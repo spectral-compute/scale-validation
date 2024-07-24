@@ -1,0 +1,11 @@
+--- src/util/math.h
++++ src/util/math.h
+@@ -239,7 +239,7 @@ ccl_device_inline uint as_uint(float f)
+   return u.i;
+ }
+
+-#  ifndef __HIP__
++#  if !defined(__HIP__) && !defined(__CUDA__)
+ ccl_device_inline int __float_as_int(float f)
+ {
+   union {
