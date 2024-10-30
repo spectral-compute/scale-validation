@@ -1,0 +1,27 @@
+diff --git include/flamegpu/runtime/DeviceAPI.cuh include/flamegpu/runtime/DeviceAPI.cuh
+index 4f60d54c..a97bf13a 100644
+--- include/flamegpu/runtime/DeviceAPI.cuh
++++ include/flamegpu/runtime/DeviceAPI.cuh
+@@ -15,7 +15,6 @@
+ #include "flamegpu/runtime/random/AgentRandom.cuh"
+ #include "flamegpu/runtime/environment/DeviceEnvironment.cuh"
+ #include "flamegpu/runtime/AgentFunction.cuh"
+-#include "flamegpu/runtime/AgentFunctionCondition.cuh"
+ #include "flamegpu/defines.h"
+ 
+ #ifdef FLAMEGPU_USE_GLM
+@@ -151,6 +150,14 @@ class ReadOnlyDeviceAPI {
+     }
+ };
+ 
++} // namespace flamegpu
++
++// Relies on ReadOnlyDeviceAPI but also includes this header, so make sure ReadOnlyDeviceAPI is always available.
++#include "flamegpu/runtime/AgentFunctionCondition.cuh"
++
++namespace flamegpu {
++
++
+ /** @brief    A flame gpu api class for the device runtime only
+  *
+  * This class provides access to model variables/state inside agent functions

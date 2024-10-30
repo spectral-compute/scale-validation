@@ -1,0 +1,16 @@
+--- examples/cpp/circles_bruteforce/src/main.cu
++++ examples/cpp/circles_bruteforce/src/main.cu
+@@ -1,4 +1,5 @@
+ #include "flamegpu/flamegpu.h"
++#include <cfloat>
+
+ FLAMEGPU_AGENT_FUNCTION(output_message, flamegpu::MessageNone, flamegpu::MessageBruteForce) {
+     FLAMEGPU->message_out.setVariable<flamegpu::id_t>("id", FLAMEGPU->getID());
+--- examples/cpp/circles_spatial3D/src/main.cu
++++ examples/cpp/circles_spatial3D/src/main.cu
+@@ -1,4 +1,5 @@
+ #include "flamegpu/flamegpu.h"
++#include <cfloat>
+
+ FLAMEGPU_AGENT_FUNCTION(output_message, flamegpu::MessageNone, flamegpu::MessageSpatial3D) {
+     FLAMEGPU->message_out.setVariable<flamegpu::id_t>("id", FLAMEGPU->getID());

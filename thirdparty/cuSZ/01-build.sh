@@ -11,7 +11,7 @@ rm -rf "${OUT_DIR}/cuSZ/build"
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_CUDA_COMPILER="${CUDA_DIR}/bin/nvcc" \
-    -DCMAKE_CXX_FLAGS="-Wno-unused-result" \
+    -DCMAKE_CXX_FLAGS="-Wno-unused-result -fpermissive" \
     -DCMAKE_CUDA_FLAGS="-Wno-unused-result" \
     -DCMAKE_CUDA_ARCHITECTURES="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')" \
     -DBUILD_TESTING=On \
