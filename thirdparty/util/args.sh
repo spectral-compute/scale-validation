@@ -28,6 +28,12 @@ if [ ! -e "${CUDA_DIR}/include/cuda.h" ] ; then
 fi
 shift
 
+# GPU_ARCH: sm_86
+# GPU_ARCH_NUM: 86
+# GPU_ARCH_DEC: 8.6
+GPU_ARCH_NUM=$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')
+GPU_ARCH_DEC="${GPU_ARCH_NUM: :-1}"."${GPU_ARCH_NUM: -1}"
+
 if [ "${PARTIAL_PARSE:-}" == "1" ] ; then
     return 0
 fi
@@ -56,7 +62,7 @@ done
 
 # Clone and sync submodules for a project.
 function do_clone() {
-  git clone --recursive $2
+  git clone --recursive $2 $1
   git -C $1 checkout $3
   git -C $1 submodule update --init --recursive
 }

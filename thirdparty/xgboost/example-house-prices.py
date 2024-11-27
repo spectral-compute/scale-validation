@@ -57,12 +57,18 @@ if len(submissionPredictions) != len(predictions):
 averageDelta = sum([abs(d[0] - d[1]) for d in zip(predictions, submissionPredictions)]) / len(predictions)
 print('\x1b[1mAverage delta\x1b[m: %f' % averageDelta)
 
-refDeltas = {'gbtree': {'hist': 11348.786164, 'approx': 11348.786164},
-             'dart':   {'hist': 11348.788059, 'approx': 11348.788059}}
-refDelta = refDeltas[booster][tree_method]
+refDeltas = {'gbtree': {'hist': [11348.786164, 11314.406732], 'approx': [11348.786164, 11314.406732]},
+             'dart':   {'hist': [11348.788059, 11314.404208], 'approx': [11348.788059, 11314.404208]}}
+refDeltaList = refDeltas[booster][tree_method] # Arch and Ubuntu differ a bit on the results, even on CPU.
 
-if not (averageDelta >= refDelta - 0.1 and averageDelta <= refDelta + 0.1):
-    print('\x1b[31;1mAverage delta out of range.\x1b[m')
+deltaBad = True
+for refDelta in refDeltaList:
+    if (averageDelta >= refDelta - 0.1 and averageDelta <= refDelta + 0.1):
+        deltaBad = False
+        break
+if deltaBad:
+    print('\x1b[31;1mAverage delta out of range.\x1b[m: %f %s' % \
+          (averageDelta, ', '.join('%f' % d for d in refDeltaList)))
     bad = True
 
 if bad:

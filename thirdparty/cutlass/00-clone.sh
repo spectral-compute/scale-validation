@@ -6,4 +6,7 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 mkdir -p "${OUT_DIR}/cutlass"
 cd "${OUT_DIR}/cutlass"
 
-do_clone cutlass https://github.com/NVIDIA/cutlass.git 7d49e6c7e2f8896c47f586706e67e1fb215529dc
+do_clone cutlass https://github.com/NVIDIA/cutlass.git v3.5.1
+
+# Disable incredibly obnoxious warning spam the only way we can.
+sed -Ee 's|-Xcompiler=-Wconversion||g' -i"" "${OUT_DIR}/cutlass/cutlass/CMakeLists.txt"

@@ -13,8 +13,8 @@ cmake \
     -DCMAKE_C_COMPILER="${CUDA_DIR}/bin/clang" \
     -DCMAKE_CXX_COMPILER="${CUDA_DIR}/bin/clang++" \
     -DCMAKE_CUDA_COMPILER="${CUDA_DIR}/bin/nvcc" \
-    -DCMAKE_CXX_FLAGS="-Wno-unused-result -Wno-unused-command-line-argument" \
-    -DCMAKE_CUDA_FLAGS="-Wno-unused-result -Wno-unused-command-line-argument" \
+    -DCMAKE_CXX_FLAGS="-Wno-unused-result -Wno-unused-command-line-argument -Wno-deprecated-declarations -Wno-c++11-narrowing-const-reference" \
+    -DCMAKE_CUDA_FLAGS="-Wno-unused-result -Wno-unused-command-line-argument -Wno-deprecated-declarations -Wno-c++11-narrowing-const-reference" \
     -DCMAKE_CUDA_ARCHITECTURES="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')" \
     -DUSE_CUDA=ON \
     -DKEEP_BUILD_ARTIFACTS_IN_BINARY_DIR=ON \

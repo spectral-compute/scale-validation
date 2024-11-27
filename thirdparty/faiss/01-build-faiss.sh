@@ -5,6 +5,7 @@ SCRIPT_DIR="$(realpath "$(dirname "$0")")"
 source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
 export PATH="${CUDA_DIR}/bin:${PATH}"
+export LD_LIBRARY_PATH="${CUDA_DIR}/lib"
 
 # Configure.
 cmake \
@@ -13,6 +14,7 @@ cmake \
     -DCMAKE_CXX_FLAGS="-Wno-unused-result" \
     -DCMAKE_CUDA_FLAGS="-Wno-unused-result" \
     -DCMAKE_CUDA_ARCHITECTURES="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')" \
+    -DBUILD_SHARED_LIBS=ON \
     -DBUILD_TESTING=ON \
     -DCMAKE_CTEST_ARGUMENTS="--output-on-failure --output-junit faiss.xml" \
     -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/faiss/install" \

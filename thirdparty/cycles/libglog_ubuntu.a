@@ -1,0 +1,4 @@
+INPUT(/usr/lib/x86_64-linux-gnu/libglog.a
+      /usr/lib/x86_64-linux-gnu/libunwind.a
+      /usr/lib/x86_64-linux-gnu/libunwind-x86_64.a
+      /usr/lib/x86_64-linux-gnu/liblzma.so)

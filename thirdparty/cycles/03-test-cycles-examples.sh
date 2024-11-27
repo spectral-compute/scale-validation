@@ -35,7 +35,7 @@ for EXAMPLE in cube_surface cube_volume monkey sphere_bump ; do
 
     set -e
 
-    CMP="$(magick compare -metric mse "${CPU_OUT}" "${CUDA_OUT}" /dev/null 2>&1 | cut -f 1 -d ' ')"
+    CMP="$(compare -metric mse "${CPU_OUT}" "${CUDA_OUT}" /dev/null 2>&1 | cut -f 1 -d ' ')"
     if [ "$(echo "print(${CMP} < 0.01)" | python3)" == "True" ] ; then
         echo -e "\x1b[32;1mPassed\x1b[m with \x1b[1m${CMP}\x1b[m\n"
     else
