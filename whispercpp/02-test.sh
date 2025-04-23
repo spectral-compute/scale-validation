@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -e
+SCRIPT_DIR="$(realpath "$(dirname "$0")")"
+source "${SCRIPT_DIR}"/../util/args.sh "$@"
+
+cd "${OUT_DIR}/whispercpp/whispercpp/build"
+
+set -o pipefail
+./build/bin/main -f samples/jfk.wav | tee output.txt
+
+cat output.txt | grep "And so my fellow Americans, ask not what your country can do for you, ask what you can do for your country."

@@ -1,0 +1,11 @@
+--- faiss/gpu/StandardGpuResources.cpp
++++ faiss/gpu/StandardGpuResources.cpp
+@@ -370,7 +370,7 @@ void StandardGpuResourcesImpl::initializeForDevice(int device) {
+             prop.warpSize == 32 || prop.warpSize == 64,
+             "Device id %d does not have expected warpSize of 32 or 64",
+             device);
+-#else
++#elif !defined(__SCALE_RT__) // SCALE reports hardware warp size.
+     // Our code is pre-built with and expects warpSize == 32, validate that
+     FAISS_ASSERT_FMT(
+             prop.warpSize == 32,

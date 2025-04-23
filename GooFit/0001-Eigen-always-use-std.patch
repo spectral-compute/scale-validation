@@ -1,0 +1,11 @@
+--- extern/Eigen/Eigen/Core
++++ extern/Eigen/Eigen/Core
+@@ -69,7 +69,7 @@
+ // global namespace.  In host mode, and when device doee with clang, use the
+ // std versions.
+ #if defined(__CUDA_ARCH__) && defined(__NVCC__)
+-  #define EIGEN_USING_STD_MATH(FUNC) using ::FUNC;
++  #define EIGEN_USING_STD_MATH(FUNC) using std::FUNC;
+ #else
+   #define EIGEN_USING_STD_MATH(FUNC) using std::FUNC;
+ #endif

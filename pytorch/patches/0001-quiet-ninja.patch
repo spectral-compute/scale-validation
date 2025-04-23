@@ -1,0 +1,15 @@
+diff --git a/tools/setup_helpers/cmake.py b/tools/setup_helpers/cmake.py
+index fb19b66dfba..31f5fbd03bd 100644
+--- a/tools/setup_helpers/cmake.py
++++ b/tools/setup_helpers/cmake.py
+@@ -391,4 +391,10 @@ class CMake:
+                 build_args += [f"/p:CL_MPCount={max_jobs}"]
+             else:
+                 build_args += ["-j", max_jobs]
++
++        if not "--" in build_args:
++            build_args += ["--"]
++
++        build_args += ["--quiet", "-k", "0"]
++
+         self.run(build_args, my_env)

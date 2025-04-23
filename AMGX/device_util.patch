@@ -1,0 +1,9 @@
+--- cub/util_device.cuh
++++ cub/util_device.cuh
+@@ -114,6 +114,7 @@
+  */
+ template <typename T>
+ __global__ void EmptyKernel(void) { }
++template __global__ void EmptyKernel<void>();
+
+ #endif  // DOXYGEN_SHOULD_SKIP_THIS

@@ -1,0 +1,17 @@
+--- third_party/eigen3/gpu_packet_math.patch
++++ third_party/eigen3/gpu_packet_math.patch
+@@ -22,3 +22,14 @@
+      return res;
+    }
+  };
++--- a/Eigen/src/Core/arch/GPU/PacketMath.h
+++++ b/Eigen/src/Core/arch/GPU/PacketMath.h
++@@ -105,7 +105,7 @@
++ // We need to distinguish ‘clang as the CUDA compiler’ from ‘clang as the host compiler,
++ // invoked by NVCC’ (e.g. on MacOS). The former needs to see both host and device implementation
++ // of the functions, while the latter can only deal with one of them.
++-#if defined(EIGEN_CUDA_ARCH) || defined(EIGEN_HIPCC) || (defined(EIGEN_CUDACC) && EIGEN_COMP_CLANG && !EIGEN_COMP_NVCC)
+++#if defined(__clang__) || defined(EIGEN_CUDA_ARCH) || defined(EIGEN_HIPCC) || (defined(EIGEN_CUDACC) && EIGEN_COMP_CLANG && !EIGEN_COMP_NVCC)
++ namespace {
++ 
++ EIGEN_DEVICE_FUNC EIGEN_STRONG_INLINE float bitwise_and(const float& a,

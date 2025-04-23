@@ -1,0 +1,26 @@
+diff --git src/tests/custom_memory_use.cu src/tests/custom_memory_use.cu
+index ead99e4..361c5b1 100644
+--- src/tests/custom_memory_use.cu
++++ src/tests/custom_memory_use.cu
+@@ -415,7 +415,7 @@ void run()
+     cudaMemGetInfo(&free_mem, &total_mem);
+     size_t context_buffer = 10000000;
+     amgx::thrust::device_vector<double> test_vector;
+-    int vec_size = (free_mem - context_buffer) / 8;
++    size_t vec_size = (free_mem - context_buffer) / 8;
+     test_vector.resize(vec_size);
+     test_vector.clear();
+     test_vector.shrink_to_fit();
+diff --git src/tests/memory_use.cu src/tests/memory_use.cu
+index 82fad27..bd0a49f 100644
+--- src/tests/memory_use.cu
++++ src/tests/memory_use.cu
+@@ -80,7 +80,7 @@ void launch_test_case(TestCase &test_case)
+     cudaMemGetInfo(&free_mem, &total_mem);
+     size_t context_buffer = 10000000;
+     amgx::thrust::device_vector<double> test_vector;
+-    int vec_size = (free_mem - context_buffer) / 8;
++    size_t vec_size = (free_mem - context_buffer) / 8;
+     test_vector.resize(vec_size);
+     test_vector.clear();
+     test_vector.shrink_to_fit();
