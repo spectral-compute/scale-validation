@@ -80,9 +80,9 @@ fi
 
 BUILD_JOBS=$(nproc)
 VERBOSE=0
-export CXXFLAGS="-fdiagnostics-color=always "
-export CFLAGS="-fdiagnostics-color=always "
-export NVCC_PREPEND_FLAGS="-fdiagnostics-color=always "
+export CXXFLAGS="-fdiagnostics-color=always"
+export CFLAGS="-fdiagnostics-color=always"
+export NVCC_PREPEND_FLAGS="-fdiagnostics-color=always"
 export CMAKE_COLOR_DIAGNOSTICS=ON
 
 while [[ $# -gt 0 ]] ; do

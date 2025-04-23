@@ -4,22 +4,16 @@ set -ETeuo pipefail
 SCRIPT_DIR="$(realpath "$(dirname "$0")")"
 source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
-# Clean up any previous stuff.
-rm -rf "${OUT_DIR}/timemachine/build"
-mkdir "${OUT_DIR}/timemachine/build"
+# args.sh sets colour-diagnostics in CXXFLAGS, but timemachine uses
+# string concatenation to add `-Wall` with no leading space, and cmake
+# provides no way to preserve a trailing space, sooo:
+unset CXXFLAGS
 
-cd "${OUT_DIR}/timemachine/build"
+mkdir -p "${OUT_DIR}/timemachine/build"
+cd "${OUT_DIR}/timemachine/timemachine"
 python3.12 -m venv venv
 source venv/bin/activate
+pip install mypy
 
-# Configure.
-ARCH_TGT=$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')
-cmake \
-    -DCUDA_ARCH=${ARCH_TGT} \
-    -DCMAKE_CUDA_ARCHITECTURES=${ARCH_TGT} \
-    -DCMAKE_COMPILE_WARNING_AS_ERROR=OFF \
-    -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/timemachine/install" \
-    -B "${OUT_DIR}/timemachine/build" \
-    -S "${OUT_DIR}/timemachine/timemachine/timemachine/cpp"
-
-make -C "${OUT_DIR}/timemachine/build" install -j"${BUILD_JOBS}" "${VERBOSE}"
+pip install -r requirements.txt
+CMAKE_ARGS=-DCUDA_ARCH=86 pip install -e .[dev,test]
