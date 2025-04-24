@@ -65,6 +65,16 @@ else
     # Activate SCALE
     source "${SCALE_DIR}/bin/scaleenv" $INPUT_GPU_ARCH
     GPU_ARCH=sm_${SCALE_FAKE_CUDA_ARCH}
+
+    export CXXFLAGS="-fdiagnostics-color=always"
+    export CFLAGS="-fdiagnostics-color=always"
+    export NVCC_PREPEND_FLAGS="-fdiagnostics-color=always"
+    export CMAKE_COLOR_DIAGNOSTICS=ON
+
+    # A buildsystem-independent way of avoiding warning spam.
+    # These warnings matter, but nvidia ignores them and the torrent makes CI runs
+    # overflow the output limit.
+    export NVCC_APPEND_FLAGS="-Wno-unknown-warning-option -Wno-unused-function -Wno-int-conversion -Wno-sign-conversion -Wno-shorten-64-to-32 -Wno-template-id-cdtor -Wno-switch -Wno-vla-cxx-extension -Wno-missing-template-arg-list-after-template-kw -Wno-deprecated-declarations -Wno-c++11-narrowing-const-reference -Wno-typename-missing -Wno-unknown-pragmas -Wno-inconsistent-missing-override -Wno-unused-private-field -Wno-sign-compare -Wno-pessimizing-move -Wno-unused-result -Wno-invalid-constexpr -Wno-unused-but-set-variable -Wno-unused-variable -Wno-implicit-const-int-float-conversion -Wno-pass-failed"
 fi
 shift
 
@@ -80,10 +90,6 @@ fi
 
 BUILD_JOBS=$(nproc)
 VERBOSE=0
-export CXXFLAGS="-fdiagnostics-color=always"
-export CFLAGS="-fdiagnostics-color=always"
-export NVCC_PREPEND_FLAGS="-fdiagnostics-color=always"
-export CMAKE_COLOR_DIAGNOSTICS=ON
 
 while [[ $# -gt 0 ]] ; do
     case "$1" in
@@ -114,8 +120,3 @@ function do_clone_hash() {
 }
 
 PY_VER_PATH=$(python3 --version | cut -d ' ' -f 2 | cut -d '.' -f 1-2) # Like "3.12"
-
-# A buildsystem-independent way of avoiding warning spam.
-# These warnings matter, but nvidia ignores them and the torrent makes CI runs
-# overflow the output limit.
-export NVCC_APPEND_FLAGS="-Wno-unknown-warning-option -Wno-unused-function -Wno-int-conversion -Wno-sign-conversion -Wno-shorten-64-to-32 -Wno-template-id-cdtor -Wno-switch -Wno-vla-cxx-extension -Wno-missing-template-arg-list-after-template-kw -Wno-deprecated-declarations -Wno-c++11-narrowing-const-reference -Wno-typename-missing -Wno-unknown-pragmas -Wno-inconsistent-missing-override -Wno-unused-private-field -Wno-sign-compare -Wno-pessimizing-move -Wno-unused-result -Wno-invalid-constexpr -Wno-unused-but-set-variable -Wno-unused-variable -Wno-implicit-const-int-float-conversion -Wno-pass-failed"
