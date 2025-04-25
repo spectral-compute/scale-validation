@@ -6,8 +6,10 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 mkdir -p "${OUT_DIR}/gromacs"
 cd "${OUT_DIR}/gromacs"
 
-wget -q http://ftp.gromacs.org/pub/gromacs/gromacs-2024.4.tar.gz
-wget -q https://ftp.gromacs.org/regressiontests/regressiontests-2024.4.tar.gz
+GROMACS_VER=2025.1
 
-tar xf gromacs-2024.4.tar.gz
-tar xf regressiontests-2024.4.tar.gz
+wget -q http://ftp.gromacs.org/pub/gromacs/gromacs-${GROMACS_VER}.tar.gz
+wget -q https://ftp.gromacs.org/regressiontests/regressiontests-${GROMACS_VER}.tar.gz
+
+tar xf gromacs-${GROMACS_VER}.tar.gz
+tar xf regressiontests-${GROMACS_VER}.tar.gz
