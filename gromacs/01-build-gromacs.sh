@@ -7,7 +7,7 @@ source "${SCRIPT_DIR}"/../util/args.sh "$@"
 mkdir -p "${OUT_DIR}/gromacs/build"
 cd "${OUT_DIR}/gromacs/build"
 
-GROMACS_VER=2025.1
+GROMACS_VER=2024.4
 
 # Configure.
 cmake \
