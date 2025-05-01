@@ -1,6 +1,5 @@
 #!/bin/bash
 
-echo "benchMem fails!! "
 source "$(dirname "$0")"/../util/args.sh "$@"
 export LD_LIBRARY_PATH="${CUDA_DIR}/lib"
 
@@ -22,6 +21,5 @@ if [ ! -e benchMEM.tpr ] ; then
 fi
 
 source "${OUT_DIR}/gromacs/install/bin/GMXRC"
-#gmx mdrun -s 
 gmx mdrun -s benchMEM.tpr -nb gpu 
 echo "Done"
