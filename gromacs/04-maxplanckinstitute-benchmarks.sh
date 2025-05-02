@@ -11,20 +11,20 @@ cd "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks"
 for URL in https://www.mpibpc.mpg.de/benchMEM.zip \
            https://www.mpibpc.mpg.de/benchPEP.zip \
            https://www.mpibpc.mpg.de/benchRIB.zip \
-           https://www.mpibpc.mpg.de/benchBFC.zip \
-           https://www.mpibpc.mpg.de/benchBFI.zip \
-           https://www.mpibpc.mpg.de/benchBNC.zip \
-           https://www.mpibpc.mpg.de/benchBNI.zip \
-           https://www.mpibpc.mpg.de/benchBTC.zip \
-           https://www.mpibpc.mpg.de/benchBTI.zip \
-           https://www.mpibpc.mpg.de/benchSFC.zip \
-           https://www.mpibpc.mpg.de/benchSFI.zip \
-           https://www.mpibpc.mpg.de/benchSNC.zip \
-           https://www.mpibpc.mpg.de/benchSNI.zip \
-           https://www.mpibpc.mpg.de/benchSTC.zip \
-           https://www.mpibpc.mpg.de/benchSTI.zip ; do
+           https://www.mpinat.mpg.de/632216/benchBFC.zip \
+           https://www.mpinat.mpg.de/632219/benchBFI.zip \
+           https://www.mpinat.mpg.de/632222/benchBNC.zip \
+           https://www.mpinat.mpg.de/632214/benchBNI.zip \
+           https://www.mpinat.mpg.de/632223/benchBTC.zip \
+           https://www.mpinat.mpg.de/632215/benchBTI.zip \
+           https://www.mpinat.mpg.de/632218/benchSFC.zip \
+           https://www.mpinat.mpg.de/632220/benchSFI.zip \
+           https://www.mpinat.mpg.de/632213/benchSNC.zip \
+           https://www.mpinat.mpg.de/632217/benchSNI.zip \
+           https://www.mpinat.mpg.de/632221/benchSTC.zip \
+           https://www.mpinat.mpg.de/632212/benchSTI.zip ; do
     if [ ! -e "$(echo "${URL}" | sed -E 's;.*/;;')" ] ; then
-        wget -q "${URL}"
+        wget "${URL}"
     fi
 done
 

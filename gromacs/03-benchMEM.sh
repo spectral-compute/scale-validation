@@ -7,7 +7,7 @@ export LD_LIBRARY_PATH="${CUDA_DIR}/lib"
 mkdir -p "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks"
 cd "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks"
 if [ ! -e benchMEM.zip ] ; then
-    wget -q https://www.mpinat.mpg.de/benchMEM.zip
+    wget https://www.mpinat.mpg.de/benchMEM.zip
 fi
 
 # Create somewhere for results.
