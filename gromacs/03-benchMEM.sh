@@ -19,7 +19,6 @@ mkdir -p "${RESULT_DIR}"
 if [ ! -e benchMEM.tpr ] ; then
     unzip "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks/benchMEM.zip"
 fi
-
 source "${OUT_DIR}/gromacs/install/bin/GMXRC"
-gmx mdrun -s benchMEM.tpr -nb gpu 
+gmx mdrun -s benchMEM.tpr -nb gpu -pme cpu 
 echo "Done"

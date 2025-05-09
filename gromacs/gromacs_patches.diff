@@ -1,0 +1,43 @@
+diff --git a/src/gromacs/domdec/gpuhaloexchange_impl_gpu.cpp b/src/gromacs/domdec/gpuhaloexchange_impl_gpu.cpp
+index 4b55924c80..768f90d639 100644
+--- a/src/gromacs/domdec/gpuhaloexchange_impl_gpu.cpp
++++ b/src/gromacs/domdec/gpuhaloexchange_impl_gpu.cpp
+@@ -153,8 +153,8 @@ void GpuHaloExchange::Impl::reinitHalo(DeviceBuffer<Float3> d_coordinatesBuffer,
+     if (useNvshmem_)
+     {
+         reinitXGridSizeAndDevBarrier();
+-        MPI_Allreduce(&newSize, &recvBufNewSize, 1, MPI_INT, MPI_MAX, mpi_comm_mysim_world_);
+ #if GMX_MPI
++        MPI_Allreduce(&newSize, &recvBufNewSize, 1, MPI_INT, MPI_MAX, mpi_comm_mysim_world_);
+         // remote PE atomOffset to nvshmem put halo coordinates
+         MPI_Sendrecv(&atomOffset_,
+                      sizeof(int),
+diff --git a/src/gromacs/ewald/pme_coordinate_receiver_gpu_impl_gpu.cpp b/src/gromacs/ewald/pme_coordinate_receiver_gpu_impl_gpu.cpp
+index 861a2d842b..c3ae9c470b 100644
+--- a/src/gromacs/ewald/pme_coordinate_receiver_gpu_impl_gpu.cpp
++++ b/src/gromacs/ewald/pme_coordinate_receiver_gpu_impl_gpu.cpp
+@@ -183,7 +183,7 @@ std::tuple<int, GpuEventSynchronizer*> PmeCoordinateReceiverGpu::Impl::receivePp
+         return std::make_tuple(-1, nullptr);
+     }
+ #else
+-    GMX_UNUSED_VALUE(pipelineStage);
++    //GMX_UNUSED_VALUE(pipelineStage);
+     return std::make_tuple(-1, nullptr);
+ #endif
+ }
+diff --git a/src/gromacs/mdtypes/state_propagator_data_gpu_impl_gpu.cpp b/src/gromacs/mdtypes/state_propagator_data_gpu_impl_gpu.cpp
+index 651d71ec23..fbb813528c 100644
+--- a/src/gromacs/mdtypes/state_propagator_data_gpu_impl_gpu.cpp
++++ b/src/gromacs/mdtypes/state_propagator_data_gpu_impl_gpu.cpp
+@@ -220,7 +220,11 @@ void StatePropagatorDataGpu::Impl::reinit(int numAtomsLocal, int numAtomsAll, co
+     int maxNumAtomsPadded = numAtomsPadded;
+     if (useNvshmem_)
+     {
++#    if GMX_MPI
+         MPI_Allreduce(&numAtomsPadded, &maxNumAtomsPadded, 1, MPI_INT, MPI_MAX, cr.mpi_comm_mysim);
++#    else
++        maxNumAtomsPadded = numAtomsPadded;
++#    endif
+     }
+ 
+     reallocateDeviceBuffer(

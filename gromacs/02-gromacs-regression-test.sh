@@ -1,8 +1,8 @@
 #!/bin/bash
-
+GROMACS_VER=2025.1
 set -e
 source "$(dirname "$0")"/../util/args.sh "$@"
-cd "${OUT_DIR}/gromacs/regressiontests-2024.4"
+cd "${OUT_DIR}/gromacs/regressiontests-${GROMACS_VER}"
 
 source "${OUT_DIR}/gromacs/install/bin/GMXRC"
 
@@ -27,3 +27,4 @@ if [ "${ABNORMAL}" != "14" ] ; then
     exit 1
 fi
 echo "GROMACS regression tests performed as expected :)"
+
