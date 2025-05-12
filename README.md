@@ -31,7 +31,7 @@ definitely needs. The list may not be exhaustive.
 | gomc          | ✔      |                                                       |                                                                           |
 | GooFit        | ❌      |                                                       | Texture Refs                                                              |
 | gpu_jpeg2k    | ✔      |                                                       |                                                                           |
-| GROMACS       | ❌      |                                                       |                                                                           |
+| GROMACS       | ✔      |                                                       |                                                                           |
 | hashcat       | ✔      |                                                       |                                                                           |
 | hashinator    | ✔      |                                                       |                                                                           |
 | hypre         | ❌      | Buildsystem nonsense                                  |                                                                           |
