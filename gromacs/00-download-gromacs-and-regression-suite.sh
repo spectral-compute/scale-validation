@@ -9,7 +9,7 @@ mkdir -p "${OUT_DIR}/gromacs"
 cd "${OUT_DIR}/gromacs"
 git clone https://github.com/gromacs/gromacs.git 
 cd gromacs
-git checkout release-2025
+git checkout v2025.1
 git apply "${SCRIPT_DIR}/gromacs_patches.diff" ## required to compile with scale not native
 cd ..
 GROMACS_VER=2025.1
