@@ -1,5 +1,7 @@
 #!/bin/bash
+
 GROMACS_VER=2025.1
+
 set -e
 source "$(dirname "$0")"/../util/args.sh "$@"
 cd "${OUT_DIR}/gromacs/regressiontests-${GROMACS_VER}"
