@@ -32,6 +32,7 @@ definitely needs. The list may not be exhaustive.
 | GooFit        | ❌      |                                                       | Texture Refs                                                              |
 | gpu_jpeg2k    | ✔      |                                                       |                                                                           |
 | GROMACS       | ✔      |                                                       |                                                                           |
+| ggml          | ✔*     | Old version works. New version needs more APIs        | Missing async opcodes                                                     |
 | hashcat       | ✔      |                                                       |                                                                           |
 | hashinator    | ✔      |                                                       |                                                                           |
 | hypre         | ❌      | Buildsystem nonsense                                  |                                                                           |
