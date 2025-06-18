@@ -54,7 +54,7 @@ if [ ! -e "${SCALE_DIR}/bin/scaleenv" ] ; then
     export CUDA_DIR="${SCALE_DIR}"
     export CUDA_HOME="${SCALE_DIR}"
     export CUDA_PATH="${SCALE_DIR}"
-    export CUDA_CXX="${SCALE_DIR}/bin/nvcc"
+    export CUDACXX="${SCALE_DIR}/bin/nvcc"
     export PATH="${SCALE_DIR}/bin:${PATH-}"
     export CUDAARCHS="${GPU_ARCH}"
     export LD_LIBRARY_PATH="${SCALE_DIR}/lib:${LD_LIBRARY_PATH-}"
