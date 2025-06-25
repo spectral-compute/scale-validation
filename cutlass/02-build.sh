@@ -4,7 +4,7 @@ set -ETeuo pipefail
 SCRIPT_DIR="$(realpath "$(dirname "$0")")"
 source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
-export SCALE_CUDA_VERSION="11.4"
+export SCALE_CUDA_VERSION="11.8"
 
 # Configure.
 cmake \
@@ -12,6 +12,8 @@ cmake \
     -DCUTLASS_NVCC_ARCHS="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')" \
     -DCMAKE_CUDA_ARCHITECTURES="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')" \
     -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
+    -DCMAKE_CXX_COMPILER="${CUDA_PATH}/bin/clang++" \
+    -DCMAKE_C_COMPILER="${CUDA_PATH}/bin/clang" \
     -B"${OUT_DIR}/cutlass/build" \
     "${OUT_DIR}/cutlass/cutlass"
 
