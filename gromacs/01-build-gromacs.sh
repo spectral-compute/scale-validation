@@ -21,12 +21,11 @@ cmake \
     -DGMX_PYTHON_PACKAGE=OFF \
     -DGMX_MPI=OFF \
     -DGMX_PYTHON_BINDINGS=OFF \
-    -DGMX_THREAD_MPI=OFF \
+    -DGMX_THREAD_MPI=ON \
     -DCMAKE_DISABLE_FIND_PACKAGE_MPI=ON \
     -DGMX_HAVE_GPU_GRAPH_SUPPORT=OFF \
     -DGMX_NNPOT=OFF  \
     -DGMX_OPENMP=OFF \
-    -DREGRESSIONTEST_PATH="${OUT_DIR}/gromacs/regressiontests-${GROMACS_VER}" \
     "${OUT_DIR}/gromacs/gromacs"
 
 # Make sure we actually found CUDA.

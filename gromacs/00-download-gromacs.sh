@@ -20,6 +20,3 @@ if [ ${GROMACS_VER} = "2025.1" ]; then
   # hook it up to GROMACS, too!).
   git -C "${OUT_DIR}/gromacs/gromacs" apply "${SCRIPT_DIR}/gromacs_patches.diff"
 fi
-
-wget -q https://ftp.gromacs.org/regressiontests/regressiontests-${GROMACS_VER}.tar.gz
-tar xf regressiontests-${GROMACS_VER}.tar.gz
