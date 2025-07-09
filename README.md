@@ -1,16 +1,16 @@
 # Testing SCALE against 3rd-party projects
 
-This repo contains the scripts used to clone, build, and test various 
+This repo contains the scripts used to clone, build, and test various
 open-source projects to validate the correctness of [SCALE](https://docs.scale-lang.com/).
 
 ## Current Status
 
-Test scripts get added to this repository long before they are fully 
-supported by SCALE. We use the outcome of this kind of testing to prioritise 
+Test scripts get added to this repository long before they are fully
+supported by SCALE. We use the outcome of this kind of testing to prioritise
 development. Contributions welcome!
 
-This table summarises the current state as of the most recent stable release 
-of SCALE. "Needs" describes missing CUDA APIs/features that the project 
+This table summarises the current state as of the most recent stable release
+of SCALE. "Needs" describes missing CUDA APIs/features that the project
 definitely needs. The list may not be exhaustive.
 
 | Project       | Status | Notes                                                 | Needs                                                                     |
@@ -42,7 +42,7 @@ definitely needs. The list may not be exhaustive.
 | MAGMA         | ✔      |                                                       |                                                                           |
 | OpenCV        | ❌      |                                                       | NPP                                                                       |
 | openmpi       | ✔      |                                                       |                                                                           |
-| PysX          | ❌      | Numerous missing APIs                                 | PTX barriers, cudaArray, graphics interop                                 |
+| PhysX         | ❌      | Numerous missing APIs                                 | PTX barriers, cudaArray, graphics interop                                 |
 | pytorch       | ❌      | Numerous missing APIs                                 | cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,... |
 | quda          | ❌      |                                                       | NVML                                                                      |
 | risc0         | ❌      | Dependent project tries to return carry-bit. Fixable. |                                                                           |
@@ -59,10 +59,10 @@ definitely needs. The list may not be exhaustive.
 ## Running Tests
 
 Each directory (except `util`) contains a set of scripts that should be executed
-in lexicographical order for a complete test. These scripts are mostly just 
+in lexicographical order for a complete test. These scripts are mostly just
 the normal CUDA build instructions for the corresponding project.
 
-The test driver script `test.sh` may be used to conveniently execute an 
+The test driver script `test.sh` may be used to conveniently execute an
 entire test:
 
 ```bash
@@ -71,7 +71,7 @@ entire test:
 
 For example: `./test.sh ~/cuda_tests /opt/scale gfx1100 hashcat`.
 
-See the `test.sh` usage message for more detailed information and other 
+See the `test.sh` usage message for more detailed information and other
 options for adjusting how tests are run.
 
 ### The `util` directory
