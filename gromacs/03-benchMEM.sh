@@ -22,7 +22,8 @@ if [ ! -e benchMEM.tpr ] ; then
 fi
 source "${OUT_DIR}/gromacs/install/bin/GMXRC"
 set +e
-gmx mdrun -s benchMEM.tpr -nb gpu -pme cpu 
+# When comparing with hip we should use -pme cpu -bonded cpu -update cpu
+gmx mdrun -s benchMEM.tpr -v -ntmpi 1 -pme cpu -bonded cpu -update cpu -nb gpu
 RESULT=$?
 set -e
 # Log to result CSV

@@ -9,5 +9,5 @@ source "${OUT_DIR}/gromacs/install/bin/GMXRC"
 OUT="${OUT_DIR}/gromacs/regression-test.txt"
 
 set +e
-
-make check 2>&1 | tee "${OUT}" 
+make tests -j
+ctest 2>&1 | tee "${OUT}"
