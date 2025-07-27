@@ -3,7 +3,7 @@
 set -e
 set -o xtrace
 
-GROMACS_VER=2025.1
+GROMACS_VER=2025.2
 
 source "$(dirname "$0")"/../util/args.sh "$@"
 SCRIPT_DIR="$(realpath "$(dirname "$0")")"

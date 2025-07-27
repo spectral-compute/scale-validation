@@ -1,0 +1,9 @@
+--- third_party/cxxopts/include/cxxopts.hpp
++++ third_party/cxxopts/include/cxxopts.hpp
+@@ -26,6 +26,7 @@
+ #define CXXOPTS_HPP_INCLUDED
+
++#include <cstdint>
+ #include <cctype>
+ #include <cstring>
+ #include <exception>

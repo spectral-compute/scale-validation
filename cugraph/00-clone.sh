@@ -6,4 +6,4 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 mkdir -p "${OUT_DIR}/cugraph"
 cd "${OUT_DIR}/cugraph"
 
-do_clone_hash cugraph https://github.com/rapidsai/cugraph fc880db
+do_clone_hash cugraph https://github.com/rapidsai/cugraph v25.06.00

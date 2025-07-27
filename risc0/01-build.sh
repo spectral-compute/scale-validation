@@ -10,3 +10,5 @@ cd "${OUT_DIR}/risc0/risc0"
 
 cargo install --force --path risc0/cargo-risczero
 cargo risczero install
+cargo risczero init
+rzup install

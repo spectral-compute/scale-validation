@@ -7,7 +7,7 @@ source "${SCRIPT_DIR}"/../util/args.sh "$@"
 # Configure.
 cmake \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DVLLM_PYTHON_EXECUTABLE=`which python3` \
+    -DVLLM_PYTHON_EXECUTABLE="/usr/bin/python3.11" \
     -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
     -DCMAKE_CUDA_ARCHITECTURES="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')" \
     -DBUILD_TESTING=ON \

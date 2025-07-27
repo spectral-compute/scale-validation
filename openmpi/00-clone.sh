@@ -6,8 +6,8 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 mkdir -p "${OUT_DIR}/openmpi"
 cd "${OUT_DIR}/openmpi"
 
-MAJOR=4
-MINOR=1
+MAJOR=5
+MINOR=0
 PATCH=8
 
 VER="v${MAJOR}.${MINOR}"

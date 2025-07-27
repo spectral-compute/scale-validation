@@ -10,16 +10,15 @@ cd "${OUT_DIR}/pytorch/build"
 # CONFIGURE #
 #############
 
-export CC="${CUDA_PATH}/bin/gcc"
-export CXX="${CUDA_PATH}/bin/g++"
+export CC="${CUDA_PATH}/bin/clang"
+export CXX="${CUDA_PATH}/bin/clang++"
 export CFLAGS="\
     -march=native \
     -mtune=native \
     -Wno-inconsistent-missing-destructor-override \
     -Wno-deprecated-copy-with-user-provided-dtor \
     -Wno-dangling-reference \
-    -Wno-redundant-move
-"
+    -Wno-redundant-move"
 export _GLIBCXX_USE_CXX11_ABI=TRUE
 
 export CUDAHOSTCXX="${CUDA_PATH}/bin/g++"
@@ -60,6 +59,7 @@ export BUILD_TEST=ON
 
 export MAX_JOBS="${BUILD_JOBS}"
 export VERBOSE="${VERBOSE}"
+export PATH=/home/allen/deps/scale/targets/gfx1100/bin:$PATH
 
 
 #########
