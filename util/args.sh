@@ -64,7 +64,7 @@ if [ ! -e "${SCALE_DIR}/bin/scaleenv" ] ; then
 else
     # Activate SCALE
     source "${SCALE_DIR}/bin/scaleenv" $INPUT_GPU_ARCH
-    GPU_ARCH=sm_${SCALE_FAKE_CUDA_ARCH}
+    GPU_ARCH=sm_${CUDAARCHS}
 
     export CXXFLAGS="-fdiagnostics-color=always"
     export CFLAGS="-fdiagnostics-color=always"
