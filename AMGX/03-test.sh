@@ -25,6 +25,10 @@ EXCLUSIONS=(
     # more work that I got diverted away from).
     # https://gitlab.com/spectral-ai/engineering/cuda/platform/compiler/llvm-project/-/issues/638
     LowDegDeterminism MinMaxColoringTest
+
+    # Tests which don't report failure, but which print errors regarding memory corruption or
+    # invalid usage of internal data structures on both SCALE and NV
+    CAPIFailure FGMRESConvergencePoisson NestedSolvers
 )
 EXCLUSIONS_SED=
 for TEST in "${EXCLUSIONS[@]}" ; do
