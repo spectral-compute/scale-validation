@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-set -o xtrace
 
 GROMACS_VER=2025.1
 
