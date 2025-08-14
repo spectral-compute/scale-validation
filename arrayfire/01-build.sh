@@ -13,6 +13,7 @@ cmake \
     -DAF_BUILD_CUDA=ON \
     -DAF_BUILD_DOCS=OFF \
     -DAF_BUILD_ONEAPI=OFF \
+    -DAF_WITH_CUDNN=OFF \
     -DAF_WITH_NONFREE=ON \
     -DAF_WITH_FMT_HEADER_ONLY=ON \
     -B"${OUT_DIR}/arrayfire/arrayfire/build" \
