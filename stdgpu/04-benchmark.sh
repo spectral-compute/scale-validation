@@ -17,4 +17,4 @@ stdgpu_unordered_set_clear/.*
 
 SKIP=$(echo $SKIP | sed 's/ /|/g')
 
-build/bin/benchmarkstdgpu --benchmark_filter="-$SKIP"
+build/bin/benchmarkstdgpu --benchmark_filter="-$SKIP" --benchmark_out_format=csv --benchmark_out=out.csv
