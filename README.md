@@ -21,7 +21,7 @@ definitely needs. The list may not be exhaustive.
 | caffe         | ✔      |                                                       |                                                                           |
 | ctranslate2   | ✔*     | Some intermittent test failures                       |                                                                           |
 | cuml          | ❌      | Buildsystem nonsnse                                   |                                                                           |
-| cuSZ          | ❌      |                                                       | NVML                                                                      |
+| cuSZ          | ✔      |                                                       |                                                                           |
 | cutlass       | ❌      |                                                       |                                                                           |
 | CV-CUDA       | ❌      |                                                       |                                                                           |
 | cycles        | ✔      |                                                       |                                                                           |
