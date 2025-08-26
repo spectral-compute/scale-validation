@@ -1,0 +1,199 @@
+diff --git a/Samples/0_Introduction/CMakeLists.txt b/Samples/0_Introduction/CMakeLists.txt
+index 7453475..8d60d66 100644
+--- a/Samples/0_Introduction/CMakeLists.txt
++++ b/Samples/0_Introduction/CMakeLists.txt
+@@ -18,11 +18,11 @@ add_subdirectory(simpleAttributes)
+ add_subdirectory(simpleCUDA2GL)
+ add_subdirectory(simpleCallback)
+ add_subdirectory(simpleCooperativeGroups)
+-add_subdirectory(simpleCubemapTexture)
++#add_subdirectory(simpleCubemapTexture)
+ add_subdirectory(simpleDrvRuntime)
+ add_subdirectory(simpleHyperQ)
+ add_subdirectory(simpleIPC)
+-add_subdirectory(simpleLayeredTexture)
++#add_subdirectory(simpleLayeredTexture)
+ add_subdirectory(simpleMPI)
+ add_subdirectory(simpleMultiCopy)
+ add_subdirectory(simpleMultiGPU)
+@@ -31,7 +31,7 @@ add_subdirectory(simpleP2P)
+ add_subdirectory(simplePitchLinearTexture)
+ add_subdirectory(simplePrintf)
+ add_subdirectory(simpleStreams)
+-add_subdirectory(simpleSurfaceWrite)
++#add_subdirectory(simpleSurfaceWrite)
+ add_subdirectory(simpleTemplates)
+ add_subdirectory(simpleTexture)
+ add_subdirectory(simpleTexture3D)
+diff --git a/Samples/0_Introduction/UnifiedMemoryStreams/CMakeLists.txt b/Samples/0_Introduction/UnifiedMemoryStreams/CMakeLists.txt
+index d92baee..a0611d6 100644
+--- a/Samples/0_Introduction/UnifiedMemoryStreams/CMakeLists.txt
++++ b/Samples/0_Introduction/UnifiedMemoryStreams/CMakeLists.txt
+@@ -27,9 +27,9 @@ endif()
+
+ # Source file
+ if(CMAKE_GENERATOR MATCHES "Visual Studio")
+-    find_package(OpenMP REQUIRED C CXX)
++    find_package(OpenMP REQUIRED COMPONENTS C CXX)
+ else()
+-    find_package(OpenMP REQUIRED)
++    find_package(OpenMP REQUIRED COMPONENTS C CXX)
+ endif()
+
+ if(${OpenMP_FOUND})
+diff --git a/Samples/2_Concepts_and_Techniques/CMakeLists.txt b/Samples/2_Concepts_and_Techniques/CMakeLists.txt
+index 63cceff..e872d68 100644
+--- a/Samples/2_Concepts_and_Techniques/CMakeLists.txt
++++ b/Samples/2_Concepts_and_Techniques/CMakeLists.txt
+@@ -1,5 +1,7 @@
+-add_subdirectory(EGLStream_CUDA_CrossGPU)
+-add_subdirectory(EGLStream_CUDA_Interop)
++# EGL interop
++#add_subdirectory(EGLStream_CUDA_CrossGPU)
++#add_subdirectory(EGLStream_CUDA_Interop)
++
+ add_subdirectory(FunctionPointers)
+ add_subdirectory(MC_EstimatePiInlineP)
+ add_subdirectory(MC_EstimatePiInlineQ)
+@@ -25,8 +27,11 @@ add_subdirectory(scan)
+ add_subdirectory(segmentationTreeThrust)
+ add_subdirectory(shfl_scan)
+ add_subdirectory(sortingNetworks)
+-add_subdirectory(streamOrderedAllocation)
+-add_subdirectory(streamOrderedAllocationIPC)
+-add_subdirectory(streamOrderedAllocationP2P)
++
++# Stream ordered memory allocator.
++#add_subdirectory(streamOrderedAllocation)
++#add_subdirectory(streamOrderedAllocationIPC)
++#add_subdirectory(streamOrderedAllocationP2P)
++
+ add_subdirectory(threadFenceReduction)
+ add_subdirectory(threadMigration)
+diff --git a/Samples/3_CUDA_Features/CMakeLists.txt b/Samples/3_CUDA_Features/CMakeLists.txt
+index d7416b2..6d25558 100644
+--- a/Samples/3_CUDA_Features/CMakeLists.txt
++++ b/Samples/3_CUDA_Features/CMakeLists.txt
+@@ -2,11 +2,11 @@ add_subdirectory(StreamPriorities)
+ add_subdirectory(bf16TensorCoreGemm)
+ add_subdirectory(binaryPartitionCG)
+ add_subdirectory(bindlessTexture)
+-add_subdirectory(cdpAdvancedQuicksort)
+-add_subdirectory(cdpBezierTessellation)
+-add_subdirectory(cdpQuadtree)
+-add_subdirectory(cdpSimplePrint)
+-add_subdirectory(cdpSimpleQuicksort)
++#add_subdirectory(cdpAdvancedQuicksort)
++#add_subdirectory(cdpBezierTessellation)
++#add_subdirectory(cdpQuadtree)
++#add_subdirectory(cdpSimplePrint)
++#add_subdirectory(cdpSimpleQuicksort)
+ add_subdirectory(cudaCompressibleMemory)
+ add_subdirectory(cudaTensorCoreGemm)
+ add_subdirectory(dmmaTensorCoreGemm)
+diff --git a/Samples/4_CUDA_Libraries/CMakeLists.txt b/Samples/4_CUDA_Libraries/CMakeLists.txt
+index e425989..997bc85 100644
+--- a/Samples/4_CUDA_Libraries/CMakeLists.txt
++++ b/Samples/4_CUDA_Libraries/CMakeLists.txt
+@@ -1,8 +1,8 @@
+-add_subdirectory(FilterBorderControlNPP)
++#add_subdirectory(FilterBorderControlNPP)
+ add_subdirectory(MersenneTwisterGP11213)
+ add_subdirectory(batchCUBLAS)
+-add_subdirectory(boxFilterNPP)
+-add_subdirectory(cannyEdgeDetectorNPP)
++#add_subdirectory(boxFilterNPP)
++#add_subdirectory(cannyEdgeDetectorNPP)
+ add_subdirectory(conjugateGradient)
+ add_subdirectory(conjugateGradientCudaGraphs)
+ add_subdirectory(conjugateGradientMultiBlockCG)
+@@ -15,20 +15,33 @@ add_subdirectory(cuSolverRf)
+ add_subdirectory(cuSolverSp_LinearSolver)
+ add_subdirectory(cuSolverSp_LowlevelCholesky)
+ add_subdirectory(cuSolverSp_LowlevelQR)
+-add_subdirectory(freeImageInteropNPP)
+-add_subdirectory(histEqualizationNPP)
+-add_subdirectory(jitLto)
++
++# NPP
++#add_subdirectory(freeImageInteropNPP)
++#add_subdirectory(histEqualizationNPP)
++
++# nvjitlink
++#add_subdirectory(jitLto)
++
+ add_subdirectory(lineOfSight)
+ add_subdirectory(matrixMulCUBLAS)
+-add_subdirectory(nvJPEG)
+-add_subdirectory(nvJPEG_encoder)
++
++# nvjpeg
++#add_subdirectory(nvJPEG)
++#add_subdirectory(nvJPEG_encoder)
++
+ add_subdirectory(oceanFFT)
+ add_subdirectory(randomFog)
+ add_subdirectory(simpleCUBLAS)
+-add_subdirectory(simpleCUBLASXT)
++
++# cublasXT
++#add_subdirectory(simpleCUBLASXT)
++
+ add_subdirectory(simpleCUBLAS_LU)
+ add_subdirectory(simpleCUFFT)
+ add_subdirectory(simpleCUFFT_2d_MGPU)
+ add_subdirectory(simpleCUFFT_MGPU)
+ add_subdirectory(simpleCUFFT_callback)
+-add_subdirectory(watershedSegmentationNPP)
++
++# NPP
++#add_subdirectory(watershedSegmentationNPP)
+diff --git a/Samples/5_Domain_Specific/CMakeLists.txt b/Samples/5_Domain_Specific/CMakeLists.txt
+index 9ded8e5..d51cdbb 100644
+--- a/Samples/5_Domain_Specific/CMakeLists.txt
++++ b/Samples/5_Domain_Specific/CMakeLists.txt
+@@ -17,9 +17,13 @@ add_subdirectory(dxtc)
+ add_subdirectory(fastWalshTransform)
+ add_subdirectory(fluidsGL)
+ add_subdirectory(marchingCubes)
+-add_subdirectory(nbody)
++
++# Graphics interop
++#add_subdirectory(nbody)
+ add_subdirectory(p2pBandwidthLatencyTest)
+-add_subdirectory(postProcessGL)
++
++# OpenGL interop
++#add_subdirectory(postProcessGL)
+ add_subdirectory(quasirandomGenerator)
+ add_subdirectory(quasirandomGenerator_nvrtc)
+ add_subdirectory(recursiveGaussian)
+@@ -30,7 +34,11 @@ add_subdirectory(simpleGL)
+ add_subdirectory(simpleVulkan)
+ add_subdirectory(simpleVulkanMMAP)
+ add_subdirectory(smokeParticles)
+-add_subdirectory(stereoDisparity)
+-add_subdirectory(volumeFiltering)
++
++# vabsdiff PTX instr
++#add_subdirectory(stereoDisparity)
++
++# Surface objects
++#add_subdirectory(volumeFiltering)
+ add_subdirectory(volumeRender)
+ add_subdirectory(vulkanImageCUDA)
+diff --git a/Samples/CMakeLists.txt b/Samples/CMakeLists.txt
+index 3f7a8f3..7a4512f 100644
+--- a/Samples/CMakeLists.txt
++++ b/Samples/CMakeLists.txt
+@@ -24,8 +24,8 @@ add_subdirectory(5_Domain_Specific)
+ set(CMAKE_FOLDER "6_Performance")
+ add_subdirectory(6_Performance)
+
+-set(CMAKE_FOLDER "7_libNVVM")
+-add_subdirectory(7_libNVVM)
++#set(CMAKE_FOLDER "7_libNVVM")
++#add_subdirectory(7_libNVVM)
+
+ if(BUILD_TEGRA)
+     set(CMAKE_FOLDER "8_Platform_Specific/Tegra")
