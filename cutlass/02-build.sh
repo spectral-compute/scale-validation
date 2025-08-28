@@ -10,6 +10,7 @@ export SCALE_CUDA_VERSION="12.1"
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCUTLASS_NVCC_ARCHS="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')" \
+    -DCUTLASS_TEST_UNIT_ENABLE_WARNINGS=ON \
     -DCMAKE_CUDA_ARCHITECTURES="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')" \
     -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
     -DCMAKE_CUDA_FLAGS="-Wno-unused-result -Wno-deprecated-declarations" \
