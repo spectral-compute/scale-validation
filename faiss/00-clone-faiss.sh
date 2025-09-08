@@ -9,6 +9,6 @@ cd "${OUT_DIR}/faiss"
 do_clone faiss https://github.com/facebookresearch/faiss.git v1.9.0
 
 # Dataset
-wget -q ftp://ftp.irisa.fr/local/texmex/corpus/sift.tar.gz
+wget -q https://data.spectralcompute.co.uk/faiss/sift.tar.gz
 tar xf sift.tar.gz
 mv sift sift1M
