@@ -1,11 +1,8 @@
 #!/bin/bash
 
-# set -ETeuo pipefail # Script previously started with this, unrolling them
 set -o errtrace
 set -o functrace
-set -o errexit
 set -o nounset
-set -o pipefail
 
 
 SCRIPT_DIR="$(realpath "$(dirname "$0")")"
@@ -21,7 +18,6 @@ TESTS=(
     $(find test -type f -executable | sort)
 )
 
-set +e
 FAILURES=()
 for T in "${TESTS[@]}" ; do
     echo "======== ${T} ========"
@@ -30,7 +26,6 @@ for T in "${TESTS[@]}" ; do
         FAILURES+=("${T}")
     fi
 done
-set -e
 
 for T in "${FAILURES[@]}" ; do
     echo "Failed: ${T}"
@@ -38,3 +33,6 @@ done
 if [ ! -z "${FAILURES}" ] ; then
     exit 1
 fi
+
+echo "Cutlass test script finished"
+exit 0
