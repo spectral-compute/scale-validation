@@ -4,7 +4,6 @@ set -o errtrace
 set -o functrace
 set -o nounset
 
-
 SCRIPT_DIR="$(realpath "$(dirname "$0")")"
 source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
@@ -33,7 +32,6 @@ TESTS=(
 )
 
 # Currently this runs every test under the same negative filter list.
-
 FAILURES=()
 for T in "${TESTS[@]}" ; do
     echo "======== ${T} ========" | tee -a $LOGFILE
@@ -46,9 +44,6 @@ done
 for T in "${FAILURES[@]}" ; do
     echo "Failed: ${T}"
 done
-if [ ! -z "${FAILURES}" ] ; then
-    exit 1
-fi
 
 
 echo "Summary"
@@ -58,4 +53,9 @@ grep '\[  FAILED  \] [0-9]* tests, listed below:' "$LOGFILE" | cut -d ' ' -f 6 |
 
 
 echo "Cutlass test script finished"
+
+if [ ! -z "${FAILURES}" ] ; then
+    exit 1
+fi
+
 exit 0
