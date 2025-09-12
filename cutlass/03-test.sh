@@ -17,12 +17,24 @@ rm -f "$LOGFILE"
 FILTERS='*:-'
 
 # These tests require > 64k of smem to execute
+# e.g. with export SCALE_EXCEPTIONS=2, report "failed due to smem_size"
 for LargeSMEM in \
     SM80_CuTe_Ampere.CooperativeGemm2_Double_MMA \
     SM80_CuTe_Ampere.CooperativeGemm3_Half_MMA_CustomSmemLayouts \
     SM80_CuTe_Ampere.CooperativeGemm4_Half_MMA_SwizzledSmemLayouts \
     SM80_CuTe_Ampere.CooperativeGemm5_Double_MMA_SwizzledSmemLayouts \
-    SM80_CuTe_Ampere.CooperativeGemmComposedStride
+    SM80_CuTe_Ampere.CooperativeGemmComposedStride \
+    SM80_Device_Gemm_f64n_f64n_f64n_simt_f64.128x128x64_64x64x64 \
+    SM80_Device_Gemm_f64n_f64t_f64n_simt_f64.128x128x64_64x64x64 \
+    SM80_Device_Gemm_f64n_f64t_f64n_tensor_op_f64.128x128x64_64x64x64 \
+    SM80_Device_Gemm_f64t_f64n_f64n_simt_f64.128x128x64_64x64x64 \
+    SM80_Device_Gemm_f64t_f64n_f64n_tensor_op_f64.128x128x64_64x64x64 \
+    SM80_Device_Gemm_f64t_f64t_f64n_simt_f64.128x128x64_64x64x64 \
+    SM80_Device_Gemm_tf32n_tf32n_f32n_tensor_op_f32.128x128x32_64x64x64 \
+    SM80_Device_Gemm_tf32n_tf32t_f32n_tensor_op_f32.128x128x32_64x64x64 \
+    SM80_Device_Gemm_tf32t_tf32n_f32n_tensor_op_f32.128x128x32_64x64x64 \
+    SM80_Device_Gemm_tf32t_tf32n_f32n_tensor_op_f32.128x128x32_64x64x64_profiling \
+    SM80_Device_Gemm_tf32t_tf32t_f32n_tensor_op_f32.128x128x32_64x64x64
 do    
     FILTERS="$FILTERS:$LargeSMEM"
 done
@@ -35,7 +47,7 @@ TESTS=(
 FAILURES=()
 for T in "${TESTS[@]}" ; do
     echo "======== ${T} ========" | tee -a $LOGFILE
-    "${T}" --gtest_filter=$FILTERS >> $LOGFILE
+    "${T}" --gtest_filter=$FILTERS >> $LOGFILE 2>&1
     if [ "$?" != "0" ] ; then
         FAILURES+=("${T}")
     fi
