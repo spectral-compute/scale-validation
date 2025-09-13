@@ -6,7 +6,7 @@ source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
 # Configure.
 cmake \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCUDA_TOOLKIT_ROOT_DIR=${CUDA_PATH} \
     -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
     -DCMAKE_C_COMPILER="${CUDA_PATH}/bin/clang" \
