@@ -24,7 +24,7 @@ sed -E 's/ Difference/ ::Difference/g' -i "${OUT_DIR}/gomc/GOMC/src/GPU/Calculat
 
 # Configure.
 cmake \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
     -DCMAKE_CXX_FLAGS="-fPIC" \
     -DCMAKE_CUDA_FLAGS="-fPIC" \

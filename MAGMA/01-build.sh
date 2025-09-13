@@ -14,7 +14,7 @@ sed -i"" -Ee 's|find_package\( *OpenMP *\)||g' "${OUT_DIR}/MAGMA/MAGMA/CMakeList
 
 # Configure.
 cmake \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/MAGMA/MAGMA/inst" \
     -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
     -DCMAKE_C_COMPILER="${CUDA_PATH}/bin/clang" \

@@ -6,7 +6,7 @@ source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
 # Configure.
 cmake \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/xgboost/install" \
     -DCMAKE_C_COMPILER="${CUDA_PATH}/bin/clang" \
     -DCMAKE_CXX_COMPILER="${CUDA_PATH}/bin/clang++" \
