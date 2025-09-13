@@ -12,7 +12,7 @@ ARCHs="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')"
 
 # Configure.
 cmake \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
     -DCMAKE_CUDA_ARCHITECTURES="${ARCHs}" \
     -DGOOFIT_SUBMODULE=OFF \
