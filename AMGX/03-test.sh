@@ -5,7 +5,6 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 cd "${OUT_DIR}/AMGX/AMGX/build"
 
 export LD_LIBRARY_PATH="${CUDA_PATH}/lib"
-ls "${LD_LIBRARY_PATH}"
 
 # Just running ./src/amgx_tests_launcher generates a lot of failures even on Nvidia. So only run the tests that pass
 # there.
