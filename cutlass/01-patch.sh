@@ -8,9 +8,9 @@ source "${SCRIPT_DIR}"/../util/args.sh "$@"
 SRCDIR="${OUT_DIR}/cutlass/cutlass"
 
 # Cutlass disables wmma with clang due to an old clang bug that doesn't apply to SCALE.
-#sed -Ee 's|#if !\(defined\(__clang__\) && defined\(__CUDA__\)\)|#if 1|' -i ${SRCDIR}/include/cutlass/arch/wmma.h
-#sed -Ee 's|#if !\(defined\(__clang__\) && defined\(__CUDA__\)\)|#if 1|' -i ${SRCDIR}/include/cutlass/epilogue/warp/fragment_iterator_wmma_tensor_op.h
-#sed -Ee 's|#if !\(defined\(__clang__\) && defined\(__CUDA__\)\)|#if 1|' -i ${SRCDIR}/include/cutlass/epilogue/warp/tile_iterator_wmma_tensor_op.h
+sed -Ee 's|#if !\(defined\(__clang__\) && defined\(__CUDA__\)\)|#if 1|' -i ${SRCDIR}/include/cutlass/arch/wmma.h
+sed -Ee 's|#if !\(defined\(__clang__\) && defined\(__CUDA__\)\)|#if 1|' -i ${SRCDIR}/include/cutlass/epilogue/warp/fragment_iterator_wmma_tensor_op.h
+sed -Ee 's|#if !\(defined\(__clang__\) && defined\(__CUDA__\)\)|#if 1|' -i ${SRCDIR}/include/cutlass/epilogue/warp/tile_iterator_wmma_tensor_op.h
 
 # Always disable clustering.
 sed -Ee 's|#  define CUTLASS_SM90_CLUSTER_LAUNCH_ENABLED|//CUTLASS_SM90_CLUSTER_LAUNCH_ENABLED|' -i ${SRCDIR}/include/cutlass/cluster_launch.hpp
