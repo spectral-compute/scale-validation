@@ -47,7 +47,7 @@ TESTS=(
 FAILURES=()
 for T in "${TESTS[@]}" ; do
     echo "======== ${T} ========" | tee -a $LOGFILE
-    "${T}" --gtest_filter=$FILTERS >> $LOGFILE 2>&1
+    "${T}" --gtest_filter=$FILTERS |& tee -a $LOGFILE
     if [ "$?" != "0" ] ; then
         FAILURES+=("${T}")
     fi
