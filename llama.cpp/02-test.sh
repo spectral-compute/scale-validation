@@ -4,6 +4,8 @@ set -ETeuo pipefail
 source "$(dirname "$0")"/../util/args.sh "$@"
 cd "${OUT_DIR}/llama.cpp/install/bin"
 
+export LD_LIBRARY_PATH="${OUT_DIR}/llama.cpp/install/lib:${LD_LIBRARY_PATH}"
+
 for F in test-* ; do
     echo "Running test $F"
 
