@@ -4,8 +4,7 @@ set -ETeuo pipefail
 SCRIPT_DIR="$(realpath "$(dirname "$0")")"
 source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
-export SCALE_CUDA_VERSION="11.4"
-
+export SCALE_CUDA_VERSION="11.8"
 # Configure.
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
