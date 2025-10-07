@@ -10,6 +10,7 @@ cmake \
     -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
     -DCMAKE_CUDA_ARCHITECTURES="$(echo "${GPU_ARCH}" | sed -E 's/^sm_//')" \
     -DGGML_CUDA=ON \
+    -DLLAMA_CURL=OFF \
     -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/llama.cpp/install" \
     -B"${OUT_DIR}/llama.cpp/build" \
     "${OUT_DIR}/llama.cpp/llama.cpp"
