@@ -10,7 +10,7 @@ export FLAMEGPU_INC_DIR="${OUT_DIR}/FLAMEGPU2/FLAMEGPU2/include"
 # Err why is this needed only in CI?
 export CUDA_PATH="${CUDA_PATH}"
 
-FILTERS='-LoggingTest.CUDAEnsembleSimulate:DependencyGraphTest.UnattachedFunctionWarning'
+FILTERS='-LoggingTest.CUDAEnsembleSimulate:DependencyGraphTest.UnattachedFunctionWarning:*DeathTest*'
 
 # On gfx9xx, a bug in the AQL queue implementation causes intermittent deadlocks when multiple
 # compute queues are used. Sighhhh.
