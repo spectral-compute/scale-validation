@@ -40,6 +40,7 @@ definitely needs. The list may not be exhaustive.
 | llama.cpp     | ✔****  | Old version works. New version needs more APIs        | More graph APIs, async matmuls                                            |
 | llm.c         | ❌      | Old version builds+runs. New version needs more APIs  | NVML, cuBLASLt                                                            |
 | MAGMA         | ✔      |                                                       |                                                                           |
+| nvflip         | ✔      |                                                       |                                                                           |
 | OpenCV        | ❌      |                                                       | NPP                                                                       |
 | openmpi       | ✔      |                                                       |                                                                           |
 | PhysX         | ❌      | Numerous missing APIs                                 | PTX barriers, cudaArray, graphics interop                                 |
