@@ -62,6 +62,9 @@ Each directory (except `util`) contains a set of scripts that should be executed
 in lexicographical order for a complete test. These scripts are mostly just
 the normal CUDA build instructions for the corresponding project.
 
+Note that you may need to install the system dependencies described on the project
+website before this will succeed.
+
 The test driver script `test.sh` may be used to conveniently execute an
 entire test:
 
