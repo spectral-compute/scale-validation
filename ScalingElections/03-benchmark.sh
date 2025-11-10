@@ -2,7 +2,7 @@
 set -ETeuo pipefail
 
 SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
+source "${SCRIPT_DIR}"/../util/args.sh "$@"   # expects OUT_DIR, etc.
 
 APP_ROOT="${OUT_DIR}/scaling-elections"
 APP_DIR="${APP_ROOT}/ScalingElections"
@@ -31,9 +31,17 @@ export PYTHONUNBUFFERED=1
 
 : > "$LOGFILE"
 
+# Same matrix as run_mojo.sh
+#   "CANDS  WARMUP  REPEAT"
+runs=(
+  "2048   1 20"
+  "4096   1 10"
+  "8192   1 5"
+  "16384  1 3"
+  "32768  1 1"
+)
+
 RUN_GPU="--run-gpu"
-# Add more sizes if you want: 4096 8192 ...
-CANDIDATE_SETS=( 2048 4096 8192 )
 
 RCS=()
 FAIL=0
@@ -42,7 +50,7 @@ pushd "${APP_DIR}" >/dev/null
 
 echo "== venv =="
 python -V
-# Ensure numba/llvmlite/numpy are present and compatible (pins known-good combo)
+# Ensure numba/llvmlite/numpy are present and compatible (known-good pins)
 python - <<'PY' || python -m pip install -q --upgrade "numpy==1.26.*" "numba==0.60.*" "llvmlite==0.43.*"
 try:
     import numpy, numba, llvmlite  # noqa: F401
@@ -52,19 +60,28 @@ PY
 python -c "import numpy, numba, llvmlite; print('numpy', numpy.__version__, '| numba', numba.__version__, '| llvmlite', llvmlite.__version__)"
 
 run_one() {
-  local N="$1"
-  echo "======== python ${SCRIPT} --num-candidates ${N} --num-voters 0 ${RUN_GPU} ========" | tee -a "$LOGFILE"
-  # stdbuf keeps line order when piping through tee
-  stdbuf -oL -eL python -u "${SCRIPT}" --num-candidates "${N}" --num-voters 0 ${RUN_GPU} 2>&1 | tee -a "$LOGFILE"
+  local CANDS="$1" WARMUP="$2" REPEAT="$3"
+  echo "=== ${CANDS} candidates (warmup=${WARMUP}, repeat=${REPEAT}) ===" | tee -a "$LOGFILE"
+  # Keep line order when piping through tee
+  stdbuf -oL -eL python -u "${SCRIPT}" \
+    --num-candidates "${CANDS}" \
+    --num-voters 0 \
+    ${RUN_GPU} \
+    --no-serial \
+    --warmup "${WARMUP}" \
+    --repeat "${REPEAT}" 2>&1 | tee -a "$LOGFILE"
   return ${PIPESTATUS[0]}
 }
 
-for N in "${CANDIDATE_SETS[@]}"; do
-  if run_one "${N}"; then
+for r in "${runs[@]}"; do
+  set -- $r
+  CANDS="$1"; WARMUP="$2"; REPEAT="$3"
+  if run_one "${CANDS}" "${WARMUP}" "${REPEAT}"; then
     RCS+=( 0 )
   else
     RCS+=( 1 ); FAIL=1
   fi
+  echo | tee -a "$LOGFILE"
 done
 
 popd >/dev/null
