@@ -1,0 +1,1 @@
+ctranslate2 v4.5.0

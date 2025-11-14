@@ -6,4 +6,4 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 mkdir -p "${OUT_DIR}/FLAMEGPU2"
 cd "${OUT_DIR}/FLAMEGPU2"
 
-do_clone FLAMEGPU2 https://github.com/FLAMEGPU/FLAMEGPU2.git v2.0.0-rc.2
+do_clone FLAMEGPU2 https://github.com/FLAMEGPU/FLAMEGPU2.git "$(cat "$(dirname $0)/version.txt" | grep "FLAMEGPU2" | sed "s/FLAMEGPU2 //g")"

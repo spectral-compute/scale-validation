@@ -97,6 +97,7 @@ for S in "${TEST_DIR}/${TEST}"/* ; do
     F=$(basename $S)
     if [[ $F == *.sh && "$F" =~ ^[0-9][0-9]-.+ ]]; then
         FMT=$(printf %02d $I)
+        # Check if script begins with correct index number
         if [[ $F != $FMT-* ]]; then
             echo -e "\x1b[31;1mFATAL: ${S} looks like a test script, but is not part of a sequential order\x1b[m"
             exit -1
@@ -126,7 +127,9 @@ for S in "${TEST_DIR}/${TEST}"/* ; do
     echo -e "Running \x1b[1m$(basename "$S")\x1b[0m in \x1b[1m${TEST}\x1b[0m"
 
     set +e
-    "$S" "${ARGS[@]}"
+    # HACK: call with absolute path so $0 points accurately to script dir
+    # not proud... but i dont wanna mass edit 50+ bash scripts :((
+    "$(realpath "$S")" "${ARGS[@]}"
     R="$?"
     set -e
 
