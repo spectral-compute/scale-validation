@@ -5,6 +5,8 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
+**This shows the test status for SCALE at version master <790246e1>.**
+
 Test scripts get added to this repository long before they are fully
 supported by SCALE. We use the outcome of this kind of testing to prioritise
 development. Contributions welcome!
@@ -57,7 +59,7 @@ definitely needs. The list may not be exhaustive.
 | whispercpp    | ?      |                                                       |                                                                           |
 | xgboost       | ?      |                                                       |                                                                           |
 
-> \* The following program tests were skipped for this SCALE version (master <765d6900>), and given states are from older versions:
+> \* The following program tests were skipped for this SCALE version (master <790246e1>), and given states are from older versions:
 > 
 > * hashcat
 > * stdgpu
