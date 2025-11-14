@@ -15,47 +15,55 @@ definitely needs. The list may not be exhaustive.
 
 | Project       | Status | Notes                                                 | Needs                                                                     |
 |---------------|--------|-------------------------------------------------------|---------------------------------------------------------------------------|
-| Alien         | ✔*     | Needs patch to remove OpenGL interop                  | OpenGL Interop                                                            |
-| AMGX          | ✔      |                                                       |                                                                           |
-| arrayfire     | ❌      |                                                       | cuDNN, more cuSPARSE                                                      |
-| caffe         | ✔      |                                                       |                                                                           |
-| ctranslate2   | ✔*     | Some intermittent test failures                       |                                                                           |
-| cuml          | ❌      | Buildsystem nonsnse                                   |                                                                           |
-| cuSZ          | ✔      |                                                       |                                                                           |
-| cutlass       | ❌      |                                                       |                                                                           |
-| CV-CUDA       | ❌      |                                                       |                                                                           |
-| cycles        | ✔      |                                                       |                                                                           |
-| faiss         | ✔      |                                                       |                                                                           |
-| FastEddy      | ✔      |                                                       |                                                                           |
-| FLAMEGPU2     | ✔      |                                                       |                                                                           |
-| gomc          | ✔      |                                                       |                                                                           |
-| GooFit        | ❌      |                                                       | Texture Refs                                                              |
-| gpu_jpeg2k    | ✔      |                                                       |                                                                           |
-| GROMACS       | ✔      |                                                       |                                                                           |
-| ggml          | ✔*     | Old version works. New version needs more APIs        | Missing async opcodes                                                     |
-| hashcat       | ✔      |                                                       |                                                                           |
-| hashinator    | ✔      |                                                       |                                                                           |
-| hypre         | ❌      | Buildsystem nonsense                                  |                                                                           |
-| jitify        | ✔*     | Some test failures                                    |                                                                           |
-| llama.cpp     | ✔****  | Old version works. New version needs more APIs        | More graph APIs, async matmuls                                            |
-| llm.c         | ❌      | Old version builds+runs. New version needs more APIs  | NVML, cuBLASLt                                                            |
-| MAGMA         | ✔      |                                                       |                                                                           |
-| nvflip         | ✔      |                                                       |                                                                           |
-| OpenCV        | ❌      |                                                       | NPP                                                                       |
-| openmpi       | ✔      |                                                       |                                                                           |
-| PhysX         | ❌      | Numerous missing APIs                                 | PTX barriers, cudaArray, graphics interop                                 |
-| pytorch       | ❌      | Numerous missing APIs                                 | cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,... |
-| quda          | ❌      |                                                       | NVML                                                                      |
-| risc0         | ❌      | Dependent project tries to return carry-bit. Fixable. |                                                                           |
-| rodinia_suite | ✔      |                                                       |                                                                           |
-| stdgpu        | ✔*     | Multigpu/crash tests are flaky                        |                                                                           |
-| TCLB          | ✔      |                                                       |                                                                           |
-| thrust        | ✔      | Old. Should add `cccl`!                               |                                                                           |
-| timemachine   | ❌      | Buildsystem nonsense                                  |                                                                           |
-| UppASD        | ✔      |                                                       |                                                                           |
-| vllm          | ❌      | Needs Pytorch                                         |                                                                           |
-| whispercpp    | ✔      |                                                       |                                                                           |
-| xgboost       | ✔      |                                                       |                                                                           |
+| Alien         | ?     | Needs patch to remove OpenGL interop                  | OpenGL Interop                                                            |
+| AMGX          | ?      |                                                       |                                                                           |
+| arrayfire     | ?      |                                                       | cuDNN, more cuSPARSE                                                      |
+| caffe         | ?      |                                                       |                                                                           |
+| ctranslate2   | ?     | Some intermittent test failures                       |                                                                           |
+| cuml          | ?      | Buildsystem nonsnse                                   |                                                                           |
+| cuSZ          | ?      |                                                       |                                                                           |
+| cutlass       | ?      |                                                       |                                                                           |
+| CV-CUDA       | ?     |                                                       |                                                                           |
+| cycles        | ?      |                                                       |                                                                           |
+| faiss         | ❓*      |                                                       |                                                                           |
+| FastEddy      | ?      |                                                       |                                                                           |
+| FLAMEGPU2     | ?      |                                                       |                                                                           |
+| gomc          | ❓*      |                                                       |                                                                           |
+| GooFit        | ?      |                                                       | Texture Refs                                                              |
+| gpu\_jpeg2k    | ?      |                                                       |                                                                           |
+| GROMACS       | ?      |                                                       |                                                                           |
+| ggml          | ?     | Old version works. New version needs more APIs        | Missing async opcodes                                                     |
+| hashcat       | ❓*      |                                                       |                                                                           |
+| hashinator    | ?      |                                                       |                                                                           |
+| hypre         | ?      | Buildsystem nonsense                                  |                                                                           |
+| jitify        | ?     | Some test failures                                    |                                                                           |
+| llama.cpp     | ?  | Old version works. New version needs more APIs        | More graph APIs, async matmuls                                            |
+| llm.c         | ?      | Old version builds+runs. New version needs more APIs  | NVML, cuBLASLt                                                            |
+| MAGMA         | ?      |                                                       |                                                                           |
+| nvflip         | ?      |                                                       |                                                                           |
+| OpenCV        | ?      |                                                       | NPP                                                                       |
+| openmpi       | ?      |                                                       |                                                                           |
+| PhysX         | ?      | Numerous missing APIs                                 | PTX barriers, cudaArray, graphics interop                                 |
+| pytorch       | ?      | Numerous missing APIs                                 | cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,... |
+| quda          | ?      |                                                       | NVML                                                                      |
+| risc0         | ?      | Dependent project tries to return carry-bit. Fixable. |                                                                           |
+| rodinia\_suite | ?      |                                                       |                                                                           |
+| stdgpu        | ❓*     | Multigpu/crash tests are flaky                        |                                                                           |
+| TCLB          | ?      |                                                       |                                                                           |
+| thrust        | ❓*      | Old. Should add `cccl`!                               |                                                                           |
+| timemachine   | ?      | Buildsystem nonsense                                  |                                                                           |
+| UppASD        | ?      |                                                       |                                                                           |
+| vllm          | ?      | Needs Pytorch                                         |                                                                           |
+| whispercpp    | ?      |                                                       |                                                                           |
+| xgboost       | ?      |                                                       |                                                                           |
+
+> \* The following program tests were skipped for this SCALE version (master <765d6900>), and given states are from older versions:
+> 
+> * hashcat
+> * stdgpu
+> * gomc
+> * thrust
+> * faiss
 
 ## Running Tests
 
