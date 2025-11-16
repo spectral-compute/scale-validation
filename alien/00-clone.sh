@@ -6,4 +6,4 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 mkdir -p "${OUT_DIR}/alien"
 cd "${OUT_DIR}/alien"
 
-do_clone_hash alien https://github.com/chrxh/alien.git "$(cat "$(dirname $0)/version.txt" | grep "alien" | sed "s/alien //g")"
+do_clone_hash alien https://github.com/chrxh/alien.git "$(get_version alien)"

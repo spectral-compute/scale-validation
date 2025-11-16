@@ -1,4 +1,5 @@
 # Script to help refactor old set version scripts into ones that read version.txt
+# Not part of any automated pipeline, probably not needed anymore, preserved just in case
 # God forgive me...
 
 insert_version () {
@@ -14,7 +15,7 @@ insert_version () {
         printf -v version "%q" "$version"
         local clone_script="$(ls $1 -1 | grep -E 'clone|download')"
 
-        sed -i -r 's/^(do_clone[^[:space:]]* '"$program"' [^[:space:]]+) '"$version"'$/\1 "$(cat "$(dirname $0)/version.txt" | grep "'"$program"'" | sed "s\/'"$program"' \/\/g")"/g' "$1/$clone_script"
+        sed -i -r 's/^(do_clone[^[:space:]]* '"$program"' [^[:space:]]+) (.*)$/\1 "$(get_version '"$program"')"/g' "$1/$clone_script"
     done <<< "$version_info"
 
 }

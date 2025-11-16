@@ -5,7 +5,7 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 
 mkdir -p "${OUT_DIR}/llama.cpp"
 cd "${OUT_DIR}/llama.cpp"
-do_clone llama.cpp https://github.com/ggerganov/llama.cpp "$(cat "$(dirname $0)/version.txt" | grep "llama.cpp" | sed "s/llama.cpp //g")"
+do_clone llama.cpp https://github.com/ggerganov/llama.cpp "$(get_version llama.cpp)"
 
 mkdir models
 cd models

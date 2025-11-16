@@ -91,6 +91,7 @@ if [ -z "${STOP_AFTER}" ] ; then
 fi
 
 # Run all the scripts for the test.
+
 RETURN_CODE=0
 I=0
 for S in "${TEST_DIR}/${TEST}"/* ; do

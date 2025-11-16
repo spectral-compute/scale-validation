@@ -119,4 +119,15 @@ function do_clone_hash() {
   git -C $1 submodule update --init --recursive
 }
 
+# Extract version from matching version.txt
+get_version () {
+    local dir=""
+    if [[ $# == 1 ]]; then
+        dir="$(dirname $0)"
+    else
+        dir="$2"
+    fi
+    echo $(cat "$dir/version.txt" | grep "$1" | sed "s/$1 //g")
+}
+
 PY_VER_PATH=$(python3 --version | cut -d ' ' -f 2 | cut -d '.' -f 1-2) # Like "3.12"

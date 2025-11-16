@@ -6,7 +6,7 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 mkdir -p "${OUT_DIR}/faiss"
 cd "${OUT_DIR}/faiss"
 
-do_clone faiss https://github.com/facebookresearch/faiss.git "$(cat "$(dirname $0)/version.txt" | grep "faiss" | sed "s/faiss //g")"
+do_clone faiss https://github.com/facebookresearch/faiss.git "$(get_version faiss)"
 
 # Dataset
 wget -q https://data.spectralcompute.co.uk/faiss/sift.tar.gz

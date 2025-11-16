@@ -7,7 +7,7 @@ SCRIPT_DIR="$(realpath "$(dirname "$0")")"
 mkdir -p "${OUT_DIR}/tiny-cuda-nn"
 cd "${OUT_DIR}/tiny-cuda-nn"
 
-do_clone tiny-cuda-nn https://github.com/NVlabs/tiny-cuda-nn "$(cat "$(dirname $0)/version.txt" | grep "tiny-cuda-nn" | sed "s/tiny-cuda-nn //g")"
+do_clone tiny-cuda-nn https://github.com/NVlabs/tiny-cuda-nn "$(get_version tiny-cuda-nn)"
 
 cd "${OUT_DIR}/tiny-cuda-nn/tiny-cuda-nn"
 # Patch that disables jit fusion to alow the use of cutlass.
