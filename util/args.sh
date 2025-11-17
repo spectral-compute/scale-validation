@@ -127,7 +127,7 @@ get_version () {
     else
         dir="$2"
     fi
-    echo $(cat "$dir/version.txt" | grep "$1" | sed "s/$1 //g")
+    echo $(cat "$dir/../versions.txt" | grep "$1" | sed "s/$1 //g")
 }
 
 PY_VER_PATH=$(python3 --version | cut -d ' ' -f 2 | cut -d '.' -f 1-2) # Like "3.12"
