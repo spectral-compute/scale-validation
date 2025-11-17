@@ -1,3 +1,0 @@
-opencv 725e440
-opencv_contrib e247b68
-opencv_extra 5abbd7e
