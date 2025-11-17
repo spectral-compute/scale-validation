@@ -61,11 +61,11 @@ definitely needs. The list may not be exhaustive.
 
 > \* The following program tests were skipped for geoff-dev-repo: master <790246e1>, and given states are from older versions:
 > 
+> * thrust
 > * hashcat
+> * faiss
 > * stdgpu
 > * gomc
-> * thrust
-> * faiss
 
 ## Running Tests
 
