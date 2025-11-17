@@ -30,7 +30,7 @@ definitely needs. The list may not be exhaustive.
 |  faiss  |  v1.9.0  |  ❓*  |  |  |
 |  FastEddy  |  v2.0.0  |  ?  |  |  |
 |  FLAMEGPU2  |  v2.0.0-rc.2  |  ?  |  |  |
-|  gomc  |  ?  |  ❓*  |  |  |
+|  gomc  |  4c12477  |  ❓*  |  |  |
 |  GooFit  |  v2.3.0  |  ?  |  |  Texture Refs  |
 |  gpu\_jpeg2k  |  ee715e9  |  ?  |  |  |
 |  GROMACS  |  ?  |  ?  |  |  |
@@ -43,7 +43,7 @@ definitely needs. The list may not be exhaustive.
 |  llm.c  |  7ecd8906afe6ed...  |  ?  |  Old version builds+runs. New version needs more APIs  |  NVML, cuBLASLt  |
 |  MAGMA  |  v2.9.0  |  ?  |  |  |
 |  nvflip  |  1eb247c  |  ?  |  |  |
-|  OpenCV  |  ?  |  ?  |  |  NPP  |
+|  OpenCV  |  725e440  |  ?  |  |  NPP  |
 |  openmpi  |  ?  |  ?  |  |  |
 |  PhysX  |  ?  |  ?  |  Numerous missing APIs  |  PTX barriers, cudaArray, graphics interop  |
 |  pytorch  |  v1.8.1  |  ?  |  Numerous missing APIs  |  cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,...  |
