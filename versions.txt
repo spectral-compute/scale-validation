@@ -17,7 +17,7 @@ FastEddy v2.0.0
 FLAMEGPU2 v2.0.0-rc.2
 flashinfer v0.2.8
 ggml d3a58b0
-GOMC 4c12477
+gomc 4c12477
 GOMC_Examples cec1be7
 GooFit v2.3.0
 GPUJPEG 3e045d1
@@ -31,6 +31,7 @@ llm.c 7ecd8906afe6ed7a2b2cdb731c042f26d525b820
 MAGMA v2.9.0
 nerf-cuda main
 nvflip 1eb247c
+openmpi v4.1
 opencv 725e440
 opencv_contrib e247b68
 opencv_extra 5abbd7e
@@ -52,3 +53,4 @@ whispercpp v1.7.1
 xgboost v2.1.0
 House-Prices-Advanced-Regression f3a41e6
 datasets 5e987d5
+gromacs v2025.1
