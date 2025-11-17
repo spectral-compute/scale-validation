@@ -6,12 +6,10 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 mkdir -p "${OUT_DIR}/openmpi"
 cd "${OUT_DIR}/openmpi"
 
-MAJOR=4
-MINOR=1
 PATCH=8
 
-VER="v${MAJOR}.${MINOR}"
-DIR="openmpi-${MAJOR}.${MINOR}.${PATCH}"
+VER="$(get_version openmpi)"
+DIR="openmpi-$(echo $VER | sed 's/v//g').${PATCH}"
 FILE="${DIR}.tar.bz2"
 
 wget "https://download.open-mpi.org/release/open-mpi/${VER}/${FILE}"
