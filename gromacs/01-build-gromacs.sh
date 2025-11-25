@@ -6,10 +6,11 @@ source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
 mkdir -p "${OUT_DIR}/gromacs/build"
 cd "${OUT_DIR}/gromacs/build"
-GROMACS_VER=2025.1
+GROMACS_VER=2025.4
 
 # Configure.
 cmake \
+    -DGMX_TEST_TIMEOUT_FACTOR=4 \
     -DGMX_DISABLE_CUDA_TEXTURES=ON \
     -DCMAKE_INSTALL_PREFIX="$(pwd)/../install" \
     -DCMAKE_BUILD_TYPE=Release \

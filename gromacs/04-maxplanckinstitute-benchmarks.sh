@@ -87,7 +87,8 @@ for ZIP in "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks/"*.zip ; do
     # Actually extract and run the test.
     unzip "${ZIP}"
     set +e
-    gmx mdrun -s "${NAME}.tpr" ${EXTRA_ARGS} -ntmpi 1 -pme cpu -bonded cpu -update cpu
+    #gmx mdrun -s "${NAME}.tpr" ${EXTRA_ARGS} -ntmpi 1 -pme cpu -bonded cpu -update cpu
+    gmx mdrun -s "${NAME}.tpr" ${EXTRA_ARGS} -ntmpi 1 -nb gpu
     if [ "$?" != 0 ] ; then
         set -e
         RETCODE=2

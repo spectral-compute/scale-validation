@@ -2,7 +2,7 @@
 
 set -e
 
-GROMACS_VER=2025.1
+GROMACS_VER=2025.4
 
 source "$(dirname "$0")"/../util/args.sh "$@"
 SCRIPT_DIR="$(realpath "$(dirname "$0")")"
