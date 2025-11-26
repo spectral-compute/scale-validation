@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <41263ba8>.**
+**This shows the test status for SCALE: master <2898e558>.**
 
 Test scripts get added to this repository long before they are fully
 supported by SCALE. We use the outcome of this kind of testing to prioritise
@@ -59,28 +59,112 @@ definitely needs. The list may not be exhaustive.
 |  whispercpp  |  v1.7.1  |    |  |  |
 |  xgboost  |  v2.1.0  |    |  |  |
 
-> \* The following program tests were skipped for SCALE: master <41263ba8>, and given states are from older versions:
+> \* The following program tests were skipped for SCALE: master <2898e558>, and given states are from older versions:
 > 
+> * nvflip
+> * bitnet
+> * nvflip
+> * hashcat
+> * rodinia
+> * stdgpu
+> * gomc
+> * ctranslate2
+> * rodinia
+> * FLAMEGPU2
+> * alien
+> * GPUJPEG
 > * gpu_jpeg2k
 > * gomc
-> * whisper.cpp
-> * jitify
-> * cycles
-> * stdgpu
-> * bitnet
 > * faiss
+> * cycles
+> * hashcat
+> * TCLB
+> * whisper.cpp
+> * GROMACS
+> * jitify
+> * ggml
 > * FastEddy
-> * GPUJPEG
+> * ggml
+> * GROMACS
+> * stdgpu
+> * hashcat
+> * cuSZ
+> * CUTLASS
+> * hashcat
+> * rodinia
+> * stdgpu
+> * gomc
+> * CUTLASS
+> * faiss
+> * cycles
+> * FLAMEGPU2
+> * GROMACS
+> * TCLB
+> * whisper.cpp
+> * ggml
+> * jitify
+> * FastEddy
+> * gpu_jpeg2k
 > * ctranslate2
 > * cuSZ
 > * alien
-> * hashcat
+> * GPUJPEG
+> * rodinia
+> * CUTLASS
 > * nvflip
+> * bitnet
+> * whisper.cpp
+> * cuSZ
+> * FastEddy
+> * CUTLASS
+> * bitnet
+> * stdgpu
+> * gomc
+> * faiss
+> * cycles
+> * alien
+> * GPUJPEG
+> * ctranslate2
+> * jitify
 > * FLAMEGPU2
 > * TCLB
+> * hashcat
+> * gpu_jpeg2k
+> * FastEddy
+> * cuSZ
+> * faiss
+> * TCLB
+> * whisper.cpp
+> * jitify
 > * GROMACS
-> * rodinia
+> * bitnet
+> * cycles
+> * FLAMEGPU2
+> * alien
+> * GPUJPEG
+> * gpu_jpeg2k
+> * ctranslate2
 > * ggml
+> * nvflip
+> * gomc
+> * gpu_jpeg2k
+> * faiss
+> * whisper.cpp
+> * cycles
+> * rodinia
+> * stdgpu
+> * TCLB
+> * bitnet
+> * alien
+> * GPUJPEG
+> * FastEddy
+> * cuSZ
+> * ctranslate2
+> * FLAMEGPU2
+> * jitify
+> * ggml
+> * GROMACS
+> * nvflip
 > * CUTLASS
 
 ## Running Tests
