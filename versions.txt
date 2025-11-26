@@ -37,7 +37,7 @@ opencv_contrib e247b68
 opencv_extra 5abbd7e
 PhysX 1e44a0e
 pytorch v2.2.1
-pytorch v1.8.1
+pytorch-1.8.1 v1.8.1
 quda 07822b61c6ab5fa9586233b03ac794bf33ab647e
 risc0 v1.2.2
 rodinia_suite spectral
