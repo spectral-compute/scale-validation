@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <2898e558>.**
+**This shows the test status for SCALE: master <7fc7c21d>.**
 
 Test scripts get added to this repository long before they are fully
 supported by SCALE. We use the outcome of this kind of testing to prioritise
@@ -46,7 +46,7 @@ definitely needs. The list may not be exhaustive.
 |  OpenCV  |  725e440  |    |  |  NPP  |
 |  openmpi  |  v4.1  |    |  |  |
 |  PhysX  |    |    |  Numerous missing APIs  |  PTX barriers, cudaArray, graphics interop  |
-|  pytorch  |  v1.8.1  |    |  Numerous missing APIs  |  cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,...  |
+|  pytorch  |  v2.2.1  |    |  Numerous missing APIs  |  cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,...  |
 |  quda  |  07822b61c6ab5f...  |    |  |  NVML  |
 |  risc0  |  v1.2.2  |    |  Dependent project tries to return carry-bit. Fixable.  |  |
 |  rodinia\_suite  |  spectral  |    |  |  |
@@ -59,111 +59,27 @@ definitely needs. The list may not be exhaustive.
 |  whispercpp  |  v1.7.1  |    |  |  |
 |  xgboost  |  v2.1.0  |    |  |  |
 
-> \* The following program tests were skipped for SCALE: master <2898e558>, and given states are from older versions:
+> \* The following program tests were skipped for SCALE: master <7fc7c21d>, and given states are from older versions:
 > 
-> * nvflip
-> * bitnet
-> * nvflip
-> * hashcat
-> * rodinia
-> * stdgpu
-> * gomc
-> * ctranslate2
-> * rodinia
-> * FLAMEGPU2
-> * alien
 > * GPUJPEG
+> * alien
+> * ctranslate2
 > * gpu_jpeg2k
-> * gomc
-> * faiss
-> * cycles
-> * hashcat
-> * TCLB
-> * whisper.cpp
-> * GROMACS
-> * jitify
-> * ggml
-> * FastEddy
-> * ggml
-> * GROMACS
-> * stdgpu
-> * hashcat
-> * cuSZ
-> * CUTLASS
-> * hashcat
-> * rodinia
-> * stdgpu
-> * gomc
-> * CUTLASS
-> * faiss
-> * cycles
-> * FLAMEGPU2
-> * GROMACS
-> * TCLB
-> * whisper.cpp
-> * ggml
-> * jitify
-> * FastEddy
-> * gpu_jpeg2k
-> * ctranslate2
-> * cuSZ
-> * alien
-> * GPUJPEG
-> * rodinia
-> * CUTLASS
-> * nvflip
-> * bitnet
-> * whisper.cpp
-> * cuSZ
-> * FastEddy
-> * CUTLASS
-> * bitnet
-> * stdgpu
-> * gomc
-> * faiss
-> * cycles
-> * alien
-> * GPUJPEG
-> * ctranslate2
 > * jitify
 > * FLAMEGPU2
 > * TCLB
-> * hashcat
-> * gpu_jpeg2k
+> * whisper.cpp
 > * FastEddy
-> * cuSZ
-> * faiss
-> * TCLB
-> * whisper.cpp
-> * jitify
-> * GROMACS
-> * bitnet
-> * cycles
-> * FLAMEGPU2
-> * alien
-> * GPUJPEG
-> * gpu_jpeg2k
-> * ctranslate2
 > * ggml
-> * nvflip
-> * gomc
-> * gpu_jpeg2k
+> * GROMACS
 > * faiss
-> * whisper.cpp
+> * gomc
 > * cycles
+> * hashcat
 > * rodinia
 > * stdgpu
-> * TCLB
-> * bitnet
-> * alien
-> * GPUJPEG
-> * FastEddy
 > * cuSZ
-> * ctranslate2
-> * FLAMEGPU2
-> * jitify
-> * ggml
-> * GROMACS
+> * bitnet
 > * nvflip
 > * CUTLASS
 
