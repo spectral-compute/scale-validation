@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <7fc7c21d>.**
+**This shows the test status for SCALE: master <c8e65f02>.**
 
 Test scripts get added to this repository long before they are fully
 supported by SCALE. We use the outcome of this kind of testing to prioritise
@@ -59,29 +59,30 @@ definitely needs. The list may not be exhaustive.
 |  whispercpp  |  v1.7.1  |    |  |  |
 |  xgboost  |  v2.1.0  |    |  |  |
 
-> \* The following program tests were skipped for SCALE: master <7fc7c21d>, and given states are from older versions:
+> \* The following program tests were skipped for SCALE: master <c8e65f02>, and given states are from older versions:
 > 
-> * GPUJPEG
-> * alien
 > * ctranslate2
-> * gpu_jpeg2k
-> * jitify
+> * ggml
+> * bitnet
+> * faiss
+> * CUTLASS
+> * CUTLASS
+> * hashcat
+> * stdgpu
 > * FLAMEGPU2
-> * TCLB
 > * whisper.cpp
 > * FastEddy
-> * ggml
-> * GROMACS
-> * faiss
-> * gomc
+> * gpu_jpeg2k
 > * cycles
-> * hashcat
+> * alien
 > * rodinia
-> * stdgpu
-> * cuSZ
-> * bitnet
+> * gomc
+> * GPUJPEG
+> * jitify
+> * TCLB
 > * nvflip
-> * CUTLASS
+> * GROMACS
+> * cuSZ
 
 ## Running Tests
 
