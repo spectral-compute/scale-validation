@@ -1,0 +1,33 @@
+diff --git a/tools/setup_helpers/cmake.py b/tools/setup_helpers/cmake.py
+index 02ab011..dde82bd 100644
+--- a/tools/setup_helpers/cmake.py
++++ b/tools/setup_helpers/cmake.py
+@@ -440,10 +440,12 @@ class CMake:
+         # 1) MAX_JOBS environment variable
+         # 2) If using the Ninja build system, delegate decision to it.
+         # 3) Otherwise, fall back to the number of processors.
+-
++        # These are arguments passed to the underlying native build tool
++        # (ninja/make/msbuild) after `cmake --build ... --`.
++        native_build_args: List[str] = []
+         # Allow the user to set parallelism explicitly. If unset,
+         # we'll try to figure it out.
+-        max_jobs = os.getenv("MAX_JOBS")
++        max_jobs = os.getenv("MAX_JOBS")
+ 
+         if max_jobs is not None or not USE_NINJA:
+             # Ninja is capable of figuring out the parallelism on its
+@@ -459,6 +461,13 @@ class CMake:
+ 
+             # CMake 3.12 provides a '-j' option.
+             build_args += ["-j", max_jobs]
++            if not IS_WINDOWS:
++                if USE_NINJA:
++                    native_build_args = ["-k", "0"] + native_build_args
++                else:
++                    native_build_args = ["-k"] + native_build_args
++            if native_build_args:
++                build_args += ["--"] + native_build_args
+         self.run(build_args, my_env)
+ 
+     def clear_cache(self) -> None:
