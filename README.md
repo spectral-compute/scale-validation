@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <267eae45>.**
+**This shows the test status for SCALE: master <e814a917>.**
 
 Test scripts get added to this repository long before they are fully
 supported by SCALE. We use the outcome of this kind of testing to prioritise
@@ -17,7 +17,7 @@ definitely needs. The list may not be exhaustive.
 
 | Project       | Version | Status | Notes                                                 | Needs                                                                     |
 |---------------|---------|--------|-------------------------------------------------------|---------------------------------------------------------------------------|
-|  Alien  |  scaletest  |  ❌  |  Needs patch to remove OpenGL interop  |  OpenGL Interop  |
+|  Alien  |  scaletest  |  ✅  |  Needs patch to remove OpenGL interop  |  OpenGL Interop  |
 |  AMGX  |  v2.4.0  |    |  |  |
 |  arrayfire  |  v3.9.0  |    |  |  cuDNN, more cuSPARSE  |
 |  caffe  |  9b891540183ddc...  |    |  |  |
@@ -29,7 +29,7 @@ definitely needs. The list may not be exhaustive.
 |  cycles  |  v4.4.0  |  ✅  |  |  |
 |  faiss  |  v1.9.0  |  ❌  |  |  |
 |  FastEddy  |  v2.0.0  |  ❌  |  |  |
-|  FLAMEGPU2  |  v2.0.0-rc.2  |  ❓*  |  |  |
+|  FLAMEGPU2  |  v2.0.0-rc.2  |  ❌  |  |  |
 |  gomc  |  4c12477  |  ✅  |  |  |
 |  GooFit  |  v2.3.0  |    |  |  Texture Refs  |
 |  gpu\_jpeg2k  |  ee715e9  |  ❌  |  |  |
@@ -51,7 +51,7 @@ definitely needs. The list may not be exhaustive.
 |  risc0  |  v1.2.2  |    |  Dependent project tries to return carry-bit. Fixable.  |  |
 |  rodinia\_suite  |  spectral  |    |  |  |
 |  stdgpu  |  563dc59d6d08df...  |  ❌  |  Multigpu/crash tests are flaky  |  |
-|  TCLB  |  v6.7  |  ❌  |  |  |
+|  TCLB  |  v6.7  |  ✅  |  |  |
 |  thrust  |  756c5af  |    |  Old. Should add `cccl`!  |  |
 |  timemachine  |  01f14f8  |    |  Buildsystem nonsense  |  |
 |  UppASD  |  gpu_new  |    |  |  |
@@ -59,9 +59,7 @@ definitely needs. The list may not be exhaustive.
 |  whispercpp  |  v1.7.1  |    |  |  |
 |  xgboost  |  v2.1.0  |    |  |  |
 
-> \* The following program tests were skipped for SCALE: master <267eae45>, and given states are from older versions:
-> 
-> * FLAMEGPU2
+
 
 ## Running Tests
 
