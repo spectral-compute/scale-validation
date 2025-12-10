@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <6b38d5a2>.**
+**This shows the test status for SCALE: master <cdcd31ac>.**
 
 Test scripts get added to this repository long before they are fully
 supported by SCALE. We use the outcome of this kind of testing to prioritise
@@ -23,7 +23,7 @@ definitely needs. The list may not be exhaustive.
 |  caffe  |  9b891540183ddc...  |    |  |  |
 |  ctranslate2  |  v4.5.0  |  ❌  |  Some intermittent test failures  |  |
 |  cuml  |  b17f2db  |    |  Buildsystem nonsnse  |  |
-|  cuSZ  |  v0.16.2  |  ❌  |  |  |
+|  cuSZ  |  v0.16.2  |  ❓*  |  |  |
 |  cutlass  |  v4.1.0  |    |  |  |
 |  CV-CUDA  |  f769fe4  |    |  |  |
 |  cycles  |  v4.4.0  |  ❌  |  |  |
@@ -42,7 +42,7 @@ definitely needs. The list may not be exhaustive.
 |  llama.cpp  |  b2000  |    |  Old version works. New version needs more APIs  |  More graph APIs, async matmuls  |
 |  llm.c  |  7ecd8906afe6ed...  |    |  Old version builds+runs. New version needs more APIs  |  NVML, cuBLASLt  |
 |  MAGMA  |  v2.9.0  |    |  |  |
-|  nvflip  |  1eb247c  |  ❌  |  |  |
+|  nvflip  |  1eb247c  |  ❓*  |  |  |
 |  OpenCV  |  725e440  |    |  |  NPP  |
 |  openmpi  |  v4.1  |    |  |  |
 |  PhysX  |    |    |  Numerous missing APIs  |  PTX barriers, cudaArray, graphics interop  |
@@ -59,7 +59,13 @@ definitely needs. The list may not be exhaustive.
 |  whispercpp  |  v1.7.1  |    |  |  |
 |  xgboost  |  v2.1.0  |    |  |  |
 
-
+> \* The following program tests were skipped for SCALE: master <cdcd31ac>, and given states are from older versions:
+> 
+> * cuSZ
+> * CUTLASS
+> * CUTLASS
+> * bitnet
+> * nvflip
 
 ## Running Tests
 
