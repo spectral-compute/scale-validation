@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <2ea52656>.**
+**This shows the test status for SCALE: master <a63743e0>.**
 
 Test scripts get added to this repository long before they are fully
 supported by SCALE. We use the outcome of this kind of testing to prioritise
@@ -17,7 +17,7 @@ definitely needs. The list may not be exhaustive.
 
 | Project       | Version | Status | Notes                                                 | Needs                                                                     |
 |---------------|---------|--------|-------------------------------------------------------|---------------------------------------------------------------------------|
-|  Alien  |  scaletest  |  ❌  |  Needs patch to remove OpenGL interop  |  OpenGL Interop  |
+|  Alien  |  scaletest  |  ✅  |  Needs patch to remove OpenGL interop  |  OpenGL Interop  |
 |  AMGX  |  v2.4.0  |    |  |  |
 |  arrayfire  |  v3.9.0  |    |  |  cuDNN, more cuSPARSE  |
 |  caffe  |  9b891540183ddc...  |    |  |  |
