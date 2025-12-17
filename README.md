@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <c87da5b4>.**
+**This shows the test status for SCALE: master <a9b14e10>.**
 
 Test scripts get added to this repository long before they are fully
 supported by SCALE. We use the outcome of this kind of testing to prioritise
