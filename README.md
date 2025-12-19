@@ -38,7 +38,7 @@ definitely needs. The list may not be exhaustive.
 |  hashcat  |  6716447dfce969...  |  ✅  |  |  |
 |  hashinator  |  34cf188  |    |  |  |
 |  hypre  |  v2.33.0  |    |  Buildsystem nonsense  |  |
-|  jitify  |  master  |  ❌  |  Some test failures  |  |
+|  jitify  |  master  |  ✅  |  Some test failures  |  |
 |  llama.cpp  |  b2000  |    |  Old version works. New version needs more APIs  |  More graph APIs, async matmuls  |
 |  llm.c  |  7ecd8906afe6ed...  |    |  Old version builds+runs. New version needs more APIs  |  NVML, cuBLASLt  |
 |  MAGMA  |  v2.9.0  |    |  |  |
