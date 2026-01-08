@@ -17,32 +17,32 @@ definitely needs. The list may not be exhaustive.
 
 | Project       | Version | Status | Notes                                                 | Needs                                                                     |
 |---------------|---------|--------|-------------------------------------------------------|---------------------------------------------------------------------------|
-|  Alien  |  scaletest  |    |  Needs patch to remove OpenGL interop  |  OpenGL Interop  |
+|  Alien  |  scaletest  |  ✅  |  Needs patch to remove OpenGL interop  |  OpenGL Interop  |
 |  AMGX  |  v2.4.0  |  ➖ (*)  |  |  |
 |  arrayfire  |  v3.9.0  |    |  |  cuDNN, more cuSPARSE  |
 |  caffe  |  9b891540183ddc...  |    |  |  |
-|  ctranslate2  |  v4.5.0  |    |  Some intermittent test failures  |  |
+|  ctranslate2  |  v4.5.0  |  ✅  |  Some intermittent test failures  |  |
 |  cuml  |  b17f2db  |    |  Buildsystem nonsnse  |  |
-|  cuSZ  |  v0.16.2  |    |  |  |
-|  CUTLASS  |  v4.1.0  |    |  |  |
+|  cuSZ  |  v0.16.2  |  ✅  |  |  |
+|  CUTLASS  |  v4.1.0  |  ➖ (*)  |  |  |
 |  CV-CUDA  |  f769fe4  |    |  |  |
-|  cycles  |  v4.4.0  |    |  |  |
-|  faiss  |  v1.9.0  |    |  |  |
-|  FastEddy  |  v2.0.0  |    |  |  |
-|  FLAMEGPU2  |  v2.0.0-rc.2  |    |  |  |
-|  gomc  |  4c12477  |    |  |  |
+|  cycles  |  v4.4.0  |  ✅  |  |  |
+|  faiss  |  v1.9.0  |  ❌  |  |  |
+|  FastEddy  |  v2.0.0  |  ✅  |  |  |
+|  FLAMEGPU2  |  v2.0.0-rc.2  |  ➖ (*)  |  |  |
+|  gomc  |  4c12477  |  ✅  |  |  |
 |  GooFit  |  v2.3.0  |    |  |  Texture Refs  |
-|  gpu\_jpeg2k  |  ee715e9  |    |  |  |
-|  GROMACS  |  v2025.1  |    |  |  |
-|  ggml  |  d3a58b0  |    |  Old version works. New version needs more APIs  |  Missing async opcodes  |
-|  hashcat  |  6716447dfce969...  |    |  |  |
+|  gpu\_jpeg2k  |  ee715e9  |  ✅  |  |  |
+|  GROMACS  |  v2025.1  |  ✅  |  |  |
+|  ggml  |  d3a58b0  |  ✅  |  Old version works. New version needs more APIs  |  Missing async opcodes  |
+|  hashcat  |  6716447dfce969...  |  ✅  |  |  |
 |  hashinator  |  34cf188  |    |  |  |
 |  hypre  |  v2.33.0  |  ➖ (*)  |  Buildsystem nonsense  |  |
-|  jitify  |  master  |    |  Some test failures  |  |
+|  jitify  |  master  |  ➖ (*)  |  Some test failures  |  |
 |  llama.cpp  |  b2000  |    |  Old version works. New version needs more APIs  |  More graph APIs, async matmuls  |
 |  llm.c  |  7ecd8906afe6ed...  |  ➖ (*)  |  Old version builds+runs. New version needs more APIs  |  NVML, cuBLASLt  |
 |  MAGMA  |  v2.9.0  |    |  |  |
-|  nvflip  |  1eb247c  |    |  |  |
+|  nvflip  |  1eb247c  |  ✅  |  |  |
 |  OpenCV  |  725e440  |    |  |  NPP  |
 |  openmpi  |  v4.1  |    |  |  |
 |  PhysX  |    |    |  Numerous missing APIs  |  PTX barriers, cudaArray, graphics interop  |
@@ -50,8 +50,8 @@ definitely needs. The list may not be exhaustive.
 |  quda  |  07822b61c6ab5f...  |  ➖ (*)  |  |  NVML  |
 |  risc0  |  v1.2.2  |    |  Dependent project tries to return carry-bit. Fixable.  |  |
 |  rodinia\_suite  |  spectral  |    |  |  |
-|  stdgpu  |  563dc59d6d08df...  |    |  Multigpu/crash tests are flaky  |  |
-|  TCLB  |  v6.7  |    |  |  |
+|  stdgpu  |  563dc59d6d08df...  |  ❓ (**)  |  Multigpu/crash tests are flaky  |  |
+|  TCLB  |  v6.7  |  ✅  |  |  |
 |  thrust  |  756c5af  |  ➖ (*)  |  Old. Should add `cccl`!  |  |
 |  timemachine  |  01f14f8  |    |  Buildsystem nonsense  |  |
 |  UppASD  |  gpu_new  |    |  |  |
@@ -68,6 +68,23 @@ definitely needs. The list may not be exhaustive.
 * ❓ (**) Validation skipped, no previous validation state to reference
 
 > \* Notes: 
+> * FLAMEGPU2
+>	* Program had conflicting states for different architectures:
+>	 * gfx1030 : ❌
+>	 * gfx90a : ❌
+>	 * gfx1201 : ❌
+>	 * gfx1100 : ❌
+> * jitify
+>	* Program had conflicting states for different architectures:
+>	 * gfx90a : ❌
+>	 * gfx1201 : ❌
+> * CUTLASS
+>	* Program had conflicting states for different architectures:
+>	 * gfx90a : ❌
+>	 * gfx1030 : ❌
+>	 * gfx900 : ❌
+>	 * gfx1100 : ❌
+>	 * gfx1201 : ❓ (**)
 > * AMGX
 >	* Program had conflicting states for different architectures:
 >	 * gfx90a : ❌
@@ -113,6 +130,12 @@ definitely needs. The list may not be exhaustive.
 
 > \*\* The following program tests were skipped for 46405500:\ master\ <df45e576>, and given states are from the last version they were tested on instead:
 > 
+> * stdgpu
+> * CUTLASS
+> * stdgpu
+> * stdgpu
+> * stdgpu
+> * stdgpu
 > * AMGX
 > * thrust
 > * pytorch
