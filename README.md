@@ -68,7 +68,7 @@ definitely needs. The list may not be exhaustive.
 * ❓ (\*) Validation skipped, no previous validation state to reference
 
 
-> \*\* The following program tests were skipped for 46405500:\ master\ <df45e576>, and given states are from the last version they were tested on instead:
+> \* The following program tests were skipped for 46405500:\ master\ <df45e576>, and given states are from the last version they were tested on instead:
 > 
 > * stdgpu
 > * CUTLASS
