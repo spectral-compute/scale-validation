@@ -29,7 +29,7 @@ definitely needs. The list may not be exhaustive.
 |  cycles  |  v4.4.0  |  ✅  |  |  |
 |  faiss  |  v1.9.0  |  ❌  |  |  |
 |  FastEddy  |  v2.0.0  |  ✅  |  |  |
-|  FLAMEGPU2  |  v2.0.0-rc.2  |  ❌  |  |  |
+|  FLAMEGPU2  |  v2.0.0-rc.2  |  ➖ (*)  |  |  |
 |  gomc  |  4c12477  |  ✅  |  |  |
 |  GooFit  |  v2.3.0  |    |  |  Texture Refs  |
 |  gpu\_jpeg2k  |  ee715e9  |  ✅  |  |  |
@@ -38,7 +38,7 @@ definitely needs. The list may not be exhaustive.
 |  hashcat  |  6716447dfce969...  |  ✅  |  |  |
 |  hashinator  |  34cf188  |    |  |  |
 |  hypre  |  v2.33.0  |    |  Buildsystem nonsense  |  |
-|  jitify  |  master  |  ❌  |  Some test failures  |  |
+|  jitify  |  master  |  ➖ (*)  |  Some test failures  |  |
 |  llama.cpp  |  b2000  |    |  Old version works. New version needs more APIs  |  More graph APIs, async matmuls  |
 |  llm.c  |  7ecd8906afe6ed...  |    |  Old version builds+runs. New version needs more APIs  |  NVML, cuBLASLt  |
 |  MAGMA  |  v2.9.0  |    |  |  |
@@ -50,7 +50,7 @@ definitely needs. The list may not be exhaustive.
 |  quda  |  07822b61c6ab5f...  |    |  |  NVML  |
 |  risc0  |  v1.2.2  |    |  Dependent project tries to return carry-bit. Fixable.  |  |
 |  rodinia\_suite  |  spectral  |    |  |  |
-|  stdgpu  |  563dc59d6d08df...  |  ❓ (*)  |  Multigpu/crash tests are flaky  |  |
+|  stdgpu  |  563dc59d6d08df...  |  ❓ (**)  |  Multigpu/crash tests are flaky  |  |
 |  TCLB  |  v6.7  |  ✅  |  |  |
 |  thrust  |  756c5af  |    |  Old. Should add `cccl`!  |  |
 |  timemachine  |  01f14f8  |    |  Buildsystem nonsense  |  |
@@ -59,7 +59,171 @@ definitely needs. The list may not be exhaustive.
 |  whispercpp  |  v1.7.1  |    |  |  |
 |  xgboost  |  v2.1.0  |    |  |  |
 
-> \* The following program tests were skipped for 46405500:\ master\ <df45e576>, and given states are from the last version they were tested on instead:
+\*
+ * FLAMEGPU2Program had conflicting states for different architectures.
+* * F
+* * L
+* * A
+* * M
+* * E
+* * G
+* * P
+* * U
+* * 2
+* * :
+* * g
+* * f
+* * x
+* * 9
+* * 0
+* * a
+* *  
+* * :
+* *  
+* * ❌
+* * F
+* * L
+* * A
+* * M
+* * E
+* * G
+* * P
+* * U
+* * 2
+* * :
+* * g
+* * f
+* * x
+* * 1
+* * 2
+* * 0
+* * 1
+* *  
+* * :
+* *  
+* * ❌
+* * F
+* * L
+* * A
+* * M
+* * E
+* * G
+* * P
+* * U
+* * 2
+* * :
+* * g
+* * f
+* * x
+* * 1
+* * 1
+* * 0
+* * 0
+* *  
+* * :
+* *  
+* * ❌
+> * jitifyProgram had conflicting states for different architectures.
+* * j
+* * i
+* * t
+* * i
+* * f
+* * y
+* * :
+* * g
+* * f
+* * x
+* * 1
+* * 2
+* * 0
+* * 1
+* *  
+* * :
+* *  
+* * ❌
+> * CUTLASSProgram had conflicting states for different architectures.
+* * C
+* * U
+* * T
+* * L
+* * A
+* * S
+* * S
+* * :
+* * g
+* * f
+* * x
+* * 1
+* * 0
+* * 3
+* * 0
+* *  
+* * :
+* *  
+* * ❌
+* * C
+* * U
+* * T
+* * L
+* * A
+* * S
+* * S
+* * :
+* * g
+* * f
+* * x
+* * 9
+* * 0
+* * 0
+* *  
+* * :
+* *  
+* * ❌
+* * C
+* * U
+* * T
+* * L
+* * A
+* * S
+* * S
+* * :
+* * g
+* * f
+* * x
+* * 1
+* * 1
+* * 0
+* * 0
+* *  
+* * :
+* *  
+* * ❌
+* * C
+* * U
+* * T
+* * L
+* * A
+* * S
+* * S
+* * :
+* * g
+* * f
+* * x
+* * 1
+* * 2
+* * 0
+* * 1
+* *  
+* * :
+* *  
+* * ❓
+* *  
+* * (
+* * *
+* * *
+* * )
+> \*\* The following program tests were skipped for 46405500:\ master\ <df45e576>, and given states are from the last version they were tested on instead:
 > 
 > * stdgpu
 > * CUTLASS
