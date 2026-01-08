@@ -73,8 +73,9 @@ definitely needs. The list may not be exhaustive.
 >	 * CUTLASS:gfx1030 : ❌
 >	 * CUTLASS:gfx900 : ❌
 >	 * CUTLASS:gfx1100 : ❌
->	 * CUTLASS:gfx1201 : ❓ (**) 
->
+>	 * CUTLASS:gfx1201 : ❓ (**)
+
+
 > \*\* The following program tests were skipped for 46405500:\ master\ <df45e576>, and given states are from the last version they were tested on instead:
 > 
 > * stdgpu
