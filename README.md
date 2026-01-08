@@ -15,8 +15,8 @@ This table summarises the current state as of the most recent stable release
 of SCALE. "Needs" describes missing CUDA APIs/features that the project
 definitely needs. The list may not be exhaustive.
 
-| Project       | Version | Status | Valid GFX | Notes                                                 | Needs                                                                     |
-|---------------|---------|--------|-------------------------------------------------------|---------------------------------------------------------------------------|
+| Project | Version | Status | Valid GFX | Notes | Needs |
+|---|---|---|---|---|---|
 |  Alien  |  scaletest  |  ✅  | gfx90a: ✅ |   Needs patch to remove OpenGL interop  |  OpenGL Interop  |
 |  AMGX  |  v2.4.0  |  ➖ (\*)  | gfx90a: ✅, gfx1030: ❌, gfx1201: ❓ (\*\*), gfx1100: ❓ (\*\*) |   |  |
 |  arrayfire  |  v3.9.0  |    |  |   |  cuDNN, more cuSPARSE  |
