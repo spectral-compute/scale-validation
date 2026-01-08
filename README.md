@@ -60,13 +60,16 @@ definitely needs. The list may not be exhaustive.
 |  xgboost  |  v2.1.0  |    |  |  |
 
 > \*
- * FLAMEGPU2Program had conflicting states for different architectures.
+> * FLAMEGPU2
+ *Program had conflicting states for different architectures.
 >	 * FLAMEGPU2:gfx90a : ❌
 >	 * FLAMEGPU2:gfx1201 : ❌
 >	 * FLAMEGPU2:gfx1100 : ❌
-> * jitifyProgram had conflicting states for different architectures.
+> * jitify
+ *Program had conflicting states for different architectures.
 >	 * jitify:gfx1201 : ❌
-> * CUTLASSProgram had conflicting states for different architectures.
+> * CUTLASS
+ *Program had conflicting states for different architectures.
 >	 * CUTLASS:gfx1030 : ❌
 >	 * CUTLASS:gfx900 : ❌
 >	 * CUTLASS:gfx1100 : ❌
