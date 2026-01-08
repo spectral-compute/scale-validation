@@ -39,7 +39,7 @@ definitely needs. The list may not be exhaustive.
 |  hashinator  |  34cf188  |    |  |  |
 |  hypre  |  v2.33.0  |  ➖ (*)  |  Buildsystem nonsense  |  |
 |  jitify  |  master  |  ➖ (*)  |  Some test failures  |  |
-|  llama.cpp  |  b2000  |    |  Old version works. New version needs more APIs  |  More graph APIs, async matmuls  |
+|  llama.cpp  |    |  ➖ (*)  |  Old version works. New version needs more APIs  |  More graph APIs, async matmuls  |
 |  llm.c  |  7ecd8906afe6ed...  |  ➖ (*)  |  Old version builds+runs. New version needs more APIs  |  NVML, cuBLASLt  |
 |  MAGMA  |  v2.9.0  |    |  |  |
 |  nvflip  |  1eb247c  |  ✅  |  |  |
@@ -49,14 +49,14 @@ definitely needs. The list may not be exhaustive.
 |  pytorch  |  v1.8.1  |  ➖ (*)  |  Numerous missing APIs  |  cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,...  |
 |  quda  |  07822b61c6ab5f...  |  ➖ (*)  |  |  NVML  |
 |  risc0  |  v1.2.2  |    |  Dependent project tries to return carry-bit. Fixable.  |  |
-|  rodinia\_suite  |  spectral  |    |  |  |
+|  rodinia\_suite  |    |  ✅  |  |  |
 |  stdgpu  |  563dc59d6d08df...  |  ❓ (**)  |  Multigpu/crash tests are flaky  |  |
 |  TCLB  |  v6.7  |  ✅  |  |  |
 |  thrust  |  756c5af  |  ➖ (*)  |  Old. Should add `cccl`!  |  |
 |  timemachine  |  01f14f8  |    |  Buildsystem nonsense  |  |
 |  UppASD  |  gpu_new  |    |  |  |
 |  vllm  |  v0.6.3  |    |  Needs Pytorch  |  |
-|  whispercpp  |  v1.7.1  |    |  |  |
+|  whispercpp  |    |  ✅  |  |  |
 |  xgboost  |  v2.1.0  |  ➖ (*)  |  |  |
 
 *Key:*
