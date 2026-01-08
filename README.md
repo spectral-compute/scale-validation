@@ -24,7 +24,7 @@ definitely needs. The list may not be exhaustive.
 |  ctranslate2  |  v4.5.0  |  ✅  |  Some intermittent test failures  |  |
 |  cuml  |  b17f2db  |    |  Buildsystem nonsnse  |  |
 |  cuSZ  |  v0.16.2  |  ✅  |  |  |
-|  cutlass  |  v4.1.0  |    |  |  |
+|  CUTLASS  |  v4.1.0  |  ➖ (*)  |  |  |
 |  CV-CUDA  |  f769fe4  |    |  |  |
 |  cycles  |  v4.4.0  |  ✅  |  |  |
 |  faiss  |  v1.9.0  |  ❌  |  |  |
