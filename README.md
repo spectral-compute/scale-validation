@@ -59,18 +59,18 @@ definitely needs. The list may not be exhaustive.
 |  whispercpp  |  v1.7.1  |    |  |  |
 |  xgboost  |  v2.1.0  |    |  |  |
 
-\*
+> \*
  * FLAMEGPU2Program had conflicting states for different architectures.
-	 * FLAMEGPU2:gfx90a : ❌
-	 * FLAMEGPU2:gfx1201 : ❌
-	 * FLAMEGPU2:gfx1100 : ❌
+>	 * FLAMEGPU2:gfx90a : ❌
+>	 * FLAMEGPU2:gfx1201 : ❌
+>	 * FLAMEGPU2:gfx1100 : ❌
 > * jitifyProgram had conflicting states for different architectures.
-	 * jitify:gfx1201 : ❌
+>	 * jitify:gfx1201 : ❌
 > * CUTLASSProgram had conflicting states for different architectures.
-	 * CUTLASS:gfx1030 : ❌
-	 * CUTLASS:gfx900 : ❌
-	 * CUTLASS:gfx1100 : ❌
-	 * CUTLASS:gfx1201 : ❓ (**)
+>	 * CUTLASS:gfx1030 : ❌
+>	 * CUTLASS:gfx900 : ❌
+>	 * CUTLASS:gfx1100 : ❌
+>	 * CUTLASS:gfx1201 : ❓ (**)
 > \*\* The following program tests were skipped for 46405500:\ master\ <df45e576>, and given states are from the last version they were tested on instead:
 > 
 > * stdgpu
