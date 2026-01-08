@@ -59,7 +59,7 @@ definitely needs. The list may not be exhaustive.
 |  whispercpp  |  v1.7.1  |    |  |  |
 |  xgboost  |  v2.1.0  |    |  |  |
 
-> \*
+> \* Notes: 
 > * FLAMEGPU2
 	* Program had conflicting states for different architectures.
 >	 * FLAMEGPU2:gfx90a : ❌
