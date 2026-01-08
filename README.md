@@ -59,6 +59,14 @@ definitely needs. The list may not be exhaustive.
 |  whispercpp  |  v1.7.1  |    |  |  |
 |  xgboost  |  v2.1.0  |    |  |  |
 
+*Key:*
+* ✅ Validated succesfully
+* ❌ Failed to validate
+* ➖ (*) Conflicting statuses, see notes for different architectures
+* ✅ (**) Validation skipped, last known status was Valid
+* ❌ (**) Validation skipped, last known status was Inalid
+* ❓ (**) Validation skipped, no previous validation state to reference
+
 > \* Notes: 
 > * FLAMEGPU2
 >	* Program had conflicting states for different architectures:
