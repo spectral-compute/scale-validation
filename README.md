@@ -70,21 +70,21 @@ definitely needs. The list may not be exhaustive.
 > \* Notes: 
 > * FLAMEGPU2
 >	* Program had conflicting states for different architectures:
->	 * FLAMEGPU2 : ❌
->	 * FLAMEGPU2 : ❌
->	 * FLAMEGPU2 : ❌
->	 * FLAMEGPU2 : ❌
+>	 * gfx1030 : ❌
+>	 * gfx90a : ❌
+>	 * gfx1201 : ❌
+>	 * gfx1100 : ❌
 > * jitify
 >	* Program had conflicting states for different architectures:
->	 * jitify : ❌
->	 * jitify : ❌
+>	 * gfx90a : ❌
+>	 * gfx1201 : ❌
 > * CUTLASS
 >	* Program had conflicting states for different architectures:
->	 * CUTLASS : ❌
->	 * CUTLASS : ❌
->	 * CUTLASS : ❌
->	 * CUTLASS : ❌
->	 * CUTLASS : ❓ (**)
+>	 * gfx90a : ❌
+>	 * gfx1030 : ❌
+>	 * gfx900 : ❌
+>	 * gfx1100 : ❌
+>	 * gfx1201 : ❓ (**)
 
 
 > \*\* The following program tests were skipped for 46405500:\ master\ <df45e576>, and given states are from the last version they were tested on instead:
