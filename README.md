@@ -45,7 +45,7 @@ definitely needs. The list may not be exhaustive.
 |  nvflip  |  1eb247c  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  |
 |  OpenCV  |  725e440  |    |  |   |  NPP  |
 |  openmpi  |  v4.1  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  |
-|  PhysX  |    |    |  |   Numerous missing APIs  |  PTX barriers, cudaArray, graphics interop  |
+|  PhysX  |  1e44a0e  |  ❓ (\*)  | gfx90a: ❓ (\*) |   Numerous missing APIs  |  PTX barriers, cudaArray, graphics interop  |
 |  pytorch  |  v1.8.1  |  ❓ (\*)  | gfx90a: ❓ (\*) |   Numerous missing APIs  |  cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,...  |
 |  quda  |  07822b61c6ab5f...  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  NVML  |
 |  risc0  |  v1.2.2  |  ❓ (\*)  | gfx90a: ❓ (\*) |   Dependent project tries to return carry-bit. Fixable.  |  |
