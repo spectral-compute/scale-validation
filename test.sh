@@ -4,6 +4,12 @@ set -e
 
 TEST_DIR="$(dirname "$0")"
 
+if [[ -n "$CI_INSTA_FAIL" ]]; then
+    # Some tests insta-fail as a "skip" to save time in CI while still registering the job
+    /bin/false
+fi
+
+
 # Check for files ending in .sh but which are not executable, as such they
 # will not run
 if [[ $1 == -check ]]; then
