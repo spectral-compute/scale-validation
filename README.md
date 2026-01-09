@@ -43,7 +43,7 @@ definitely needs. The list may not be exhaustive.
 |  llm.c  |  7ecd8906afe6ed...  |  ❓ (\*)  | gfx90a: ❓ (\*) |   Old version builds+runs. New version needs more APIs  |  NVML, cuBLASLt  |
 |  MAGMA  |  v2.9.0  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  |
 |  nvflip  |  1eb247c  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  |
-|  OpenCV  |  725e440  |    |  |   |  NPP  |
+|  OpenCV  |  725e440  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  NPP  |
 |  openmpi  |  v4.1  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  |
 |  PhysX  |  1e44a0e  |  ❓ (\*)  | gfx90a: ❓ (\*) |   Numerous missing APIs  |  PTX barriers, cudaArray, graphics interop  |
 |  pytorch  |  v1.8.1  |  ❓ (\*)  | gfx90a: ❓ (\*) |   Numerous missing APIs  |  cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,...  |
