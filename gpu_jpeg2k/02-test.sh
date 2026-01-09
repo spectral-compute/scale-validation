@@ -4,14 +4,18 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 
 cd ${OUT_DIR}/gpu_jpeg2k
 
-wget https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/BSDS300-images.tgz
-tar -xzf BSDS300-images.tgz
+if ! [ -f BSDS300-images.tgz ]; then
+    wget https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/BSDS300-images.tgz
+    tar -xzf BSDS300-images.tgz
+fi
 
 # Correct answers live here.
-git clone https://gitlab.com/manos5/gpu_jpeg_cuda_imgs.git
-cd gpu_jpeg_cuda_imgs
-tar xf native_outputs.tar
-cd -
+if ! [ -d gpu_jpeg_cuda_imgs ]; then
+    git clone https://gitlab.com/manos5/gpu_jpeg_cuda_imgs.git
+    cd gpu_jpeg_cuda_imgs
+    tar xf native_outputs.tar
+    cd -
+fi
 
 input_dir="BSDS300/images/train/"
 output_dir="BSDS300_Out"
