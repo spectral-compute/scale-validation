@@ -4,7 +4,7 @@ set -e
 
 TEST_DIR="$(dirname "$0")"
 
-if [[ -n "$CI_INSTA_FAIL" ]]; then
+if [[ "$CI_INSTA_FAIL" == "true" ]] || [[ "$CI_INSTA_FAIL" == "1" ]]; then
     # Some tests insta-fail as a "skip" to save time in CI while still registering the job
     /bin/false
 fi
