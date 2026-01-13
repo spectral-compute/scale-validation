@@ -15,11 +15,11 @@ definitely needs. The list may not be exhaustive.
 
 | Project       | Status | Notes                                                 | Needs                                                                     |
 |---------------|--------|-------------------------------------------------------|---------------------------------------------------------------------------|
-| Alien         | ✔*     | Needs patch to remove OpenGL interop                  | OpenGL Interop                                                            |
+| Alien         | ✔     | Needs patch to remove OpenGL interop                  | OpenGL Interop                                                            |
 | AMGX          | ✔      |                                                       |                                                                           |
 | arrayfire     | ❌      |                                                       | cuDNN, more cuSPARSE                                                      |
 | caffe         | ✔      |                                                       |                                                                           |
-| ctranslate2   | ✔*     | Some intermittent test failures                       |                                                                           |
+| ctranslate2   | ✔     | Some intermittent test failures                       |                                                                           |
 | cuml          | ❌      | Buildsystem nonsnse                                   |                                                                           |
 | cuSZ          | ✔      |                                                       |                                                                           |
 | cutlass       | ❌      |                                                       |                                                                           |
@@ -32,12 +32,12 @@ definitely needs. The list may not be exhaustive.
 | GooFit        | ❌      |                                                       | Texture Refs                                                              |
 | gpu_jpeg2k    | ✔      |                                                       |                                                                           |
 | GROMACS       | ✔      |                                                       |                                                                           |
-| ggml          | ✔*     | Old version works. New version needs more APIs        | Missing async opcodes                                                     |
+| ggml          | ✔     | Old version works. New version needs more APIs        | Missing async opcodes                                                     |
 | hashcat       | ✔      |                                                       |                                                                           |
 | hashinator    | ✔      |                                                       |                                                                           |
 | hypre         | ❌      | Buildsystem nonsense                                  |                                                                           |
-| jitify        | ✔*     | Some test failures                                    |                                                                           |
-| llama.cpp     | ✔****  | Old version works. New version needs more APIs        | More graph APIs, async matmuls                                            |
+| jitify        | ✔     | Some test failures                                    |                                                                           |
+| llama.cpp     | ✔  | Old version works. New version needs more APIs        | More graph APIs, async matmuls                                            |
 | llm.c         | ❌      | Old version builds+runs. New version needs more APIs  | NVML, cuBLASLt                                                            |
 | MAGMA         | ✔      |                                                       |                                                                           |
 | nvflip         | ✔      |                                                       |                                                                           |
@@ -48,7 +48,7 @@ definitely needs. The list may not be exhaustive.
 | quda          | ❌      |                                                       | NVML                                                                      |
 | risc0         | ❌      | Dependent project tries to return carry-bit. Fixable. |                                                                           |
 | rodinia_suite | ✔      |                                                       |                                                                           |
-| stdgpu        | ✔*     | Multigpu/crash tests are flaky                        |                                                                           |
+| stdgpu        | ✔     | Multigpu/crash tests are flaky                        |                                                                           |
 | TCLB          | ✔      |                                                       |                                                                           |
 | thrust        | ✔      | Old. Should add `cccl`!                               |                                                                           |
 | timemachine   | ❌      | Buildsystem nonsense                                  |                                                                           |
