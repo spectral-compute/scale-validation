@@ -8,14 +8,14 @@ source "${SCRIPT_DIR}/../util/args.sh" "$@"
 
 # 1) Add -k to pytorch build
 echo "Patch Ninja"
-cd "${OUT_DIR}/pytorch/pytorch/tools/setup_helpers"
+cd "${OUT_DIR}/pytorch_2.9.0/pytorch_2.9.0/tools/setup_helpers"
 git stash
 # Make Ninja quiet so there is no build log spam
 git apply "${SCRIPT_DIR}/patches/0001-quiet-ninja.patch"
 
 # 2) Patch CUTLASS sources
 echo "Patch CUTLASS"
-cd "${OUT_DIR}/pytorch/pytorch/third_party/cutlass/"
+cd "${OUT_DIR}/pytorch_2.9.0/pytorch_2.9.0/third_party/cutlass/"
 
 # Cutlass disables wmma with clang due to an old clang bug that doesn't apply to SCALE.
 sed -Ee 's|#if !\(defined\(__clang__\) && defined\(__CUDA__\)\)|#if 1|' \
