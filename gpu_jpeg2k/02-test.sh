@@ -5,7 +5,7 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 cd ${OUT_DIR}/gpu_jpeg2k
 
 if ! [ -f BSDS300-images.tgz ]; then
-    wget https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/BSDS300-images.tgz
+    wget -q https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/BSDS300-images.tgz
     tar -xzf BSDS300-images.tgz
 fi
 
