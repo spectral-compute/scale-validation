@@ -5,21 +5,16 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 cd ${OUT_DIR}/gpu_jpeg2k
 
 if ! [ -f BSDS300-images.tgz ]; then
-    wget -q https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/BSDS300-images.tgz
+    # Some images, and the result of running them through this on nvidia.
+    wget -q https://data.spectralcompute.co.uk/gpu_jpeg2k/BSDS300-images.tgz
+    wget -q https://data.spectralcompute.co.uk/gpu_jpeg2k/BSDS300-images-ref.tgz
     tar -xzf BSDS300-images.tgz
-fi
-
-# Correct answers live here.
-if ! [ -d gpu_jpeg_cuda_imgs ]; then
-    git clone https://gitlab.com/manos5/gpu_jpeg_cuda_imgs.git
-    cd gpu_jpeg_cuda_imgs
-    tar xf native_outputs.tar
-    cd -
+    tar -xzf BSDS300-images-ref.tgz
 fi
 
 input_dir="BSDS300/images/train/"
 output_dir="BSDS300_Out"
-native_dir="gpu_jpeg_cuda_imgs/BSDS300_Nat"
+native_dir="BSDS300_Nat"
 
 if [ ! -d "$native_dir" ]; then
     echo "Error: Directory $native_dir does not exist."
