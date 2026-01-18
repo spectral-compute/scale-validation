@@ -12,4 +12,4 @@ cmake \
     -B"${OUT_DIR}/parrot/parrot/build" \
     "${OUT_DIR}/parrot/parrot"
 
-make -C "${OUT_DIR}/parrot/parrot/build" -j"${BUILD_JOBS}"
+make -C "${OUT_DIR}/parrot/parrot/build" -j"$(nproc)"

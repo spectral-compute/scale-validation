@@ -17,10 +17,4 @@ cmake \
 # Make sure we actually found CUDA.
 "${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/llama.cpp/build"
 
-# Build.
-if [ "${VERBOSE}" == "1" ] ; then
-    VERBOSE="VERBOSE=1"
-else
-    VERBOSE=
-fi
-make -C "${OUT_DIR}/llama.cpp/build" install -j"${BUILD_JOBS}" ${VERBOSE}
+make -C "${OUT_DIR}/llama.cpp/build" install -j"$(nproc)"

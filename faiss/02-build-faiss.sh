@@ -19,14 +19,7 @@ cmake \
     -B"${OUT_DIR}/faiss/build" \
     "${OUT_DIR}/faiss/faiss"
 
-# Build.
-if [ "${VERBOSE}" == "1" ] ; then
-    VERBOSE="VERBOSE=1"
-else
-    VERBOSE=
-fi
-
-make -C "${OUT_DIR}/faiss/build" install -j"${BUILD_JOBS}" ${VERBOSE}
+make -C "${OUT_DIR}/faiss/build" install -j"$(nproc)"
 
 # Build the Python package, and install it.
 cd "${OUT_DIR}/faiss/build/faiss/python"

@@ -13,4 +13,4 @@ cmake \
     -B"${OUT_DIR}/CV-CUDA/build" \
     "${OUT_DIR}/CV-CUDA/CV-CUDA"
 
-cmake --build "${OUT_DIR}/CV-CUDA/build" -j"${BUILD_JOBS}"
+cmake --build "${OUT_DIR}/CV-CUDA/build" -j"$(nproc)"

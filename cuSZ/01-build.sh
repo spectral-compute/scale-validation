@@ -15,4 +15,4 @@ cmake \
     -B"${OUT_DIR}/cuSZ/build" \
     "${OUT_DIR}/cuSZ/cuSZ"
 
-make -C "${OUT_DIR}/cuSZ/build" install -j"${BUILD_JOBS}"
+make -C "${OUT_DIR}/cuSZ/build" install -j"$(nproc)"

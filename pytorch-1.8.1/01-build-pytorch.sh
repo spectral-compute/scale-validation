@@ -38,7 +38,7 @@ export USE_ROCM=OFF
 export BUILD_BINARY=ON
 export BUILD_TEST=ON
 
-export MAX_JOBS="${BUILD_JOBS}"
+export MAX_JOBS="$(nproc)"
 export VERBOSE="${VERBOSE}"
 
 # Patch PyTorch.

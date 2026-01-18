@@ -51,6 +51,7 @@ export USE_MKLDNN=OFF
 export USE_NUMPY=OFF
 export USE_OPENCV=OFF
 export USE_ROCM=OFF
+export USE_CUSPARSELT=OFF
 
 export BUILD_CAFFE2=ON
 export BUILD_CAFFE2_OPS=ON
@@ -58,8 +59,7 @@ export BUILD_CAFFE2_OPS=ON
 export BUILD_BINARY=ON
 export BUILD_TEST=ON
 
-export MAX_JOBS="${BUILD_JOBS}"
-export VERBOSE="${VERBOSE}"
+export MAX_JOBS="$(nproc)"
 
 
 #########

@@ -4,13 +4,6 @@ set -e
 SCRIPT_DIR="$(realpath "$(dirname "$0")")"
 source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
-# Argument parsing.
-if [ "${VERBOSE}" == "1" ] ; then
-    VERBOSE="-s"
-else
-    VERBOSE=
-fi
-
 # Clear the bazel cache so we always get a clean build.
 rm -rf ~/.cache/bazel
 
@@ -48,7 +41,7 @@ bazel build ${BAZEL_CONFIG} --config=v2 \
     //tensorflow:libtensorflow_cc.so \
     //tensorflow:install_headers \
     //tensorflow/tools/pip_package:build_pip_package \
-    ${VERBOSE} -j "${BUILD_JOBS}"
+    -j "$(nproc)"
 bazel-bin/tensorflow/tools/pip_package/build_pip_package --gpu pip_out
 
 # Install Tensorflow.
@@ -86,8 +79,8 @@ echo $PYTHONPATH
 cp -r --reflink=auto "${OUT_DIR}/tensorflow/tensorboard" ./
 cd tensorboard
 
-bazel build tensorboard:tensorboard ${VERBOSE} -j "${BUILD_JOBS}"
-bazel build //tensorboard/pip_package:build_pip_package ${VERBOSE} -j "${BUILD_JOBS}"
+bazel build tensorboard:tensorboard -j "$(nproc)"
+bazel build //tensorboard/pip_package:build_pip_package -j "$(nproc)"
 
 cd tensorboard/pip_package
 cp -r --reflink=auto \
@@ -104,7 +97,7 @@ cd estimator
 bazel build \
     //tensorflow_estimator/tools/pip_package:build_pip_package \
     --action_env=PYTHONPATH="${PYTHONPATH}" \
-    ${VERBOSE} -j "${BUILD_JOBS}"
+    -j "$(nproc)"
 bazel-bin/tensorflow_estimator/tools/pip_package/build_pip_package pip_out
 pip3 install --ignore-installed --no-dependencies --root "${OUT_DIR}/tensorflow/install" pip_out/*.whl
 cd ../
@@ -112,7 +105,7 @@ cd ../
 # Build and install Tensorflow-Model-Optimization.
 cp -r --reflink=auto "${OUT_DIR}/tensorflow/model-optimization" ./
 cd model-optimization
-bazel build :pip_pkg ${VERBOSE} -j "${BUILD_JOBS}"
+bazel build :pip_pkg -j "$(nproc)"
 bazel-bin/pip_pkg ./
 pip3 install --ignore-installed --no-dependencies --root "${OUT_DIR}/tensorflow/install" *.whl
 cd ../
@@ -128,7 +121,7 @@ for F in build_deps/toolchains/gcc7_manylinux2010-nvcc-cuda10.1/cc_toolchain_con
 done
 
 python3 ./configure.py --no-deps
-bazel build build_pip_pkg ${VERBOSE} -j "${BUILD_JOBS}"
+bazel build build_pip_pkg -j "$(nproc)"
 bazel-bin/build_pip_pkg pip_out
 pip3 install --ignore-installed --no-dependencies --root "${OUT_DIR}/tensorflow/install" pip_out/*.whl
 cd ../
@@ -136,7 +129,7 @@ cd ../
 # Build and install Tensorflow-Metadata.
 cp -r --reflink=auto "${OUT_DIR}/tensorflow/metadata" ./
 cd metadata
-bazel build //tensorflow_metadata:build_pip_package ${VERBOSE} -j "${BUILD_JOBS}"
+bazel build //tensorflow_metadata:build_pip_package -j "$(nproc)"
 python3 setup.py install --root "${OUT_DIR}/tensorflow/install" --optimize=1 --skip-build
 mkdir -p ${SITE_PACKAGES}/tensorflow_metadata/proto/
 cp -r --reflink=auto bazel-bin/tensorflow_metadata/proto/v0 ${SITE_PACKAGES}/tensorflow_metadata/proto

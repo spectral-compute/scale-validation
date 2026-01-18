@@ -24,4 +24,4 @@ cmake \
     "${OUT_DIR}/flashinfer/flashinfer"
 
 # Build.
-cmake --build "${OUT_DIR}/flashinfer/build" -j"${BUILD_JOBS}"
+cmake --build "${OUT_DIR}/flashinfer/build" -j"$(nproc)"

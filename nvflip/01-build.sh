@@ -14,4 +14,4 @@ cmake \
     -B"${OUT_DIR}/nvflip/nvflip/build" \
     "${OUT_DIR}/nvflip/nvflip/src"
 
-make -C "${OUT_DIR}/nvflip/nvflip/build" -j"${BUILD_JOBS}"
+make -C "${OUT_DIR}/nvflip/nvflip/build" -j"$(nproc)"

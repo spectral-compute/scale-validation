@@ -15,4 +15,4 @@ cmake \
     -B"${OUT_DIR}/UppASD/UppASD/build" \
     "${OUT_DIR}/UppASD/UppASD"
 
-make -C "${OUT_DIR}/UppASD/UppASD/build" -j"${BUILD_JOBS}"
+make -C "${OUT_DIR}/UppASD/UppASD/build" -j"$(nproc)"

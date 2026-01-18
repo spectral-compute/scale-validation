@@ -8,7 +8,7 @@ source "${SCRIPT_DIR}"/../util/args.sh "$@"
 # This generates part of the cmake build system using make.
 cd "${OUT_DIR}/MAGMA/MAGMA"
 echo -e "BACKEND = cuda\nFORT = true\nGPU_TARGET=sm_${GPU_ARCH}" > make.inc
-make -j"${BUILD_JOBS}" generate
+make -j"$(nproc)" generate
 
 sed -i"" -Ee 's|find_package\( *OpenMP *\)||g' "${OUT_DIR}/MAGMA/MAGMA/CMakeLists.txt"
 
@@ -24,11 +24,4 @@ cmake \
     -B"${OUT_DIR}/MAGMA/MAGMA/build" \
     "${OUT_DIR}/MAGMA/MAGMA"
 
-# Build.
-if [ "${VERBOSE}" == "1" ] ; then
-    VERBOSE="VERBOSE=1"
-else
-    VERBOSE=
-fi
-
-make -C "${OUT_DIR}/MAGMA/MAGMA/build" -j"${BUILD_JOBS}" ${VERBOSE}
+make -C "${OUT_DIR}/MAGMA/MAGMA/build" -j"$(nproc)"

@@ -34,10 +34,4 @@ cmake \
     -B"${OUT_DIR}/gomc/build" \
     "${OUT_DIR}/gomc/GOMC"
 
-# Build.
-if [ "${VERBOSE}" == "1" ] ; then
-    VERBOSE="VERBOSE=1"
-else
-    VERBOSE=
-fi
-make -C "${OUT_DIR}/gomc/build" -j"${BUILD_JOBS}" ${VERBOSE}
+make -C "${OUT_DIR}/gomc/build" -j"$(nproc)"

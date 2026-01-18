@@ -16,11 +16,4 @@ cmake \
     -DCMAKE_CUDA_ARCHITECTURES="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')" \
     ..
 
-# Build.
-if [ "${VERBOSE}" == "1" ] ; then
-    VERBOSE="VERBOSE=1"
-else
-    VERBOSE=
-fi
-
-make -j"${BUILD_JOBS}" ${VERBOSE}
+make -j"$(nproc)"

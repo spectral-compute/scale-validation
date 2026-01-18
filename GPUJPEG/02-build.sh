@@ -19,4 +19,4 @@ cmake \
 "${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/GPUJPEG/build"
 
 # Build.
-cmake --build "${OUT_DIR}/GPUJPEG/build" -j"${BUILD_JOBS}"
+cmake --build "${OUT_DIR}/GPUJPEG/build" -j"$(nproc)"

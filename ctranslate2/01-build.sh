@@ -22,11 +22,4 @@ cmake \
     -B"${OUT_DIR}/ctranslate2/ctranslate2/build" \
     "${OUT_DIR}/ctranslate2/ctranslate2"
 
-# Build.
-if [ "${VERBOSE}" == "1" ] ; then
-    VERBOSE="VERBOSE=1"
-else
-    VERBOSE=
-fi
-
-make -C "${OUT_DIR}/ctranslate2/ctranslate2/build" -j"${BUILD_JOBS}" ${VERBOSE}
+make -C "${OUT_DIR}/ctranslate2/ctranslate2/build" -j"$(nproc)"

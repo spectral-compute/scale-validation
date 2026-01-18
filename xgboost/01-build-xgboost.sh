@@ -18,15 +18,8 @@ cmake \
     -B"${OUT_DIR}/xgboost/build" \
     "${OUT_DIR}/xgboost/xgboost"
 
-# Build.
-if [ "${VERBOSE}" == "1" ] ; then
-    VERBOSE="VERBOSE=1"
-else
-    VERBOSE=
-fi
-
 rm -rf "${OUT_DIR}/xgboost/install"
-make -C "${OUT_DIR}/xgboost/build" install -j"${BUILD_JOBS}" ${VERBOSE}
+make -C "${OUT_DIR}/xgboost/build" install -j"$(nproc)"
 
 # Build the Python package.
 rm -rf "${OUT_DIR}/xgboost/pybuild"

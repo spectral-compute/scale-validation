@@ -14,4 +14,4 @@ cmake \
     -B"${OUT_DIR}/quda/build" \
     "${OUT_DIR}/quda/quda"
 
-make -C "${OUT_DIR}/quda/build" install -j"${BUILD_JOBS}" "${VERBOSE}"
+make -C "${OUT_DIR}/quda/build" install -j"$(nproc)"

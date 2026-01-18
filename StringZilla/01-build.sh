@@ -13,4 +13,4 @@ cmake \
     -B"${OUT_DIR}/StringZilla/StringZilla/build" \
     "${OUT_DIR}/StringZilla/StringZilla"
 
-make -C "${OUT_DIR}/StringZilla/StringZilla/build" -j"${BUILD_JOBS}"
+make -C "${OUT_DIR}/StringZilla/StringZilla/build" -j"$(nproc)"

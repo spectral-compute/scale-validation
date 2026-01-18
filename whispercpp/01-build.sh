@@ -15,11 +15,4 @@ cmake \
     -B"${OUT_DIR}/whispercpp/whispercpp/build" \
     "${OUT_DIR}/whispercpp/whispercpp"
 
-# Build.
-if [ "${VERBOSE}" == "1" ] ; then
-    VERBOSE="VERBOSE=1"
-else
-    VERBOSE=
-fi
-
-make -C "${OUT_DIR}/whispercpp/whispercpp/build" -j"${BUILD_JOBS}" ${VERBOSE}
+make -C "${OUT_DIR}/whispercpp/whispercpp/build" -j"$(nproc)"

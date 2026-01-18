@@ -17,4 +17,4 @@ cmake \
 "${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/alien/build"
 
 # Build.
-cmake --build "${OUT_DIR}/alien/build" -j"${BUILD_JOBS}"
+cmake --build "${OUT_DIR}/alien/build" -j"$(nproc)"

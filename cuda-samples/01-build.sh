@@ -15,4 +15,4 @@ cmake \
     -B"${OUT_DIR}/cuda-samples/build" \
     "${OUT_DIR}/cuda-samples/cuda-samples"
 
-make -C "${OUT_DIR}/cuda-samples/build" -j"${BUILD_JOBS}"
+make -C "${OUT_DIR}/cuda-samples/build" -j"$(nproc)"

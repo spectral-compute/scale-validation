@@ -88,25 +88,6 @@ if [ "${PARTIAL_PARSE:-}" == "1" ] ; then
     return 0
 fi
 
-BUILD_JOBS=$(nproc)
-VERBOSE=0
-
-while [[ $# -gt 0 ]] ; do
-    case "$1" in
-        -s)
-            BUILD_JOBS=1
-        ;;
-        -v)
-            VERBOSE=1
-        ;;
-        *)
-            echo "${USAGE}" 1>&2
-            exit 1
-        ;;
-    esac
-    shift
-done
-
 # Clone and sync submodules for a project.
 function do_clone() {
   git clone --recursive --depth 1 --shallow-submodules --branch $3 $2 $1

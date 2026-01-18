@@ -22,4 +22,4 @@ cmake \
 "${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/cutlass/build"
 
 # Build.
-cmake --build "${OUT_DIR}/cutlass/build" -j"${BUILD_JOBS}"
+cmake --build "${OUT_DIR}/cutlass/build" -j"$(nproc)"
