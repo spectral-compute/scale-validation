@@ -1,10 +1,8 @@
 #!/bin/bash
 
 set -e
-source "$(dirname "$0")"/../util/args.sh "$@"
 
-cd "${OUT_DIR}/pytorch/build"
-
+cd "build"
 
 #############
 # CONFIGURE #
@@ -99,3 +97,5 @@ symlinkAllIn "${DST}/lib" "${SRC}/lib"
 for D in "${SRC}/include/"* "${SRC}/include/torch/csrc/api/include/"* ; do
     symlinkAllIn "${DST}/include/$(basename ${D})" "${D}"
 done
+
+cd -

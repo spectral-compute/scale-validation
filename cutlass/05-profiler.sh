@@ -17,18 +17,10 @@ SKIP_PATTERNS='*static*'
 
 # Limit number of (operation,kernel-pattern) runs (default: 2 for quick smoke test)
 #MAX_PAIRS="${MAX_PAIRS:-2}"
-MAX_PAIRS="${MAX_PAIRS:-120}" # Decrease tests from 235 to 120 
-
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
-
-cd "${OUT_DIR}/cutlass/build" || {
-  echo "Build dir not found: ${OUT_DIR}/cutlass/build" >&2
-  exit 1
-}
+MAX_PAIRS="${MAX_PAIRS:-120}" # Decrease tests from 235 to 120
 
 # ---------- Build cutlass_profiler (log to file) ----------
-BUILD_LOG="${OUT_DIR}/cutlass/build/cutlass_profiler.build.log"
+BUILD_LOG="build/cutlass_profiler.build.log"
 mkdir -p "$(dirname "$BUILD_LOG")"
 : > "$BUILD_LOG"
 echo "Building cutlass_profiler (logging to $BUILD_LOG)..."
@@ -43,7 +35,7 @@ if [[ $rc -ne 0 ]]; then
 fi
 
 # ---------- Auto-generate targets log ----------
-TARGETS_LOG="${OUT_DIR}/cutlass/build/targets.log"
+TARGETS_LOG="build/targets.log"
 
 gen_targets_log() {
   local out="$1"

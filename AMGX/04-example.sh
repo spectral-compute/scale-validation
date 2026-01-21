@@ -1,8 +1,9 @@
 #!/bin/bash
 
 set -e
-source "$(dirname "$0")"/../util/args.sh "$@"
-cd "${OUT_DIR}/AMGX/AMGX/build"
+
+OUT_DIR=$(realpath ../)
+cd "build"
 
 export PATH="${OUT_DIR}/openmpi/install/bin:${CUDA_DIR}/bin:${PATH}"
 export LD_LIBRARY_PATH="${OUT_DIR}/openmpi/install/lib:${LD_LIBRARY_PATH}"

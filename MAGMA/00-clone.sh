@@ -1,9 +1,7 @@
 #!/bin/bash
 
 set -e
-source "$(dirname "$0")"/../util/args.sh "$@"
 
-mkdir -p "${OUT_DIR}/MAGMA"
-cd "${OUT_DIR}/MAGMA"
+source "$(dirname "$0")"/../util/git.sh
 
 do_clone MAGMA https://github.com/icl-utk-edu/magma/ "$(get_version MAGMA)"

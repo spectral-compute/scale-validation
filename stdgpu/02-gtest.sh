@@ -1,8 +1,6 @@
 #!/bin/bash
 
 set -e
-source "$(dirname "$0")"/../util/args.sh "$@"
-cd "${OUT_DIR}/stdgpu"
 
 # Skip faulty tests. See scale#385.
 SKIP="

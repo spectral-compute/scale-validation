@@ -30,6 +30,8 @@ python3 -m installer "${OUT_DIR}/xgboost/xgboost/python-package/dist"/*.whl \
     --prefix= --destdir="${OUT_DIR}/xgboost/install" --compile-bytecode=2
 
 # For some reason, Arch and Ubuntu disagree on whether this directory gets created.
+
+PY_VER_PATH=$(python3 --version | cut -d ' ' -f 2 | cut -d '.' -f 1-2) # Like "3.12"
 if [ -e "${OUT_DIR}/xgboost/install/lib/python${PY_VER_PATH}" ] ; then
     rm "${OUT_DIR}/xgboost/install/lib/python${PY_VER_PATH}/site-packages/xgboost/lib/libxgboost.so"
     ln -s ../../../../libxgboost.so "${OUT_DIR}/xgboost/install/lib/python${PY_VER_PATH}/site-packages/xgboost/lib/libxgboost.so"

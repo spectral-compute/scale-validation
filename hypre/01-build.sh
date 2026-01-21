@@ -1,8 +1,5 @@
 #!/bin/bash
 
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
-
 MPI_DIR="${OUT_DIR}/openmpi/install"
 if [ ! -e "${MPI_DIR}" ] ; then
     echo "Please build the OpenMPI third party project first. Use the same working directory." 1>&2

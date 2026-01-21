@@ -1,8 +1,6 @@
 #!/bin/bash
 
 set -e
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
 # Configure.
 cmake \
@@ -11,7 +9,7 @@ cmake \
     -DCMAKE_CXX_COMPILER="${CUDA_PATH}/bin/clang++" \
     -DCMAKE_CXX_FLAGS="-Wno-error=c++11-narrowing" \
     -DFLIP_ENABLE_CUDA=ON \
-    -B"${OUT_DIR}/nvflip/nvflip/build" \
-    "${OUT_DIR}/nvflip/nvflip/src"
+    -B"build" \
+    "nvflip/src"
 
-make -C "${OUT_DIR}/nvflip/nvflip/build" -j"$(nproc)"
+make -C "build" -j"$(nproc)"

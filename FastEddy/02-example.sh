@@ -3,9 +3,7 @@
 set -e
 set -u
 
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
-
+OUT_DIR=$(realpath ../)
 export PATH="${OUT_DIR}/openmpi/install/bin:${CUDA_DIR}/bin:${PATH}"
 export LD_LIBRARY_PATH="${OUT_DIR}/openmpi/install/lib:${LD_LIBRARY_PATH}"
 export OMPI_MCA_accelerator=cuda
@@ -14,11 +12,12 @@ export OMPI_MCA_accelerator=cuda
 # right at the top allow you to use an `np` other than 4.
 
 # Create a directory for the example.
-EXAMPLES="${OUT_DIR}/FastEddy/examples"
+EXAMPLES="FastEddy/examples"
 EXAMPLE=Example01_NBL
 
 rm -rf "${EXAMPLES}/${EXAMPLE}"
 mkdir -p "${EXAMPLES}/${EXAMPLE}/output"
+
 cd "${EXAMPLES}/${EXAMPLE}"
 cp "${OUT_DIR}/FastEddy/FastEddy/tutorials/examples/Example01_NBL.in" .
 

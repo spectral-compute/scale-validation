@@ -1,11 +1,7 @@
 #!/bin/bash
 
 set -e
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
-mkdir -p "${OUT_DIR}/nerf-cuda/nerf-cuda/build"
-cd "${OUT_DIR}/nerf-cuda/nerf-cuda/build"
 
 # Configure.
 cmake \
@@ -13,7 +9,8 @@ cmake \
     -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
     -DCMAKE_C_COMPILER="${CUDA_PATH}/bin/clang" \
     -DCMAKE_CXX_COMPILER="${CUDA_PATH}/bin/clang++" \
-    -DCMAKE_CUDA_ARCHITECTURES="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')" \
-    ..
+    -DCMAKE_CUDA_ARCHITECTURES="${SCALE_FAKE_CUDA_ARCH}" \
+    -B"build" \
+    "nerf-cuda"
 
-make -j"$(nproc)"
+make -C build -j"$(nproc)"

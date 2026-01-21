@@ -1,11 +1,7 @@
 #!/bin/bash
 
 set -e
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
-mkdir -p "${OUT_DIR}/gromacs/build"
-cd "${OUT_DIR}/gromacs/build"
 GROMACS_VER=2025.4
 
 # Configure.
@@ -14,8 +10,8 @@ cmake \
     -DGMX_DISABLE_CUDA_TEXTURES=ON \
     -DCMAKE_INSTALL_PREFIX="$(pwd)/../install" \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CUDA_ARCHITECTURES=$(echo $GPU_ARCH | sed -E 's/sm_//') \
-    -DGMX_CUDA_TARGET_SM=$(echo $GPU_ARCH | sed -E 's/sm_//') \
+    -DCMAKE_CUDA_ARCHITECTURES=${SCALE_FAKE_CUDA_ARCH} \
+    -DGMX_CUDA_TARGET_SM=${SCALE_FAKE_CUDA_ARCH} \
     -DGMX_CLANG_CUDA=OFF \
     -DGMX_GPU=CUDA \
     -DGMX_BUILD_OWN_FFTW=ON \
@@ -27,6 +23,7 @@ cmake \
     -DGMX_HAVE_GPU_GRAPH_SUPPORT=OFF \
     -DGMX_NNPOT=OFF  \
     -DGMX_OPENMP=OFF \
-    "${OUT_DIR}/gromacs/gromacs"
+    -B"build" \
+    "gromacs"
 
-make -j"$(nproc)" install
+make -C build -j"$(nproc)" install

@@ -1,10 +1,8 @@
 #!/bin/bash
 
 set -e
-source "$(dirname "$0")"/../util/args.sh "$@"
 
-mkdir -p "${OUT_DIR}/openmpi"
-cd "${OUT_DIR}/openmpi"
+source "$(dirname "$0")"/../util/git.sh
 
 PATCH=8
 

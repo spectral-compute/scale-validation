@@ -1,8 +1,5 @@
 #!/bin/bash
 set -ETeuo pipefail
-source "$(dirname "$0")"/../util/args.sh "$@"
-
-cd ${OUT_DIR}/gpu_jpeg2k
 
 if ! [ -f BSDS300-images.tgz ]; then
     # Some images, and the result of running them through this on nvidia.

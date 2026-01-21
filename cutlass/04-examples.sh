@@ -1,21 +1,15 @@
 #!/bin/bash
 set -Eeuo pipefail
 
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
-
-cd "${OUT_DIR}/cutlass/build"
-
-LOGDIR="${OUT_DIR}/cutlass/build"
+LOGDIR="build"
 LOGFILE="${LOGDIR}/examples.log"
 JUNIT="${LOGDIR}/cutlass-examples.xml"
-mkdir -p "${LOGDIR}"
 : > "${LOGFILE}"
 
 echo "Writing to $LOGFILE"
 
 # discover example executables
-mapfile -t TESTS < <(find examples -type f -perm /100 | sort)
+mapfile -t TESTS < <(find build/examples -type f -perm /100 | sort)
 
 # your skip list (exact paths)
 SKIP=(

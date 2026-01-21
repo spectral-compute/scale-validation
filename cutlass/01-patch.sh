@@ -2,10 +2,8 @@
 
 
 set -ETeuo pipefail
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
-SRCDIR="${OUT_DIR}/cutlass/cutlass"
+SRCDIR="cutlass"
 
 # Cutlass disables wmma with clang due to an old clang bug that doesn't apply to SCALE.
 sed -Ee 's|#if !\(defined\(__clang__\) && defined\(__CUDA__\)\)|#if 1|' -i ${SRCDIR}/include/cutlass/arch/wmma.h

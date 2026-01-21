@@ -1,9 +1,5 @@
 #!/bin/bash
 
 set -ETeuo pipefail
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
-cd "${OUT_DIR}/thrust/build"
-export LD_LIBRARY_PATH="${CUDA_PATH}/lib"
-ctest --output-on-failure --output-junit thrust.xml -E "thrust.test.complex_transform|thrust.test.cuda.device_side_universal_vector.cdp_0|thrust.test.sequence|thrust.test.cuda.pair_sort_by_key.cdp_0|thrust.test.cuda.sort_by_key.cdp_0"
+ctest --test-dir build --output-on-failure --output-junit thrust.xml -E "thrust.test.complex_transform|thrust.test.cuda.device_side_universal_vector.cdp_0|thrust.test.sequence|thrust.test.cuda.pair_sort_by_key.cdp_0|thrust.test.cuda.sort_by_key.cdp_0"

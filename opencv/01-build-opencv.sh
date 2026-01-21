@@ -1,8 +1,6 @@
 #!/bin/bash
 
 set -e
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
 # Configure.
 cmake \
@@ -27,7 +25,7 @@ cmake \
     -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}" \
     -DOPENCV_EXTRA_MODULES_PATH="${OUT_DIR}/opencv/opencv_contrib/modules" \
     -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/opencv/install" \
-    -B"${OUT_DIR}/opencv/build" \
-    "${OUT_DIR}/opencv/opencv"
+    -B"build" \
+    "opencv"
 
-make -C "${OUT_DIR}/opencv/build" install -j"$(nproc)"
+make -C "build" install -j"$(nproc)"

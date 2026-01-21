@@ -1,11 +1,6 @@
 #!/bin/bash
 
 set -e
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
-
-mkdir -p "${OUT_DIR}/caffe/build"
-cd "${OUT_DIR}/caffe/build"
 
 # Configure.
 cmake \
@@ -22,7 +17,8 @@ cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX="$(pwd)/../install" \
     -Dpython_version=3 \
-    ../caffe
+    -B"build" \
+    caffe
 
-make -j"$(nproc)" install
-make -j"$(nproc)" test.testbin
+make -C build -j"$(nproc)" install
+make -C build -j"$(nproc)" test.testbin

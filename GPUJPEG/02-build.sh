@@ -1,19 +1,17 @@
 #!/bin/bash
 
 set -e
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
 # Configure.
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CUDA_ARCHITECTURES="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')" \
+    -DCMAKE_CUDA_ARCHITECTURES="${SCALE_FAKE_CUDA_ARCH}" \
     -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
     -DCMAKE_C_FLAGS="-Wno-error=implicit-function-declaration -Wno-error=implicit-int" \
     -DCMAKE_CXX_FLAGS="-Wno-stringop-overread" \
     -DCMAKE_CUDA_FLAGS="-Wno-error=implicit-const-int-float-conversion" \
-    -B"${OUT_DIR}/GPUJPEG/build" \
-    "${OUT_DIR}/GPUJPEG/GPUJPEG"
+    -B"build" \
+    "GPUJPEG"
 
 # Build.
-cmake --build "${OUT_DIR}/GPUJPEG/build" -j"$(nproc)"
+cmake --build "build" -j"$(nproc)"

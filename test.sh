@@ -2,82 +2,43 @@
 
 set -e
 
-TEST_DIR="$(dirname "$0")"
+USAGE=$(cat <<-END
 
+    Usage: $0 WORKDIR PATH_TO_SCALE GPU_ARCHITECTURE TEST_NAME
+
+    - WORKDIR
+        A directory for the script to work in. Compilation results will
+        go here.
+
+    - PATH_TO_SCALE
+        The path where SCALE is installed.
+
+    - GPU_ARCHITECTURE
+        The AMD GPU archiecture to build for, eg "gfx1100".
+
+    - TEST_NAME
+        The name of one of the test directories in this repo.
+
+END
+)
+
+if [[ $# -lt 3 ]] ; then
+    echo "${USAGE}" 1>&2
+    exit 1
+fi
+
+
+# TODO: Kill
 if [[ "$CI_INSTA_FAIL" == "true" ]] || [[ "$CI_INSTA_FAIL" == "1" ]]; then
     # Some tests insta-fail as a "skip" to save time in CI while still registering the job
     /bin/false
 fi
 
-
-# Check for files ending in .sh but which are not executable, as such they
-# will not run
-if [[ $1 == -check ]]; then
-    ret=0
-    for l in $(ls $TEST_DIR); do
-        d="${TEST_DIR}/${l}"
-        if [[ -d $d && $d != $(realpath ${TEST_DIR}/util/) ]]; then
-            i=0
-            for m in $(ls $d); do
-                fmt=$(printf %02d $i)
-                if [[ $m == *.sh && "$m" =~ ^[0-9][0-9]-.+ ]]; then
-                    if [[ $m != $fmt-* ]]; then
-                        echo -e "\x1b[33;1m${c} looks like a test script, but is not part of a sequential order\x1b[m"
-                    fi
-
-                    c="${d}/${m}"
-                    if [[ ! -x $c ]]; then
-                        echo -e "\x1b[33;1m${c} looks like a test script, but is not executable\x1b[m"
-                        ret=-1
-                    elif [[ $VERBOSE ]]; then
-                        echo "${c} is ok"
-                    fi
-                    i=$(expr $i + 1)
-                fi
-            done
-        fi
-    done
-    if [[ ! $ret -eq 0 ]]; then
-        echo -e "\x1b[31;1m${TEST_DIR} FAILED CHECK\x1b[m"
-    fi
-    exit $ret
-fi
-
-USAGE_SUFFIX=" TEST [SKIP_N] [STOP_AFTER_N]"
-PARTIAL_PARSE=1
-source "${TEST_DIR}/util/args.sh" "$@"
-
-# Process the script arguments with an array. This array will end up with just
-# the arguments that should be passed to the child scripts.
-ARGS=("$@")
-
-function getOurArgument
-{
-    if [ "${#ARGS[@]}" == "0" ] ; then
-        echo "${USAGE}" 1>&2
-        exit 1
-    fi
-    echo "${ARGS[${#ARGS[@]}-1]}"
-}
-
-# Unconditionally get the first argument.
-TEST="$(getOurArgument)"
-unset ARGS[${#ARGS[@]}-1]
-
-# If we got a number, shuffle the argument along, and get the next one.
-if echo "${TEST}" | grep -qE '^[0-9]+$' ; then
-    SKIP="${TEST}"
-    TEST="$(getOurArgument)"
-    unset ARGS[${#ARGS[@]}-1]
-fi
-
-# If we got a number, shuffle the argument along, and get the next one.
-if echo "${TEST}" | grep -qE '^[0-9]+$' ; then
-    STOP_AFTER="${SKIP}"
-    SKIP="${TEST}"
-    TEST="$(getOurArgument)"
-    unset ARGS[${#ARGS[@]}-1]
-fi
+TEST_DIR="$(realpath "$(dirname "$0")")"
+OUT_DIR="$(realpath "$1")"
+SCALE_DIR="$(realpath "$2")"
+INPUT_GPU_ARCH="$3"
+TEST="$4"
 
 # The next argument should be a subdirectory of the directory this script is in.
 if [ "$TEST" == "util" ] || [ ! -d "${TEST_DIR}/${TEST}" ] ; then
@@ -85,68 +46,43 @@ if [ "$TEST" == "util" ] || [ ! -d "${TEST_DIR}/${TEST}" ] ; then
     exit 1
 fi
 
-# If no skip was given (even 0), then delete the
-if [ -z "${SKIP}" ] ; then
-    rm -rf "${OUT_DIR}/${TEST}"
-fi
+rm -rf "${OUT_DIR}/${TEST}"
 mkdir -p "${OUT_DIR}/${TEST}"
+cd "${OUT_DIR}/${TEST}"
 
-# If no stop-after was given, then use the number of tests.
-if [ -z "${STOP_AFTER}" ] ; then
-    STOP_AFTER="$(find "${TEST_DIR}/${TEST}" -type f | wc -l)"
+# If we're using SCALE, activate it.
+
+if [ -e "${SCALE_DIR}/bin/scaleenv" ] ; then
+    # Activate SCALE
+    source "${SCALE_DIR}/bin/scaleenv" $INPUT_GPU_ARCH
+    GPU_ARCH=sm_${CUDAARCHS}
+
+    export CXXFLAGS="-fdiagnostics-color=always"
+    export CFLAGS="-fdiagnostics-color=always"
+    export NVCC_PREPEND_FLAGS="-fdiagnostics-color=always"
+    export CMAKE_COLOR_DIAGNOSTICS=ON
+
+    # A buildsystem-independent way of avoiding warning spam.
+    # These warnings matter, but nvidia ignores them and the torrent makes CI runs
+    # overflow the output limit.
+    export NVCC_APPEND_FLAGS="-Wno-unknown-warning-option -Wno-unused-function -Wno-int-conversion -Wno-sign-conversion -Wno-shorten-64-to-32 -Wno-template-id-cdtor -Wno-switch -Wno-vla-cxx-extension -Wno-missing-template-arg-list-after-template-kw -Wno-deprecated-declarations -Wno-c++11-narrowing-const-reference -Wno-typename-missing -Wno-unknown-pragmas -Wno-inconsistent-missing-override -Wno-unused-private-field -Wno-sign-compare -Wno-pessimizing-move -Wno-unused-result -Wno-invalid-constexpr -Wno-unused-but-set-variable -Wno-unused-variable -Wno-unused-value -Wno-implicit-const-int-float-conversion -Wno-pass-failed"
+
+else
+    echo -e "\x1b[33;1mNOTE: \"${SCALE_DIR}\" is not a SCALE installation; using default environment\x1b[m" 1>&2
+    GPU_ARCH=$INPUT_GPU_ARCH
+
+    # Export the environment variables that scaleenv would.
+    export CUDA_DIR="${SCALE_DIR}"
+    export CUDA_HOME="${SCALE_DIR}"
+    export CUDA_PATH="${SCALE_DIR}"
+    export CUDACXX="${SCALE_DIR}/bin/nvcc"
+    export PATH="${SCALE_DIR}/bin:${PATH-}"
+    export CUDAARCHS="${GPU_ARCH}"
 fi
 
 # Run all the scripts for the test.
-
-RETURN_CODE=0
-I=0
-for S in "${TEST_DIR}/${TEST}"/* ; do
-    F=$(basename $S)
-    if [[ $F == *.sh && "$F" =~ ^[0-9][0-9]-.+ ]]; then
-        FMT=$(printf %02d $I)
-        # Check if script begins with correct index number
-        if [[ $F != $FMT-* ]]; then
-            echo -e "\x1b[31;1mFATAL: ${S} looks like a test script, but is not part of a sequential order\x1b[m"
-            exit -1
-        fi
-        if [[ ! -x $S ]]; then
-            echo -e "\x1b[31;1mFATAL: ${S} looks like a test script, but is not executable\x1b[m"
-            exit -1
-        fi
-    fi
-
-    if [ ! -x "${S}" ] || [ ! -f "${S}" ] ; then
-        continue
-    fi
-
-    J=$I
-    I=$(expr $I + 1)
-    if [ ! -z "${SKIP}" ] && [[ $J -lt ${SKIP} ]] ; then
-        echo -e "Skipping \x1b[1m$(basename "$S")\x1b[0m in \x1b[1m${TEST}\x1b[0m"
-        continue
-    fi
-
-    if [ ! -z "${STOP_AFTER}" ] && [[ $J -ge ${STOP_AFTER} ]] ; then
-        echo -e "Skipping \x1b[1m$(basename "$S")\x1b[0m in \x1b[1m${TEST}\x1b[0m"
-        continue
-    fi
-
-    echo -e "Running \x1b[1m$(basename "$S")\x1b[0m in \x1b[1m${TEST}\x1b[0m"
-
-    set +e
-    # HACK: call with absolute path so $0 points accurately to script dir
-    # not proud... but i dont wanna mass edit 50+ bash scripts :((
-    "$(realpath "$S")" "${ARGS[@]}"
-    R="$?"
-    set -e
-
-    if [ "$R" == "0" ] ; then
-        continue
-    elif [ "$R" == "222" ] ; then
-        RETURN_CODE=222
-    else
-        exit "$R"
-    fi
+set -o errexit
+for i in "${TEST_DIR}/${TEST}"/*; do
+    echo "--------------- Executing $i ---------------"
+    $i
 done
-
-exit $RETURN_CODE

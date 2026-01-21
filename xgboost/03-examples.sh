@@ -7,6 +7,8 @@ source "$(dirname "$0")"/../util/args.sh "$@"
 export LD_LIBRARY_PATH="${CUDA_PATH}/lib:${CUDA_PATH}/../../llvm/lib/x86_64-unknown-linux-gnu"
 
 # Look for the Python package. These end up in different places on Arch and Ubuntu.
+
+PY_VER_PATH=$(python3 --version | cut -d ' ' -f 2 | cut -d '.' -f 1-2) # Like "3.12"
 for D in "${OUT_DIR}/xgboost/install/lib/python${PY_VER_PATH}/site-packages" \
          "${OUT_DIR}/xgboost/install/local/lib/python${PY_VER_PATH}/dist-packages" ; do
     if [ -e "${D}" ] ; then

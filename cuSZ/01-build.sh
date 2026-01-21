@@ -1,8 +1,6 @@
 #!/bin/bash
 
 set -ETeuo pipefail
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
 # Configure.
 cmake \
@@ -12,7 +10,7 @@ cmake \
     -DBUILD_TESTING=On \
     -DPSZ_BUILD_EXAMPLES=On \
     -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/cuSZ/install" \
-    -B"${OUT_DIR}/cuSZ/build" \
-    "${OUT_DIR}/cuSZ/cuSZ"
+    -B"build" \
+    "cuSZ"
 
-make -C "${OUT_DIR}/cuSZ/build" install -j"$(nproc)"
+make -C "build" install -j"$(nproc)"

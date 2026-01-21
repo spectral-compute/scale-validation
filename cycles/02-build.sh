@@ -1,11 +1,6 @@
 #!/bin/bash
 
 set -e
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
-
-rm -Rf "${OUT_DIR}/cycles/build"
-mkdir -p "${OUT_DIR}/cycles/build"
 
 # Cycles's finder script for Glog can't cope with either Arch or Ubuntu.
 if echo $(source /etc/os-release ; echo $NAME) | grep -F 'Arch Linux' ; then
@@ -37,8 +32,8 @@ cmake \
     -DWITH_CYCLES_OPENCOLORIO=ON \
     "${CMAKE_EXTRA_ARGS[@]}" \
     -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}" \
-    -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/cycles/install" \
-    -B"${OUT_DIR}/cycles/build" \
-    "${OUT_DIR}/cycles/cycles"
+    -DCMAKE_INSTALL_PREFIX="install" \
+    -B"build" \
+    "cycles"
 
-make -C "${OUT_DIR}/cycles/build" install -j"$(nproc)"
+make -C "build" install -j"$(nproc)"

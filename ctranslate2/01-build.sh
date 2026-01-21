@@ -1,8 +1,6 @@
 #!/bin/bash
 
 set -e
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
 # Configure.
 cmake \
@@ -15,11 +13,11 @@ cmake \
     -DOPENMP_RUNTIME=COMP \
     -DWITH_MKL=OFF \
     -DCUDA_NVCC_FLAGS="-Wno-pass-failed -Wno-deprecated-builtins -Wno-unused-result -Wno-missing-braces -Wno-unused-parameter -Wno-sign-compare -Wno-unused-local-typedef" \
-    -DCMAKE_CUDA_ARCHITECTURES="$GPU_ARCH_NUM" \
-    -DCUDA_ARCH_LIST="$GPU_ARCH_DEC" \
+    -DCMAKE_CUDA_ARCHITECTURES="${SCALE_FAKE_CUDA_ARCH}" \
+    -DCUDA_ARCH_LIST="8.6" \
     -DWITH_CUDA=ON \
     -DBUILD_TESTS=ON \
-    -B"${OUT_DIR}/ctranslate2/ctranslate2/build" \
-    "${OUT_DIR}/ctranslate2/ctranslate2"
+    -B"build" \
+    "ctranslate2"
 
-make -C "${OUT_DIR}/ctranslate2/ctranslate2/build" -j"$(nproc)"
+make -C "build" -j"$(nproc)"

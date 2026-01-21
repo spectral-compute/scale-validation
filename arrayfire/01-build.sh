@@ -1,8 +1,6 @@
 #!/bin/bash
 
 set -e
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
 # Configure.
 cmake \
@@ -16,7 +14,7 @@ cmake \
     -DAF_WITH_CUDNN=OFF \
     -DAF_WITH_NONFREE=ON \
     -DAF_WITH_FMT_HEADER_ONLY=ON \
-    -B"${OUT_DIR}/arrayfire/arrayfire/build" \
-    "${OUT_DIR}/arrayfire/arrayfire"
+    -B"build" \
+    "arrayfire"
 
-make -C "${OUT_DIR}/arrayfire/arrayfire/build" -j"$(nproc)"
+make -C "build" -j"$(nproc)"

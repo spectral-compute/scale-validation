@@ -1,10 +1,8 @@
 #!/bin/bash
 
 set -ETeuo pipefail
-source "$(dirname "$0")"/../util/args.sh "$@"
-cd "${OUT_DIR}/llama.cpp/install/bin"
 
-for F in test-* ; do
+for F in install/bin/test-* ; do
     echo "Running test $F"
 
     case "${F}" in

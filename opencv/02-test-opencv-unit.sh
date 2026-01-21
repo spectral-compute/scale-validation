@@ -1,8 +1,7 @@
 #!/bin/bash
 
 set -e
-source "$(dirname "$0")"/../util/args.sh "$@"
-cd "${OUT_DIR}/opencv/opencv_extra/testdata/gpu"
+cd "opencv/opencv_extra/testdata/gpu"
 
 RETCODE=0
 BROKEN=
@@ -19,6 +18,8 @@ for T in ../../../install/bin/opencv_test_cuda* ; do
         RETCODE=2
     fi
 done
+
+cd -
 
 echo -e "${BROKEN}"
 exit $RETCODE
