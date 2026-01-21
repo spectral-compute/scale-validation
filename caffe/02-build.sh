@@ -6,6 +6,7 @@ set -e
 cmake \
     -DUSE_CUDNN=OFF \
     -DUSE_OPENCV=OFF \
+    -DBUILD_python=off \
     -DBLAS=Open \
     -DBUILD_docs=OFF \
     -DCUDA_ARCH_NAME=Manual \
