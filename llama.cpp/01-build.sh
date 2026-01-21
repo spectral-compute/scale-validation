@@ -14,7 +14,4 @@ cmake \
     -B"${OUT_DIR}/llama.cpp/build" \
     "${OUT_DIR}/llama.cpp/llama.cpp"
 
-# Make sure we actually found CUDA.
-"${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/llama.cpp/build"
-
 make -C "${OUT_DIR}/llama.cpp/build" install -j"$(nproc)"

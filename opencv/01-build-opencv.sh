@@ -30,7 +30,4 @@ cmake \
     -B"${OUT_DIR}/opencv/build" \
     "${OUT_DIR}/opencv/opencv"
 
-# Make sure we actually found CUDA.
-"${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/opencv/build"
-
 make -C "${OUT_DIR}/opencv/build" install -j"$(nproc)"

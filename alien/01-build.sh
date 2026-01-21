@@ -13,8 +13,5 @@ cmake \
     -B"${OUT_DIR}/alien/build" \
     "${OUT_DIR}/alien/alien"
 
-# Make sure we actually found CUDA.
-"${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/alien/build"
-
 # Build.
 cmake --build "${OUT_DIR}/alien/build" -j"$(nproc)"

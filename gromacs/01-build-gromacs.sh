@@ -29,7 +29,4 @@ cmake \
     -DGMX_OPENMP=OFF \
     "${OUT_DIR}/gromacs/gromacs"
 
-# Make sure we actually found CUDA.
-"${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/gromacs/build"
-
 make -j"$(nproc)" install

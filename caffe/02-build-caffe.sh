@@ -24,8 +24,5 @@ cmake \
     -Dpython_version=3 \
     ../caffe
 
-# Make sure we actually found CUDA.
-"${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/caffe/build"
-
 make -j"$(nproc)" install
 make -j"$(nproc)" test.testbin

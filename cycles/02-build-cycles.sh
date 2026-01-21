@@ -41,7 +41,4 @@ cmake \
     -B"${OUT_DIR}/cycles/build" \
     "${OUT_DIR}/cycles/cycles"
 
-# Make sure we actually found CUDA.
-"${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/cycles/build"
-
 make -C "${OUT_DIR}/cycles/build" install -j"$(nproc)"

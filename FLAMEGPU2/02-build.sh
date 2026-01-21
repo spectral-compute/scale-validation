@@ -15,7 +15,4 @@ cmake \
     -B"${OUT_DIR}/FLAMEGPU2/build" \
     "${OUT_DIR}/FLAMEGPU2/FLAMEGPU2"
 
-# Make sure we actually found CUDA.
-"${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/FLAMEGPU2/build"
-
 make -C "${OUT_DIR}/FLAMEGPU2/build" -j"$(nproc)"

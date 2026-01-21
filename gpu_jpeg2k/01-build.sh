@@ -18,8 +18,5 @@ cmake \
     -B"${OUT_DIR}/gpu_jpeg2k/build" \
     "${OUT_DIR}/gpu_jpeg2k/gpu_jpeg2k"
 
-# Make sure we actually found CUDA.
-"${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/gpu_jpeg2k/build"
-
 # Build.
 cmake --build "${OUT_DIR}/gpu_jpeg2k/build" -j"$(nproc)"

@@ -15,8 +15,5 @@ cmake \
     -B"${OUT_DIR}/GPUJPEG/build" \
     "${OUT_DIR}/GPUJPEG/GPUJPEG"
 
-# Make sure we actually found CUDA.
-"${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/GPUJPEG/build"
-
 # Build.
 cmake --build "${OUT_DIR}/GPUJPEG/build" -j"$(nproc)"

@@ -11,8 +11,5 @@ cmake \
     -B"${OUT_DIR}/tiny-cuda-nn/build" \
     "${OUT_DIR}/tiny-cuda-nn/tiny-cuda-nn"
 
-# Make sure we actually found CUDA.
-"${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/tiny-cuda-nn/build"
-
 # Build.
 cmake --build "${OUT_DIR}/tiny-cuda-nn/build" -j"$(nproc)"

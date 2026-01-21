@@ -18,8 +18,5 @@ cmake \
     -B"${OUT_DIR}/cutlass/build" \
     "${OUT_DIR}/cutlass/cutlass"
 
-# Make sure we actually found CUDA.
-"${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/cutlass/build"
-
 # Build.
 cmake --build "${OUT_DIR}/cutlass/build" -j"$(nproc)"

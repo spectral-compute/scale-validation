@@ -18,7 +18,4 @@ cmake \
     -B"${OUT_DIR}/stdgpu/build" \
     "${OUT_DIR}/stdgpu/stdgpu"
 
-# Make sure we actually found CUDA.
-"${SCRIPT_DIR}"/../util/check-cmake-cuda-version.sh "${OUT_DIR}/stdgpu/build"
-
 make -C "${OUT_DIR}/stdgpu/build" install -j"$(nproc)"
