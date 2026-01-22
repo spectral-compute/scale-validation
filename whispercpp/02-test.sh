@@ -1,12 +1,9 @@
 #!/bin/bash
 
 set -e
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
-
-cd "${OUT_DIR}/whispercpp/whispercpp"
-
 set -o pipefail
+
+cd "whispercpp"
 
 # Do the moral equivalent of make base.en -j10 | tee output.txt
 
