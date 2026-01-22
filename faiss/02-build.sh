@@ -20,5 +20,5 @@ make -C "build" install -j"$(nproc)"
 # Build the Python package, and install it.
 cd "build/faiss/python"
 python3 -m build --wheel --no-isolation
-python3 -m installer --prefix= --destdir="${OUT_DIR}/install" dist/*.whl
+python3 -m installer --prefix= --destdir="install" dist/*.whl
 cd -
