@@ -12,7 +12,7 @@ export OMPI_MCA_accelerator=cuda
 # right at the top allow you to use an `np` other than 4.
 
 # Create a directory for the example.
-EXAMPLES="FastEddy/examples"
+EXAMPLES="${OUT_DIR}/FastEddy/examples"
 EXAMPLE=Example01_NBL
 
 rm -rf "${EXAMPLES}/${EXAMPLE}"
