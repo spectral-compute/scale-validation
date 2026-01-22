@@ -82,7 +82,7 @@ fi
 
 # Run all the scripts for the test.
 set -o errexit
-for i in "${TEST_DIR}/${TEST}"/*; do
+for i in "${TEST_DIR}/${TEST}"/*.sh; do
     echo "--------------- Executing $i ---------------"
     $i
 done
