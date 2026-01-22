@@ -2,7 +2,7 @@
 
 set -ETeuo pipefail
 
-export FLAMEGPU_INC_DIR="${pwd}/FLAMEGPU2/include"
+export FLAMEGPU_INC_DIR="$(pwd)/FLAMEGPU2/include"
 
 # Err why is this needed only in CI?
 export CUDA_PATH="${CUDA_PATH}"
