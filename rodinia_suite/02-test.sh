@@ -8,9 +8,8 @@ compare_files() {
   diff -u "$f1" "$f2" >"$log"
 }
 
-source "$(dirname "$0")"/../util/args.sh "$@"
-
 REPO_ROOT="$PWD"
+OUT_DIR=$(realpath .)
 if OUT_ABS="$(readlink -f "$OUT_DIR" 2>/dev/null)"; then :; \
 elif OUT_ABS="$(realpath "$OUT_DIR" 2>/dev/null)"; then :; \
 else OUT_ABS="$REPO_ROOT/$OUT_DIR"; fi

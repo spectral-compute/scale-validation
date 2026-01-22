@@ -3,6 +3,7 @@
 set -e
 
 # Configure.
+OUTDIR=$(realpath .)
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
@@ -19,5 +20,5 @@ make -C "build" install -j"$(nproc)"
 # Build the Python package, and install it.
 cd "build/faiss/python"
 python3 -m build --wheel --no-isolation
-python3 -m installer --prefix= --destdir="${OUT_DIR}/faiss/install" dist/*.whl
+python3 -m installer --prefix= --destdir="${OUT_DIR}/install" dist/*.whl
 cd -

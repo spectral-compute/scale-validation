@@ -9,6 +9,6 @@ cmake \
     -DCMAKE_CUDA_ARCHITECTURES="${SCALE_FAKE_CUDA_ARCH}" \
     -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/stdgpu/install" \
     -B"build" \
-    "/stdgpu"
+    "stdgpu"
 
 make -C "build" install -j"$(nproc)"

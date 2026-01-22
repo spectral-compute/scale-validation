@@ -2,5 +2,5 @@
 
 set -e
 
-cd "build/testing/
+cd "build/testing/"
 ../../testing/run_tests.py

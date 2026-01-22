@@ -4,7 +4,7 @@ set -ETeuo pipefail
 
 cmake \
 	-DGGML_CUDA=ON \
-	-DCMAKE_INSTALL_PREFIX="$OUT_DIR/install_ggml" \
+	-DCMAKE_INSTALL_PREFIX="install_ggml" \
 	-B "build_ggml" \
 	"ggml"
 
