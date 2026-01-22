@@ -75,7 +75,6 @@ definitely needs. The list may not be exhaustive.
 > * TCLB
 > * alien
 > * cycles
-> * jitify
 > * caffe
 > * rodinia
 > * stdgpu
@@ -83,27 +82,28 @@ definitely needs. The list may not be exhaustive.
 > * GPUJPEG
 > * jitify
 > * ggml
+> * jitify
 > * gomc
 > * AMGX
 > * CUTLASS
 > * llm.c
-> * quda
-> * CV-CUDA
-> * xgboost
 > * pytorch
-> * hashinator
 > * timemachine
+> * xgboost
 > * cuml
 > * llama-cpp
 > * hypre
 > * arrayfire
-> * GooFit
 > * vllm
+> * GooFit
 > * risc0
 > * PhysX
-> * opencv
+> * hashinator
 > * thrust
 > * MAGMA
+> * CV-CUDA
+> * quda
+> * opencv
 
 ## Running Tests
 
