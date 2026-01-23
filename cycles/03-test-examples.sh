@@ -1,20 +1,19 @@
 #!/bin/bash
 
 set -e
-source "$(dirname "$0")"/../util/args.sh "$@"
 
 RETCODE=0
 BROKEN=
 
 for EXAMPLE in cube_surface cube_volume monkey sphere_bump ; do
-    IN="${OUT_DIR}/cycles/cycles/examples/scene_${EXAMPLE}.xml"
-    CPU_OUT="${OUT_DIR}/cycles/${EXAMPLE}_cpu.png"
-    CUDA_OUT="${OUT_DIR}/cycles/${EXAMPLE}_cuda.png"
+    IN="./cycles/examples/scene_${EXAMPLE}.xml"
+    CPU_OUT="./${EXAMPLE}_cpu.png"
+    CUDA_OUT="./${EXAMPLE}_cuda.png"
 
     set +e
 
     echo -e "Rendering \x1b[1m${EXAMPLE}\x1b[m on \x1b[34;1mCPU\x1b[m"
-    /usr/bin/time -f 'Time: %e' "${OUT_DIR}/cycles/install/cycles" "${IN}" --device CPU --output "${CPU_OUT}"
+    /usr/bin/time -f 'Time: %e' "./install/cycles" "${IN}" --device CPU --output "${CPU_OUT}"
     if [ "$?" != "0" ] ; then
         BROKEN="${BROKEN}\n${EXAMPLE}"
         RETCODE=2
@@ -23,7 +22,7 @@ for EXAMPLE in cube_surface cube_volume monkey sphere_bump ; do
     fi
 
     echo -e "Rendering \x1b[1m${EXAMPLE}\x1b[m with \x1b[32;1mCUDA\x1b[m"
-    /usr/bin/time -f 'Time: %e' "${OUT_DIR}/cycles/install/cycles" "${IN}" --device CUDA --output "${CUDA_OUT}"
+    /usr/bin/time -f 'Time: %e' "./install/cycles" "${IN}" --device CUDA --output "${CUDA_OUT}"
     if [ "$?" != "0" ] ; then
         BROKEN="${BROKEN}\n${EXAMPLE}"
         RETCODE=2

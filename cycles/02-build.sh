@@ -3,10 +3,11 @@
 set -e
 
 # Cycles's finder script for Glog can't cope with either Arch or Ubuntu.
+# TODO: This is pretty scuffed
 if echo $(source /etc/os-release ; echo $NAME) | grep -F 'Arch Linux' ; then
     CMAKE_EXTRA_ARGS=(-DGLOG_LIBRARY=/usr/lib/libglog.so)
 elif cat /etc/issue | grep -F 'Ubuntu' ; then
-    CMAKE_EXTRA_ARGS=(-DGLOG_LIBRARY="${SCRIPT_DIR}/libglog_ubuntu.a")
+    CMAKE_EXTRA_ARGS=(-DGLOG_LIBRARY="$(realpath "$(dirname "$0")")/libglog_ubuntu.a")
 else
     CMAKE_EXTRA_ARGS=()
 fi
