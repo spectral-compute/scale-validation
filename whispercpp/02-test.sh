@@ -19,7 +19,7 @@ make samples
 for f in samples/*.wav; do
     echo "----------------------------------------------"
     echo ""
-    ./build/bin/main -m models/ggml-base.en.bin -f "$f" &> "$f.out"
+    ../build/bin/main -m ./models/ggml-base.en.bin -f "$f" &> "$f.out"
     echo ""
 done
 
