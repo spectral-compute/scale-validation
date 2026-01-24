@@ -20,5 +20,5 @@ get_version () {
     else
         dir="$2"
     fi
-    echo $(cat "$dir/../versions.txt" | grep "$1" | sed "s/$1 //g")
+    echo $(cat "$dir/../versions.txt" | grep "$1 " | sed "s/$1 //g")
 }

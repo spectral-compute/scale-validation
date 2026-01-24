@@ -2,13 +2,14 @@
 
 set -ETeuo pipefail
 SCRIPT_DIR="$(realpath "$(dirname "$0")")"
+SRC_DIR="$(realpath ./thrust)"
 
 # Clang needs some help to build Thrust.
 if ! ${CUDA_PATH}/bin/nvcc --version | grep clang ; then
     exit 0
 fi
 
-cd "${OUT_DIR}/thrust/thrust/dependencies/cub/cub"
+cd "${SRC_DIR}/dependencies/cub/cub"
 
 # The tests compile with -Werror, but apparently NVCC's -Wall -Wextra does not warn about unused things.
 sed -E '/-Werror/d' -i "thrust/cmake/ThrustBuildCompilerTargets.cmake"

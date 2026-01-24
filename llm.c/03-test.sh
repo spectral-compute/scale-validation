@@ -2,7 +2,8 @@
 
 set -ETeuo pipefail
 
-./llm.c/train_gpt2fp32cu | tee output.log
+cd llm.c
+./train_gpt2fp32cu | tee output.log
 
 # Check the output matches that obtained on the nvidia device.
 cat << EOF > expected.log
