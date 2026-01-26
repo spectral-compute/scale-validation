@@ -22,6 +22,10 @@ for F in $(find . -type f -executable) ; do
             # Faulty. See scale#385.
             continue
         ;;
+        ./ranges)
+            # Faulty. See scale#385.
+            continue
+        ;;
     esac
     echo -e "Running \x1b[1m'$F'\x1b[0m..."
     $F
