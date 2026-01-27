@@ -1,10 +1,14 @@
 #!/bin/bash
 
+# set -ETeuo pipefail
+# set -o xtrace
+
 # Download the benchmark data if it doesn't already exist.
-mkdir -p "data/MaxPlanckInstituteGromacsBenchmarks"
-cd "data/MaxPlanckInstituteGromacsBenchmarks"
-if [ ! -e benchMEM.zip ] ; then
-    wget https://www.mpinat.mpg.de/benchMEM.zip
+BENCH_MEM="data/MaxPlanckInstituteGromacsBenchmarks"
+mkdir -p "$BENCH_MEM"
+if [ ! -e "$BENCH_MEM/benchMEM.zip" ] ; then
+    wget https://www.mpinat.mpg.de/benchMEM.zip -O "$BENCH_MEM/benchMEM.zip"
+    unzip "$BENCH_MEM/benchMEM.zip"
 fi
 
 # Create somewhere for results.
@@ -14,16 +18,13 @@ rm -f "${RESULT_FILE}"
 RESULT_DIR="$(pwd)/benchmarks/MaxPlanckInstitute/benchMEM"
 mkdir -p "${RESULT_DIR}"
 
-cd "${RESULT_DIR}"
-if [ ! -e benchMEM.tpr ] ; then
-    unzip "data/MaxPlanckInstituteGromacsBenchmarks/benchMEM.zip"
-fi
-source "${OUT_DIR}/gromacs/install/bin/GMXRC"
+source "install/bin/GMXRC"
+
 set +e
 # When comparing with hip we should use -pme cpu -bonded cpu -update cpu
 #gmx mdrun -s benchMEM.tpr -v -ntmpi 1 -pme cpu -bonded cpu -update cpu -nb gpu
 # When comparing with a more complete version
-gmx mdrun -s benchMEM.tpr -v -ntmpi 1 -nb gpu
+gmx mdrun -s "benchMEM.tpr" -v -ntmpi 1 -nb gpu
 RESULT=$?
 set -e
 # Log to result CSV
