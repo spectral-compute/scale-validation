@@ -7,7 +7,7 @@
 BENCH_MEM="data/MaxPlanckInstituteGromacsBenchmarks"
 mkdir -p "$BENCH_MEM"
 if [ ! -e "$BENCH_MEM/benchMEM.zip" ] ; then
-    wget https://www.mpinat.mpg.de/benchMEM.zip -O "$BENCH_MEM/benchMEM.zip"
+    wget https://data.spectralcompute.co.uk/gromacs/benchMEM.zip -O "$BENCH_MEM/benchMEM.zip"
     unzip "$BENCH_MEM/benchMEM.zip"
 fi
 
