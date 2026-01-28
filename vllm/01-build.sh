@@ -6,8 +6,8 @@ set -e
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DVLLM_PYTHON_EXECUTABLE=`which python3` \
-    -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
-    -DCMAKE_CUDA_ARCHITECTURES="${SCALE_FAKE_CUDA_ARCH}" \
+    -DCMAKE_CUDA_COMPILER="nvcc" \
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
     -DBUILD_TESTING=ON \
     -DCMAKE_CTEST_ARGUMENTS="--output-on-failure --output-junit vllm.xml" \
     -DCMAKE_INSTALL_PREFIX="install" \

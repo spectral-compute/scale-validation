@@ -30,7 +30,7 @@ export CUDA_TOOLKIT_PATH="${CUDA_PATH}"
 export CUDNN_INSTALL_PATH="${CUDA_PATH}"
 export TF_CUDA_PATHS="${CUDA_PATH}"
 export TF_CUDA_VERSION=$("${CUDA_PATH}/bin/nvcc" --version | sed -n 's/^.*release \(.*\),.*/\1/p')
-export TF_CUDA_COMPUTE_CAPABILITIES=$(echo $GPU_ARCH | sed -E 's/sm_([0-9]+)([0-9])/\1.\2/')
+export TF_CUDA_COMPUTE_CAPABILITIES=$(echo $CUDAARCHS | sed -E 's/sm_([0-9]+)([0-9])/\1.\2/')
 
 # Other things that apparently can't be autodetected.
 export TMP=/tmp

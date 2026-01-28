@@ -2,7 +2,7 @@
 
 set -ETeuo pipefail
 
-SM_NUM=${SCALE_FAKE_CUDA_ARCH}
+SM_NUM=${CUDAARCHS}
 
 # This project is pretty ancient and has its own rather loopy way to get flags into the
 # nvcc call. CMake list syntax is required in CUDA_NVCC_FLAGS_RELEASE.

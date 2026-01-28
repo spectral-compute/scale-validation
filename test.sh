@@ -50,35 +50,28 @@ rm -rf "${OUT_DIR}/${TEST}"
 mkdir -p "${OUT_DIR}/${TEST}"
 cd "${OUT_DIR}/${TEST}"
 
-# If we're using SCALE, activate it.
+# Activate SCALE
+source "${SCALE_DIR}/bin/scaleenv" $INPUT_GPU_ARCH
 
-if [ -e "${SCALE_DIR}/bin/scaleenv" ] ; then
-    # Activate SCALE
-    source "${SCALE_DIR}/bin/scaleenv" $INPUT_GPU_ARCH
-    GPU_ARCH=sm_${CUDAARCHS}
-
-    export CXXFLAGS="-fdiagnostics-color=always"
-    export CFLAGS="-fdiagnostics-color=always"
-    export NVCC_PREPEND_FLAGS="-fdiagnostics-color=always"
-    export CMAKE_COLOR_DIAGNOSTICS=ON
-
-    # A buildsystem-independent way of avoiding warning spam.
-    # These warnings matter, but nvidia ignores them and the torrent makes CI runs
-    # overflow the output limit.
-    export NVCC_APPEND_FLAGS="-Wno-unknown-warning-option -Wno-unused-function -Wno-int-conversion -Wno-sign-conversion -Wno-shorten-64-to-32 -Wno-template-id-cdtor -Wno-switch -Wno-vla-cxx-extension -Wno-missing-template-arg-list-after-template-kw -Wno-deprecated-declarations -Wno-c++11-narrowing-const-reference -Wno-typename-missing -Wno-unknown-pragmas -Wno-inconsistent-missing-override -Wno-unused-private-field -Wno-sign-compare -Wno-pessimizing-move -Wno-unused-result -Wno-invalid-constexpr -Wno-unused-but-set-variable -Wno-unused-variable -Wno-unused-value -Wno-implicit-const-int-float-conversion -Wno-pass-failed"
-
+if [[ $INPUT_GPU_ARCH == sm_* ]]; then
+    # For NVIDIA archiectrues, just pass the arch along directly.
+    export CUDAARCHS="$(echo $INPUT_GPU_ARCH | sed -Ee 's|sm_||g')"
 else
-    echo -e "\x1b[33;1mNOTE: \"${SCALE_DIR}\" is not a SCALE installation; using default environment\x1b[m" 1>&2
-    GPU_ARCH=$INPUT_GPU_ARCH
-
-    # Export the environment variables that scaleenv would.
-    export CUDA_DIR="${SCALE_DIR}"
-    export CUDA_HOME="${SCALE_DIR}"
-    export CUDA_PATH="${SCALE_DIR}"
-    export CUDACXX="${SCALE_DIR}/bin/nvcc"
-    export PATH="${SCALE_DIR}/bin:${PATH-}"
-    export CUDAARCHS="${GPU_ARCH}"
+    # For AMD, we need to pick an arbitrary NVIDIA-looking arch number.
+    export CUDAARCHS="${CUDAARCHS}"
 fi
+
+export CXXFLAGS="-fdiagnostics-color=always"
+export CFLAGS="-fdiagnostics-color=always"
+
+# This also serves to conveniently explode if we accidentially end up using nvidia nvcc.
+export NVCC_PREPEND_FLAGS="-fdiagnostics-color=always"
+export CMAKE_COLOR_DIAGNOSTICS=ON
+
+# A buildsystem-independent way of avoiding warning spam.
+# These warnings matter, but nvidia ignores them and the torrent makes CI runs
+# overflow the output limit.
+export NVCC_APPEND_FLAGS="-Wno-unknown-warning-option -Wno-unused-function -Wno-int-conversion -Wno-sign-conversion -Wno-shorten-64-to-32 -Wno-template-id-cdtor -Wno-switch -Wno-vla-cxx-extension -Wno-missing-template-arg-list-after-template-kw -Wno-deprecated-declarations -Wno-c++11-narrowing-const-reference -Wno-typename-missing -Wno-unknown-pragmas -Wno-inconsistent-missing-override -Wno-unused-private-field -Wno-sign-compare -Wno-pessimizing-move -Wno-unused-result -Wno-invalid-constexpr -Wno-unused-but-set-variable -Wno-unused-variable -Wno-unused-value -Wno-implicit-const-int-float-conversion -Wno-pass-failed"
 
 # Run all the scripts for the test.
 set -o errexit

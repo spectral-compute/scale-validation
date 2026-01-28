@@ -6,8 +6,8 @@ set -e
 OUTDIR=$(realpath .)
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
-    -DCMAKE_CUDA_ARCHITECTURES="${SCALE_FAKE_CUDA_ARCH}" \
+    -DCMAKE_CUDA_COMPILER="nvcc" \
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
     -DBUILD_SHARED_LIBS=ON \
     -DBUILD_TESTING=ON \
     -DCMAKE_CTEST_ARGUMENTS="--output-on-failure --output-junit faiss.xml" \

@@ -6,8 +6,8 @@ set -ETeuo pipefail
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_CXX_FLAGS="-Wno-stringop-overread -Wno-format-truncation" \
-    -DCMAKE_CUDA_ARCHITECTURES="${SCALE_FAKE_CUDA_ARCH}" \
-    -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
+    -DCMAKE_CUDA_COMPILER="nvcc" \
     -B"build" \
     "alien"
 

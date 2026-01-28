@@ -15,5 +15,5 @@ source venv/bin/activate
 pip install mypy
 
 pip install -r requirements.txt
-CMAKE_ARGS=-DCUDA_ARCH=${SCALE_FAKE_CUDA_ARCH} pip install -e .[dev,test]
+CMAKE_ARGS=-DCUDA_ARCH=${CUDAARCHS} pip install -e .[dev,test]
 cd -

@@ -15,7 +15,7 @@ cd "build/src"
 ./configure \
   --enable-unified-memory \
   --with-cuda \
-  --with-gpu-arch="${SCALE_FAKE_CUDA_ARCH}" \
+  --with-gpu-arch="${CUDAARCHS}" \
   --disable-onemklsparse \
   --disable-onemklblas \
   --disable-onemklrand \

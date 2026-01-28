@@ -3,9 +3,8 @@
 set -e
 
 # Compile for the architectures we want.
-GPU_ARCH="${SCALE_FAKE_CUDA_ARCH}"
 for F in GOMC/CMake/GOMCCUDASetup.cmake GOMC/test/BuildGPUTests.cmake ; do
-    sed -E "s/(\s+CUDA_ARCHITECTURES ).*/\1${GPU_ARCH}/" -i "${F}"
+    sed -E "s/(\s+CUDA_ARCHITECTURES ).*/\1${CUDAARCHS}/" -i "${F}"
 done
 
 # CMake detects that we're Clang, and GOMC enables libc++ for that in a way that seems to be broken.
@@ -23,10 +22,10 @@ sed -E 's/ Difference/ ::Difference/g' -i "GOMC/src/GPU/CalculateForceCUDAKernel
 # Configure.
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CUDA_COMPILER="${CUDA_PATH}/bin/nvcc" \
+    -DCMAKE_CUDA_COMPILER="nvcc" \
     -DCMAKE_CXX_FLAGS="-fPIC" \
     -DCMAKE_CUDA_FLAGS="-fPIC" \
-    -DCMAKE_CUDA_ARCHITECTURES="${GPU_ARCH}" \
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
     -DGOMC_GTEST=On \
     -DCMAKE_INSTALL_PREFIX="install" \
     -B"build" \

@@ -2,4 +2,4 @@
 
 set -ETeuo pipefail
 
-./rodinia_suite/cuda/buildall.sh ${CUDA_PATH} ${SCALE_FAKE_CUDA_ARCH} true
+./rodinia_suite/cuda/buildall.sh ${CUDA_PATH} ${CUDAARCHS} true
