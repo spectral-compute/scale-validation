@@ -29,15 +29,15 @@ done
 cd -
 
 # Create somewhere for results.
-RESULT_FILE="${OUT_DIR}/gromacs/$(basename -s .sh "$0").csv"
+RESULT_FILE="${OUT_DIR}/$(basename -s .sh "$0").csv"
 rm -f "${RESULT_FILE}"
 
-RESULT_DIR="${OUT_DIR}/gromacs/benchmarks/MaxPlanckInstitute"
+RESULT_DIR="${OUT_DIR}/benchmarks/MaxPlanckInstitute"
 mkdir -p "${RESULT_DIR}"
 
 # Run all the tests.
 RETCODE=0
-source "${OUT_DIR}/gromacs/install/bin/GMXRC"
+source "./install/bin/GMXRC"
 for ZIP in "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks/"*.zip ; do
     NAME="$(basename -s .zip "${ZIP}")"
 
