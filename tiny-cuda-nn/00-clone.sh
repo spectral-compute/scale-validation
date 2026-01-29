@@ -2,6 +2,8 @@
 
 set -ETeuo pipefail
 
+source "$(dirname "$0")"/../util/git.sh
+
 do_clone tiny-cuda-nn https://github.com/NVlabs/tiny-cuda-nn "$(get_version tiny-cuda-nn)"
 
 # Patch that disables jit fusion to alow the use of cutlass.
