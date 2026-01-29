@@ -4,6 +4,6 @@ set -ETeuo pipefail
 
 cd TCLB
 ./tools/install.sh rdep
-make configureCUDAARCHS
-./configure --with-cuda-arch="${SCALE_FAKE_CUDA_ARCH}"
+make configure
+./configure --with-cuda-arch="${CUDAARCHS}"
 make d2q9 -j$(nproc)
