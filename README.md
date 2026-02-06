@@ -18,46 +18,46 @@ definitely needs. The list may not be exhaustive.
 | Project | Version | Status | Valid GFX | Notes | Needs |
 |---|---|---|---|---|---|
 |  Alien  |  scaletest  |  ❓ (\*)  | gfx900: ❓ (\*) |   Needs patch to remove OpenGL interop  |  OpenGL Interop  |
-|  AMGX  |  v2.4.0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  arrayfire  |  v3.9.0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  cuDNN, more cuSPARSE  |
+|  AMGX  |  v2.4.0  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  |
+|  arrayfire  |  v3.9.0  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  cuDNN, more cuSPARSE  |
 |  caffe  |  9b891540183ddc...  |  ❓ (\*)  | gfx900: ❓ (\*) |   |  |
 |  ctranslate2  |  v4.5.0  |  ❓ (\*)  | gfx900: ❓ (\*) |   Some intermittent test failures  |  |
-|  cuml  |  b17f2db  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Buildsystem nonsnse  |  |
+|  cuml  |  b17f2db  |  ❓ (\*)  | gfx90a: ❓ (\*) |   Buildsystem nonsnse  |  |
 |  cuSZ  |  v0.16.2  |  ❓ (\*)  | gfx900: ❓ (\*) |   |  |
-|  CUTLASS  |  v4.1.0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  CV-CUDA  |  f769fe4  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
+|  CUTLASS  |  v4.1.0  |  ❓ (\*)  | gfx1030: ❓ (\*) |   |  |
+|  CV-CUDA  |  f769fe4  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  |
 |  cycles  |  v4.4.0  |  ❓ (\*)  | gfx900: ❓ (\*) |   |  |
 |  faiss  |  v1.9.0  |  ❓ (\*)  | gfx900: ❓ (\*) |   |  |
 |  FastEddy  |  v2.0.0  |  ❓ (\*)  | gfx900: ❓ (\*) |   |  |
 |  FLAMEGPU2  |  v2.0.0-rc.2  |  ❓ (\*)  | gfx900: ❓ (\*) |   |  |
 |  gomc  |  4c12477  |  ❓ (\*)  | gfx900: ❓ (\*) |   |  |
-|  GooFit  |  v2.3.0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  Texture Refs  |
-|  gpu\_jpeg2k  |  ee715e9  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
+|  GooFit  |  v2.3.0  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  Texture Refs  |
+|  gpu\_jpeg2k  |  ee715e9  |  ❓ (\*)  | gfx1030: ❓ (\*) |   |  |
 |  GROMACS  |  v2025.4  |  ❓ (\*)  | gfx900: ❓ (\*) |   |  |
 |  ggml  |  d3a58b0  |  ❓ (\*)  | gfx900: ❓ (\*) |   Old version works. New version needs more APIs  |  Missing async opcodes  |
 |  hashcat  |  6716447dfce969...  |  ❓ (\*)  | gfx906: ❓ (\*) |   |  |
-|  hashinator  |  34cf188  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  hypre  |  v2.33.0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Buildsystem nonsense  |  |
+|  hashinator  |  34cf188  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  |
+|  hypre  |  v2.33.0  |  ❓ (\*)  | gfx1030: ❓ (\*) |   Buildsystem nonsense  |  |
 |  jitify  |  master  |  ❓ (\*)  | gfx900: ❓ (\*) |   Some test failures  |  |
-|  llama.cpp  |    |  ❓ (\*)  | gfx1201: ❓ (\*) |   Old version works. New version needs more APIs  |  More graph APIs, async matmuls  |
-|  llm.c  |  7ecd8906afe6ed...  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Old version builds+runs. New version needs more APIs  |  NVML, cuBLASLt  |
-|  MAGMA  |  v2.9.0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
+|  llama.cpp  |    |  ❓ (\*)  | gfx1030: ❓ (\*) |   Old version works. New version needs more APIs  |  More graph APIs, async matmuls  |
+|  llm.c  |  7ecd8906afe6ed...  |  ❓ (\*)  | gfx1030: ❓ (\*) |   Old version builds+runs. New version needs more APIs  |  NVML, cuBLASLt  |
+|  MAGMA  |  v2.9.0  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  |
 |  nvflip  |  1eb247c  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  |
-|  OpenCV  |  725e440  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  NPP  |
+|  OpenCV  |  725e440  |  ❓ (\*)  | gfx90a: ❓ (\*) |   |  NPP  |
 |  openmpi  |  v4.1  |  ✅  |  |  No included tests, based on library build validity  |  |
-|  PhysX  |  1e44a0e  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Numerous missing APIs  |  PTX barriers, cudaArray, graphics interop  |
-|  pytorch  |  v2.2.1  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Numerous missing APIs  |  cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,...  |
-|  quda  |  07822b61c6ab5f...  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  NVML  |
-|  risc0  |  v1.2.2  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Dependent project tries to return carry-bit. Fixable.  |  |
+|  PhysX  |  1e44a0e  |  ❓ (\*)  | gfx90a: ❓ (\*) |   Numerous missing APIs  |  PTX barriers, cudaArray, graphics interop  |
+|  pytorch  |  v2.2.1  |  ❓ (\*)  | gfx1030: ❓ (\*) |   Numerous missing APIs  |  cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,...  |
+|  quda  |  07822b61c6ab5f...  |  ❓ (\*)  | gfx1030: ❓ (\*) |   |  NVML  |
+|  risc0  |  v1.2.2  |  ❓ (\*)  | gfx90a: ❓ (\*) |   Dependent project tries to return carry-bit. Fixable.  |  |
 |  rodinia\_suite  |    |  ❓ (\*)  | gfx900: ❓ (\*) |   |  |
 |  stdgpu  |  563dc59d6d08df...  |  ❓ (\*)  | gfx900: ❓ (\*) |   Multigpu/crash tests are flaky  |  |
 |  TCLB  |  v6.7  |  ❓ (\*)  | gfx900: ❓ (\*) |   |  |
-|  thrust  |  756c5af  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Old. Should add `cccl`!  |  |
-|  timemachine  |  01f14f8  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Buildsystem nonsense  |  |
+|  thrust  |  756c5af  |  ❓ (\*)  | gfx1030: ❓ (\*) |   Old. Should add `cccl`!  |  |
+|  timemachine  |  01f14f8  |  ❓ (\*)  | gfx90a: ❓ (\*) |   Buildsystem nonsense  |  |
 |  UppASD  |  gpu_new  |  ❓ (\*)  | gfx906: ❓ (\*) |   |  |
-|  vllm  |  v0.6.3  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Needs Pytorch  |  |
+|  vllm  |  v0.6.3  |  ❓ (\*)  | gfx90a: ❓ (\*) |   Needs Pytorch  |  |
 |  whispercpp  |    |  ❓ (\*)  | gfx900: ❓ (\*) |   |  |
-|  xgboost  |  v2.1.0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
+|  xgboost  |  v2.1.0  |  ❓ (\*)  | gfx1030: ❓ (\*) |   |  |
 
 *Key:*
 * ✅ Validated succesfully
@@ -196,44 +196,6 @@ definitely needs. The list may not be exhaustive.
 > * nvflip
 > * UppASD
 > * caffe
-> * gpu_jpeg2k
-> * CUTLASS
-> * xgboost
-> * llama-cpp
-> * llm.c
-> * quda
-> * hypre
-> * pytorch
-> * HeCBench
-> * thrust
-> * AMGX
-> * arrayfire
-> * cuml
-> * CV-CUDA
-> * GooFit
-> * hashinator
-> * MAGMA
-> * opencv
-> * PhysX
-> * risc0
-> * timemachine
-> * vllm
-> * hypre
-> * pytorch
-> * HeCBench
-> * thrust
-> * AMGX
-> * arrayfire
-> * cuml
-> * CV-CUDA
-> * GooFit
-> * hashinator
-> * MAGMA
-> * opencv
-> * PhysX
-> * risc0
-> * timemachine
-> * vllm
 > * AMGX
 > * arrayfire
 > * cuml
@@ -258,6 +220,8 @@ definitely needs. The list may not be exhaustive.
 > * thrust
 > * GooFit
 > * hashinator
+> * hypre
+> * pytorch
 > * gpu_jpeg2k
 > * CUTLASS
 > * xgboost
@@ -328,6 +292,42 @@ definitely needs. The list may not be exhaustive.
 > * llama-cpp
 > * llm.c
 > * quda
+> * HeCBench
+> * thrust
+> * AMGX
+> * arrayfire
+> * cuml
+> * CV-CUDA
+> * GooFit
+> * hashinator
+> * MAGMA
+> * opencv
+> * PhysX
+> * risc0
+> * timemachine
+> * vllm
+> * gpu_jpeg2k
+> * CUTLASS
+> * xgboost
+> * llama-cpp
+> * llm.c
+> * quda
+> * hypre
+> * pytorch
+> * HeCBench
+> * thrust
+> * AMGX
+> * arrayfire
+> * cuml
+> * CV-CUDA
+> * GooFit
+> * hashinator
+> * MAGMA
+> * opencv
+> * PhysX
+> * risc0
+> * timemachine
+> * vllm
 
 ## Running Tests
 
