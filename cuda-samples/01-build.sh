@@ -8,7 +8,7 @@ echo $NVCC_APPEND_FLAGS
 # Configure.
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CUDA_ARCHITECTURES="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')" \
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
     -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/cuda-samples/install" \
     -B"build" \
     "cuda-samples"

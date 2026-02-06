@@ -10,7 +10,7 @@ cmake \
     -DUSE_GPU=ON \
     -DUSE_CUDA=ON \
     -DBUILD_CPP_TEST=ON \
-    -DCMAKE_CUDA_ARCHITECTURES="$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')" \
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
     -DCMAKE_INSTALL_PREFIX="install" \
     -B"build" \
     "lightgbm"
