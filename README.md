@@ -17,47 +17,47 @@ definitely needs. The list may not be exhaustive.
 
 | Project | Version | Status | Valid GFX | Notes | Needs |
 |---|---|---|---|---|---|
-|  Alien  |  scaletest  |  ❓ (\*)  | gfx1030: ❓ (\*) |   Needs patch to remove OpenGL interop  |  OpenGL Interop  |
-|  AMGX  |  v2.4.0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  arrayfire  |  v3.9.0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  cuDNN, more cuSPARSE  |
-|  caffe  |  9b891540183ddc...  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  ctranslate2  |  v4.5.0  |  ❓ (\*)  | gfx1030: ❓ (\*) |   Some intermittent test failures  |  |
-|  cuml  |  b17f2db  |  ❓ (\*)  | gfx906: ❓ (\*) |   Buildsystem nonsnse  |  |
-|  cuSZ  |  v0.16.2  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  CUTLASS  |  v4.1.0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  CV-CUDA  |  f769fe4  |  ❓ (\*)  | gfx906: ❓ (\*) |   |  |
-|  cycles  |  v4.4.0  |  ❓ (\*)  | gfx1030: ❓ (\*) |   |  |
-|  faiss  |  v1.9.0  |  ❓ (\*)  | gfx1030: ❓ (\*) |   |  |
-|  FastEddy  |  v2.0.0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  FLAMEGPU2  |  v2.0.0-rc.2  |  ❓ (\*)  | gfx1030: ❓ (\*) |   |  |
-|  gomc  |  4c12477  |  ❓ (\*)  | gfx1030: ❓ (\*) |   |  |
-|  GooFit  |  v2.3.0  |  ❓ (\*)  | gfx1100: ❓ (\*) |   |  Texture Refs  |
-|  gpu\_jpeg2k  |  ee715e9  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  GROMACS  |  v2025.4  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  ggml  |  d3a58b0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Old version works. New version needs more APIs  |  Missing async opcodes  |
-|  hashcat  |  6716447dfce969...  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  hashinator  |  34cf188  |  ❓ (\*)  | gfx1100: ❓ (\*) |   |  |
-|  hypre  |  v2.33.0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Buildsystem nonsense  |  |
-|  jitify  |  master  |  ❓ (\*)  | gfx1030: ❓ (\*) |   Some test failures  |  |
-|  llama.cpp  |    |  ❓ (\*)  | gfx1201: ❓ (\*) |   Old version works. New version needs more APIs  |  More graph APIs, async matmuls  |
-|  llm.c  |  7ecd8906afe6ed...  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Old version builds+runs. New version needs more APIs  |  NVML, cuBLASLt  |
-|  MAGMA  |  v2.9.0  |  ❓ (\*)  | gfx1100: ❓ (\*) |   |  |
-|  nvflip  |  1eb247c  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  OpenCV  |  725e440  |  ❓ (\*)  | gfx1100: ❓ (\*) |   |  NPP  |
+|  Alien  |  scaletest  |  ➖  | gfx1100: ✅, gfx906: ❌, gfx1201: ❌ |   Needs patch to remove OpenGL interop  |  OpenGL Interop  |
+|  AMGX  |  v2.4.0  |  ➖  | gfx1201: ✅, gfx906: ❌, gfx1030: ❌ (\*) |   |  |
+|  arrayfire  |  v3.9.0  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   |  cuDNN, more cuSPARSE  |
+|  caffe  |  9b891540183ddc...  |  ➖  | gfx1100: ✅, gfx1201: ❌, gfx906: ❌ |   |  |
+|  ctranslate2  |  v4.5.0  |  ➖  | gfx1030: ✅, gfx906: ❌ |   Some intermittent test failures  |  |
+|  cuml  |  b17f2db  |  ➖  | gfx1201: ❌, gfx1030: ❌ (\*) |   Buildsystem nonsnse  |  |
+|  cuSZ  |  v0.16.2  |  ➖  | gfx1100: ✅, gfx906: ❌, gfx1201: ❌ |   |  |
+|  CUTLASS  |  v4.1.0  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   |  |
+|  CV-CUDA  |  f769fe4  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   |  |
+|  cycles  |  v4.4.0  |  ➖  | gfx1201: ✅, gfx906: ❌ |   |  |
+|  faiss  |  v1.9.0  |  ❌  | gfx906: ❌ |   |  |
+|  FastEddy  |  v2.0.0  |  ➖  | gfx1100: ✅, gfx906: ❌, gfx1201: ❌ |   |  |
+|  FLAMEGPU2  |  v2.0.0-rc.2  |  ➖  | gfx1100: ✅, gfx906: ❌, gfx1201: ❌, gfx1030: ❌ |   |  |
+|  gomc  |  4c12477  |  ➖  | gfx1100: ✅, gfx906: ❌, gfx1201: ❌ |   |  |
+|  GooFit  |  v2.3.0  |  ➖  | gfx1201: ❌, gfx1030: ❌ (\*) |   |  Texture Refs  |
+|  gpu\_jpeg2k  |  ee715e9  |  ❌  | gfx906: ❌ |   |  |
+|  GROMACS  |  v2025.4  |  ➖  | gfx1100: ✅, gfx906: ❌ |   |  |
+|  ggml  |  d3a58b0  |  ➖  | gfx1201: ✅, gfx906: ❌ |   Old version works. New version needs more APIs  |  Missing async opcodes  |
+|  hashcat  |  6716447dfce969...  |  ➖  | gfx1100: ✅, gfx906: ❌, gfx1201: ❌ |   |  |
+|  hashinator  |  34cf188  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   |  |
+|  hypre  |  v2.33.0  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   Buildsystem nonsense  |  |
+|  jitify  |  master  |  ➖  | gfx1100: ✅, gfx906: ❌, gfx1201: ❌ |   Some test failures  |  |
+|  llama.cpp  |    |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   Old version works. New version needs more APIs  |  More graph APIs, async matmuls  |
+|  llm.c  |  7ecd8906afe6ed...  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   Old version builds+runs. New version needs more APIs  |  NVML, cuBLASLt  |
+|  MAGMA  |  v2.9.0  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   |  |
+|  nvflip  |  1eb247c  |  ➖  | gfx1100: ✅, gfx906: ❌, gfx1201: ❌ |   |  |
+|  OpenCV  |  725e440  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   |  NPP  |
 |  openmpi  |  v4.1  |  ✅  |  |  No included tests, based on library build validity  |  |
-|  PhysX  |  1e44a0e  |  ❓ (\*)  | gfx1100: ❓ (\*) |   Numerous missing APIs  |  PTX barriers, cudaArray, graphics interop  |
-|  pytorch  |  v2.2.1  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Numerous missing APIs  |  cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,...  |
-|  quda  |  07822b61c6ab5f...  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  NVML  |
-|  risc0  |  v1.2.2  |  ❓ (\*)  | gfx1100: ❓ (\*) |   Dependent project tries to return carry-bit. Fixable.  |  |
-|  rodinia\_suite  |    |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  stdgpu  |  563dc59d6d08df...  |  ❓ (\*)  | gfx1030: ❓ (\*) |   Multigpu/crash tests are flaky  |  |
-|  TCLB  |  v6.7  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  thrust  |  756c5af  |  ❓ (\*)  | gfx1201: ❓ (\*) |   Old. Should add `cccl`!  |  |
-|  timemachine  |  01f14f8  |  ❓ (\*)  | gfx1100: ❓ (\*) |   Buildsystem nonsense  |  |
-|  UppASD  |  gpu_new  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  vllm  |  v0.6.3  |  ❓ (\*)  | gfx1100: ❓ (\*) |   Needs Pytorch  |  |
-|  whispercpp  |    |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
-|  xgboost  |  v2.1.0  |  ❓ (\*)  | gfx1201: ❓ (\*) |   |  |
+|  PhysX  |  1e44a0e  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   Numerous missing APIs  |  PTX barriers, cudaArray, graphics interop  |
+|  pytorch  |  v2.2.1  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   Numerous missing APIs  |  cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,...  |
+|  quda  |  07822b61c6ab5f...  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   |  NVML  |
+|  risc0  |  v1.2.2  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   Dependent project tries to return carry-bit. Fixable.  |  |
+|  rodinia\_suite  |    |  ➖  | gfx1201: ✅, gfx906: ❌ |   |  |
+|  stdgpu  |  563dc59d6d08df...  |  ➖  | gfx1100: ✅, gfx906: ❌, gfx1201: ❌ |   Multigpu/crash tests are flaky  |  |
+|  TCLB  |  v6.7  |  ➖  | gfx1100: ✅, gfx1201: ❌, gfx906: ❌ |   |  |
+|  thrust  |  756c5af  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   Old. Should add `cccl`!  |  |
+|  timemachine  |  01f14f8  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   Buildsystem nonsense  |  |
+|  UppASD  |  gpu_new  |  ➖  | gfx1100: ✅, gfx906: ❌, gfx1201: ❌ |   |  |
+|  vllm  |  v0.6.3  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   Needs Pytorch  |  |
+|  whispercpp  |    |  ➖  | gfx1100: ✅, gfx906: ❌ |   |  |
+|  xgboost  |  v2.1.0  |  ➖  | gfx906: ❌, gfx1030: ❌ (\*) |   |  |
 
 *Key:*
 * ✅ Validated succesfully
@@ -70,221 +70,27 @@ definitely needs. The list may not be exhaustive.
 
 > \* The following program tests were skipped for SCALE:\ master\ <9031c1ff>, and given states are from the last version they were tested on instead:
 > 
-> * stdgpu
-> * gomc
-> * faiss
-> * cycles
-> * alien
-> * GPUJPEG
-> * ctranslate2
-> * jitify
-> * FLAMEGPU2
-> * caffe
-> * hashcat:rtx5070ti
-> * rodinia:rtx5070ti
-> * stdgpu:rtx5070ti
-> * gomc:rtx5070ti
-> * faiss:rtx5070ti
-> * cycles:rtx5070ti
-> * alien:rtx5070ti
-> * GPUJPEG:rtx5070ti
-> * ctranslate2:rtx5070ti
-> * jitify:rtx5070ti
-> * FLAMEGPU2:rtx5070ti
-> * TCLB:rtx5070ti
-> * whisper.cpp:rtx5070ti
-> * ggml:rtx5070ti
-> * FastEddy:rtx5070ti
-> * GROMACS:rtx5070ti
-> * cuSZ:rtx5070ti
-> * bitnet:rtx5070ti
-> * nvflip:rtx5070ti
-> * UppASD:rtx5070ti
-> * caffe:rtx5070ti
-> * hashcat
-> * rodinia
-> * stdgpu
-> * gomc
-> * faiss
-> * cycles
-> * alien
-> * GPUJPEG
-> * ctranslate2
-> * jitify
-> * FLAMEGPU2
-> * TCLB
-> * whisper.cpp
-> * ggml
-> * FastEddy
-> * GROMACS
-> * cuSZ
-> * bitnet
-> * nvflip
-> * UppASD
-> * hashcat
-> * rodinia
-> * stdgpu
-> * gomc
-> * faiss
-> * cycles
-> * alien
-> * GPUJPEG
-> * ctranslate2
-> * jitify
-> * FLAMEGPU2
-> * TCLB
-> * whisper.cpp
-> * ggml
-> * FastEddy
-> * GROMACS
-> * cuSZ
-> * bitnet
-> * nvflip
-> * rodinia
-> * stdgpu
-> * gomc
-> * faiss
-> * cycles
-> * alien
-> * GPUJPEG
-> * ctranslate2
-> * jitify
-> * FLAMEGPU2
-> * TCLB
-> * whisper.cpp
-> * ggml
-> * FastEddy
-> * GROMACS
-> * cuSZ
-> * bitnet
-> * nvflip
-> * UppASD
-> * caffe
-> * UppASD
-> * caffe
-> * hashcat
-> * rodinia
-> * TCLB
-> * whisper.cpp
-> * ggml
-> * FastEddy
-> * GROMACS
-> * cuSZ
-> * bitnet
-> * nvflip
-> * UppASD
-> * caffe
-> * hashcat
-> * GooFit
-> * hashinator
-> * MAGMA
-> * opencv
-> * PhysX
-> * risc0
-> * timemachine
-> * vllm
-> * gpu_jpeg2k
 > * CUTLASS
-> * xgboost
-> * llama-cpp
-> * llm.c
-> * quda
-> * hypre
-> * pytorch
-> * HeCBench
-> * thrust
 > * AMGX
-> * arrayfire
-> * gpu_jpeg2k
-> * CUTLASS
-> * xgboost
-> * llama-cpp
-> * llm.c
-> * quda
-> * hypre
-> * pytorch
-> * HeCBench
-> * thrust
-> * AMGX
-> * arrayfire
-> * cuml
 > * CV-CUDA
+> * HeCBench
 > * GooFit
-> * hashinator
 > * MAGMA
-> * opencv
-> * PhysX
-> * risc0
-> * timemachine
-> * vllm
-> * gpu_jpeg2k
-> * CUTLASS
-> * xgboost
-> * llama-cpp
-> * cuml
-> * CV-CUDA
-> * GooFit
-> * hashinator
-> * MAGMA
-> * opencv
-> * PhysX
-> * risc0
-> * timemachine
-> * vllm
-> * gpu_jpeg2k:rtx5070ti
-> * CUTLASS:rtx5070ti
-> * xgboost:rtx5070ti
-> * llama-cpp:rtx5070ti
-> * llm.c:rtx5070ti
-> * quda:rtx5070ti
-> * hypre:rtx5070ti
-> * pytorch:rtx5070ti
-> * AMGX:rtx5070ti
-> * arrayfire:rtx5070ti
-> * cuml:rtx5070ti
-> * CV-CUDA:rtx5070ti
-> * GooFit:rtx5070ti
-> * hashinator:rtx5070ti
-> * MAGMA:rtx5070ti
-> * opencv:rtx5070ti
-> * PhysX:rtx5070ti
-> * risc0:rtx5070ti
-> * timemachine:rtx5070ti
-> * vllm:rtx5070ti
-> * llm.c
-> * quda
-> * hypre
-> * pytorch
-> * HeCBench
-> * thrust
-> * AMGX
 > * arrayfire
-> * cuml
-> * CV-CUDA
-> * GooFit
-> * hashinator
-> * MAGMA
-> * opencv
 > * PhysX
-> * risc0
-> * timemachine
-> * vllm
-> * gpu_jpeg2k
-> * CUTLASS
-> * xgboost
-> * llama-cpp
-> * llm.c
-> * quda
+> * hashinator
 > * hypre
-> * pytorch
-> * HeCBench
-> * thrust
-> * AMGX
-> * arrayfire
 > * cuml
-> * CV-CUDA
-> * HeCBench:rtx5070ti
-> * thrust:rtx5070ti
+> * opencv
+> * pytorch
+> * llm.c
+> * llama-cpp
+> * risc0
+> * quda
+> * thrust
+> * vllm
+> * xgboost
+> * timemachine
 
 ## Running Tests
 
