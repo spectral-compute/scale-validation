@@ -1,8 +1,7 @@
 #!/bin/bash
 
 set -ETeuo pipefail
-source "$(dirname "$0")"/../util/args.sh "$@"
-cd "${OUT_DIR}/cuSZ/build/test"
+cd "./build/test"
 
 export LD_LIBRARY_PATH="${CUDA_PATH}/lib"
 for F in $(find . -maxdepth 1 -type f -perm /u+x | grep -vE '\.so$' | sort) ; do
@@ -20,3 +19,5 @@ for F in $(find . -maxdepth 1 -type f -perm /u+x | grep -vE '\.so$' | sort) ; do
         ;;
     esac
 done
+
+cd -

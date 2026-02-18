@@ -1,31 +1,30 @@
 #!/bin/bash
 
-source "$(dirname "$0")"/../util/args.sh "$@"
-export LD_LIBRARY_PATH="${CUDA_DIR}/lib"
+# set -ETeuo pipefail
+# set -o xtrace
 
 # Download the benchmark data if it doesn't already exist.
-mkdir -p "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks"
-cd "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks"
-if [ ! -e benchMEM.zip ] ; then
-    wget https://www.mpinat.mpg.de/benchMEM.zip
+BENCH_MEM="data/MaxPlanckInstituteGromacsBenchmarks"
+mkdir -p "$BENCH_MEM"
+if [ ! -e "$BENCH_MEM/benchMEM.zip" ] ; then
+    wget https://data.spectralcompute.co.uk/gromacs/benchMEM.zip -O "$BENCH_MEM/benchMEM.zip"
+    unzip "$BENCH_MEM/benchMEM.zip"
 fi
 
 # Create somewhere for results.
-RESULT_FILE="${OUT_DIR}/gromacs/$(basename -s .sh "$0").csv"
+RESULT_FILE="$(pwd)/$(basename -s .sh "$0").csv"
 rm -f "${RESULT_FILE}"
 
-RESULT_DIR="${OUT_DIR}/gromacs/benchmarks/MaxPlanckInstitute/benchMEM"
+RESULT_DIR="$(pwd)/benchmarks/MaxPlanckInstitute/benchMEM"
 mkdir -p "${RESULT_DIR}"
-cd "${RESULT_DIR}"
-if [ ! -e benchMEM.tpr ] ; then
-    unzip "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks/benchMEM.zip"
-fi
-source "${OUT_DIR}/gromacs/install/bin/GMXRC"
+
+source "install/bin/GMXRC"
+
 set +e
 # When comparing with hip we should use -pme cpu -bonded cpu -update cpu
 #gmx mdrun -s benchMEM.tpr -v -ntmpi 1 -pme cpu -bonded cpu -update cpu -nb gpu
-# When comparing with a more complete version 
-gmx mdrun -s benchMEM.tpr -v -ntmpi 1 -nb gpu
+# When comparing with a more complete version
+gmx mdrun -s "benchMEM.tpr" -v -ntmpi 1 -nb gpu
 RESULT=$?
 set -e
 # Log to result CSV

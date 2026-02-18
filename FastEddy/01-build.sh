@@ -1,9 +1,8 @@
 #!/bin/bash
 
 set -e
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
 
+OUT_DIR=$(realpath ../)
 if [ ! -e "${OUT_DIR}/openmpi/install" ] ; then
     echo "Please build the OpenMPI third party project first. Use the same working directory." 1>&2
     exit 1
@@ -19,5 +18,4 @@ if [ -z $NCAR_ROOT_MPI ]; then
   echo "Run the openmpi script first"
 fi
 
-cd "${OUT_DIR}/FastEddy/FastEddy/SRC/FEMAIN"
-make
+make -C FastEddy/SRC/FEMAIN

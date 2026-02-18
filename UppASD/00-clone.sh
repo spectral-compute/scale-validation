@@ -1,10 +1,7 @@
 #!/bin/bash
 
 set -e
-source "$(dirname "$0")"/../util/args.sh "$@"
 
-mkdir -p "${OUT_DIR}/UppASD"
-cd "${OUT_DIR}/UppASD"
+source "$(dirname "$0")"/../util/git.sh
 
-do_clone UppASD git@github.com:UppASD/UppASD.git gpu_new
-
+do_clone UppASD https://github.com/UppASD/UppASD.git "$(get_version UppASD)"

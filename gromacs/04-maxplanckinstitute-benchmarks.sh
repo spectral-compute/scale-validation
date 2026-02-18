@@ -1,43 +1,43 @@
 #!/bin/bash
 
 set -e
-source "$(dirname "$0")"/../util/args.sh "$@"
-export LD_LIBRARY_PATH="${CUDA_DIR}/lib"
 
 # Download the benchmark data if it doesn't already exist.
-mkdir -p "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks"
-cd "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks"
+OUT_DIR=$(realpath .)
+mkdir -p "data/MaxPlanckInstituteGromacsBenchmarks"
+cd "data/MaxPlanckInstituteGromacsBenchmarks"
 
-for URL in https://www.mpibpc.mpg.de/benchMEM.zip \
-           https://www.mpibpc.mpg.de/benchPEP.zip \
-           https://www.mpibpc.mpg.de/benchRIB.zip \
-           https://www.mpinat.mpg.de/632216/benchBFC.zip \
-           https://www.mpinat.mpg.de/632219/benchBFI.zip \
-           https://www.mpinat.mpg.de/632222/benchBNC.zip \
-           https://www.mpinat.mpg.de/632214/benchBNI.zip \
-           https://www.mpinat.mpg.de/632223/benchBTC.zip \
-           https://www.mpinat.mpg.de/632215/benchBTI.zip \
-           https://www.mpinat.mpg.de/632218/benchSFC.zip \
-           https://www.mpinat.mpg.de/632220/benchSFI.zip \
-           https://www.mpinat.mpg.de/632213/benchSNC.zip \
-           https://www.mpinat.mpg.de/632217/benchSNI.zip \
-           https://www.mpinat.mpg.de/632221/benchSTC.zip \
-           https://www.mpinat.mpg.de/632212/benchSTI.zip ; do
+for URL in https://data.spectralcompute.co.uk/gromacs/benchMEM.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchPEP.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchRIB.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchBFC.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchBFI.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchBNC.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchBNI.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchBTC.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchBTI.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchSFC.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchSFI.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchSNC.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchSNI.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchSTC.zip \
+           https://data.spectralcompute.co.uk/gromacs/benchSTI.zip ; do
     if [ ! -e "$(echo "${URL}" | sed -E 's;.*/;;')" ] ; then
         wget "${URL}"
     fi
 done
+cd -
 
 # Create somewhere for results.
-RESULT_FILE="${OUT_DIR}/gromacs/$(basename -s .sh "$0").csv"
+RESULT_FILE="${OUT_DIR}/$(basename -s .sh "$0").csv"
 rm -f "${RESULT_FILE}"
 
-RESULT_DIR="${OUT_DIR}/gromacs/benchmarks/MaxPlanckInstitute"
+RESULT_DIR="${OUT_DIR}/benchmarks/MaxPlanckInstitute"
 mkdir -p "${RESULT_DIR}"
 
 # Run all the tests.
 RETCODE=0
-source "${OUT_DIR}/gromacs/install/bin/GMXRC"
+source "./install/bin/GMXRC"
 for ZIP in "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks/"*.zip ; do
     NAME="$(basename -s .zip "${ZIP}")"
 

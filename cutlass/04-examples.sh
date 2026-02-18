@@ -1,50 +1,44 @@
 #!/bin/bash
 set -Eeuo pipefail
 
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
-
-cd "${OUT_DIR}/cutlass/build"
-
-LOGDIR="${OUT_DIR}/cutlass/build"
+LOGDIR="build"
 LOGFILE="${LOGDIR}/examples.log"
 JUNIT="${LOGDIR}/cutlass-examples.xml"
-mkdir -p "${LOGDIR}"
 : > "${LOGFILE}"
 
 echo "Writing to $LOGFILE"
 
 # discover example executables
-mapfile -t TESTS < <(find examples -type f -perm /100 | sort)
+mapfile -t TESTS < <(find build/examples -type f -perm /100 | sort)
 
 # your skip list (exact paths)
 SKIP=(
     # These require external input and require special handling to provide it.
-    examples/41_fused_multi_head_attention/41_fused_multi_head_attention_backward
+    build/examples/41_fused_multi_head_attention/41_fused_multi_head_attention_backward
 
     # These crash the GPU with a segfault and sometimes the whole system.
-    examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm75_rf
-    examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm75_shmem
-    examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm80_rf
-    examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm80_shmem
+    build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm75_rf
+    build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm75_shmem
+    build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm80_rf
+    build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm80_shmem
 
     # These failed
-    examples/13_two_tensor_op_fusion/13_fused_two_convs_f16_sm80_shmem
-    examples/13_two_tensor_op_fusion/13_fused_two_convs_s8_sm80_shmem
-    examples/13_two_tensor_op_fusion/13_fused_two_gemms_f16_sm80_shmem
-    examples/15_ampere_sparse_tensorop_gemm/15_ampere_sparse_tensorop_gemm
-    examples/15_ampere_sparse_tensorop_gemm/15_ampere_sparse_tensorop_gemm_universal
-    examples/15_ampere_sparse_tensorop_gemm/15_ampere_sparse_tensorop_gemm_with_visitor
-    examples/18_ampere_fp64_tensorop_affine2_gemm/18_ampere_fp64_tensorop_affine2_gemm
-    examples/32_basic_trmm/32_basic_trmm
-    examples/13_two_tensor_op_fusion/13_fused_two_convs_f16_sm75_rf
-    examples/13_two_tensor_op_fusion/13_fused_two_convs_f16_sm75_shmem
-    examples/13_two_tensor_op_fusion/13_fused_two_convs_f16_sm80_rf
-    examples/13_two_tensor_op_fusion/13_fused_two_convs_s8_sm75_shmem
-    examples/13_two_tensor_op_fusion/13_fused_two_gemms_f16_sm75_rf
-    examples/13_two_tensor_op_fusion/13_fused_two_gemms_f16_sm75_shmem
-    examples/13_two_tensor_op_fusion/13_fused_two_gemms_f16_sm80_rf
-    examples/45_dual_gemm/45_dual_gemm
+    build/examples/13_two_tensor_op_fusion/13_fused_two_convs_f16_sm80_shmem
+    build/examples/13_two_tensor_op_fusion/13_fused_two_convs_s8_sm80_shmem
+    build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_f16_sm80_shmem
+    build/examples/15_ampere_sparse_tensorop_gemm/15_ampere_sparse_tensorop_gemm
+    build/examples/15_ampere_sparse_tensorop_gemm/15_ampere_sparse_tensorop_gemm_universal
+    build/examples/15_ampere_sparse_tensorop_gemm/15_ampere_sparse_tensorop_gemm_with_visitor
+    build/examples/18_ampere_fp64_tensorop_affine2_gemm/18_ampere_fp64_tensorop_affine2_gemm
+    build/examples/32_basic_trmm/32_basic_trmm
+    build/examples/13_two_tensor_op_fusion/13_fused_two_convs_f16_sm75_rf
+    build/examples/13_two_tensor_op_fusion/13_fused_two_convs_f16_sm75_shmem
+    build/examples/13_two_tensor_op_fusion/13_fused_two_convs_f16_sm80_rf
+    build/examples/13_two_tensor_op_fusion/13_fused_two_convs_s8_sm75_shmem
+    build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_f16_sm75_rf
+    build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_f16_sm75_shmem
+    build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_f16_sm80_rf
+    build/examples/45_dual_gemm/45_dual_gemm
 )
 
 # bound example runtime (seconds) if timeout is available

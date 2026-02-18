@@ -8,21 +8,17 @@ compare_files() {
   diff -u "$f1" "$f2" >"$log"
 }
 
-source "$(dirname "$0")"/../util/args.sh "$@"
+REPO_ROOT="$(pwd)/rodinia_suite"
+OUT_DIR=$(realpath .)
 
-REPO_ROOT="$PWD"
-if OUT_ABS="$(readlink -f "$OUT_DIR" 2>/dev/null)"; then :; \
-elif OUT_ABS="$(realpath "$OUT_DIR" 2>/dev/null)"; then :; \
-else OUT_ABS="$REPO_ROOT/$OUT_DIR"; fi
-
-RESULTS_DIR="$OUT_ABS/rodinia_suite"
+RESULTS_DIR="$OUT_DIR/rodinia_suite"
 mkdir -p "$RESULTS_DIR"
 JUNIT="$RESULTS_DIR/rodinia.xml"
 TMPCASE="$RESULTS_DIR/.cases.tmp"
 : >"$TMPCASE"
 echo "Writing JUnit to: $JUNIT"
 
-cd "$OUT_ABS/rodinia_suite/rodinia_suite/cuda"
+cd "rodinia_suite/cuda"
 
 export SCALE_EXCEPTIONS=2
 

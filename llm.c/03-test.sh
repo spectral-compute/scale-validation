@@ -2,11 +2,7 @@
 
 set -ETeuo pipefail
 
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
-
-cd "${OUT_DIR}/llm.c/llm.c"
-
+cd llm.c
 ./train_gpt2fp32cu | tee output.log
 
 # Check the output matches that obtained on the nvidia device.

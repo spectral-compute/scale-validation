@@ -1,18 +1,17 @@
 #!/bin/bash
 
 set -ETeuo pipefail
-source "$(dirname "$0")"/../util/args.sh "$@"
-cd "${OUT_DIR}/llama.cpp/install/bin"
 
-for F in test-* ; do
+SRC_DIR=$(realpath llama.cpp)
+for F in install/bin/test-* ; do
     echo "Running test $F"
 
     case "${F}" in
         test-tokenizer-*-llama)
-            ./"${F}" ${OUT_DIR}/llama.cpp/llama.cpp/models/ggml-vocab-llama.gguf
+            ./"${F}" ${SRC_DIR}/models/ggml-vocab-llama.gguf
         ;;
         test-tokenizer-*)
-            ./"${F}" ${OUT_DIR}/llama.cpp/llama.cpp/models/ggml-vocab-falcon.gguf
+            ./"${F}" ${SRC_DIR}/models/ggml-vocab-falcon.gguf
         ;;
         *)
             ./"${F}"

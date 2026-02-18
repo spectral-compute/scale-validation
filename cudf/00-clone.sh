@@ -1,9 +1,7 @@
 #!/bin/bash
 
 set -ETeuo pipefail
-source "$(dirname "$0")"/../util/args.sh "$@"
 
-mkdir -p "${OUT_DIR}/cudf"
-cd "${OUT_DIR}/cudf"
+source "$(dirname "$0")"/../util/git.sh
 
-do_clone cudf https://github.com/rapidsai/cudf v25.04.00
+do_clone cudf https://github.com/rapidsai/cudf "$(get_version cudf)"

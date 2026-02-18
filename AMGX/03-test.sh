@@ -1,10 +1,8 @@
 #!/bin/bash
 
 set -e
-source "$(dirname "$0")"/../util/args.sh "$@"
-cd "${OUT_DIR}/AMGX/AMGX/build"
 
-export LD_LIBRARY_PATH="${CUDA_PATH}/lib"
+cd "build"
 
 # Just running ./src/amgx_tests_launcher generates a lot of failures even on Nvidia. So only run the tests that pass
 # there.
@@ -34,3 +32,5 @@ for TEST in "${EXCLUSIONS[@]}" ; do
     EXCLUSIONS_SED="${EXCLUSIONS_SED};/${TEST}/d"
 done
 ./src/amgx_tests_launcher $(./src/amgx_tests_launcher --help | sed -E "1,/Available tests are:/d;${EXCLUSIONS_SED}")
+
+cd -

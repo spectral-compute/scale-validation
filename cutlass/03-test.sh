@@ -5,13 +5,8 @@ set -o functrace
 set -o nounset
 set -o pipefail
 
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
-
-cd "${OUT_DIR}/cutlass/build"
-
-LOGFILE="${OUT_DIR}/cutlass/build/tests.log"
-JUNIT="${OUT_DIR}/cutlass/build/cutlass-tests.xml"
+LOGFILE="build/tests.log"
+JUNIT="build/cutlass-tests.xml"
 
 # If You want to limit the Tests executing specify TEST_LIMIT (0 = no limit).
 # TEST_LIMIT="${TEST_LIMIT:-5}"
@@ -63,7 +58,7 @@ do
 done
 
 TESTS=(
-  $(find test -type f -executable \
+  $(find build/test -type f -executable \
       ! -name "*.so" ! -name "*.a" ! -name "*.o" | sort)
 )
 
@@ -246,7 +241,7 @@ skipped=$(
 
 echo "  Total           : $total_tests ( / 3857)"
 echo "  Passed          : $passed ( / 3566)"
-echo "  Skipped         : $skipped ( / 33)" 
+echo "  Skipped         : $skipped ( / 33)"
 #echo "  Failed (derived): $failed_derived
 echo "  Failed   : $failed ( / 258)"
 

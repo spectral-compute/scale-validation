@@ -88,25 +88,6 @@ if [ "${PARTIAL_PARSE:-}" == "1" ] ; then
     return 0
 fi
 
-BUILD_JOBS=$(nproc)
-VERBOSE=0
-
-while [[ $# -gt 0 ]] ; do
-    case "$1" in
-        -s)
-            BUILD_JOBS=1
-        ;;
-        -v)
-            VERBOSE=1
-        ;;
-        *)
-            echo "${USAGE}" 1>&2
-            exit 1
-        ;;
-    esac
-    shift
-done
-
 # Clone and sync submodules for a project.
 function do_clone() {
   git clone --recursive --depth 1 --shallow-submodules --branch $3 $2 $1
@@ -117,6 +98,17 @@ function do_clone_hash() {
   git clone --recursive $2 $1
   git -C $1 checkout $3
   git -C $1 submodule update --init --recursive
+}
+
+# Extract version from matching version.txt
+get_version () {
+    local dir=""
+    if [[ $# == 1 ]]; then
+        dir="$(dirname $0)"
+    else
+        dir="$2"
+    fi
+    echo $(cat "$dir/../versions.txt" | grep "$1" | sed "s/$1 //g")
 }
 
 PY_VER_PATH=$(python3 --version | cut -d ' ' -f 2 | cut -d '.' -f 1-2) # Like "3.12"

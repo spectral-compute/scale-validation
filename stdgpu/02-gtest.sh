@@ -1,21 +1,23 @@
 #!/bin/bash
 
 set -e
-source "$(dirname "$0")"/../util/args.sh "$@"
-cd "${OUT_DIR}/stdgpu"
 
 # Skip faulty tests. See scale#385.
-SKIP="
-stdgpu_deque.simultaneous_push_back_and_pop_back
+SKIP="stdgpu_deque.simultaneous_push_back_and_pop_back
 stdgpu_deque.simultaneous_push_front_and_pop_front
 stdgpu_deque.simultaneous_push_back_and_pop_front
 stdgpu_unordered_map.insert_unique_parallel
 stdgpu_unordered_map.emplace_unique_parallel
 stdgpu_unordered_map.erase_unique_parallel
-stdgpu_unordered_map.insert_and_erase_unique_parallel
+stdgpu_unordered_map.insert_range_unique_parallel
 stdgpu_unordered_map.insert_range_unique_parallel_custom_execution_policy
+stdgpu_unordered_map.insert_const_range_unique_parallel
+stdgpu_unordered_map.erase_range_unique_parallel
+stdgpu_unordered_map.erase_range_unique_parallel_custom_execution_policy
+stdgpu_unordered_map.erase_const_range_unique_parallel
 stdgpu_unordered_map.bucket_size_sum
 stdgpu_unordered_map.count_sum
+stdgpu_unordered_map.insert_and_erase_unique_parallel
 stdgpu_unordered_map.non_const_device_range
 stdgpu_unordered_map.non_const_device_range_same_custom_execution_policy
 stdgpu_unordered_map.const_device_range
@@ -40,8 +42,7 @@ stdgpu_unordered_set.const_device_range
 stdgpu_unordered_set.const_device_range_same_custom_execution_policy
 stdgpu_unordered_set.clear
 stdgpu_unordered_set.clear_custom_execution_policy
-stdgpu_vector.simultaneous_push_back_and_pop_back
-"
+stdgpu_vector.simultaneous_push_back_and_pop_back"
 
 SKIP=$(echo $SKIP | sed 's/ /:/g')
 

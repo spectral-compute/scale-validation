@@ -1,9 +1,7 @@
 #!/bin/bash
 
 set -e
-source "$(dirname "$0")"/../util/args.sh "$@"
 
-mkdir -p "${OUT_DIR}/hashcat"
-cd "${OUT_DIR}/hashcat"
+source "$(dirname "$0")"/../util/git.sh
 
-do_clone_hash hashcat https://github.com/hashcat/hashcat.git 6716447dfce969ddde42a9abe0681500bee0df48
+do_clone_hash hashcat https://github.com/hashcat/hashcat.git "$(get_version hashcat)"

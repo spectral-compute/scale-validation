@@ -3,9 +3,8 @@
 set -e
 set -u
 
+OUT_DIR=$(realpath ../)
 SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
-
 export PATH="${OUT_DIR}/openmpi/install/bin:${CUDA_DIR}/bin:${PATH}"
 export LD_LIBRARY_PATH="${OUT_DIR}/openmpi/install/lib:${LD_LIBRARY_PATH}"
 export OMPI_MCA_accelerator=cuda
@@ -19,6 +18,7 @@ EXAMPLE=Example01_NBL
 
 rm -rf "${EXAMPLES}/${EXAMPLE}"
 mkdir -p "${EXAMPLES}/${EXAMPLE}/output"
+
 cd "${EXAMPLES}/${EXAMPLE}"
 cp "${OUT_DIR}/FastEddy/FastEddy/tutorials/examples/Example01_NBL.in" .
 

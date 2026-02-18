@@ -18,7 +18,7 @@ export CUDAHOSTCXX="${CUDA_PATH}/bin/g++"
 export CUDNN_INCLUDE_DIR=/usr/include
 export CUDNN_LIB_DIR=/usr/lib
 export USE_SYSTEM_NCCL=ON
-export TORCH_CUDA_ARCH_LIST="$(echo $GPU_ARCH | sed -E 's/sm_([0-9]+)([0-9])/\1.\2/')"
+export TORCH_CUDA_ARCH_LIST="$(echo $CUDAARCHS | sed -E 's/sm_([0-9]+)([0-9])/\1.\2/')"
 
 export BUILD_BINARY=ON
 export BUILD_CAFFE2_OPS=ON
@@ -38,7 +38,7 @@ export USE_ROCM=OFF
 export BUILD_BINARY=ON
 export BUILD_TEST=ON
 
-export MAX_JOBS="${BUILD_JOBS}"
+export MAX_JOBS="$(nproc)"
 export VERBOSE="${VERBOSE}"
 
 # Patch PyTorch.

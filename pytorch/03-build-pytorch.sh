@@ -1,10 +1,8 @@
 #!/bin/bash
 
 set -e
-source "$(dirname "$0")"/../util/args.sh "$@"
 
-cd "${OUT_DIR}/pytorch/build"
-
+cd "build"
 
 #############
 # CONFIGURE #
@@ -51,6 +49,7 @@ export USE_MKLDNN=OFF
 export USE_NUMPY=OFF
 export USE_OPENCV=OFF
 export USE_ROCM=OFF
+export USE_CUSPARSELT=OFF
 
 export BUILD_CAFFE2=ON
 export BUILD_CAFFE2_OPS=ON
@@ -58,8 +57,7 @@ export BUILD_CAFFE2_OPS=ON
 export BUILD_BINARY=ON
 export BUILD_TEST=ON
 
-export MAX_JOBS="${BUILD_JOBS}"
-export VERBOSE="${VERBOSE}"
+export MAX_JOBS="$(nproc)"
 
 
 #########
@@ -99,3 +97,5 @@ symlinkAllIn "${DST}/lib" "${SRC}/lib"
 for D in "${SRC}/include/"* "${SRC}/include/torch/csrc/api/include/"* ; do
     symlinkAllIn "${DST}/include/$(basename ${D})" "${D}"
 done
+
+cd -
