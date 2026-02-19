@@ -1,0 +1,44 @@
+diff --git a/tools/setup_helpers/cmake.py b/tools/setup_helpers/cmake.py
+index 02ab011..eb2b182 100644
+--- a/tools/setup_helpers/cmake.py
++++ b/tools/setup_helpers/cmake.py
+@@ -440,7 +440,9 @@ class CMake:
+         # 1) MAX_JOBS environment variable
+         # 2) If using the Ninja build system, delegate decision to it.
+         # 3) Otherwise, fall back to the number of processors.
+-
++        # Arguments to the *native* build tool (ninja/make/msbuild),
++        # passed after `cmake --build ... --`.
++        native_build_args: List[str] = []
+         # Allow the user to set parallelism explicitly. If unset,
+         # we'll try to figure it out.
+         max_jobs = os.getenv("MAX_JOBS")
+@@ -457,8 +459,26 @@ class CMake:
+             # os.sched_getaffinity(0) on platforms that support it.
+             max_jobs = max_jobs or str(multiprocessing.cpu_count())
+ 
+-            # CMake 3.12 provides a '-j' option.
+-            build_args += ["-j", max_jobs]
++            if IS_WINDOWS and not USE_NINJA:
++                # Likely MSBuild
++                native_build_args += [f"/p:CL_MPCount={max_jobs}"]
++            else:
++                # ninja / make
++                native_build_args += ["-j", max_jobs]
++
++        # Always try to keep going on errors (-k)
++        if not IS_WINDOWS:
++            if USE_NINJA:
++                native_build_args = ["-k", "0"] + native_build_args
++            else:
++                native_build_args = ["-k"] + native_build_args
++
++        if native_build_args:
++            print(f"[DEBUG] native_build_args = {native_build_args}")
++            print(f"[DEBUG] build_args BEFORE = {build_args}")
++            build_args += ["--"] + native_build_args
++            print(f"[DEBUG] build_args AFTER  = {build_args}")
++
+         self.run(build_args, my_env)
+ 
+     def clear_cache(self) -> None:
