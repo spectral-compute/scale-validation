@@ -1,0 +1,55 @@
+diff --git a/csrc/flash_attn/src/flash_bwd_kernel.h b/csrc/flash_attn/src/flash_bwd_kernel.h
+index 8f42f0a..dd7392b 100644
+--- a/csrc/flash_attn/src/flash_bwd_kernel.h
++++ b/csrc/flash_attn/src/flash_bwd_kernel.h
+@@ -548,7 +548,9 @@ inline __device__ void compute_dq_dk_dv_1colblock(const Params &params, const in
+             : FLASH_NAMESPACE::convert_type_relu<Element>(acc_s);
+         // Reshape rP from (MMA=4, MMA_M, MMA_N) to ((4, 2), MMA_N, MMA_N / 2)
+         // if using m16n8k16 or (4, MMA_N, MMA_N) if using m16n8k8.
+-        Tensor tPrP = make_tensor(rP.data(), FLASH_NAMESPACE::convert_layout_acc_Aregs<Kernel_traits::TiledMmaSdP>(rP.layout()));
++        Tensor tPrP = make_tensor(
++            rP.data(),
++            FLASH_NAMESPACE::convert_layout_acc_Aregs<typename Kernel_traits::TiledMmaSdP>(rP.layout()));
+         Tensor tPaP = smem_thr_copy_PdS.retile_S(tPrP);     // ((Atom,AtomNum), MMA_N, MMA_N)
+         cute::copy(smem_tiled_copy_PdS, tPaP, tPsP);
+         // if (cute::thread0()) { print(tPaP); }
+diff --git a/csrc/flash_attn/src/flash_fwd_kernel.h b/csrc/flash_attn/src/flash_fwd_kernel.h
+index 1ba07da..d492c87 100644
+--- a/csrc/flash_attn/src/flash_fwd_kernel.h
++++ b/csrc/flash_attn/src/flash_fwd_kernel.h
+@@ -362,7 +362,7 @@ inline __device__ void compute_attn_1rowblock(const Params &params, const int bi
+ 
+         // Reshape rP from (MMA=4, MMA_M, MMA_N) to ((4, 2), MMA_M, MMA_N / 2)
+         // if using m16n8k16 or (4, MMA_M, MMA_N) if using m16n8k8.
+-        Tensor tOrP = make_tensor(rP.data(), FLASH_NAMESPACE::convert_layout_acc_Aregs<Kernel_traits::TiledMma>(rP.layout()));
++        Tensor tOrP = make_tensor(rP.data(), FLASH_NAMESPACE::convert_layout_acc_Aregs<typename Kernel_traits::TiledMma>(rP.layout()));
+         // if (cute::thread0()) { print(tOrP); }
+         FLASH_NAMESPACE::gemm_rs(acc_o, tOrP, tOrVt, tOsVt, tiled_mma, smem_tiled_copy_V, smem_thr_copy_V);
+         // if (cute::thread0()) { print(scores); }
+@@ -424,7 +424,7 @@ inline __device__ void compute_attn_1rowblock(const Params &params, const int bi
+ 
+         // Reshape rP from (MMA=4, MMA_M, MMA_N) to ((4, 2), MMA_M, MMA_N / 2)
+         // if using m16n8k16 or (4, MMA_M, MMA_N) if using m16n8k8.
+-        Tensor tOrP = make_tensor(rP.data(), FLASH_NAMESPACE::convert_layout_acc_Aregs<Kernel_traits::TiledMma>(rP.layout()));
++        Tensor tOrP = make_tensor(rP.data(), FLASH_NAMESPACE::convert_layout_acc_Aregs<typename Kernel_traits::TiledMma>(rP.layout()));
+         FLASH_NAMESPACE::gemm_rs(acc_o, tOrP, tOrVt, tOsVt, tiled_mma, smem_tiled_copy_V, smem_thr_copy_V);
+     }
+ 
+@@ -922,7 +922,7 @@ inline __device__ void compute_attn_1rowblock_splitkv(const Params &params, cons
+         Tensor rP = FLASH_NAMESPACE::convert_type<Element>(acc_s);
+         // Reshape rP from (MMA=4, MMA_M, MMA_N) to ((4, 2), MMA_M, MMA_N / 2)
+         // if using m16n8k16 or (4, MMA_M, MMA_N) if using m16n8k8.
+-        Tensor tOrP = make_tensor(rP.data(), FLASH_NAMESPACE::convert_layout_acc_Aregs<Kernel_traits::TiledMma>(rP.layout()));
++        Tensor tOrP = make_tensor(rP.data(), FLASH_NAMESPACE::convert_layout_acc_Aregs<typename Kernel_traits::TiledMma>(rP.layout()));
+ 
+         FLASH_NAMESPACE::gemm_rs(acc_o, tOrP, tOrVt, tOsVt, tiled_mma, smem_tiled_copy_V, smem_thr_copy_V);
+ 
+@@ -987,7 +987,7 @@ inline __device__ void compute_attn_1rowblock_splitkv(const Params &params, cons
+         Tensor rP = FLASH_NAMESPACE::convert_type<Element>(acc_s);
+         // Reshape rP from (MMA=4, MMA_M, MMA_N) to ((4, 2), MMA_M, MMA_N / 2)
+         // if using m16n8k16 or (4, MMA_M, MMA_N) if using m16n8k8.
+-        Tensor tOrP = make_tensor(rP.data(), FLASH_NAMESPACE::convert_layout_acc_Aregs<Kernel_traits::TiledMma>(rP.layout()));
++        Tensor tOrP = make_tensor(rP.data(), FLASH_NAMESPACE::convert_layout_acc_Aregs<typename Kernel_traits::TiledMma>(rP.layout()));
+ 
+         FLASH_NAMESPACE::gemm_rs(acc_o, tOrP, tOrVt, tOsVt, tiled_mma, smem_tiled_copy_V, smem_thr_copy_V);
+     }
