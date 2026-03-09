@@ -8,8 +8,6 @@ cd "build"
 # CONFIGURE #
 #############
 
-export CC="${CUDA_PATH}/bin/gcc"
-export CXX="${CUDA_PATH}/bin/g++"
 export CFLAGS="\
     -march=native \
     -mtune=native \
