@@ -18,13 +18,12 @@ export CFLAGS="\
 "
 export _GLIBCXX_USE_CXX11_ABI=TRUE
 
-export CUDAHOSTCXX="${CUDA_PATH}/bin/g++"
+export CUDAHOSTCXX="${CUDA_PATH}/bin/clang++"
 
 export CUDNN_INCLUDE_DIR=/usr/include
 export CUDNN_LIB_DIR=/usr/lib
 export USE_SYSTEM_NCCL=ON
 
-# Wat.
 export CUDAARCHS="86"
 export TORCH_CUDA_ARCH_LIST="8.6"
 
