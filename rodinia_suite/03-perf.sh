@@ -64,7 +64,7 @@ echo "[===================]"
 
 # 1) Build without breakdowns
 echo "[ STEP 1 ] Build Rodinia (no breakdowns)"
-run_in_dir "${CUDA_DIR}" ./buildall.sh --cuda "${CUDA_PATH}" --no-breakdowns --spectral
+run_in_dir "${CUDA_DIR}" ./buildall.sh --cuda "${CUDA_PATH}" --sm "${CUDAARCHS}" --no-breakdowns --spectral
 
 # 2) Run without breakdowns
 echo "[ STEP 2 ] Run Rodinia (no breakdowns)"
@@ -79,7 +79,7 @@ run_in_dir "${REPO_ROOT}" ./run_plot_computation.sh
 
 # 4) Build with breakdowns
 echo "[ STEP 4 ] Build Rodinia (with breakdowns)"
-run_in_dir "${CUDA_DIR}" ./buildall.sh --cuda "${CUDA_PATH}" --breakdowns --spectral
+run_in_dir "${CUDA_DIR}" ./buildall.sh --cuda "${CUDA_PATH}" --sm "${CUDAARCHS}" --breakdowns --spectral
 
 # 5) Run with breakdowns
 echo "[ STEP 5 ] Run Rodinia (with breakdowns)"
