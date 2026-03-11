@@ -10,6 +10,8 @@
 
 set -ETeuo pipefail
 
+cd build
+
 # Optional skipping (colon-separated globs matched against full target)
 # e.g., SKIP_PATTERNS='*planar_complex*:*cf32*'
 #SKIP_PATTERNS="${SKIP_PATTERNS:-}"
@@ -20,12 +22,12 @@ SKIP_PATTERNS='*static*'
 MAX_PAIRS="${MAX_PAIRS:-120}" # Decrease tests from 235 to 120
 
 # ---------- Build cutlass_profiler (log to file) ----------
-BUILD_LOG="build/cutlass_profiler.build.log"
+BUILD_LOG="../cutlass_profiler.build.log"
 mkdir -p "$(dirname "$BUILD_LOG")"
 : > "$BUILD_LOG"
 echo "Building cutlass_profiler (logging to $BUILD_LOG)..."
 set +e
-make -j cutlass_profiler >"$BUILD_LOG" 2>&1
+make -j$(nproc) cutlass_profiler >"$BUILD_LOG" 2>&1
 rc=$?
 set -e
 if [[ $rc -ne 0 ]]; then
@@ -35,7 +37,7 @@ if [[ $rc -ne 0 ]]; then
 fi
 
 # ---------- Auto-generate targets log ----------
-TARGETS_LOG="build/targets.log"
+TARGETS_LOG="../targets.log"
 
 gen_targets_log() {
   local out="$1"
@@ -70,8 +72,8 @@ gen_targets_log() {
 gen_targets_log "$TARGETS_LOG" || exit 3
 
 # ---------- Paths & logs ----------
-LOGFILE="${OUT_DIR}/cutlass/build/profiler.log"
-REPORT_JUNIT="${OUT_DIR}/cutlass/build/profiler-report.xml"
+LOGFILE="../profiler.log"
+REPORT_JUNIT="../profiler-report.xml"
 mkdir -p "$(dirname "$LOGFILE")"
 : > "$LOGFILE"
 echo "Writing to $LOGFILE"
@@ -258,7 +260,7 @@ echo "JUnit report: $REPORT_JUNIT"
 echo "Cutlass profiler sweep finished"
 
 # ---------- Parse profiler.log -> CSV (inline merge of parse_results_helper.sh) ----------
-OUTCSV="${OUT_DIR}/cutlass/build/cutlass-profiler-kernels.csv"
+OUTCSV="../cutlass-profiler-kernels.csv"
 echo "Parsing ${LOGFILE} -> ${OUTCSV}"
 
 python3 - "$LOGFILE" "$OUTCSV" << 'PY'
