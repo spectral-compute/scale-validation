@@ -84,14 +84,6 @@ else
     export CUDA_BIN_PATH="${SCALE_DIR}/bin"
 fi
 
-if [[ $INPUT_GPU_ARCH == sm_* ]]; then
-    # For NVIDIA archiectrues, just pass the arch along directly.
-    export CUDAARCHS="$(echo $INPUT_GPU_ARCH | sed -Ee 's|sm_||g')"
-else
-    # For AMD, we need to pick an arbitrary NVIDIA-looking arch number.
-    export CUDAARCHS="${CUDAARCHS}"
-fi
-
 # Run all the scripts for the test.
 set -o errexit
 for i in "${TEST_DIR}/${TEST}"/*.sh; do
