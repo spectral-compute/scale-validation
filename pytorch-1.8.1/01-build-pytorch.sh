@@ -14,7 +14,6 @@ export CXX="${CUDA_PATH}/bin/g++"
 export CFLAGS="-march=native -mtune=native"
 export _GLIBCXX_USE_CXX11_ABI=TRUE
 
-export CUDAHOSTCXX="${CUDA_PATH}/bin/g++"
 export CUDNN_INCLUDE_DIR=/usr/include
 export CUDNN_LIB_DIR=/usr/lib
 export USE_SYSTEM_NCCL=ON
