@@ -27,13 +27,6 @@ if [[ $# -lt 3 ]] ; then
     exit 1
 fi
 
-
-# TODO: Kill
-if [[ "$CI_INSTA_FAIL" == "true" ]] || [[ "$CI_INSTA_FAIL" == "1" ]]; then
-    # Some tests insta-fail as a "skip" to save time in CI while still registering the job
-    /bin/false
-fi
-
 TEST_DIR="$(realpath "$(dirname "$0")")"
 OUT_DIR="$(realpath "$1")"
 SCALE_DIR="$(realpath "$2")"
