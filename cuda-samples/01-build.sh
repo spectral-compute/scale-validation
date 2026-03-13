@@ -2,9 +2,6 @@
 
 set -ETeuo pipefail
 
-echo $NVCC_PREPEND_FLAGS
-echo $NVCC_APPEND_FLAGS
-
 # Configure.
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
