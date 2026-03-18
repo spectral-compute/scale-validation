@@ -2,7 +2,7 @@
 
 source "$(dirname "$0")"/../util/git.sh
 
-do_clone HeCBench https://github.com/zjin-lcf/HeCBench "$(get_version HeCBench)"
+do_clone_hash HeCBench https://github.com/ORNL/HeCBench.git "$(get_version HeCBench)"
 
 ERR_TEXT="This repository exceeded its LFS budget."
 
@@ -17,4 +17,11 @@ fi
 (
     cd HeCBench/src/slu-cuda/src
     tar -xvf nicslu.tar.bz2
+    pwd
+    cd ../../
+    pwd
+    rm -rf aop-cuda #the following does not compile even for cuda-nvidia
+    rm -rf dp4a-cuda
+    rm -rf topk-cuda
+    rm -rf gru-cuda
 )
