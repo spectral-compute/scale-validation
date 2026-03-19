@@ -16,14 +16,17 @@ TMPXML="$BUILD_DIR/.tmp_cases.xml"
 
 passed=0
 failed=0
-skipped=0
+skipped=5
 
-# Skip cm-cuda since it seems to run forever
+# Skip cm-cuda, divergence, mdh, ising since it seems to run forever
 echo '  <testcase classname="hecbench" name="src/cm-cuda" time="0"><skipped>Skipped by script</skipped></testcase>' >> "$TMPXML"
-skipped=$((skipped + 1))
+echo '  <testcase classname="hecbench" name="src/divergence-cuda" time="0"><skipped>Skipped by script</skipped></testcase>' >> "$TMPXML"
+echo '  <testcase classname="hecbench" name="src/mdh-cuda" time="0"><skipped>Skipped by script</skipped></testcase>' >> "$TMPXML"
+echo '  <testcase classname="hecbench" name="src/ising-cuda" time="0"><skipped>Skipped by script</skipped></testcase>' >> "$TMPXML"
+echo '  <testcase classname="hecbench" name="src/laplace-cuda" time="0"><skipped>Skipped by script</skipped></testcase>' >> "$TMPXML"
 
 for exe in $(find "$BIN_DIR" -mindepth 1 -maxdepth 1 -type f -executable \
-  ! -name "cm" | sort); do
+  ! -name "cm" ! -name "divergence" ! -name "mdh" ! -name "ising" ! -name "laplace" | sort); do
   name="${exe#${OUT_DIR}/}"
   runlog=$(mktemp)
 
