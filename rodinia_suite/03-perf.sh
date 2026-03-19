@@ -16,7 +16,7 @@ Usage:
 
 Environment variables:
   RUNS=<N>             Number of iterations (default: 2)
-  SLEEP_SECS=<secs>    Sleep between iterations (default: 1)
+  SLEEP_SECS=<secs>    Sleep between iterations (default: 10)
   OUT_DIR=<dir>        Results directory inside cuda/ (default: results)
   GPU_ID=<id>          GPU id for runRodiniaWithIntervals.sh
   LABEL=<str>          Label prefix (default: scale)
@@ -31,13 +31,13 @@ case "${1:-}" in
     exit 2
     ;;
 esac
-pwd
+
 # Match 02-test.sh path logic
 REPO_ROOT="$(pwd)/rodinia_suite"
 CUDA_DIR="${REPO_ROOT}/cuda"
 
-RUNS="${RUNS:-2}"
-SLEEP_SECS="${SLEEP_SECS:-1}"
+RUNS="${RUNS:-5}"
+SLEEP_SECS="${SLEEP_SECS:-10}"
 OUT_DIR="${OUT_DIR:-results}"
 GPU_ID="${GPU_ID:-0}"
 LABEL="${LABEL:-scale}"
