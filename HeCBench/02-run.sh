@@ -22,7 +22,8 @@ skipped=0
 echo '  <testcase classname="hecbench" name="src/cm-cuda" time="0"><skipped>Skipped by script</skipped></testcase>' >> "$TMPXML"
 skipped=$((skipped + 1))
 
-for exe in $(find "$BIN_DIR" -mindepth 1 -maxdepth 1 -type f -executable | sort); do
+for exe in $(find "$BIN_DIR" -mindepth 1 -maxdepth 1 -type f -executable \
+  ! -name "cm" | sort); do
   name="${exe#${OUT_DIR}/}"
   runlog=$(mktemp)
 
