@@ -72,6 +72,7 @@ export BUILD_CAFFE2=ON
 export BUILD_CAFFE2_OPS=ON
 export BUILD_BINARY=ON
 export BUILD_TEST=ON
+export CMAKE_POLICY_VERSION_MINIMUM=3.5
 
 # BUILD #
 ${PYBIN} setup.py build

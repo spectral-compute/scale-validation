@@ -1,15 +1,13 @@
 #!/bin/bash
 
 set -euo pipefail
-pwd
+
 BUILD_DIR="build"
 LOGFILE="$BUILD_DIR/cudahandbook-run.log"
-NUMBERSFILE="$BUILD_DIR/cudahandbook-numbers.txt"
 XMLFILE="$BUILD_DIR/cudahandbook-run.xml"
 TMPXML="$BUILD_DIR/.tmp_cases.xml"
 
 : > "$LOGFILE"
-: > "$NUMBERSFILE"
 : > "$TMPXML"
 
 passed=0
@@ -34,8 +32,6 @@ for exe in $(find "$BUILD_DIR" -mindepth 2 -maxdepth 2 -type f -executable \
   name="${exe#${BUILD_DIR}/}"
   runlog=$(mktemp)
 
-  # Store the total execution time per benchmark, although it is not so precise as the
-  # numbers reported from each benchmark.
   echo "Executing $name" | tee -a "$LOGFILE"
 
   start=$(date +%s)
@@ -51,11 +47,9 @@ for exe in $(find "$BUILD_DIR" -mindepth 2 -maxdepth 2 -type f -executable \
   end=$(date +%s)
   runtime=$((end - start))
 
+  echo "======== $name ========" >> "$LOGFILE"
   cat "$runlog" >> "$LOGFILE"
-
-  echo "======== $name ========" >> "$NUMBERSFILE"
-  grep -E '[0-9]' "$runlog" >> "$NUMBERSFILE" || true
-  echo >> "$NUMBERSFILE"
+  echo >> "$LOGFILE"
 
   if [ "$status" = "passed" ]; then
     echo "  <testcase classname=\"cudahandbook\" name=\"$name\" time=\"$runtime\"/>" >> "$TMPXML"
@@ -82,7 +76,6 @@ echo "Passed : $passed"
 echo "Failed : $failed"
 echo "Skipped: $skipped"
 echo "Log file: $LOGFILE"
-echo "Numbers file: $NUMBERSFILE"
 echo "XML file: $XMLFILE"
 
 if [ "$failed" -gt 0 ]; then
