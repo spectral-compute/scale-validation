@@ -62,5 +62,29 @@ echo "Patch flash attention"
 cd ../flash-attention
 git stash
 git apply "${SCRIPT_DIR}/patches/flash_attention_typename_patch.diff"
+echo "Done flash attention"
 
+# 4) Patch mem_eff_attention typename ONLY for NVIDIA builds
+echo "Patch mem_eff_attention typename (only for NVIDIA)"
+FILE="${OUT_DIR}/pytorch/aten/src/ATen/native/transformers/cuda/mem_eff_attention/kernel_forward.h"
+if [[ "${CUDAARCHS:-}" =~ ^[0-9]+$ ]]; then
+  echo "Applying NVIDIA-only typename workaround for CUDAARCHS=${CUDAARCHS}"
+  sed -i 's/Params{MM1::LayoutB(/Params{typename MM1::LayoutB(/g' "${FILE}"
+fi
+echo "Done mem_eff_attention typename"
+
+# 5) Patch __assert_fail ONLY for NVIDIA builds
+echo "Patch assert_fail"
+cd "${OUT_DIR}/pytorch"
+
+if [[ "${CUDAARCHS:-}" =~ ^[0-9]+$ ]]; then
+  echo "Applying NVIDIA-only __assert_fail patch"
+
+  sed -i '/^[[:space:]]*void[[:space:]]*$/{
+N
+s/^[[:space:]]*void[[:space:]]*\n[[:space:]]*__assert_fail(/#if defined(__CUDACC__) || defined(__CUDA__)\n    __host__ __device__ void\n#else\n    void\n#endif\n    __assert_fail(/
+}' torch/headeronly/macros/Macros.h
+fi
+
+echo "Done assert_fail"
 echo "Done patching"
