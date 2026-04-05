@@ -84,6 +84,9 @@ else
     export CUDA_BIN_PATH="${SCALE_DIR}/bin"
 fi
 
+# Keep the build log comprehensible despite multi-core.
+export MAKEFLAGS=-O
+
 # Run all the scripts for the test.
 set -o errexit
 for i in "${TEST_DIR}/${TEST}"/*.sh; do
