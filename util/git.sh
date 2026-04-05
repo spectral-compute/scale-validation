@@ -1,7 +1,32 @@
 # Two tiny helper functions for cloning things.
 
+# TODO: This should be improved by checking if the version looks like a commit
+# hash, and if so checking for later commits.
+function check_recency() {
+    local repo="$1"
+    local ver="$2"
+
+    # FIXME: This regex can be improved, it wouldn't match a version format of
+    # just `vN`. But I cannot seen anything using that format in versions.txt
+    # yet. The closest is gromacs, I think.
+    if [[ "$ver" =~ ^v[[:digit:]]+\.[[:digit:]]+ ]]; then
+        local patt="${ver//./[.]}\$" # escape '.' chars
+
+        # Iterates tags starting with `v` from oldest to newest; when the tag
+        # `ver` is recognised, `seen` is incremented for it and all later tags;
+        # print `seen-1` to drop the increment from matching `ver`.
+        local n=$(awk -v ver="$patt" 'seen || $NF ~ ver {seen++}; END {print seen-1}' \
+            <(git ls-remote -t "$repo" v\*))
+
+        echo "Version to clone is $n releases out of date"
+    else
+        echo "Unable to check version recency (unrecognisable branch/tag format)"
+    fi
+}
+
 # Clone and sync submodules for a project.
 function do_clone() {
+  check_recency $2 $3
   git clone --recursive --depth 1 --shallow-submodules --branch $3 $2 $1
 }
 
