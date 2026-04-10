@@ -3,7 +3,7 @@
 set -e
 
 #for nvcc:
-#    -DCMAKE_CXX_COMPILER=$PWD/bin/nvcc_wrapper \
+#    -DCMAKE_CXX_COMPILER=$PWD/kokkos/bin/nvcc_wrapper \
 
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
