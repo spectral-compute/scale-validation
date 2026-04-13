@@ -11,3 +11,17 @@ index 73b8372..e4ec764 100644
 
    # Function to test if the compiler accepts a given flag.
    define check_and_add_flag
+diff --git a/train_gpt2_fp32.cu b/train_gpt2_fp32.cu
+index df412ea..bce7296 100644
+--- a/train_gpt2_fp32.cu
++++ b/train_gpt2_fp32.cu
+@@ -1057,6 +1057,9 @@ float* malloc_and_point(float** targets[], const size_t* act_sizes, int n) {
+     }
+     float* acts_memory;
+     cudaCheck(cudaMalloc((void**)&acts_memory, num_activations * sizeof(float)));
++    // cudaMalloc does not guarantee initial memory values so we memset the allocation here.
++    // This matters because softmax_forward_kernel5 only writes the lower triangle of att.
++    cudaCheck(cudaMemset(acts_memory, 0, num_activations * sizeof(float)));
+     float* acts_memory_iterator = acts_memory;
+     for (size_t i = 0; i < n; i++) {
+         *(targets[i]) = acts_memory_iterator;
