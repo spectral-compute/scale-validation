@@ -29,7 +29,6 @@ Contributions welcome!
 | FLAMEGPU2      | v2.0.0-rc.2   | ➖   | gfx90a: ✅, gfx1100: ✅, gfx900: ✅, gfx1201: ❌, gfx1030: ❌   |
 | ggml           | d3a58b0        | ✅        |         |
 | gomc           | 4c12477        | ✅        |         |
-| GooFit         | v2.3.0      | ❌      |       |
 | gpu\_jpeg2k    | ee715e9  | ✅  |   |
 | GPUJPEG        | 3e045d1     | ➖     | gfx90a: ✅, gfx1201: ✅, gfx1100: ✅, gfx900: ✅, gfx1030: ❌     |
 | GROMACS        | v2025.4     | ❓ (\*)     |      |
