@@ -10,6 +10,7 @@ cugraph fc880db
 cuml b17f2db
 cuSZ v0.16.2
 cutlass v4.1.0
+CUDALibrarySamples 5ac0f9a8032a1031ff4b99ff6112d528ade2995b
 CV-CUDA f769fe4
 cycles v4.4.0
 faiss v1.9.0
