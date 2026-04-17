@@ -5,59 +5,57 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: v1.5.1.**
+**This shows the test status for SCALE: v1.6.1.**
 
-Test scripts get added to this repository long before they are fully
-supported by SCALE. We use the outcome of this kind of testing to prioritise
-development. Contributions welcome!
+Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
+We use the outcome of this kind of testing to prioritise development.
+Contributions welcome!
 
-This table summarises the current state as of the most recent stable release
-of SCALE. "Needs" describes missing CUDA APIs/features that the project
-definitely needs. The list may not be exhaustive.
-
-| Project | Version | Status | Valid GFX | Notes | Needs |
-|---|---|---|---|---|---|
-|  Alien  |  scaletest  |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   Needs patch to remove OpenGL interop  |  OpenGL Interop  |
-|  AMGX  |  v2.4.0  |  ➖  | gfx1201: ✅, gfx1100: ✅, gfx906: ✅, gfx1030: ❌ |   |  |
-|  arrayfire  |  v3.9.0  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   |  cuDNN, more cuSPARSE  |
-|  caffe  |  9b891540183ddc...  |  ➖  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ❌ |   |  |
-|  ctranslate2  |  v4.5.0  |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   Some intermittent test failures  |  |
-|  cuml  |  b17f2db  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   Buildsystem nonsnse  |  |
-|  cuSZ  |  v0.16.2  |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   |  |
-|  CUTLASS  |  v4.1.0  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   |  |
-|  CV-CUDA  |  f769fe4  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   |  |
-|  cycles  |  v4.4.0  |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   |  |
-|  faiss  |  v1.9.0  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   |  |
-|  FastEddy  |  v2.0.0  |  ➖  | gfx1201: ✅, gfx1100: ✅, gfx906: ✅, gfx1030: ❌ |   |  |
-|  FLAMEGPU2  |  v2.0.0-rc.2  |  ➖  | gfx1100: ✅, gfx1030: ✅, gfx1201: ❌, gfx906: ❌ |   |  |
-|  gomc  |  4c12477  |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   |  |
-|  GooFit  |  v2.3.0  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   |  Texture Refs  |
-|  gpu\_jpeg2k  |  ee715e9  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   |  |
-|  GROMACS  |  v2025.4  |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   |  |
-|  ggml  |  d3a58b0  |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   Old version works. New version needs more APIs  |  Missing async opcodes  |
-|  hashcat  |  6716447dfce969...  |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   |  |
-|  hashinator  |  34cf188  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   |  |
-|  hypre  |  v2.33.0  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   Buildsystem nonsense  |  |
-|  jitify  |  master  |  ➖  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ❌ |   Some test failures  |  |
-|  llama.cpp  |    |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   Old version works. New version needs more APIs  |  More graph APIs, async matmuls  |
-|  llm.c  |  7ecd8906afe6ed...  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   Old version builds+runs. New version needs more APIs  |  NVML, cuBLASLt  |
-|  MAGMA  |  v2.9.0  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   |  |
-|  nvflip  |  1eb247c  |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   |  |
-|  OpenCV  |  725e440  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   |  NPP  |
-|  openmpi  |  v4.1  |  ✅  |  |  No included tests, based on library build validity  |  |
-|  PhysX  |  1e44a0e  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   Numerous missing APIs  |  PTX barriers, cudaArray, graphics interop  |
-|  pytorch  |  v2.2.1  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   Numerous missing APIs  |  cuDNN, barriers, async copy, wgmma, more cuSPARSE, mempools, cublasLt,...  |
-|  quda  |  07822b61c6ab5f...  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   |  NVML  |
-|  risc0  |  v1.2.2  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   Dependent project tries to return carry-bit. Fixable.  |  |
-|  rodinia\_suite  |    |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   |  |
-|  stdgpu  |  563dc59d6d08df...  |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   Multigpu/crash tests are flaky  |  |
-|  TCLB  |  v6.7  |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   |  |
-|  thrust  |  756c5af  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   Old. Should add `cccl`!  |  |
-|  timemachine  |  01f14f8  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   Buildsystem nonsense  |  |
-|  UppASD  |  gpu_new  |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   |  |
-|  vllm  |  v0.6.3  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   Needs Pytorch  |  |
-|  whispercpp  |    |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   |  |
-|  xgboost  |  v2.1.0  |  ❌  | gfx1201: ❌, gfx1100: ❌, gfx1030: ❌, gfx906: ❌ |   |  |
+| Project        | Version           | Status | Valid GFX                                         |
+|----------------|-------------------|--------|---------------------------------------------------|
+| Alien          | scaletest         | ✅     |                                                   |
+| AMGX           | v2.4.0            | ➖     | gfx1030: ✅, gfx1201: ❌, gfx1100: ❌, gfx90a: ❌ |
+| arrayfire      | v3.9.0            | ✅     |                                                   |
+| bitnet         | 404980eecae38a... | ✅     |                                                   |
+| caffe          | 9b891540183ddc... | ✅     |                                                   |
+| ctranslate2    | v4.5.0            | ✅     |                                                   |
+| cuml           | b17f2db           | ✅     |                                                   |
+| cuSZ           | v0.16.2           | ✅     |                                                   |
+| CUTLASS        | v4.1.0            | ➖     | gfx1100: ✅, gfx1030: ✅, gfx1201: ❌, gfx90a: ❌ |
+| CV-CUDA        | f769fe4           | ✅     |                                                   |
+| cycles         | v4.4.0            | ✅     |                                                   |
+| faiss          | v1.9.0            | ❌     |                                                   |
+| FastEddy       | v2.0.0            | ✅     |                                                   |
+| FLAMEGPU2      | v2.0.0-rc.2       | ➖     | gfx1030: ✅, gfx1201: ❌, gfx1100: ❌, gfx90a: ❌ |
+| ggml           | d3a58b0           | ➖     | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx90a: ❌ |
+| gomc           | 4c12477           | ✅     |                                                   |
+| gpu\_jpeg2k    | ee715e9           | ✅     |                                                   |
+| GPUJPEG        | 3e045d1           | ✅     |                                                   |
+| GROMACS        | v2025.4           | ✅     |                                                   |
+| hashcat        | 6716447dfce969... | ✅     |                                                   |
+| hashinator     | 34cf188           | ✅     |                                                   |
+| HeCBench       | master            | ✅     |                                                   |
+| hypre          | v2.33.0           | ✅     |                                                   |
+| jitify         | master            | ➖     | gfx1100: ✅, gfx1030: ✅, gfx90a: ✅, gfx1201: ❌ |
+| llama.cpp      |                   | ➖     | gfx1030: ✅, gfx90a: ✅, gfx1201: ❌, gfx1100: ❌ |
+| llm.c          | 7ecd8906afe6ed... | ✅     |                                                   |
+| MAGMA          | v2.9.0            | ➖     | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx90a: ❌ |
+| nvflip         | 1eb247c           | ✅     |                                                   |
+| OpenCV         | 725e440           | ➖     | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx90a: ❌ |
+| openmpi        | v4.1              | ✅     |                                                   |
+| PhysX          | 1e44a0e           | ➖     | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx90a: ❌ |
+| pytorch        | v2.2.1            | ✅     |                                                   |
+| quda           | 07822b61c6ab5f... | ✅     |                                                   |
+| risc0          | v1.2.2            | ➖     | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx90a: ❌ |
+| rodinia\_suite |                   | ✅     |                                                   |
+| stdgpu         | 563dc59d6d08df... | ✅     |                                                   |
+| TCLB           | v6.7              | ✅     |                                                   |
+| thrust         | 756c5af           | ✅     |                                                   |
+| timemachine    | 01f14f8           | ➖     | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx90a: ❌ |
+| UppASD         | gpu_new           | ✅     |                                                   |
+| vllm           | v0.6.3            | ➖     | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx90a: ❌ |
+| whispercpp     |                   | ➖     | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx90a: ❌ |
+| xgboost        | v2.1.0            | ✅     |                                                   |
 
 *Key:*
 * ✅ Validated succesfully
@@ -68,7 +66,14 @@ definitely needs. The list may not be exhaustive.
 * ❓ (\*) Validation skipped, no previous validation state to reference
 
 
-
+> \* The following program tests were skipped during our last test run, and given states are from the last version they were tested on instead:
+>
+> * `vllm` on `gfx90a`
+> * `timemachine` on `gfx90a`
+> * `risc0` on `gfx90a`
+> * `PhysX` on `gfx90a`
+> * `opencv` on `gfx90a`
+> * `MAGMA` on `gfx90a`
 
 ## Running Tests
 
