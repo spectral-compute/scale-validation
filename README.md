@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <3cbfb2cd>.**
+**This shows the test status for SCALE: master <4c2eee87>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -13,49 +13,49 @@ Contributions welcome!
 
 | Project        | Version                    | Status                   | Valid GFX                 |
 |----------------|----------------------------|--------------------------|---------------------------|
-| Alien          | scaletest       | ✅       |        |
-| AMGX           | v2.4.0        | ➖        | gfx1030: ✅, gfx1100: ✅, gfx90a: ✅, sm_89: ❌, gfx1201: ❌, gfx900: ❌        |
-| arrayfire      | v3.9.0   | ❌   |    |
-| bitnet         | 404980eecae38a...      | ✅      |       |
-| caffe          | 9b891540183ddc...       | ➖       | sm_89: ✅, gfx1201: ✅, gfx1030: ✅, gfx1100: ✅, gfx90a: ❌, gfx900: ✅       |
-| ctranslate2    | v4.5.0 | ❌ |  |
-| cuml           | b17f2db        | ❌        |         |
-| cuSZ           | v0.16.2        | ➖        | sm_89: ✅, gfx1201: ✅, gfx1030: ✅, gfx1100: ✅, gfx90a: ❌, gfx900: ✅        |
+| Alien          | scaletest       | ➖       | gfx1030: ✅, gfx1100: ✅, gfx90a: ✅, sm_89: ❌, gfx900: ❌, gfx1201: ❌       |
+| AMGX           | v2.4.0        | ➖        | sm_89: ✅, gfx90a: ✅, gfx900: ✅, gfx1201: ✅, gfx1030: ❌, gfx1100: ❌        |
+| arrayfire      | v3.9.0   | ➖   | sm_89: ✅, gfx90a: ✅, gfx900: ✅, gfx1201: ✅, gfx1030: ❌, gfx1100: ❌   |
+| bitnet         | 404980eecae38a...      | ➖      | gfx1030: ✅, sm_89: ✅, gfx900: ✅, gfx90a: ❌, gfx1201: ❌, gfx1100: ❌      |
+| caffe          | 9b891540183ddc...       | ➖       | gfx1030: ✅, gfx1201: ✅, gfx1100: ✅, sm_89: ✅, gfx900: ✅, gfx90a: ❌       |
+| ctranslate2    | v4.5.0 | ➖ | gfx90a: ✅, gfx900: ✅, gfx1201: ✅, gfx1100: ✅, gfx1030: ❌, sm_89: ❌ |
+| cuml           | b17f2db        | ➖        | gfx90a: ✅, gfx900: ✅, gfx1201: ✅, gfx1030: ❌, sm_89: ❌, gfx1100: ❌        |
+| cuSZ           | v0.16.2        | ➖        | gfx1030: ✅, sm_89: ✅, gfx90a: ❌, gfx900: ❌, gfx1201: ❌, gfx1100: ❌        |
 | CUTLASS        | v4.1.0     | ❓ (\*)     |      |
-| CV-CUDA        | f769fe4     | ❌     |      |
-| cycles         | v4.4.0      | ✅      |       |
-| faiss          | v1.9.0       | ➖       | gfx90a: ✅, sm_89: ❌, gfx1201: ❌, gfx1030: ❌, gfx1100: ❌, gfx900: ❌       |
-| FastEddy       | v2.0.0    | ➖    | gfx1030: ✅, sm_89: ✅, gfx1201: ✅, gfx1100: ✅, gfx90a: ❌, gfx900: ❌    |
-| FLAMEGPU2      | v2.0.0-rc.2   | ➖   | sm_89: ❌, gfx900: ✅, gfx1030: ✅, gfx1100: ✅, gfx90a: ❌, gfx1201: ❌   |
-| ggml           | d3a58b0        | ➖        | sm_89: ✅, gfx1201: ✅, gfx1030: ✅, gfx1100: ✅, gfx90a: ❌, gfx900: ✅        |
-| gomc           | 4c12477        | ✅        |         |
-| gpu\_jpeg2k    | ee715e9  | ❌  |   |
-| GPUJPEG        | 3e045d1     | ✅     |      |
+| CV-CUDA        | f769fe4     | ➖     | sm_89: ✅, gfx90a: ✅, gfx900: ✅, gfx1030: ❌, gfx1100: ❌, gfx1201: ❌     |
+| cycles         | v4.4.0      | ➖      | gfx1030: ✅, sm_89: ✅, gfx90a: ❌, gfx900: ❌, gfx1201: ❌, gfx1100: ❌      |
+| faiss          | v1.9.0       | ➖       | gfx90a: ✅, gfx900: ✅, gfx1201: ✅, gfx1100: ✅, gfx1030: ❌, sm_89: ❌       |
+| FastEddy       | v2.0.0    | ➖    | gfx1100: ❌, gfx1030: ❌, gfx900: ✅, sm_89: ❌, gfx90a: ❌, gfx1201: ❌    |
+| FLAMEGPU2      | v2.0.0-rc.2   | ➖   | gfx90a: ✅, gfx1201: ✅, sm_89: ❌, gfx900: ❌, gfx1030: ❌, gfx1100: ❌   |
+| ggml           | d3a58b0        | ➖        | sm_89: ✅, gfx1030: ❌, gfx90a: ❌, gfx900: ❌, gfx1201: ❌, gfx1100: ❌        |
+| gomc           | 4c12477        | ➖        | gfx1030: ✅, sm_89: ✅, gfx1100: ✅, gfx900: ✅, gfx90a: ❌, gfx1201: ❌        |
+| gpu\_jpeg2k    | ee715e9  | ➖  | gfx900: ✅, gfx1201: ✅, gfx1100: ✅, gfx1030: ❌, sm_89: ❌, gfx90a: ❌  |
+| GPUJPEG        | 3e045d1     | ❌     |      |
 | GROMACS        | v2025.4     | ❓ (\*)     |      |
-| hashcat        | 6716447dfce969...     | ✅     |      |
-| hashinator     | 34cf188  | ❌  |   |
-| HeCBench       | 42e8f09f3f7fa9...    | ➖    | gfx90a: ✅, gfx1030: ✅, sm_89: ✅, gfx1201: ✅, gfx1100: ✅, gfx900: ❌    |
+| hashcat        | 6716447dfce969...     | ➖     | gfx1030: ✅, sm_89: ✅, gfx90a: ❌, gfx900: ❌, gfx1201: ❌, gfx1100: ❌     |
+| hashinator     | 34cf188  | ➖  | gfx90a: ✅, gfx900: ✅, gfx1030: ❌, sm_89: ❌, gfx1201: ❌, gfx1100: ❌  |
+| HeCBench       | 42e8f09f3f7fa9...    | ➖    | sm_89: ✅, gfx90a: ✅, gfx1201: ✅, gfx1030: ❌, gfx1100: ❌, gfx900: ❌    |
 | hypre          | v2.33.0       | ❌       |        |
-| jitify         | master      | ➖      | gfx90a: ✅, gfx1030: ✅, gfx1100: ✅, sm_89: ❌, gfx900: ✅, gfx1201: ❌      |
+| jitify         | master      | ➖      | gfx1030: ✅, sm_89: ❌, gfx900: ✅, gfx90a: ❌, gfx1100: ❌, gfx1201: ❌      |
 | llama.cpp      |    | ❓ (\*)   |    |
-| llm.c          | 7ecd8906afe6ed...       | ➖       | gfx90a: ✅, sm_89: ❌, gfx1201: ❌, gfx1030: ❌, gfx1100: ❌, gfx900: ❌       |
-| MAGMA          | v2.9.0       | ➖       | gfx90a: ✅, gfx1030: ✅, sm_89: ✅, gfx1201: ✅, gfx1100: ✅, gfx900: ❌       |
-| nvflip         | 1eb247c      | ➖      | gfx90a: ✅, gfx1201: ✅, gfx1030: ✅, gfx1100: ✅, sm_89: ❌, gfx900: ✅      |
-| OpenCV         | 725e440      | ❌      |       |
+| llm.c          | 7ecd8906afe6ed...       | ➖       | gfx90a: ✅, gfx900: ✅, gfx1201: ✅, gfx1100: ✅, gfx1030: ❌, sm_89: ❌       |
+| MAGMA          | v2.9.0       | ➖       | gfx1030: ✅, gfx1201: ✅, gfx1100: ✅, sm_89: ✅, gfx90a: ✅, gfx900: ❌       |
+| nvflip         | 1eb247c      | ➖      | gfx1030: ✅, sm_89: ❌, gfx90a: ❌, gfx900: ❌, gfx1201: ❌, gfx1100: ❌      |
+| OpenCV         | 725e440      | ➖      | gfx90a: ✅, gfx900: ✅, gfx1201: ✅, gfx1100: ✅, gfx1030: ❌, sm_89: ❌      |
 | openmpi        | v4.1     | ✅                       |                           |
-| PhysX          | 1e44a0e       | ❌       |        |
-| pytorch        | v2.9.0-rc4     | ❌     |      |
-| quda           | 07822b61c6ab5f...        | ➖        | gfx90a: ✅, sm_89: ✅, gfx1201: ✅, gfx1030: ✅, gfx1100: ✅, gfx900: ❌        |
-| risc0          | v1.2.2       | ❌       |        |
+| PhysX          | 1e44a0e       | ➖       | sm_89: ✅, gfx900: ✅, gfx1201: ✅, gfx1030: ❌, gfx1100: ❌, gfx90a: ❌       |
+| pytorch        | v2.9.0-rc4     | ➖     | gfx90a: ✅, gfx900: ✅, gfx1201: ✅, gfx1030: ❌, sm_89: ❌, gfx1100: ❌     |
+| quda           | 07822b61c6ab5f...        | ✅        |         |
+| risc0          | v1.2.2       | ➖       | gfx90a: ✅, gfx1201: ✅, gfx1030: ❌, sm_89: ❌, gfx1100: ❌, gfx900: ❌       |
 | rodinia\_suite |      | ❓ (\*)     |      |
-| stdgpu         | 563dc59d6d08df...      | ➖      | gfx90a: ✅, sm_89: ✅, gfx1201: ✅, gfx1030: ✅, gfx900: ✅, gfx1100: ❌      |
-| TCLB           | v6.7        | ✅        |         |
-| thrust         | 756c5af      | ❌      |       |
-| timemachine    | 01f14f8 | ➖ | gfx1201: ✅, gfx90a: ❌, sm_89: ❌, gfx1030: ❌, gfx1100: ❌, gfx900: ❌ |
-| UppASD         | gpu_new      | ✅      |       |
-| vllm           | v0.6.3        | ➖        | gfx1201: ✅, gfx90a: ❌, sm_89: ❌, gfx1030: ❌, gfx1100: ❌, gfx900: ❌        |
+| stdgpu         | 563dc59d6d08df...      | ➖      | gfx1030: ✅, sm_89: ✅, gfx90a: ❌, gfx900: ❌, gfx1201: ❌, gfx1100: ❌      |
+| TCLB           | v6.7        | ➖        | gfx1030: ✅, gfx1100: ✅, sm_89: ❌, gfx90a: ❌, gfx900: ❌, gfx1201: ❌        |
+| thrust         | 756c5af      | ➖      | gfx90a: ✅, gfx900: ✅, gfx1201: ✅, gfx1100: ✅, sm_89: ❌, gfx1030: ❌      |
+| timemachine    | 01f14f8 | ➖ | gfx900: ✅, gfx1201: ✅, gfx1100: ✅, sm_89: ❌, gfx1030: ❌, gfx90a: ❌ |
+| UppASD         | gpu_new      | ❌      |       |
+| vllm           | v0.6.3        | ➖        | gfx90a: ✅, gfx1100: ✅, sm_89: ❌, gfx1030: ❌, gfx1201: ❌, gfx900: ❌        |
 | whispercpp     |  | ❓ (\*) |  |
-| xgboost        | v2.1.0     | ➖     | gfx1201: ✅, gfx90a: ❌, sm_89: ❌, gfx1030: ❌, gfx1100: ❌, gfx900: ❌     |
+| xgboost        | v2.1.0     | ➖     | gfx900: ✅, gfx1201: ✅, gfx1100: ✅, sm_89: ❌, gfx1030: ❌, gfx90a: ❌     |
 
 *Key:*
 * ✅ Validated succesfully
