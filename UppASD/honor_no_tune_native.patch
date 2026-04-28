@@ -1,0 +1,37 @@
+--- cmake/SetFortranFlags.cmake
++++ cmake/SetFortranFlags.cmake
+@@ -74,19 +74,23 @@ SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
+                  Fortran "-cpp"
+                          "-fpp")
+
+-# There is some bug where -march=native doesn't work on Mac
+-IF(APPLE)
+-    SET(GNUNATIVE "-mtune=native")
++IF (NOT DEFINED ENV{NO_TUNE_NATIVE})
++       # There is some bug where -march=native doesn't work on Mac
++       IF(APPLE)
++               SET(GNUNATIVE "-mtune=native")
++       ELSE()
++               SET(GNUNATIVE "-march=native")
++       ENDIF()
++       # Optimize for the host's architecture
++       SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
++               Fortran "-xHost"        # Intel
++               ${GNUNATIVE}    # GNU
++               "-ta=host"      # Portland Group
++               "/QxHost"       # Intel Windows
++       )
+ ELSE()
+-    SET(GNUNATIVE "-march=native")
++       message("Skipped adding -march=native since NO_TUNE_NATIVE is set")
+ ENDIF()
+-# Optimize for the host's architecture
+-SET_COMPILE_FLAG(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS}"
+-                 Fortran "-xHost"        # Intel
+-                         ${GNUNATIVE}    # GNU
+-                         "-ta=host"      # Portland Group
+-                         "/QxHost"       # Intel Windows
+-                )
+
+ ###################
+ ### DEBUG FLAGS ###

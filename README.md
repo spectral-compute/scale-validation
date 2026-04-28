@@ -6,15 +6,6 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 ## Current Status
 
 **This shows the test status for SCALE: v1.5.1.**
-
-Test scripts get added to this repository long before they are fully
-supported by SCALE. We use the outcome of this kind of testing to prioritise
-development. Contributions welcome!
-
-This table summarises the current state as of the most recent stable release
-of SCALE. "Needs" describes missing CUDA APIs/features that the project
-definitely needs. The list may not be exhaustive.
-
 | Project | Version | Status | Valid GFX | Notes | Needs |
 |---|---|---|---|---|---|
 |  Alien  |  scaletest  |  ✅  | gfx1201: ✅, gfx1100: ✅, gfx1030: ✅, gfx906: ✅ |   Needs patch to remove OpenGL interop  |  OpenGL Interop  |
@@ -66,9 +57,6 @@ definitely needs. The list may not be exhaustive.
 * ✅ (\*) Validation skipped, last known status was Valid
 * ❌ (\*) Validation skipped, last known status was Invalid
 * ❓ (\*) Validation skipped, no previous validation state to reference
-
-
-
 
 ## Running Tests
 

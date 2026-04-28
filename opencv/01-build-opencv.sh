@@ -5,8 +5,6 @@ set -e
 # Configure.
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_C_COMPILER="${CUDA_PATH}/bin/gcc" \
-    -DCMAKE_CXX_COMPILER="${CUDA_PATH}/bin/g++" \
     -DCUDA_ARCH_BIN="${GPU_ARCH}" \
     -DCUDA_ARCH_PTX="" \
     -DBUILD_EXAMPLES=On \
