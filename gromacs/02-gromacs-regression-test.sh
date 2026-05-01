@@ -8,5 +8,5 @@ OUT="$(pwd)/regression-test.txt"
 
 set +e
 
-make -C build tests -j
+make -O -C build tests -j
 ctest --test-dir build 2>&1 | tee "${OUT}"

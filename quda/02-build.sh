@@ -12,4 +12,4 @@ cmake \
     -B"build" \
     "quda"
 
-make -C "build" install -j"$(nproc)"
+make -O -C "build" install -j"$(nproc)"

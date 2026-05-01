@@ -13,4 +13,4 @@ cmake \
     -B"build" \
     "llama.cpp"
 
-make -C "build" install -j"$(nproc)"
+make -O -C "build" install -j"$(nproc)"

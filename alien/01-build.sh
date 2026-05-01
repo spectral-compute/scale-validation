@@ -13,4 +13,4 @@ cmake \
     "alien"
 
 # Build.
-make -C "build" -j"$(nproc)"
+-O -C "build" -j"$(nproc)"

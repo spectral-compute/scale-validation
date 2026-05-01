@@ -16,4 +16,4 @@ chmod u+x ./llm.c/dev/download_starter_pack.sh
 #make train_gpt2cu
 
 # Build the old version, at least!
-make -C llm.c train_gpt2fp32cu
+make -O -C llm.c train_gpt2fp32cu

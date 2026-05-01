@@ -26,4 +26,4 @@ cmake \
     -B"build" \
     "opencv"
 
-make -C "build" install -j"$(nproc)"
+make -O -C "build" install -j"$(nproc)"

@@ -14,4 +14,4 @@ cmake \
 	-B "build_ggml" \
 	"ggml"
 
-make -C "build_ggml" install -j"$(nproc)"
+make -O -C "build_ggml" install -j"$(nproc)"

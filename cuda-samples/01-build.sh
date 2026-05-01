@@ -10,4 +10,4 @@ cmake \
     -B"build" \
     "cuda-samples"
 
-make -C "build" -j"$(nproc)"
+-O -C "build" -j"$(nproc)"

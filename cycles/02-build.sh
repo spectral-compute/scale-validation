@@ -37,4 +37,4 @@ cmake \
     -B"build" \
     "cycles"
 
-make -C "build" install -j"$(nproc)"
+make -O -C "build" install -j"$(nproc)"

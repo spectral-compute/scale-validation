@@ -11,4 +11,4 @@ cmake \
     -B"build" \
     "StringZilla"
 
-make -C "build" -j"$(nproc)"
+make -O -C "build" -j"$(nproc)"

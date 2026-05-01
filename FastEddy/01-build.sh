@@ -18,4 +18,4 @@ if [ -z $NCAR_ROOT_MPI ]; then
   echo "Run the openmpi script first"
 fi
 
-make -C FastEddy/SRC/FEMAIN
+make -O -C FastEddy/SRC/FEMAIN

@@ -2,4 +2,4 @@
 
 set -ETeuo pipefail
 
-make -C jitify jitify_test NVCC="$(which nvcc)"
+make -O -C jitify jitify_test NVCC="$(which nvcc)"

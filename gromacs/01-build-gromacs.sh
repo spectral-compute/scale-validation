@@ -33,4 +33,4 @@ cmake \
     -B"build" \
     "gromacs"
 
-make -C build -j"$(nproc)" install
+make -O -C build -j"$(nproc)" install

@@ -13,4 +13,4 @@ cmake \
     -B"build" \
     "cuSZ"
 
-make -C "build" install -j"$(nproc)"
+make -O -C "build" install -j"$(nproc)"

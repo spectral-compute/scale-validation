@@ -16,7 +16,7 @@ cmake \
     -B"build" \
     "xgboost"
 
-make -C "build" install -j"$(nproc)"
+make -O -C "build" install -j"$(nproc)"
 
 # Build the Python package.
 cp -r "xgboost" "pybuild"

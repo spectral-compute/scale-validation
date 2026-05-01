@@ -2,4 +2,4 @@
 
 set -e
 
-make -C build -sk -j$(nproc) install
+make -O -C build -sk -j$(nproc) install

@@ -14,4 +14,4 @@ cmake \
     -B"build" \
     "kokkos"
 
-make -C "build" -j"$(nproc)"
+-O -C "build" -j"$(nproc)"

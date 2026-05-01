@@ -23,4 +23,4 @@ cd "build/src"
   --with-MPI-libs="mpi" \
   --with-MPI-lib-dirs="${MPI_DIR}/lib" \
 
-make test -j$(nproc)
+make test -j$(nproc) -O
