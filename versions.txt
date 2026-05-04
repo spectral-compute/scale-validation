@@ -1,4 +1,4 @@
-alien scaletest
+alien v4.12.3
 AMGX v2.4.0
 arrayfire v3.9.0
 bitnet 404980eecae38affa4871c3e419eae3f44536a95
