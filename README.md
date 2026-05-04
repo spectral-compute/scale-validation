@@ -13,7 +13,7 @@ Contributions welcome!
 
 | Project        | Version                    | Status                   | Valid GFX                 |
 |----------------|----------------------------|--------------------------|---------------------------|
-| Alien          | scaletest       | ❌       |        |
+| Alien          | v4.12.3       | ❌       |        |
 | AMGX           | v2.4.0        | ❌        |         |
 | arrayfire      | v3.9.0   | ❌   |    |
 | bitnet         | 404980eecae38a...      | ❌      |       |
