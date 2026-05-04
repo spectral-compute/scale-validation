@@ -10,6 +10,7 @@ cugraph fc880db
 cuml b17f2db
 cuSZ v0.16.2
 cutlass v4.1.0
+CUDALibrarySamples 5ac0f9a8032a1031ff4b99ff6112d528ade2995b
 CV-CUDA f769fe4
 cycles v4.4.0
 faiss v1.9.0
@@ -36,7 +37,7 @@ opencv 725e440
 opencv_contrib e247b68
 opencv_extra 5abbd7e
 PhysX 1e44a0e
-pytorch v2.2.1
+pytorch v2.9.0-rc4
 pytorch-1.8.1 v1.8.1
 quda 07822b61c6ab5fa9586233b03ac794bf33ab647e
 risc0 v1.2.2
@@ -54,4 +55,5 @@ xgboost v2.1.0
 House-Prices-Advanced-Regression f3a41e6
 datasets 5e987d5
 gromacs v2025.4
-HeCBench master
+HeCBench 42e8f09f3f7fa922f7b7099347e70884ebe27006
+cudahandbook 5bd3f275ca5ec109b78c7612432e7f1dd04b72f7

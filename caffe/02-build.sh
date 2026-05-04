@@ -13,8 +13,6 @@ cmake \
     -DCUDA_ARCH_BIN="${GPU_ARCH}" \
     -DCUDA_ARCH_PTX="${GPU_ARCH}" \
     -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}" \
-    -DCMAKE_C_COMPILER="${CUDA_PATH}/bin/gcc" \
-    -DCMAKE_CXX_COMPILER="${CUDA_PATH}/bin/g++" \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX="$(pwd)/../install" \
     -Dpython_version=3 \

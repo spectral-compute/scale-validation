@@ -6,8 +6,11 @@ set -ETeuo pipefail
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
-    -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/cuda-samples/install" \
+    -DCMAKE_CUDA_COMPILER="nvcc" \
+    -DCMAKE_CUDA_FLAGS="-Wno-unused-result -Wno-deprecated-declarations" \
     -B"build" \
-    "cuda-samples"
+    "cudahandbook"
 
+# Build.
 make -C "build" -j"$(nproc)"
+

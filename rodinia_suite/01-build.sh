@@ -2,4 +2,4 @@
 
 set -ETeuo pipefail
 
-./rodinia_suite/cuda/buildall.sh ${CUDA_PATH} ${CUDAARCHS} true
+./rodinia_suite/cuda/buildall.sh --cuda ${CUDA_PATH} --sm ${CUDAARCHS} --spectral

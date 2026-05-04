@@ -4,6 +4,12 @@ set -e
 
 GROMACS_VER=2025.4
 
+GMX_SIMD=Auto
+if [ "${NO_TUNE_NATIVE:-0}" == "1" ]; then
+    # Reasonably portable, should be a superset of x86_64-v3
+    GMX_SIMD=AVX2_256
+fi
+
 # Configure.
 cmake \
     -DGMX_TEST_TIMEOUT_FACTOR=4 \
@@ -23,6 +29,7 @@ cmake \
     -DGMX_HAVE_GPU_GRAPH_SUPPORT=OFF \
     -DGMX_NNPOT=OFF  \
     -DGMX_OPENMP=OFF \
+    -DGMX_SIMD=$GMX_SIMD \
     -B"build" \
     "gromacs"
 

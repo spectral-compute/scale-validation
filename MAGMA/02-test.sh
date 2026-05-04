@@ -2,5 +2,7 @@
 
 set -e
 
+cp MAGMA/testing/run_tests.py build/testing/
+
 cd "build/testing/"
-../../testing/run_tests.py
+./run_tests.py

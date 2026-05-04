@@ -1,15 +1,38 @@
 #!/bin/bash
+set -ETeuo pipefail
 
-set -e
+SCRIPT_DIR="$(realpath "$(dirname "$0")")"
+OUT_DIR="$(realpath .)"
+SRCDIR="${OUT_DIR}/pytorch"
+BUILDDIR="${SRCDIR}/build"
 
-cd "build"
+cd "${SRCDIR}"
 
-#############
-# CONFIGURE #
-#############
+# 1) Python venv setup #
+# Single venv per PyTorch checkout
+if [[ ! -d .venv ]]; then
+  python3 -m venv .venv
+fi
 
-export CC="${CUDA_PATH}/bin/gcc"
-export CXX="${CUDA_PATH}/bin/g++"
+# shellcheck source=/dev/null
+source .venv/bin/activate
+
+PYBIN=python
+
+${PYBIN} -V
+${PYBIN} -m pip -V
+
+# Basic build tooling + PyTorch build deps used by torchgen/cmake
+${PYBIN} -m pip install --upgrade pip setuptools wheel
+${PYBIN} -m pip install pyyaml typing_extensions jinja2
+
+# 2) Configure C/CUDA env  #
+cd "${BUILDDIR}/pytorch"
+
+export CC="${CC:-/usr/bin/gcc}"
+export CXX="${CXX:-/usr/bin/g++}"
+export CUDAHOSTCXX="${CXX}"
+
 export CFLAGS="\
     -march=native \
     -mtune=native \
@@ -18,22 +41,18 @@ export CFLAGS="\
     -Wno-dangling-reference \
     -Wno-redundant-move
 "
+export CXXFLAGS="${CFLAGS}"
 export _GLIBCXX_USE_CXX11_ABI=TRUE
-
-export CUDAHOSTCXX="${CUDA_PATH}/bin/g++"
-
 export CUDNN_INCLUDE_DIR=/usr/include
 export CUDNN_LIB_DIR=/usr/lib
 export USE_SYSTEM_NCCL=ON
-
-# Wat.
-export CUDAARCHS="86"
-export TORCH_CUDA_ARCH_LIST="8.6"
-
+export CUDAARCHS="89"
+export TORCH_CUDA_ARCH_LIST="8.9"
 export USE_CUDA=ON
 export USE_CUDNN=OFF
+export USE_CUFILE=OFF
 export CAFFE2_USE_CUDNN=OFF
-
+export USE_CUSPARSELT=OFF
 export USE_NCCL=OFF
 export USE_DISTRIBUTED=OFF
 export USE_FAKELOWP=OFF
@@ -49,53 +68,39 @@ export USE_MKLDNN=OFF
 export USE_NUMPY=OFF
 export USE_OPENCV=OFF
 export USE_ROCM=OFF
-export USE_CUSPARSELT=OFF
-
 export BUILD_CAFFE2=ON
 export BUILD_CAFFE2_OPS=ON
-
-export BUILD_BINARY=ON
-export BUILD_TEST=ON
-
-export MAX_JOBS="$(nproc)"
-
-
-#########
+export BUILD_BINARY=OFF
+export BUILD_TEST=OFF
+export CMAKE_POLICY_VERSION_MINIMUM=3.5
+export CMAKE_ARGS="-DBUILD_BINARY=OFF -DBUILD_TEST=OFF"
+echo "CMAKE_ARGS=${CMAKE_ARGS}"
 # BUILD #
-#########
+${PYBIN} setup.py build
 
-# Build PyTorch
-python3 setup.py build
-
-
-###########
 # INSTALL #
-###########
+INSTALL_DIR="${BUILDDIR}/../install/"
 
-# Install PyTorch Python
-INSTALL_DIR="$(pwd)"/../install/
-python3 setup.py install --root="${INSTALL_DIR}" --optimize=1 --skip-build
+# Install PyTorch into a staged root under install/
+${PYBIN} setup.py install --root="${INSTALL_DIR}" --optimize=1 --skip-build
 
-# Link the C++ API to a sensible place (useful for testing).
-function symlinkAllIn
-{
+# Link the C++ API to a sensible place #
+function symlinkAllIn {
     _DST="$1"
     _SRC="$2"
 
     mkdir -p "${_DST}"
-    for F in "${_SRC}"/* ; do
+    for F in "${_SRC}"/*; do
         B="$(basename "${F}")"
         ln -s "${F}" "${_DST}/${B}"
     done
 }
 
-PYVER=$(python3 --version | sed -E 's/Python ([0-9]+\.[0-9]+)\.[0-9]+/\1/')
+PYVER="$(${PYBIN} --version | sed -E 's/Python ([0-9]+\.[0-9]+)\.[0-9]+/\1/')"
 SRC="${INSTALL_DIR}/usr/lib/python${PYVER}/site-packages/torch"
 DST="${INSTALL_DIR}/usr"
 
 symlinkAllIn "${DST}/lib" "${SRC}/lib"
-for D in "${SRC}/include/"* "${SRC}/include/torch/csrc/api/include/"* ; do
-    symlinkAllIn "${DST}/include/$(basename ${D})" "${D}"
+for D in "${SRC}/include/"* "${SRC}/include/torch/csrc/api/include/"*; do
+    symlinkAllIn "${DST}/include/$(basename "${D}")" "${D}"
 done
-
-cd -

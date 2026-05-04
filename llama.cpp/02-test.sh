@@ -7,10 +7,10 @@ for F in install/bin/test-* ; do
     echo "Running test $F"
 
     case "${F}" in
-        test-tokenizer-*-llama)
+        install/bin/test-tokenizer-*-llama)
             ./"${F}" ${SRC_DIR}/models/ggml-vocab-llama.gguf
         ;;
-        test-tokenizer-*)
+        install/bin/test-tokenizer-*)
             ./"${F}" ${SRC_DIR}/models/ggml-vocab-falcon.gguf
         ;;
         *)
