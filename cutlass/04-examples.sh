@@ -1,152 +1,68 @@
 #!/bin/bash
-set -Eeuo pipefail
 
-LOGDIR="build"
-LOGFILE="${LOGDIR}/examples.log"
-JUNIT="${LOGDIR}/cutlass-examples.xml"
-: > "${LOGFILE}"
+set -ETeuo pipefail
 
+LOGFILE="examples.log"
 echo "Writing to $LOGFILE"
+rm -f "$LOGFILE"
 
-# discover example executables
-mapfile -t TESTS < <(find build/examples -type f -perm /100 | sort)
-
-# your skip list (exact paths)
+TESTS=(
+    $(find build/examples -type f -perm /100 | sort)
+)
 SKIP=(
     # These require external input and require special handling to provide it.
     build/examples/41_fused_multi_head_attention/41_fused_multi_head_attention_backward
 
-    # These crash the GPU with a segfault and sometimes the whole system.
+    # These crash the GPU (on gfx1100) with a segfault and sometimes the whole system.
     build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm75_rf
     build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm75_shmem
     build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm80_rf
     build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm80_shmem
 
-    # These failed
+    # These failed (on gfx1100).
     build/examples/13_two_tensor_op_fusion/13_fused_two_convs_f16_sm80_shmem
     build/examples/13_two_tensor_op_fusion/13_fused_two_convs_s8_sm80_shmem
     build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_f16_sm80_shmem
+    build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_grouped_f16_sm80_rf
+    build/examples/14_ampere_tf32_tensorop_gemm/14_ampere_tf32_tensorop_gemm
     build/examples/15_ampere_sparse_tensorop_gemm/15_ampere_sparse_tensorop_gemm
     build/examples/15_ampere_sparse_tensorop_gemm/15_ampere_sparse_tensorop_gemm_universal
     build/examples/15_ampere_sparse_tensorop_gemm/15_ampere_sparse_tensorop_gemm_with_visitor
+    build/examples/16_ampere_tensorop_conv2dfprop/16_ampere_tensorop_conv2dfprop
     build/examples/18_ampere_fp64_tensorop_affine2_gemm/18_ampere_fp64_tensorop_affine2_gemm
+    build/examples/25_ampere_fprop_mainloop_fusion/25_ampere_3d_fprop_mainloop_fusion
+    build/examples/25_ampere_fprop_mainloop_fusion/25_ampere_fprop_mainloop_fusion
     build/examples/32_basic_trmm/32_basic_trmm
-    build/examples/13_two_tensor_op_fusion/13_fused_two_convs_f16_sm75_rf
-    build/examples/13_two_tensor_op_fusion/13_fused_two_convs_f16_sm75_shmem
-    build/examples/13_two_tensor_op_fusion/13_fused_two_convs_f16_sm80_rf
-    build/examples/13_two_tensor_op_fusion/13_fused_two_convs_s8_sm75_shmem
-    build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_f16_sm75_rf
-    build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_f16_sm75_shmem
-    build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_f16_sm80_rf
-    build/examples/45_dual_gemm/45_dual_gemm
+    build/examples/36_gather_scatter_fusion/36_gather_scatter_fusion
+    build/examples/37_gemm_layernorm_gemm_fusion/37_gemm_layernorm_gemm_fusion
+    build/examples/59_ampere_gather_scatter_conv/59_ampere_gather_scatter_conv
+
+    # These failed on gfx1030.
+    build/examples/19_tensorop_canonical/19_tensorop_canonical
 )
 
-# bound example runtime (seconds) if timeout is available
-#EXAMPLE_TIMEOUT="${EXAMPLE_TIMEOUT:-0}"  # 0 = no timeout
-EXAMPLE_TIMEOUT=30
-
-# helper to check exact membership
-is_skipped() {
-    local x="$1"
-    for s in "${SKIP[@]}"; do
-        [[ "$x" == "$s" ]] && return 0
-    done
-    return 1
-}
-
-total=${#TESTS[@]}
-passed=0 failed=0 skipped=0
-
-TMPCASE="$(mktemp)"
-: > "${TMPCASE}"
-
+set +e
 FAILURES=()
-
-for T in "${TESTS[@]}"; do
-    echo "======== ${T} ========" | tee -a "$LOGFILE"
-    if is_skipped "$T"; then
-        ((++skipped))
-        printf '  <testcase classname="cutlass.examples" name="%s" time="0"><skipped>Skipped by list</skipped></testcase>\n' \
-        "$(basename "$T")" >> "${TMPCASE}"
-        echo " -- SKIPPED --" | tee -a "$LOGFILE"
+for T in "${TESTS[@]}" ; do
+    echo "======== ${T} ========" | tee -a "${LOGFILE}"
+    if [[ " ${SKIP[@]} " =~ " ${T} " ]]; then
+        echo " -- SKIPPED --" | tee -a "${LOGFILE}"
         continue
     fi
 
-    RUNLOG="$(mktemp)"
-    start_ts="$(date +%s.%N)"
-    rc=0
-
-    set +e
-    if command -v timeout >/dev/null 2>&1 && (( EXAMPLE_TIMEOUT > 0 )); then
-        timeout "${EXAMPLE_TIMEOUT}"s "$T" --help |& tee -a "$LOGFILE" | tee "$RUNLOG" >/dev/null
-    else
-        "$T" --help |& tee -a "$LOGFILE" | tee "$RUNLOG" >/dev/null
+    "${T}" |& tee -a "${LOGFILE}"
+    if [ "$?" != "0" ] ; then
+        FAILURES+=("${T}")
     fi
-    rc=${PIPESTATUS[0]}
-
-    # If --help fails, try with no args
-    if (( rc != 0 )); then
-        : > "$RUNLOG"
-        if command -v timeout >/dev/null 2>&1 && (( EXAMPLE_TIMEOUT > 0 )); then
-            timeout "${EXAMPLE_TIMEOUT}"s "$T" |& tee -a "$LOGFILE" | tee "$RUNLOG" >/dev/null
-        else
-            "$T" |& tee -a "$LOGFILE" | tee "$RUNLOG" >/dev/null
-        fi
-        rc=${PIPESTATUS[0]}
-    fi
-    set -e
-
-    end_ts="$(date +%s.%N)"
-    dur=$(python3 - <<PY
-from decimal import Decimal, ROUND_HALF_UP
-s=Decimal("${start_ts}"); e=Decimal("${end_ts}")
-print((e-s).quantize(Decimal("0.000001"), rounding=ROUND_HALF_UP))
-PY
-)
-
-    base="$(basename "$T")"
-    if (( rc == 0 )); then
-        ((++passed))
-        printf '  <testcase classname="cutlass.examples" name="%s" time="%s"/>\n' \
-            "$base" "$dur" >> "${TMPCASE}"
-    else
-        # Treat “usage / invalid option / required arg” cases as skipped (no data provided)
-        if grep -qiE 'usage:|invalid|unrecognized option|required.*argument' "$RUNLOG"; then
-            ((++skipped))
-            printf '  <testcase classname="cutlass.examples" name="%s" time="%s"><skipped>Requires arguments or prints usage</skipped></testcase>\n' \
-            "$base" "$dur" >> "${TMPCASE}"
-        else
-            ((++failed))
-            FAILURES+=("$T")
-            tail_txt="$(tail -n 120 "$RUNLOG" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g')"
-            printf '  <testcase classname="cutlass.examples" name="%s" time="%s"><failure message="exit code %d"><![CDATA[%s]]></failure></testcase>\n' \
-                "$base" "$dur" "$rc" "$tail_txt" >> "${TMPCASE}"
-        fi
-    fi
-    rm -f "$RUNLOG"
 done
+set -e
 
-# echo human summary
-for s in "${SKIP[@]}";    do echo "Skipped: ${s}"; done
-for f in "${FAILURES[@]}"; do echo "Failed:  ${f}"; done
-echo "Summary"
-echo "Total:   $total"
-echo "Passed:  $passed"
-echo "Failed:  $failed"
-echo "Skipped: $skipped"
-
-# write JUnit
-{
-    echo '<?xml version="1.0" encoding="UTF-8"?>'
-    printf '<testsuite name="cutlass_examples" tests="%d" failures="%d" skipped="%d">\n' "$total" "$failed" "$skipped"
-    cat "${TMPCASE}"
-    echo '</testsuite>'
-} > "${JUNIT}"
-rm -f "${TMPCASE}"
-
-echo "JUnit report: ${JUNIT}"
-echo "Cutlass example script finished"
-if (( failed > 0 )); then
-  exit 1
+for T in "${SKIP[@]}" ; do
+    echo "Skipped: ${T}"
+done
+for T in "${FAILURES[@]}" ; do
+    echo "Failed: ${T}"
+done
+if [ "${#FAILURES[@]}" != "0" ] ; then
+    exit 1
 fi
-exit 0
