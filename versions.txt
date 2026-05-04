@@ -16,6 +16,7 @@ cycles v4.4.0
 faiss v1.9.0
 FastEddy v2.0.0
 FLAMEGPU2 v2.0.0-rc.2
+ffmpeg n7.1.3
 flashinfer v0.2.8
 ggml d3a58b0
 gomc 4c12477
