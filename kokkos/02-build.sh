@@ -8,7 +8,7 @@ set -e
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DKokkos_ENABLE_CUDA=ON \
-    -DKokkos_ARCH_ADA89=ON \
+    -DKokkos_ARCH_AMPERE86=ON \
     -DCMAKE_CXX_COMPILER=clang++ \
     -DKokkos_ENABLE_TESTS=ON \
     -B"build" \
