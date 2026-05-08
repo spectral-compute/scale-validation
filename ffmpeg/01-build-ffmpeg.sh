@@ -16,7 +16,8 @@ cd ffmpeg
     --enable-nonfree \
     --disable-x86asm \
     --enable-filter=scale_cuda \
-    --enable-cuda-nvcc
+    --enable-cuda-nvcc \
+    --nvccflags="-gencode arch=compute_$CUDAARCHS,code=sm_$CUDAARCHS -O2"
 
 make -j"$(nproc)"
 make install
