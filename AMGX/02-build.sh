@@ -8,19 +8,12 @@ if [ ! -e "${OUT_DIR}/openmpi/install" ] ; then
     exit 1
 fi
 
-# Configure.
-if [ -z "$(which scalediag)" ] || scalediag full-driver p2p ; then
-    CMAKE_NO_MPI=Off
-else
-    CMAKE_NO_MPI=On
-fi
-
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_CUDA_COMPILER="nvcc" \
     -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
     -DCUDA_ARCH="${CUDAARCHS}" \
-    -DCMAKE_NO_MPI=${CMAKE_NO_MPI} \
+    -DCMAKE_NO_MPI=Off \
     -B"build" \
     "AMGX"
 
