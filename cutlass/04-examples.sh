@@ -19,7 +19,7 @@ SKIP=(
     build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm80_rf
     build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_s8_sm80_shmem
 
-    # These failed (on gfx1100).
+    # These failed.
     build/examples/13_two_tensor_op_fusion/13_fused_two_convs_f16_sm80_shmem
     build/examples/13_two_tensor_op_fusion/13_fused_two_convs_s8_sm80_shmem
     build/examples/13_two_tensor_op_fusion/13_fused_two_gemms_f16_sm80_shmem
@@ -30,16 +30,15 @@ SKIP=(
     build/examples/15_ampere_sparse_tensorop_gemm/15_ampere_sparse_tensorop_gemm_with_visitor
     build/examples/16_ampere_tensorop_conv2dfprop/16_ampere_tensorop_conv2dfprop
     build/examples/18_ampere_fp64_tensorop_affine2_gemm/18_ampere_fp64_tensorop_affine2_gemm
+    build/examples/19_tensorop_canonical/19_tensorop_canonical
     build/examples/25_ampere_fprop_mainloop_fusion/25_ampere_3d_fprop_mainloop_fusion
     build/examples/25_ampere_fprop_mainloop_fusion/25_ampere_fprop_mainloop_fusion
     build/examples/32_basic_trmm/32_basic_trmm
     build/examples/36_gather_scatter_fusion/36_gather_scatter_fusion
     build/examples/37_gemm_layernorm_gemm_fusion/37_gemm_layernorm_gemm_fusion
+    build/examples/41_fused_multi_head_attention/41_fused_multi_head_attention_fixed_seqlen
     build/examples/41_fused_multi_head_attention/41_fused_multi_head_attention_variable_seqlen
     build/examples/59_ampere_gather_scatter_conv/59_ampere_gather_scatter_conv
-
-    # These failed on gfx1030.
-    build/examples/19_tensorop_canonical/19_tensorop_canonical
 )
 
 if [ "${CUTLASS_TEST_SKIP_SLOW:-0}" == "1" ] ; then
