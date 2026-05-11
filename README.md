@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <6564205d>.**
+**This shows the test status for SCALE: master <88791eac>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -21,7 +21,7 @@ Contributions welcome!
 | ctranslate2    | v4.5.0 | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | cuml           | b17f2db        | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | cuSZ           | v0.16.2        | ✅|✅|✅|✅|✅|✅|
-| CUTLASS        | v4.1.0     | ❌|❌|✅|✅|✅|🛠️️|
+| CUTLASS        | v4.1.0     | ❌|✅|✅|✅|✅|🛠️️|
 | CV-CUDA        | f769fe4     | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | cycles         | v4.4.0      | ✅|✅|✅|✅|✅|✅|
 | faiss          | v1.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
@@ -33,11 +33,11 @@ Contributions welcome!
 | gpu\_jpeg2k    | ee715e9  | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | GPUJPEG        | 3e045d1     | ✅|✅|✅|✅|✅|✅|
 | GROMACS        | v2025.4     | ✅|✅|✅|✅|✅|✅|
-| hashcat        | 6716447dfce969...     | ✅|✅|✅|✅|✅|✅|
+| hashcat        | 6716447dfce969...     | ✅|❌|✅|✅|✅|✅|
 | hashinator     | 34cf188  | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | HeCBench       | 42e8f09f3f7fa9...    | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | hypre          | v2.33.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| jitify         | master      | ❌|✅|🛠️️|✅|✅|❌|
+| jitify         | master      | ✅|❌|🛠️️|✅|✅|❌|
 | llama.cpp      |    | ✅|✅|✅|✅|✅|✅|
 | llm.c          | 7ecd8906afe6ed...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | MAGMA          | v2.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
