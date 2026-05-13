@@ -5,7 +5,7 @@ set -e
 # This is incredibly cursed, but it's the official instructions!
 # This generates part of the cmake build system using make.
 echo -e "BACKEND = cuda\nFORT = true\nGPU_TARGET=sm_${CUDAARCHS}" > MAGMA/make.inc
-make -C MAGMA -j"$(nproc)" generate
+make -O -C MAGMA -j"$(nproc)" generate
 
 sed -i"" -Ee 's|find_package\( *OpenMP *\)||g' "MAGMA/CMakeLists.txt"
 
@@ -21,4 +21,4 @@ cmake \
     -B"build" \
     "MAGMA"
 
-make -C "build" -j"$(nproc)"
+make -O -C "build" -j"$(nproc)"

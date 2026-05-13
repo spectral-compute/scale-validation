@@ -23,7 +23,7 @@ for URL in https://data.spectralcompute.co.uk/gromacs/benchMEM.zip \
            https://data.spectralcompute.co.uk/gromacs/benchSTC.zip \
            https://data.spectralcompute.co.uk/gromacs/benchSTI.zip ; do
     if [ ! -e "$(echo "${URL}" | sed -E 's;.*/;;')" ] ; then
-        wget "${URL}"
+        wget -q "${URL}"
     fi
 done
 cd -

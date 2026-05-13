@@ -8,8 +8,9 @@ cmake \
     -DCMAKE_CUDA_COMPILER="nvcc" \
     -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
     -DLLAMA_CUBLAS=ON \
+    -DLLAMA_NATIVE=OFF \
     -DCMAKE_INSTALL_PREFIX="install" \
     -B"build" \
     "llama.cpp"
 
-make -C "build" install -j"$(nproc)"
+make -O -C "build" install -j"$(nproc)"

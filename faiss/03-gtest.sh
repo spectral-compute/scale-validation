@@ -2,4 +2,4 @@
 
 set -e
 
-ctest --test-dir build --output-on-failure --output-junit faiss.xml -E "MEM_LEAK.ivfflat"
+ctest --test-dir build --verbose --output-junit faiss.xml -E "MEM_LEAK.ivfflat"

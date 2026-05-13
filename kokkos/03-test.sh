@@ -2,6 +2,6 @@
 
 set -e
 
-ctest --test-dir build/ --output-on-failure —parallel 8
+ctest --test-dir build/ —parallel 8 --verbose
 
 cd -

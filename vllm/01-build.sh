@@ -14,7 +14,7 @@ cmake \
     -B"build" \
     "vllm"
 
-make -C "build" install -j"$(nproc)"
+make -O -C "build" install -j"$(nproc)"
 #
 ## Build the Python package, and install it.
 #cd "${OUT_DIR}/vllm/build/vllm/python"

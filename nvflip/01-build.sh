@@ -9,4 +9,4 @@ cmake \
     -B"build" \
     "nvflip/src"
 
-make -C "build" -j"$(nproc)"
+make -O -C "build" -j"$(nproc)"

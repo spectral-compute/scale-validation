@@ -1,0 +1,18 @@
+diff --git a/source/EngineGpuKernels/SimulationKernels.cu b/source/EngineGpuKernels/SimulationKernels.cu
+index 6bc929121..08edcc03a 100644
+--- a/source/EngineGpuKernels/SimulationKernels.cu
++++ b/source/EngineGpuKernels/SimulationKernels.cu
+@@ -220,8 +220,8 @@ __global__ void cudaResetDensity(SimulationData data)
+ 
+ //This is the only calcKernel that uses dynamic parallelism.
+ //When it is removed, performance drops by about 20% for unknown reasons.
+-__global__ void nestedDummy() {}
+-__global__ void dummy()
+-{
+-    nestedDummy<<<1, 1>>>();
+-}
++//__global__ void nestedDummy() {}
++//__global__ void dummy()
++//{
++//    nestedDummy<<<1, 1>>>();
++//}

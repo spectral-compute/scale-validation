@@ -19,5 +19,5 @@ cmake \
     -B"build" \
     caffe
 
-make -C build -j"$(nproc)" install
-make -C build -j"$(nproc)" test.testbin
+make -O -C build -j"$(nproc)" install
+make -O -C build -j"$(nproc)" test.testbin
