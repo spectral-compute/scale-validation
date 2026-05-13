@@ -15,7 +15,7 @@ cmake \
     -B"build" \
     "faiss"
 
-make -C "build" install -j"$(nproc)"
+make -O -C "build" install -j"$(nproc)"
 
 # Build the Python package, and install it.
 cd "build/faiss/python"

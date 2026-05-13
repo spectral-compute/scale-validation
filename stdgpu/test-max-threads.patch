@@ -1,0 +1,22 @@
+commit 322e9b02035137c506f0294182e56c5636a52566 (HEAD)
+Author: Aria Shrimpton <aria@spectralcompute.co.uk>
+Date:   Thu May 7 16:12:24 2026 +0000
+
+    Clamp the maximum number of threads for _parallel tests
+
+    This causes problems on machines with drastically more
+    threads than corresponding GPU memory, since most the tests
+    that use this helper function assume the two are correlated.
+
+diff --git a/tests/test_utils.h b/tests/test_utils.h
+index 8fcebcc..5027df8 100644
+--- a/tests/test_utils.h
++++ b/tests/test_utils.h
+@@ -81,6 +81,6 @@ inline void
+ for_each_concurrent_thread(F&& f, Args&&... args)
+ {
+     const stdgpu::index_t concurrent_threads =
+-            std::max<stdgpu::index_t>(1, static_cast<stdgpu::index_t>(std::thread::hardware_concurrency()));
++            std::min<stdgpu::index_t>(32, std::max<stdgpu::index_t>(1, static_cast<stdgpu::index_t>(std::thread::hardware_concurrency())));
+     std::vector<std::thread> threads;
+     threads.reserve(static_cast<std::size_t>(concurrent_threads));

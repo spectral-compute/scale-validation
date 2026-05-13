@@ -2,6 +2,9 @@
 
 set -ETeuo pipefail
 
+export VCPKG_KEEP_ENV_VARS=CMAKE_POLICY_VERSION_MINIMUM
+export CMAKE_POLICY_VERSION_MINIMUM=3.5
+
 # Configure.
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
@@ -13,4 +16,4 @@ cmake \
     "alien"
 
 # Build.
-make -C "build" -j"$(nproc)"
+make -O -C "build" -j"$(nproc)"

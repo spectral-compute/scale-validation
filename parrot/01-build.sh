@@ -10,4 +10,4 @@ cmake \
     -B"build" \
     "parrot"
 
-make -C "build" -j"$(nproc)"
+make -O -C "build" -j"$(nproc)"
