@@ -39,4 +39,13 @@ do_clone_hash HeCBench https://github.com/ORNL/HeCBench.git "$(get_version HeCBe
     sed -i /prefetch/d src/CMakeLists.txt
     sed -i /streamOrderedAllocation/d src/CMakeLists.txt
     sed -i /blas-fp8gemm/d src/CMakeLists.txt
+
+    # These hang
+    sed -i /cm/d src/CMakeLists.txt
+    sed -i /divergence/d src/CMakeLists.txt
+    sed -i /ising/d src/CMakeLists.txt
+    sed -i /mdh/d src/CMakeLists.txt
+    sed -i /laplace/d src/CMakeLists.txt
+    sed -i /logic-rewrite/d src/CMakeLists.txt
+
 )
