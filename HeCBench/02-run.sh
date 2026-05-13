@@ -10,9 +10,14 @@ NUMBERSFILE="$BUILD_DIR/hecbench-numbers.txt"
 XMLFILE="$BUILD_DIR/hecbench-run.xml"
 TMPXML="$BUILD_DIR/.tmp_cases.xml"
 
-: > "$LOGFILE"
-: > "$NUMBERSFILE"
-: > "$TMPXML"
+# : > "$LOGFILE"
+# : > "$NUMBERSFILE"
+# : > "$TMPXML"
+
+CUDA_ARCH_NUM="${CUDAARCHS#sm_}"
+
+python3 $OUT_DIR/tools/hecbench --verbose run --model cuda --preset scale-cuda-sm$CUDA_ARCH_NUM
+exit
 
 
 # These tests are excluded for the following reasons:
@@ -26,7 +31,6 @@ exclude=(
   logic-rewrite
 
   # Outright failures
-  ace
   blas-gemmEx
   bsw
   che
@@ -106,9 +110,12 @@ for exe in $(
 
   echo "Executing $name" | tee -a "$LOGFILE"
 
+  pushd $(dirname $exe)
+  echo "ANDY: In directory -> $(pwd)"
+
   start=$(date +%s)
 
-  if "$exe" > "$runlog" 2>&1; then
+  if make ARCH=sm_$CUDA_ARCH_NUM run > "$runlog" 2>&1; then
     passed=$((passed + 1))
     status="passed"
   else
@@ -118,6 +125,8 @@ for exe in $(
 
   end=$(date +%s)
   runtime=$((end - start))
+
+  popd
 
   cat "$runlog" >> "$LOGFILE"
 
