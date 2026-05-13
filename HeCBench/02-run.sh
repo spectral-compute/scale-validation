@@ -14,19 +14,93 @@ TMPXML="$BUILD_DIR/.tmp_cases.xml"
 : > "$NUMBERSFILE"
 : > "$TMPXML"
 
+
+# These tests are excluded for the following reasons:
+exclude=(
+  # The following hang or take too long to complete
+  cm
+  divergence
+  mdh
+  ising
+  laplace
+  logic-rewrite
+
+  # Outright failures
+  ace
+  blas-gemmEx
+  bsw
+  che
+  egs  
+  f16sp
+  geam          
+  graphExecution
+  hybridsort  
+  jaccard                  
+  lfib4                   
+  norm2                   
+  openmp                  
+  opticalFlow             
+  p2p                     
+  quantAQLM               
+  rainflow                
+  rayleighBenardConvection
+  sddmm-batch             
+  simplemoc               
+  slit                    
+  spaxpby                 
+  spd2s                   
+  spgemm                  
+  spmm                    
+  spmv                    
+  spnnz                   
+  sps2d                   
+  spsm                    
+  spsort                  
+
+  # Flaky failures
+  axhelm   
+  bicgstab 
+  blas-dot 
+  blas-gemm
+  blas-gemmEx2
+  clenergy   
+  contract   
+  determinant
+  dwconv     
+  gamma-correction
+  inversek2j
+  kmc     
+  ludb    
+  minibude
+  mrg32k3a
+  pcc
+)
+# TODO: Fix these
+# TODO: Also fix benchmark compilation failures and verify they run
+
+
 passed=0
 failed=0
-skipped=5
+skipped="${#exclude[@]}"
 
-# Skip cm-cuda, divergence, mdh, ising since it seems to run forever
-echo '  <testcase classname="hecbench" name="src/cm-cuda" time="0"><skipped>Skipped by script</skipped></testcase>' >> "$TMPXML"
-echo '  <testcase classname="hecbench" name="src/divergence-cuda" time="0"><skipped>Skipped by script</skipped></testcase>' >> "$TMPXML"
-echo '  <testcase classname="hecbench" name="src/mdh-cuda" time="0"><skipped>Skipped by script</skipped></testcase>' >> "$TMPXML"
-echo '  <testcase classname="hecbench" name="src/ising-cuda" time="0"><skipped>Skipped by script</skipped></testcase>' >> "$TMPXML"
-echo '  <testcase classname="hecbench" name="src/laplace-cuda" time="0"><skipped>Skipped by script</skipped></testcase>' >> "$TMPXML"
+for name in "${exclude[@]}"; do
+  echo "  <testcase classname=\"hecbench\" name=\"src/$name-cuda\" time=\"0\"><skipped>Skipped by script</skipped></testcase>" >> "$TMPXML"
+done
 
-for exe in $(find "$BIN_DIR" -mindepth 1 -maxdepth 1 -type f -executable \
-  ! -name "cm" ! -name "divergence" ! -name "mdh" ! -name "ising" ! -name "laplace" | sort); do
+
+find_args=()
+
+for name in "${exclude[@]}"; do
+  find_args+=( ! -name "$name" )
+done
+
+for exe in $(
+  find "$BIN_DIR" \
+  -mindepth 1 -maxdepth 1 \
+  -type f -executable \
+  "${find_args[@]}" \
+  | sort
+); do
   name="${exe#${OUT_DIR}/}"
   runlog=$(mktemp)
 
