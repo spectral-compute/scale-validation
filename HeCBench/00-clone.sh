@@ -33,6 +33,7 @@ do_clone_hash HeCBench https://github.com/ORNL/HeCBench.git "$(get_version HeCBe
     # TODO: Investigate if still failing
     sed -i /dp4a/d src/CMakeLists.txt
 
+    # Compilation Failures (on gfx1201)
     # FIXME: These prevent the benchmark from compiling on gfx1201.
     sed -i /gels/d src/CMakeLists.txt
     sed -i /prefetch/d src/CMakeLists.txt
