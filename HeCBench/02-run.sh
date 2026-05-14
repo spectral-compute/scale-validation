@@ -3,9 +3,9 @@ set -u
 
 OUT_DIR="$(realpath .)/HeCBench"
 
-DATA_FILE="$OUT_DIR/hecbench.cuda-sm$CUDA_ARCH_NUM.json"
-
 CUDA_ARCH_NUM="${CUDAARCHS#sm_}"
+
+DATA_FILE="$OUT_DIR/hecbench.cuda-sm$CUDA_ARCH_NUM.json"
 
 python3 $OUT_DIR/tools/hecbench run \
   --model cuda \
