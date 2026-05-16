@@ -1,0 +1,26 @@
+diff --git Makefile Makefile
+index cde6e5d..f06ea48 100644
+--- Makefile
++++ Makefile
+@@ -14,7 +14,7 @@ INC = -I. -I$(LIB_DIR) -I$(LIB_DIR)/micropython -I$(LIB_BUILD_DIR)
+ 
+ # Build Settings
+ ifeq ($(TARGET),cuda)
+-CC = /usr/local/cuda/bin/nvcc
++CC = nvcc
+ CFLAGS = $(INC) -x cu -dc -Xcompiler -fpermissive -D"restrict=" -O1 -DNDEBUG -rdc=true
+ LDFLAGS = -lcudadevrt
+ else
+diff --git gpusnek/Makefile gpusnek/Makefile
+index 50e7abe..b706718 100644
+--- gpusnek/Makefile
++++ gpusnek/Makefile
+@@ -6,7 +6,7 @@ TARGET ?= cuda
+ include micropython/py/mkenv.mk
+ 
+ # CUDA compiler location
+-NVCC = /usr/local/cuda/bin/nvcc
++NVCC = nvcc
+ 
+ # qstr definitions (must come before including py.mk)
+ QSTR_DEFS = qstrdefsport.h
