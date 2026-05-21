@@ -41,6 +41,7 @@ Contributions welcome!
 | llama.cpp      |                   | ✅     | ✅     | ✅      | ✅      | ✅      | ✅     |
 | llm.c          | 7ecd8906afe6ed... | ❌      | ❌      | ❌       | ❌       | ❌       | ❌      |
 | MAGMA          | v2.9.0            | ❌      | ❌      | ❌       | ❌       | ❌       | ❌      |
+| NIXL           | e128059af332df... | ❓     | ❓     | ❓      | ❓      | ❓      | ❓     |
 | nvflip         | 1eb247c           | ✅     | ✅     | ✅      | ✅      | ✅      | ❌     |
 | OpenCV         | 725e440           | ❌      | ❌      | ❌       | ❌       | ❌       | ❌      |
 | openmpi        | v4.1              | ✅     | ✅     | ✅      | ✅      | ✅      | ✅     |
