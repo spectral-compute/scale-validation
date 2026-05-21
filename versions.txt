@@ -34,6 +34,7 @@ llama.cpp b2000
 llm.c 7ecd8906afe6ed7a2b2cdb731c042f26d525b820
 MAGMA v2.9.0
 nerf-cuda main
+nixl e128059af332df6e05de218d24b04c66a64b030a
 nvflip 1eb247c
 openmpi v4.1
 opencv 725e440
@@ -52,6 +53,7 @@ thrust 756c5af
 timemachine 01f14f8
 tiny-cuda-nn v2.0
 UppASD gpu_new
+ucx c982cef7cdfc80008c838741ff4cc38a4ce54c89
 vllm v0.6.3
 whispercpp v1.7.1
 xgboost v2.1.0
