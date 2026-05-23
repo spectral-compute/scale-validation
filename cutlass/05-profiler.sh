@@ -14,3 +14,8 @@ for OP in gemm block_scaled_gemm blockwise_gemm spgemm conv2d conv3d rank_k rank
     build/tools/profiler/cutlass_profiler --operation="${OP}" --output="${OUTDIR}/cutlass_profiler" \
         |& tee -a "${LOGFILE}"
 done
+
+# zip the CSVs to provide a convenient way to retrieve the profiler output
+RESULTS_ARCHIVE="/tmp/cutlass_profiler.zip"
+echo "Zipping ${OUTDIR} to ${RESULTS_ARCHIVE}"
+zip -r "${RESULTS_ARCHIVE}" "${OUTDIR}"
