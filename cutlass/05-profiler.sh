@@ -15,7 +15,12 @@ for OP in gemm block_scaled_gemm blockwise_gemm spgemm conv2d conv3d rank_k rank
         |& tee -a "${LOGFILE}"
 done
 
-# zip the CSVs to provide a convenient way to retrieve the profiler output
+# zip the CSVs (together with GPU info) to provide a convenient way to retrieve the profiler output
+if [ -x /opt/scale/bin/scaleinfo ]; then
+    /opt/scale/bin/scaleinfo > "${OUTDIR}/scale_info.txt"
+else
+    lspci | grep -i vga > "${OUTDIR}/pci_info.txt"
+fi
 RESULTS_ARCHIVE="/tmp/cutlass_profiler.zip"
 echo "Zipping ${OUTDIR} to ${RESULTS_ARCHIVE}"
 zip -r "${RESULTS_ARCHIVE}" "${OUTDIR}"
