@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 # HeCBench requires `dvc` as part of its data management
 #
@@ -28,23 +28,4 @@ do_clone_hash HeCBench https://github.com/ORNL/HeCBench.git "$(get_version HeCBe
     cd HeCBench
     
     dvc pull
-
-    # The following does not compile even for cuda-nvidia
-    # TODO: Investigate if still failing
-    sed -i /dp4a/d src/CMakeLists.txt
-
-    # Compilation Failures (on gfx1201)
-    # FIXME: These prevent the benchmark from compiling on gfx1201.
-    sed -i /gels/d src/CMakeLists.txt
-    sed -i /prefetch/d src/CMakeLists.txt
-    sed -i /streamOrderedAllocation/d src/CMakeLists.txt
-    sed -i /blas-fp8gemm/d src/CMakeLists.txt
-
-    # These hang (on gfx1201)
-    sed -i /cm/d src/CMakeLists.txt
-    sed -i /divergence/d src/CMakeLists.txt
-    sed -i /ising/d src/CMakeLists.txt
-    sed -i /mdh/d src/CMakeLists.txt
-    sed -i /laplace/d src/CMakeLists.txt
-    sed -i /logic-rewrite/d src/CMakeLists.txt
 )
