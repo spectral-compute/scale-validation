@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <0be0bef0>.**
+**This shows the test status for SCALE: master <8d7bac6e>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -13,49 +13,49 @@ Contributions welcome!
 
 | Project        | Version                    | gfx90a|gfx900|gfx1201|gfx1100|gfx1030|sm_120|
 |----------------|----------------------------| -|-|-|-|-|-|
-| Alien          | v4.12.3       | ✅|✅|❌|✅|❌|✅|
+| Alien          | v4.12.3       | ✅|✅|✅|✅|❌|✅|
 | AMGX           | v2.4.0        | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | arrayfire      | v3.9.0   | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | bitnet         | 404980eecae38a...      | ✅|✅|✅|✅|✅|✅|
-| caffe          | 9b891540183ddc...       | ✅|❌|✅|✅|❌|✅|
+| caffe          | 9b891540183ddc...       | ✅|❌|✅|✅|✅|✅|
 | ctranslate2    | v4.5.0 | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | cuml           | b17f2db        | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| cuSZ           | v0.16.2        | ✅|✅|✅|✅|✅|✅|
-| CUTLASS        | v4.1.0     | ✅|✅|❌|✅|✅|🛠️️|
+| cuSZ           | v0.16.2        | ✅|✅|✅|✅|❌|✅|
+| CUTLASS        | v4.1.0     | ✅|✅|✅|✅|❌|🛠️️|
 | CV-CUDA        | f769fe4     | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | cycles         | v4.4.0      | ✅|✅|✅|✅|✅|✅|
 | faiss          | v1.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| FastEddy       | v2.0.0    | ✅|🛠️️|✅|✅|✅|✅|
-| ffmpeg          | n7.1.3       | ✅|✅|✅|✅|✅|✅|
+| FastEddy       | v2.0.0    | ✅|🛠️️|❌|✅|✅|✅|
+| ffmpeg          | n7.1.3       | ❌|✅|✅|✅|❌|✅|
 | FLAMEGPU2      | v2.0.0-rc.2   | 🛠️️|❌|🛠️️|🛠️️|🛠️️|✅|
 | ggml           | d3a58b0        | ✅|✅|✅|✅|✅|✅|
-| gomc           | 4c12477        | ✅|✅|✅|✅|✅|✅|
+| gomc           | 4c12477        | ✅|✅|✅|✅|❌|✅|
 | gpu\_jpeg2k    | ee715e9  | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | GPUJPEG        | 3e045d1     | ✅|✅|✅|✅|✅|✅|
-| GROMACS        | v2025.4     | ✅|❌|❌|✅|❌|✅|
-| hashcat        | 6716447dfce969...     | ✅|❌|✅|✅|✅|✅|
+| GROMACS        | v2025.4     | ✅|✅|❌|✅|❌|✅|
+| hashcat        | 6716447dfce969...     | ✅|✅|✅|✅|✅|✅|
 | hashinator     | 34cf188  | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | HeCBench       | 42e8f09f3f7fa9...    | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | hypre          | v2.33.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| jitify         | master      | ✅|❌|🛠️️|✅|✅|❌|
-| llama.cpp      |    | ✅|❌|✅|✅|❌|✅|
+| jitify         | master      | ❌|❌|🛠️️|✅|✅|❌|
+| llama.cpp      |    | ✅|❌|✅|✅|✅|✅|
 | llm.c          | 7ecd8906afe6ed...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | MAGMA          | v2.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | nvflip         | 1eb247c      | ✅|✅|✅|✅|✅|❌|
 | OpenCV         | 725e440      | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | openmpi        | v4.1     | ✅|✅|✅|✅|✅|✅|
 | PhysX          | 1e44a0e       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| pytorch        | v2.9.0-rc4     | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
+| pytorch        | v2.9.0     | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | quda           | 07822b61c6ab5f...        | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | risc0          | v1.2.2       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| rodinia\_suite | spectral     | ✅|❌|✅|✅|✅|✅|
-| stdgpu         | 563dc59d6d08df...      | ✅|❌|✅|✅|✅|✅|
-| TCLB           | v6.7        | ✅|✅|✅|✅|✅|✅|
+| rodinia\_suite | spectral     | ✅|✅|✅|✅|✅|✅|
+| stdgpu         | 563dc59d6d08df...      | ✅|✅|✅|✅|✅|✅|
+| TCLB           | v6.7        | ✅|✅|✅|✅|❌|✅|
 | thrust         | 756c5af      | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | timemachine    | 01f14f8 | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| UppASD         | gpu_new      | ❌|✅|❌|✅|❌|❌|
+| UppASD         | gpu_new      | ✅|✅|✅|✅|❌|✅|
 | vllm           | v0.6.3        | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| whispercpp     |  | ❌|✅|✅|✅|✅|✅|
+| whispercpp     |  | ✅|✅|✅|✅|✅|✅|
 | xgboost        | v2.1.0     | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 
 *Key:*
