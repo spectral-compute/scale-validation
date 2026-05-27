@@ -54,6 +54,8 @@ sed -Ee 's|wgmma_sm90.cu|sgemm_sm80.cu|' \
 # Disable SM-number checking to skip tests, so all tests always run.
 sed -Ee 's|supported = false;|supported = true;|' \
   -i "examples/13_two_tensor_op_fusion/test_run.h"
+# Disable fp8 - we don't support fp8/6/4 yet.
+sed -Ee 's|(# +define CUTLASS_ARCH_MMA_F32_SM89_ENABLED)|// \1|' -i include/cutlass/arch/mma_sm89.h
 
 echo "Done wih CUTLASS"
 
