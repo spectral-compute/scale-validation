@@ -27,6 +27,7 @@ GPUJPEG 3e045d1
 gpu_jpeg2k ee715e9
 hashcat 6716447dfce969ddde42a9abe0681500bee0df48
 hashinator 34cf188
+heraclespp a925d6a
 hypre v2.33.0
 jitify master
 llama.cpp b2000
