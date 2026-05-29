@@ -2,11 +2,13 @@
 set -u
 
 OUT_DIR="$(realpath .)/HeCBench"
-RESULTS_DIR="/tmp/ci-benchmarks/HeCBench"
+RESULTS_DIR="/tmp/ci-benchmarks"
 
 CUDA_ARCH_NUM="${CUDAARCHS#sm_}"
 
-DATA_FILE="$OUT_DIR/hecbench.cuda-sm$CUDA_ARCH_NUM.csv"
+TEST_DT=$(date '+%Y%m%d-%H%M%S')
+
+DATA_FILE="hecbench.scale.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.$TEST_DT.csv"
 
 mkdir -p "$RESULTS_DIR"
 
