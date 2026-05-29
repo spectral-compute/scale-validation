@@ -15,5 +15,6 @@ mkdir -p "$RESULTS_DIR"
 python3 $OUT_DIR/tools/hecbench run \
   --model cuda \
   --preset scale-cuda-sm$CUDA_ARCH_NUM \
-  --store \
+  --store "hecbench-results.scale.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.db" \
+  --format csv \
   --output "$RESULTS_DIR/$DATA_FILE"
