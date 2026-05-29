@@ -16,6 +16,7 @@ cmake \
     -DGGML_CUDA=ON \
     -DGGML_CUDA_NO_PEER_COPY=ON \
     -DGGML_NATIVE=$GGML_NATIVE \
+    -DCMAKE_CUDA_STANDARD=17 \
     -B"build" \
     "whispercpp"
 
