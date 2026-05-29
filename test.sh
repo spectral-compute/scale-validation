@@ -88,6 +88,8 @@ fi
 # possible to maximise info about what we are missing in the log.
 export MAKEFLAGS="-O -k"
 
+export TEST_GPU_ARCH="${INPUT_GPU_ARCH}"
+
 # Run all the scripts for the test.
 set -o errexit
 for i in "${TEST_DIR}/${TEST}"/*.sh; do
