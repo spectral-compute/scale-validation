@@ -11,6 +11,11 @@ TEST_DT=$(date '+%Y%m%d-%H%M%S')
 DATA_FILE="hecbench.scale.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.$TEST_DT.csv"
 
 mkdir -p "$RESULTS_DIR"
+if [ -x /opt/scale/bin/scaleinfo ]; then
+    /opt/scale/bin/scaleinfo > "${RESULTS_DIR}/scale_info.txt"
+else
+    lspci | grep -i vga > "${RESULTS_DIR}/pci_info.txt"
+fi
 
 python3 $OUT_DIR/tools/hecbench run \
   --model cuda \
