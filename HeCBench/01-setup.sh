@@ -112,4 +112,11 @@ EOF
     # SCALE
     # Small linking issue, being addressed as we speak
     sed -i /determinant/d src/CMakeLists.txt
+
+    # SCALE; sm_120
+    sed -i /qkv/d src/CMakeLists.txt
+    sed -i /d3q19-bgk/d src/CMakeLists.txt
+    sed -i /permute/d src/CMakeLists.txt
+    sed -i /quant3MatMul/d src/CMakeLists.txt
+    sed -i /sobol/d src/CMakeLists.txt
 )
