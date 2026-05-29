@@ -2,7 +2,7 @@
 set -u
 
 OUT_DIR="$(realpath .)/HeCBench"
-RESULTS_DIR="/tmp/ci-benchmarks"
+RESULTS_DIR="/tmp/ci_benchmarks"
 
 CUDA_ARCH_NUM="${CUDAARCHS#sm_}"
 
