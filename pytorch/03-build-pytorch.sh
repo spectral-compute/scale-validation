@@ -36,10 +36,6 @@ ${PYBIN} -m pip install pyyaml typing_extensions jinja2 numpy
 
 cd "${BUILDDIR}/pytorch"
 
-export CC="${CC:-/usr/bin/gcc}"
-export CXX="${CXX:-/usr/bin/g++}"
-export CUDAHOSTCXX="${CXX}"
-
 export CFLAGS="\
     -march=native \
     -mtune=native \
