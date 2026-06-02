@@ -3,7 +3,7 @@
 set -ETeuo pipefail
 
 cd pytorch
-source $(dirname $0)/common.sh
+source $(dirname $0)/util/common.sh
 
 if [[ ! -d "vision" ]]; then
     source $(dirname $0)/../util/git.sh

@@ -3,7 +3,7 @@ set -ETeuo pipefail
 shopt -s nullglob
 
 cd pytorch
-source $(dirname $0)/common.sh
+source $(dirname $0)/util/common.sh
 
 cd build/pytorch
 python setup.py build
