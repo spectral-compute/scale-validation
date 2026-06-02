@@ -15,6 +15,14 @@ python -m pip install pyyaml typing_extensions jinja2 numpy
 
 cd "build/pytorch"
 
+torch-arch() {
+  if ((${#CUDAARCHS} == 2)); then
+    echo "${CUDAARCHS:0:1}.${CUDAARCHS:1:1}"
+  else
+    echo "${CUDAARCHS:0:2}.${CUDAARCHS:2:1}"
+  fi
+}
+
 export CFLAGS="\
     -march=native \
     -mtune=native \
@@ -23,14 +31,11 @@ export CFLAGS="\
     -Wno-dangling-reference \
     -Wno-redundant-move
 "
-# This has no effect on the undefined symbol error currently being worked through
-#export _GLIBCXX_USE_CXX11_ABI=TRUE
+
 export CXXFLAGS="${CFLAGS}"
-export CUDAARCHS="89"
 export CUDNN_INCLUDE_DIR=/usr/include
 export CUDNN_LIB_DIR=/usr/lib
-export CUDAARCHS
-export TORCH_CUDA_ARCH_LIST=8.9
+export TORCH_CUDA_ARCH_LIST=$(torch-arch)
 export USE_CUDA=ON
 export USE_CUDNN=OFF
 export USE_CUFILE=OFF
@@ -59,7 +64,6 @@ export CMAKE_POLICY_VERSION_MINIMUM=3.5
 export FORCE_CUDA=1
 export MAX_JOBS=$(nproc)
 
-# This CMAKE_CUDA_ARCHITECTURES should be unnecessary, it should be set by the envvar but <explanation>
 export CMAKE_ARGS="-DBUILD_BINARY=OFF -DBUILD_TEST=OFF"
 
 python setup.py build
