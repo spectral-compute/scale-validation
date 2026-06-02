@@ -1,3 +1,5 @@
+# Create the build environments for torch and vision
+
 if [[ ! -d .venv ]]; then
   python3 -m venv .venv
 fi
@@ -9,6 +11,7 @@ python -m pip install "setuptools==81.0.0"
 # Remove any previously installed incompatible torchvision
 python -m pip uninstall -y torchvision || true
 
+# Build the TORCH_CUDA_ARCH_LIST; <major>.<minor>
 torch-arch() {
   if ((${#CUDAARCHS} == 2)); then
     echo "${CUDAARCHS:0:1}.${CUDAARCHS:1:1}"
@@ -26,6 +29,8 @@ export CFLAGS="\
     -Wno-dangling-reference \
     -Wno-redundant-move
 "
+
+# TODO: See if these can/should be pared down further: env vars which have no effect are noise in the script.
 export CXXFLAGS="${CFLAGS}"
 export CUDNN_INCLUDE_DIR=/usr/include
 export CUDNN_LIB_DIR=/usr/lib
