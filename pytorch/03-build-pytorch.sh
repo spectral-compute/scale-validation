@@ -72,6 +72,11 @@ export CMAKE_POLICY_VERSION_MINIMUM=3.5
 export FORCE_CUDA=1
 export MAX_JOBS=$(nproc)
 
+# clang >= 18 use c++20 mangling, but PyTorch expects c++17 mangling
+if [[ "$(nvcc --version)" == *" SCALE "* ]]; then
+  export CUDAFLAGS="-fclang-abi-compat=17 -Xcuda-ptxas -v"
+fi
+
 export CMAKE_ARGS="-DBUILD_BINARY=OFF -DBUILD_TEST=OFF"
 
 python setup.py build
