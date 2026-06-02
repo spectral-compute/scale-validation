@@ -16,5 +16,11 @@ if [[ ! -d "vision" ]]; then
     do_clone vision https://github.com/pytorch/vision.git v0.24.0
 fi
 
+# PyTorch has its own env var to set the CUDA compiler
+export PYTORCH_NVCC=${CUDACXX}
+
+# --generate-dependencies-with-compile is not a valid clang option
+export TORCH_EXTENSION_SKIP_NVCC_GEN_DEPENDENCIES=1
+
 cd vision
 python -m pip install -v --no-build-isolation --no-deps -e .
