@@ -7,7 +7,6 @@ SCRIPT_DIR="$(realpath "$(dirname "$0")")"
 OUT_DIR=$(realpath .)
 
 # 1) Add -k to pytorch build
-echo "Patch Ninja"
 cd "${OUT_DIR}/pytorch/tools/setup_helpers"
 git stash
 
@@ -15,7 +14,6 @@ git stash
 git apply "${SCRIPT_DIR}/patches/0001-quiet-ninja.patch"
 
 # 2) Patch CUTLASS sources
-echo "Patch CUTLASS"
 cd "${OUT_DIR}/pytorch/third_party/cutlass/"
 
 # Cutlass disables wmma with clang due to an old clang bug that doesn't apply to SCALE.
@@ -57,36 +55,16 @@ sed -Ee 's|supported = false;|supported = true;|' \
 # Disable fp8 - we don't support fp8/6/4 yet.
 sed -Ee 's|(# +define CUTLASS_ARCH_MMA_F32_SM89_ENABLED)|// \1|' -i include/cutlass/arch/mma_sm89.h
 
-echo "Done wih CUTLASS"
-
 # 3) Patch flash attention
 echo "Patch flash attention"
 cd ../flash-attention
 git stash
 git apply "${SCRIPT_DIR}/patches/flash_attention_typename_patch.diff"
-echo "Done flash attention"
 
-# 4) Patch mem_eff_attention typename ONLY for NVIDIA builds
-echo "Patch mem_eff_attention typename (only for NVIDIA)"
-FILE="${OUT_DIR}/pytorch/aten/src/ATen/native/transformers/cuda/mem_eff_attention/kernel_forward.h"
-if [[ "${CUDAARCHS:-}" =~ ^[0-9]+$ ]]; then
-  echo "Applying NVIDIA-only typename workaround for CUDAARCHS=${CUDAARCHS}"
-  sed -i 's/Params{MM1::LayoutB(/Params{typename MM1::LayoutB(/g' "${FILE}"
-fi
-echo "Done mem_eff_attention typename"
-
-# 5) Patch __assert_fail ONLY for NVIDIA builds
-echo "Patch assert_fail"
+# 5) Patch __assert_fail (#928)
 cd "${OUT_DIR}/pytorch"
+git apply "${SCRIPT_DIR}/patches/assert_fail.patch"
 
-if [[ "${CUDAARCHS:-}" =~ ^[0-9]+$ ]]; then
-  echo "Applying NVIDIA-only __assert_fail patch"
-
-  sed -i '/^[[:space:]]*void[[:space:]]*$/{
-N
-s/^[[:space:]]*void[[:space:]]*\n[[:space:]]*__assert_fail(/#if defined(__CUDACC__) || defined(__CUDA__)\n    __host__ __device__ void\n#else\n    void\n#endif\n    __assert_fail(/
-}' torch/headeronly/macros/Macros.h
-fi
-
-echo "Done assert_fail"
-echo "Done patching"
+# 4) Patch mem_eff_attention typename
+FILE="${OUT_DIR}/pytorch/aten/src/ATen/native/transformers/cuda/mem_eff_attention/kernel_forward.h"
+sed -i 's/Params{MM1::LayoutB(/Params{typename MM1::LayoutB(/g' "${FILE}"
