@@ -3,13 +3,7 @@
 set -ETeuo pipefail
 
 cd pytorch
-source .venv/bin/activate
-
-# Remove any previously installed incompatible torchvision
-python -m pip uninstall -y torchvision || true
-
-python -m pip install --upgrade numpy pillow ninja
-python -m pip install "setuptools==81.0.0"
+source $(dirname $0)/util/common.sh
 
 if [[ ! -d "vision" ]]; then
     source $(dirname $0)/../util/git.sh
