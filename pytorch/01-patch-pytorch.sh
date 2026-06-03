@@ -56,15 +56,20 @@ sed -Ee 's|supported = false;|supported = true;|' \
 sed -Ee 's|(# +define CUTLASS_ARCH_MMA_F32_SM89_ENABLED)|// \1|' -i include/cutlass/arch/mma_sm89.h
 
 # 3) Patch flash attention
-echo "Patch flash attention"
 cd ../flash-attention
 git stash
 git apply "${SCRIPT_DIR}/patches/flash_attention_typename_patch.diff"
 
-# 5) Patch __assert_fail (#928)
+# 4) Patch __assert_fail (#928)
 cd "${OUT_DIR}/pytorch"
 git apply "${SCRIPT_DIR}/patches/assert_fail.patch"
 
-# 4) Patch mem_eff_attention typename
+# 5) Patch mem_eff_attention typename
 FILE="${OUT_DIR}/pytorch/aten/src/ATen/native/transformers/cuda/mem_eff_attention/kernel_forward.h"
 sed -i 's/Params{MM1::LayoutB(/Params{typename MM1::LayoutB(/g' "${FILE}"
+
+# 6) Handle kernel failing to launch on scale due to register pressure. TODO(scale#1084)
+if [[ "$(nvcc --version)" == *" SCALE "* ]]; then
+    FILE="${OUT_DIR}/pytorch/aten/src/ATen/native/cuda/layer_norm_kernel.cu"
+    sed -i 's/ConfigureAndLaunchGammaBetaBackwardKernel<T, T_ACC, block_dim_x, 32, 256, rms_norm>/ConfigureAndLaunchGammaBetaBackwardKernel<T, T_ACC, block_dim_x, 16, 128, rms_norm>/' "${FILE}"
+fi
