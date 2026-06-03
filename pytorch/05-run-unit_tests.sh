@@ -25,7 +25,7 @@ cd "$TMP_RUN_DIR"
 python -m pip install -q --upgrade expecttest hypothesis pytest numpy
 
 echo "Running tests..."
-python "$SRCROOT/test/test_torch.py" -v
+python "$SRCROOT/test/test_torch.py" -v $(cat $SCRIPT_DIR/util/cuda-tests.txt)
 
 # Next try:
 # python "$SRCROOT/test/test_nn.py" -v
