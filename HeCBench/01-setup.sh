@@ -74,44 +74,38 @@ cat << EOF > $SRC_DIR/CMakeUserPresets.json
 }
 EOF
 
-# Remove benchmarks that don't compile or build for a given architecture
+
 (
     cd "$SRC_DIR"
 
     # Compilation Failures:
-    # SCALE; gfx1201
+
+    # SCALE
+    # (These will steadily be addressed.)
+    # - gfx1201
     sed -i /prefetch/d src/CMakeLists.txt
-    sed -i /streamOrderedAllocation/d src/CMakeLists.txt
     sed -i /blas-fp8gemm/d src/CMakeLists.txt
-
-    # Nvidia
-    sed -i /dp4a/d src/CMakeLists.txt
-
-    # HIP; gfx90a
-    sed -i /nms/d src/CMakeLists.txt
-    
-    # HIP; gfx942
-    sed -i /opticalFlow/d src/CMakeLists.txt
-
-    # HIP
-    # TODO: Work around `dims-local.c` being a Makefile target not included in the CMake process
-    # You need to either `make` manually, or call that target separately, it's not part of the
-    # CMake build process they're trying to move to (yet).
-    sed -i /halo-finder/d src/CMakeLists.txt
-
-    # SCALE; gfx1201
-    # Nvidia
-    sed -i /cm/d src/CMakeLists.txt
-    sed -i /divergence/d src/CMakeLists.txt
-    sed -i /ising/d src/CMakeLists.txt
-    sed -i /mdh/d src/CMakeLists.txt
-    sed -i /laplace/d src/CMakeLists.txt
-    sed -i /logic-rewrite/d src/CMakeLists.txt
-
-    # SCALE; sm_120
+    # - sm_120
     sed -i /qkv/d src/CMakeLists.txt
     sed -i /d3q19-bgk/d src/CMakeLists.txt
     sed -i /permute/d src/CMakeLists.txt
     sed -i /quant3MatMul/d src/CMakeLists.txt
     sed -i /sobol/d src/CMakeLists.txt
+
+    # We have also encountered the following compilation failures
+    # with the following compilers
+    # 
+    # NVCC
+    # - dp4a
+    # - cm
+    # - divergence
+    # - ising
+    # - mdh
+    # - laplace
+    # - logic-rewrite
+    # 
+    # HIP
+    # - cm
+    # - opticalFlow
+    # - halo-finder
 )
