@@ -80,7 +80,6 @@ EOF
 
     # Compilation Failures:
     # SCALE; gfx1201
-    sed -i /gels/d src/CMakeLists.txt
     sed -i /prefetch/d src/CMakeLists.txt
     sed -i /streamOrderedAllocation/d src/CMakeLists.txt
     sed -i /blas-fp8gemm/d src/CMakeLists.txt
@@ -108,10 +107,6 @@ EOF
     sed -i /mdh/d src/CMakeLists.txt
     sed -i /laplace/d src/CMakeLists.txt
     sed -i /logic-rewrite/d src/CMakeLists.txt
-
-    # SCALE
-    # Small linking issue, being addressed as we speak
-    sed -i /determinant/d src/CMakeLists.txt
 
     # SCALE; sm_120
     sed -i /qkv/d src/CMakeLists.txt
