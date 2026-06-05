@@ -1,0 +1,8 @@
+{
+  "name": "Blender Cycles",
+  "license": "Apache-2.0",
+  "upstream_repo": "https://projects.blender.org/blender/cycles",
+  "tags": ["rendering", "graphics", "ray-tracing"],
+  "github_issue_label": "cycles",
+  "description": "Blender's physically-based production renderer. Cycles uses path tracing and supports CUDA-accelerated GPU rendering for photorealistic scenes."
+}

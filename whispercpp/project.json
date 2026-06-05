@@ -1,0 +1,8 @@
+{
+  "name": "Whisper.cpp",
+  "license": "MIT",
+  "upstream_repo": "https://github.com/ggerganov/whisper.cpp",
+  "tags": ["speech-recognition", "ai", "nlp"],
+  "github_issue_label": "whispercpp",
+  "description": "High-performance inference of OpenAI's Whisper automatic speech recognition model. whisper.cpp is a C/C++ port that supports CUDA acceleration for multilingual transcription and translation."
+}
