@@ -1,0 +1,8 @@
+{
+  "name": "NVIDIA FLIP",
+  "license": "BSD-3-Clause",
+  "upstream_repo": "https://github.com/NVlabs/flip",
+  "tags": ["computer-vision", "image", "graphics", "image-comparison"],
+  "github_issue_label": "nvflip",
+  "description": "A perceptual image-difference evaluator from NVIDIA Research. FLIP computes a human-vision-based error metric (LDR-FLIP for PNG, HDR-FLIP for EXR) between a reference and test image, commonly used to validate rendering algorithms. With SCALE, FLIP's CUDA kernel runs on AMD GPUs without modification."
+}
