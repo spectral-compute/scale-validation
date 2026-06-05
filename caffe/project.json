@@ -1,0 +1,8 @@
+{
+  "name": "Caffe",
+  "license": "BSD-2-Clause",
+  "upstream_repo": "https://github.com/BVLC/caffe",
+  "tags": ["deep-learning", "neural-networks"],
+  "github_issue_label": "caffe",
+  "description": "A fast open framework for deep learning. Caffe is known for its expressive architecture, extensible code, and speed — widely used in academic research and production deployments for image classification and segmentation."
+}

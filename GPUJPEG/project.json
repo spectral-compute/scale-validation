@@ -1,0 +1,8 @@
+{
+  "name": "GPUJPEG",
+  "license": "BSD-2-Clause",
+  "upstream_repo": "https://github.com/CESNET/GPUJPEG",
+  "tags": ["computer-vision", "image", "jpeg"],
+  "github_issue_label": "GPUJPEG",
+  "description": "GPU-accelerated JPEG codec from CESNET. GPUJPEG encodes and decodes JPEG images on the GPU using CUDA, delivering substantially higher throughput than CPU-only codecs. With SCALE, GPUJPEG's CUDA path runs on AMD GPUs without modification."
+}
