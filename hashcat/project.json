@@ -1,0 +1,8 @@
+{
+  "name": "Hashcat",
+  "license": "MIT",
+  "upstream_repo": "https://github.com/hashcat/hashcat",
+  "tags": ["security", "password-recovery", "gpu-compute"],
+  "github_issue_label": "hashcat",
+  "description": "The world's fastest password recovery utility. Hashcat supports over 300 hash types — MD5, SHA-2, bcrypt, WPA, and more — and uses GPU acceleration to maximise cracking throughput."
+}
