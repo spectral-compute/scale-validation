@@ -1,4 +1,150 @@
 {
-  "generated_at": "2026-06-19T08:30:53.037215+00:00",
-  "projects": []
+  "generated_at": "2026-07-07T14:04:57.268665+00:00",
+  "projects": [
+    {
+      "name": "Caffe",
+      "slug": "caffe",
+      "version": "9b891540183ddc834a02b2bd81b31afae71b2153",
+      "license": "BSD-2-Clause",
+      "license_blocked": false,
+      "upstream_repo": "https://github.com/BVLC/caffe",
+      "tags": [
+        "deep-learning",
+        "neural-networks"
+      ],
+      "github_issue_label": "caffe",
+      "description": "A fast open framework for deep learning. Caffe is known for its expressive architecture, extensible code, and speed \u2014 widely used in academic research and production deployments for image classification and segmentation.",
+      "validation": {
+        "summary": "partial",
+        "pass_count": 4,
+        "total_count": 6,
+        "last_run": "2026-07-07T14:04:57.267117+00:00",
+        "architectures": {
+          "gfx1030": "success",
+          "gfx1100": "success",
+          "gfx1201": "success",
+          "gfx900": "failure",
+          "gfx90a": "failure",
+          "sm_120": "success"
+        }
+      }
+    },
+    {
+      "name": "Blender Cycles",
+      "slug": "cycles",
+      "version": "v4.4.0",
+      "license": "Apache-2.0",
+      "license_blocked": false,
+      "upstream_repo": "https://projects.blender.org/blender/cycles",
+      "tags": [
+        "rendering",
+        "graphics",
+        "ray-tracing"
+      ],
+      "github_issue_label": "cycles",
+      "description": "Blender's physically-based production renderer. Cycles uses path tracing and supports CUDA-accelerated GPU rendering for photorealistic scenes.",
+      "validation": {
+        "summary": "success",
+        "pass_count": 6,
+        "total_count": 6,
+        "last_run": "2026-07-07T14:04:57.267117+00:00",
+        "architectures": {
+          "gfx1030": "success",
+          "gfx1100": "success",
+          "gfx1201": "success",
+          "gfx900": "success",
+          "gfx90a": "success",
+          "sm_120": "success"
+        }
+      }
+    },
+    {
+      "name": "Hashcat",
+      "slug": "hashcat",
+      "version": "6716447dfce969ddde42a9abe0681500bee0df48",
+      "license": "MIT",
+      "license_blocked": false,
+      "upstream_repo": "https://github.com/hashcat/hashcat",
+      "tags": [
+        "security",
+        "password-recovery",
+        "gpu-compute"
+      ],
+      "github_issue_label": "hashcat",
+      "description": "The world's fastest password recovery utility. Hashcat supports over 300 hash types \u2014 MD5, SHA-2, bcrypt, WPA, and more \u2014 and uses GPU acceleration to maximise cracking throughput.",
+      "validation": {
+        "summary": "partial",
+        "pass_count": 5,
+        "total_count": 6,
+        "last_run": "2026-07-07T14:04:57.267117+00:00",
+        "architectures": {
+          "gfx1030": "success",
+          "gfx1100": "success",
+          "gfx1201": "success",
+          "gfx900": "failure",
+          "gfx90a": "success",
+          "sm_120": "success"
+        }
+      }
+    },
+    {
+      "name": "NVIDIA FLIP",
+      "slug": "nvflip",
+      "version": "1eb247c",
+      "license": "BSD-3-Clause",
+      "license_blocked": false,
+      "upstream_repo": "https://github.com/NVlabs/flip",
+      "tags": [
+        "computer-vision",
+        "image",
+        "graphics",
+        "image-comparison"
+      ],
+      "github_issue_label": "nvflip",
+      "description": "A perceptual image-difference evaluator from NVIDIA Research. FLIP computes a human-vision-based error metric (LDR-FLIP for PNG, HDR-FLIP for EXR) between a reference and test image, commonly used to validate rendering algorithms. With SCALE, FLIP's CUDA kernel runs on AMD GPUs without modification.",
+      "validation": {
+        "summary": "partial",
+        "pass_count": 5,
+        "total_count": 6,
+        "last_run": "2026-07-07T14:04:57.267117+00:00",
+        "architectures": {
+          "gfx1030": "success",
+          "gfx1100": "success",
+          "gfx1201": "success",
+          "gfx900": "success",
+          "gfx90a": "success",
+          "sm_120": "failure"
+        }
+      }
+    },
+    {
+      "name": "Whisper.cpp",
+      "slug": "whispercpp",
+      "version": "v1.7.1",
+      "license": "MIT",
+      "license_blocked": false,
+      "upstream_repo": "https://github.com/ggerganov/whisper.cpp",
+      "tags": [
+        "speech-recognition",
+        "ai",
+        "nlp"
+      ],
+      "github_issue_label": "whispercpp",
+      "description": "High-performance inference of OpenAI's Whisper automatic speech recognition model. whisper.cpp is a C/C++ port that supports CUDA acceleration for multilingual transcription and translation.",
+      "validation": {
+        "summary": "success",
+        "pass_count": 6,
+        "total_count": 6,
+        "last_run": "2026-07-07T14:04:57.267117+00:00",
+        "architectures": {
+          "gfx1030": "success",
+          "gfx1100": "success",
+          "gfx1201": "success",
+          "gfx900": "success",
+          "gfx90a": "success",
+          "sm_120": "success"
+        }
+      }
+    }
+  ]
 }
