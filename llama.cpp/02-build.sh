@@ -7,8 +7,9 @@ cmake \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_CUDA_COMPILER="nvcc" \
     -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
-    -DLLAMA_CUBLAS=ON \
-    -DLLAMA_NATIVE=OFF \
+    -DGGML_CUDA=ON \
+    -DGGML_NATIVE=OFF \
+    -DLLAMA_BUILD_UI=OFF \
     -DCMAKE_INSTALL_PREFIX="install" \
     -B"build" \
     "llama.cpp"

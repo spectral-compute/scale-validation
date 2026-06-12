@@ -1,0 +1,25 @@
+diff --git a/ggml/src/ggml-cuda/fattn-mma-f16.cuh b/ggml/src/ggml-cuda/fattn-mma-f16.cuh
+index 83478a02c..405e03f63 100644
+--- a/ggml/src/ggml-cuda/fattn-mma-f16.cuh
++++ b/ggml/src/ggml-cuda/fattn-mma-f16.cuh
+@@ -3,6 +3,8 @@
+ #include "mma.cuh"
+ #include "fattn-common.cuh"
+ 
++void ggml_cuda_flash_attn_ext_tile(ggml_backend_cuda_context & ctx, ggml_tensor * dst);
++
+ using namespace ggml_cuda_mma;
+ 
+ // Config options for the MMA kernel.
+@@ -1926,6 +1928,11 @@ void ggml_cuda_flash_attn_ext_mma_f16_case(ggml_backend_cuda_context & ctx, ggml
+         std::max(nbytes_shared_Q,  nbytes_shared_KV + nbytes_shared_mask) :
+                  nbytes_shared_Q + nbytes_shared_KV + nbytes_shared_mask);
+ 
++    if (nbytes_shared_total > ggml_cuda_info().devices[id].smpbo) {
++        ggml_cuda_flash_attn_ext_tile(ctx, dst);
++        return;
++    }
++
+     float logit_softcap;
+     memcpy(&logit_softcap, (const float *) KQV->op_params + 2, sizeof(float));
+ 

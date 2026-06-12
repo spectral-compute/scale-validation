@@ -1,0 +1,113 @@
+diff --git a/ggml/src/ggml-cuda/mmf.cuh b/ggml/src/ggml-cuda/mmf.cuh
+index d55cc1ec7..78fe235f3 100644
+--- a/ggml/src/ggml-cuda/mmf.cuh
++++ b/ggml/src/ggml-cuda/mmf.cuh
+@@ -175,10 +175,12 @@ static __global__ void mul_mat_f(
+             for (int i = 0; i < tile_A::I; ++i) {
+                 tile_xy[i*tile_k_padded + threadIdx.x] = x[(itA*tile_A::I + i)*stride_row  + col];
+             }
++            __syncwarp();
+ #pragma unroll
+             for (int k0 = 0; k0 < warp_size; k0 += tile_A::J) {
+                 load_ldmatrix(A[itA][k0/tile_A::J], tile_xy + k0, tile_k_padded);
+             }
++            __syncwarp();
+         }
+ 
+ #pragma unroll
+@@ -212,6 +214,7 @@ static __global__ void mul_mat_f(
+             } else {
+                 static_assert(std::is_same_v<T, void>, "unsupported type");
+             }
++            __syncwarp();
+ #pragma unroll
+             for (int k0 = 0; k0 < warp_size; k0 += tile_B::J) {
+                 tile_B B;
+@@ -221,6 +224,7 @@ static __global__ void mul_mat_f(
+                     mma(C[itA][itB], A[itA][k0/tile_B::J], B);
+                 }
+             }
++            __syncwarp();
+         }
+     }
+ 
+@@ -243,9 +247,7 @@ static __global__ void mul_mat_f(
+         }
+     }
+ 
+-    if (nwarps > 1) {
+-        __syncthreads();
+-    }
++    __syncthreads();
+ 
+ #pragma unroll
+     for (int j0 = 0; j0 < cols_per_block; j0 += nwarps) {
+@@ -386,10 +388,12 @@ static __global__ void mul_mat_f_ids(
+             for (int i = 0; i < tile_A::I; ++i) {
+                 tile_xy[i*tile_k_padded + threadIdx.x] = x[(itA*tile_A::I + i)*stride_row  + col];
+             }
++            __syncwarp();
+ #pragma unroll
+             for (int k0 = 0; k0 < warp_size; k0 += tile_A::J) {
+                 load_ldmatrix(A[itA][k0/tile_A::J], tile_xy + k0, tile_k_padded);
+             }
++            __syncwarp();
+         }
+ 
+         if constexpr (std::is_same_v<T, float>) {
+@@ -428,6 +432,7 @@ static __global__ void mul_mat_f_ids(
+                     gather_tile(itB + 1, vals_buf[next_buf]);
+                 }
+ 
++                __syncwarp();
+ #pragma unroll
+                 for (int k0 = 0; k0 < warp_size; k0 += tile_B::J) {
+                     tile_B B;
+@@ -437,6 +442,7 @@ static __global__ void mul_mat_f_ids(
+                         mma(C[itA][itB], A[itA][k0/tile_B::J], B);
+                     }
+                 }
++                __syncwarp();
+ 
+                 if (itB + 1 < ntB) {
+                     curr_buf ^= 1;
+@@ -482,6 +488,7 @@ static __global__ void mul_mat_f_ids(
+                     gather_tile(itB + 1, vals_buf[next_buf]);
+                 }
+ 
++                __syncwarp();
+ #pragma unroll
+                 for (int k0 = 0; k0 < warp_size; k0 += tile_B::J) {
+                     tile_B B;
+@@ -491,6 +498,7 @@ static __global__ void mul_mat_f_ids(
+                         mma(C[itA][itB], A[itA][k0/tile_B::J], B);
+                     }
+                 }
++                __syncwarp();
+ 
+                 if (itB + 1 < ntB) {
+                     curr_buf ^= 1;
+@@ -521,9 +529,7 @@ static __global__ void mul_mat_f_ids(
+         }
+     }
+ 
+-    if (nwarps > 1) {
+-        __syncthreads();
+-    }
++    __syncthreads();
+ 
+ #pragma unroll
+     for (int j0 = 0; j0 < cols_per_block; j0 += nwarps) {
+diff --git a/ggml/src/ggml-cuda/mmid.cu b/ggml/src/ggml-cuda/mmid.cu
+index 3c61e4595..d5be6de6d 100644
+--- a/ggml/src/ggml-cuda/mmid.cu
++++ b/ggml/src/ggml-cuda/mmid.cu
+@@ -94,6 +94,8 @@ static __global__ void mm_ids_helper(
+     }
+     nex_prev = warp_reduce_sum<warp_size>(nex_prev);
+ 
++    __syncwarp();
++
+     for (int itc = threadIdx.x; itc < it_compact; itc += warp_size) {
+         const mm_ids_helper_store store_it = store[itc];
+         const int it       = store_it.it();

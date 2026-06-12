@@ -30,7 +30,7 @@ hashinator 34cf188
 heraclespp a925d6a
 hypre v2.33.0
 jitify master
-llama.cpp b2000
+llama.cpp b9522
 llm.c 7ecd8906afe6ed7a2b2cdb731c042f26d525b820
 MAGMA v2.9.0
 nerf-cuda main
