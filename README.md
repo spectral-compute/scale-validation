@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <7679d5da>.**
+**This shows the test status for SCALE: master <b3f9568c>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -13,11 +13,11 @@ Contributions welcome!
 
 | Project        | Version                    | gfx90a|gfx900|gfx1201|gfx1100|gfx1030|sm_120|
 |----------------|----------------------------| -|-|-|-|-|-|
-| alien          | v4.12.3       | ✅|✅|✅|✅|✅|✅|
+| alien          | v4.12.3       | ✅|❌|✅|✅|✅|✅|
 | AMGX          | v2.4.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | arrayfire          | v3.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | bitnet          | 404980eecae38a...       | ✅|✅|✅|✅|✅|✅|
-| caffe          | 9b891540183ddc...       | ❌|❌|✅|❌|✅|✅|
+| caffe          | 9b891540183ddc...       | ❌|❌|✅|✅|✅|✅|
 | ctranslate2          | v4.5.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | cuml          | b17f2db       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | cuSZ          | v0.16.2       | ❌|✅|✅|✅|✅|✅|
@@ -35,10 +35,10 @@ Contributions welcome!
 | gromacs          | v2025.4       | ❌|❌|❌|❌|❌|✅|
 | hashcat          | 6716447dfce969...       | ✅|✅|✅|✅|✅|✅|
 | hashinator          | 34cf188       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| HeCBench          | 42e8f09f3f7fa9...       | ✅|✅|✅|✅|✅|✅|
+| HeCBench          | 42e8f09f3f7fa9...       | ✅|❌|✅|✅|✅|✅|
 | hypre          | v2.33.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | jitify          | master       | ✅|❌|🛠️️|❌|❌|❌|
-| llama.cpp          | b2000       | ✅|❌|✅|✅|✅|✅|
+| llama.cpp          | b9522       | ✅|✅|✅|✅|✅|✅|
 | llm.c          | 7ecd8906afe6ed...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | MAGMA          | v2.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | nvflip          | 1eb247c       | ✅|✅|✅|✅|✅|❌|
