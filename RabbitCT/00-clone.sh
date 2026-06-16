@@ -8,4 +8,5 @@ do_clone_hash RabbitCT https://github.com/ipatix/RabbitCT "$(get_version RabbitC
 
 cd RabbitCT
 
+# TODO: Find some way to cache this?
 ./download-input.sh <<< "y"

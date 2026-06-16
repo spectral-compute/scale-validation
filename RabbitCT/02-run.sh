@@ -6,5 +6,6 @@ cd RabbitCT
 
 ./rabbitRunner-NVCC \
   -i ./RabbitInput/RabbitInput.rct \
-  -m LolaBunny \
-  -s 256
+  -m LolaCUDA \
+  -s 1024 \
+  -c ./RabbitInput/Reference1024.vol
