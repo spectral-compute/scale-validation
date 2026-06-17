@@ -60,11 +60,7 @@ cd ../flash-attention
 git stash
 git apply "${SCRIPT_DIR}/patches/flash_attention_typename_patch.diff"
 
-# 4) Patch __assert_fail (#928)
-cd "${OUT_DIR}/pytorch"
-git apply "${SCRIPT_DIR}/patches/assert_fail.patch"
-
-# 5) Patch mem_eff_attention typename
+# 4) Patch mem_eff_attention typename
 FILE="${OUT_DIR}/pytorch/aten/src/ATen/native/transformers/cuda/mem_eff_attention/kernel_forward.h"
 sed -i 's/Params{MM1::LayoutB(/Params{typename MM1::LayoutB(/g' "${FILE}"
 
