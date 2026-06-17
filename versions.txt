@@ -7,7 +7,7 @@ ctranslate2 v4.5.0
 cuda-samples v12.9
 cudf v25.04.00
 cugraph fc880db
-cuml b17f2db
+cuml bac16da975ee3bc85325757542a211b58402addc
 cuSZ v0.16.2
 cutlass v4.1.0
 CUDALibrarySamples 5ac0f9a8032a1031ff4b99ff6112d528ade2995b
