@@ -10,6 +10,14 @@ compiles CUDA code for NVIDIA and AMD GPUs). Each top-level directory (e.g. `has
 `llama.cpp/`, `gromacs/`) is one project under test. Many tests are added before SCALE
 fully supports the project, so failures are expected and used to prioritise development.
 
+## Auditing freshness of tested projects
+
+The projects under test are upstream open-source projects this suite validates SCALE
+against — not dependencies of this repo. To check how far behind upstream each tested
+project's pinned ref is, use the `upstream-staleness` skill
+(`.claude/skills/upstream-staleness/SKILL.md`) — it iterates `versions.txt`, queries each
+upstream via `git ls-remote`, and reports the release gap.
+
 ## Running a test
 
 ```bash
