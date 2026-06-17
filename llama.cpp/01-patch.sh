@@ -21,6 +21,3 @@ git -C llama.cpp apply "${SCRIPT_DIR}/fattn-shared-mem-fallback.patch"
 # Use the single-block soft-max reduction (the only consumer of cooperative launch) by reporting
 # cooperative launch as unsupported.
 git -C llama.cpp apply "${SCRIPT_DIR}/disable-cooperative-launch.patch"
-
-# Widen two test-backend-ops NMSE bounds for known fp-rounding differences.
-git -C llama.cpp apply "${SCRIPT_DIR}/relax-nmse-bounds.patch"
