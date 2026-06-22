@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <b3f9568c>.**
+**This shows the test status for SCALE: master <9741b9e1>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -33,21 +33,22 @@ Contributions welcome!
 | gpu_jpeg2k          | ee715e9       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | GPUJPEG          | 3e045d1       | ✅|✅|✅|✅|✅|✅|
 | gromacs          | v2025.4       | ❌|❌|❌|❌|❌|✅|
-| hashcat          | 6716447dfce969...       | ✅|✅|✅|✅|✅|✅|
+| hashcat          | 6716447dfce969...       | ✅|❌|✅|✅|✅|✅|
 | hashinator          | 34cf188       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| HeCBench          | 42e8f09f3f7fa9...       | ✅|❌|✅|✅|✅|✅|
+| HeCBench          | 42e8f09f3f7fa9...       | ✅|✅|✅|✅|✅|✅|
 | hypre          | v2.33.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| jitify          | master       | ✅|❌|🛠️️|❌|❌|❌|
-| llama.cpp          | b9522       | ✅|✅|✅|✅|✅|✅|
+| jitify          | master       | ❌|❌|🛠️️|❌|❌|❌|
+| llama.cpp          | b9522       | ❌|❌|❌|❌|❌|❌|
 | llm.c          | 7ecd8906afe6ed...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | MAGMA          | v2.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| nvflip          | 1eb247c       | ✅|❌|✅|✅|✅|❌|
+| nixl          | e128059af332df...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|✅|
+| nvflip          | 1eb247c       | ✅|✅|✅|✅|✅|❌|
 | opencv          | 725e440       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | PhysX          | 1e44a0e       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | pytorch          | v2.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | quda          | 07822b61c6ab5f...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | risc0          | v1.2.2       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| rodinia_suite          | spectral       | ✅|❌|✅|✅|✅|✅|
+| rodinia_suite          | spectral       | ✅|✅|✅|✅|✅|✅|
 | stdgpu          | 563dc59d6d08df...       | ✅|❌|❌|❌|❌|✅|
 | TCLB          | v6.7       | ✅|✅|✅|✅|✅|✅|
 | thrust          | 756c5af       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
@@ -62,6 +63,8 @@ Contributions welcome!
 * ❌ Failed to validate
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
+
+Pipeline ID: 6841.
 
 ## Running Tests
 
