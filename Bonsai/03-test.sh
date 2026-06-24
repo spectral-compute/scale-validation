@@ -2,4 +2,6 @@
 
 set -euo pipefail
 
-./build/bonsai2_slowdust -h
+ulimit -s unlimited
+
+./build/bonsai2_slowdust -i build/model3_child_compact.tipsy -T 1
