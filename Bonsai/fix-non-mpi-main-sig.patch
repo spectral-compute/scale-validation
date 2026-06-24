@@ -1,0 +1,22 @@
+diff --git a/runtime/src/main.cpp b/runtime/src/main.cpp
+index 2df563e..728869d 100644
+--- a/runtime/src/main.cpp
++++ b/runtime/src/main.cpp
+@@ -166,10 +166,17 @@ volatile IOSharedData_t ioSharedData;
+ long long my_dev::base_mem::currentMemUsage;
+ long long my_dev::base_mem::maxMemUsage;
+ 
++#ifdef USE_MPI
+ int main(int argc, char** argv, MPI_Comm comm, int shrMemPID)
++#else
++int main(int argc, char** argv)
++#endif
+ {
+   my_dev::base_mem::currentMemUsage = 0;
+   my_dev::base_mem::maxMemUsage     = 0;
++#ifndef USE_MPI
++  int shrMemPID = 0;
++#endif
+ 
+   vector<real4>   bodyPositions;
+   vector<real4>   bodyVelocities;
