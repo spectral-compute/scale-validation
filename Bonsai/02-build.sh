@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -euo pipefail
 
@@ -15,4 +15,4 @@ cmake \
     -B"build" \
     "Bonsai/runtime"
 
-make -O -C "build" -j"$(nproc)"
+make -O -C "build" bonsai2_slowdust -j"$(nproc)"

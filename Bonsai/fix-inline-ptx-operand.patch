@@ -1,0 +1,46 @@
+diff --git a/runtime/CUDAkernels/dev_approximate_gravity_warp.cu b/runtime/CUDAkernels/dev_approximate_gravity_warp.cu
+index 5f47ace..8c8a715 100644
+--- a/runtime/CUDAkernels/dev_approximate_gravity_warp.cu
++++ b/runtime/CUDAkernels/dev_approximate_gravity_warp.cu
+@@ -111,6 +111,7 @@ static __device__ __forceinline__ int ShflSegScanStepB(
+             uint distance,
+             uint up_offset)
+ {
++  int result;
+   asm(
+       "{.reg .u32 r0;"
+       ".reg .pred p;"
+@@ -118,8 +119,8 @@ static __device__ __forceinline__ int ShflSegScanStepB(
+       "setp.le.u32 p, %2, %3;"
+       "@p add.u32 %1, r0, %1;"
+       "mov.u32 %0, %1;}"
+-      : "=r"(partial) : "r"(partial), "r"(up_offset), "r"(distance));
+-  return partial;
++      : "=r"(result), "+r"(partial) : "r"(up_offset), "r"(distance));
++  return result;
+ }
+   template<const int SIZE2>
+ static __device__ __forceinline__ int inclusive_segscan_warp_step(int value, const int distance)
+diff --git a/runtime/CUDAkernels/dev_approximate_gravity_warp_new.cu b/runtime/CUDAkernels/dev_approximate_gravity_warp_new.cu
+index ee25139..2741e9c 100644
+--- a/runtime/CUDAkernels/dev_approximate_gravity_warp_new.cu
++++ b/runtime/CUDAkernels/dev_approximate_gravity_warp_new.cu
+@@ -110,6 +110,7 @@ static __device__ __forceinline__ int ShflSegScanStepB(
+             uint distance,
+             uint up_offset)
+ {
++  int result;
+ //      "shfl.up.b32 r0, %1, %2, 0;"
+   asm(
+       "{.reg .u32 r0;"
+@@ -118,8 +119,8 @@ static __device__ __forceinline__ int ShflSegScanStepB(
+       "setp.le.u32 p, %2, %3;"
+       "@p add.u32 %1, r0, %1;"
+       "mov.u32 %0, %1;}"
+-      : "=r"(partial) : "r"(partial), "r"(up_offset), "r"(distance));
+-  return partial;
++      : "=r"(result), "+r"(partial) : "r"(up_offset), "r"(distance));
++  return result;
+ }
+ 
+   template<const int SIZE2>
