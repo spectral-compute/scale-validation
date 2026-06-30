@@ -14,7 +14,7 @@ USAGE=$(cat <<-END
         The path where SCALE is installed.
 
     - GPU_ARCHITECTURE
-        The AMD GPU archiecture to build for, eg "gfx1100".
+        The GPU archiecture to build for, eg "gfx1100".
 
     - TEST_NAME
         The name of one of the test directories in this repo.
