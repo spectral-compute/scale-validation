@@ -2,6 +2,6 @@
 
 set -e
 
-ctest --test-dir build/ —parallel 8 --verbose
+ctest --test-dir build/ -parallel 8 --verbose
 
 cd -
