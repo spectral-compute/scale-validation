@@ -4,6 +4,7 @@ set -euo pipefail
 
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DCMAKE_C_COMPILER="clang" \
     -DCMAKE_CXX_COMPILER="clang++" \
     -DCUDA_NVCC_FLAGS="-gencode;arch=compute_${CUDAARCHS},code=sm_${CUDAARCHS}" \
