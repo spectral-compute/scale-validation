@@ -5,60 +5,14 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <3cd584ef>.**
+**This shows the test status for SCALE: master <ace820cc>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
 Contributions welcome!
 
-| Project        | Version                    | gfx90a|gfx900|gfx1201|gfx1100|gfx1030|sm_120|
-|----------------|----------------------------| -|-|-|-|-|-|
-| alien          | v4.12.3       | ❌|✅|✅|✅|✅|✅|
-| AMGX          | v2.5.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| arrayfire          | v3.10.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| bitnet          | 404980eecae38a...       | ✅|✅|✅|✅|✅|✅|
-| caffe          | 9b891540183ddc...       | ✅|❌|✅|✅|✅|✅|
-| ctranslate2          | v4.8.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| cuml          | b17f2db       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| cuSZ          | v0.17.3       | ✅|✅|✅|✅|✅|✅|
-| cutlass          | v4.5.2       | ✅|✅|✅|✅|✅|🛠️️|
-| CV-CUDA          | f769fe4       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| cycles          | v5.1.0       | ❌|❌|✅|✅|✅|✅|
-| faiss          | v1.14.3       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| FastEddy          | v5.0.0       | ✅|🛠️️|✅|✅|✅|✅|
-| ffmpeg          | n8.1.2       | ✅|✅|✅|✅|✅|✅|
-| FLAMEGPU2          | v2.0.0-rc.4       | 🛠️️|✅|🛠️️|🛠️️|🛠️️|✅|
-| ggml          | d3a58b0       | ✅|✅|✅|✅|✅|✅|
-| gomc          | 4c12477       | ❌|❌|❌|❌|❌|✅|
-| gpu_jpeg2k          | ee715e9       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| GPUJPEG          | 3e045d1       | ✅|✅|✅|✅|✅|✅|
-| gromacs          | v2026.3       | ❌|❌|❌|❌|❌|✅|
-| hashcat          | 6716447dfce969...       | ✅|✅|❌|✅|✅|✅|
-| hashinator          | 34cf188       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| HeCBench          | 42e8f09f3f7fa9...       | ❌|❌|❌|❌|❌|❌|
-| hypre          | v3.1.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| jitify          | master       | ❌|❌|🛠️️|❌|❌|❌|
-| kokkos          |        | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| llama.cpp          | b9680       | ❌|❌|✅|✅|✅|❌|
-| llm.c          | 7ecd8906afe6ed...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| nixl          | e128059af332df...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|✅|
-| nvflip          | 1eb247c       | ❌|❌|❌|❌|❌|❌|
-| opencv          | 725e440       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| PhysX          | 1e44a0e       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| pytorch          | v2.12.1       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| quda          | 07822b61c6ab5f...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| RabbitCT          | 1f1359afad1355...       | ✅|✅|✅|✅|✅|✅|
-| risc0          | v3.0.5       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| rodinia_suite          | spectral       | ✅|✅|✅|✅|✅|✅|
-| stdgpu          | 563dc59d6d08df...       | ❌|❌|❌|❌|❌|✅|
-| TCLB          | v6.7       | ✅|✅|✅|✅|✅|✅|
-| thrust          | 756c5af       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| timemachine          | 01f14f8       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| UppASD          | gpu_new       | ✅|✅|✅|✅|✅|✅|
-| vllm          | v0.24.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| warp          | v1.14.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| whispercpp          | v1.9.0       | ✅|✅|✅|✅|✅|✅|
-| xgboost          | v3.3.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
+| Project        | Version                    | 
+|----------------|----------------------------| 
 
 *Key:*
 * ✅ Validated succesfully
@@ -66,7 +20,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 11899.
+Pipeline ID: 12106.
 
 ## Running Tests
 
