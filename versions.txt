@@ -33,6 +33,7 @@ jitify master
 llama.cpp b9522
 llm.c 7ecd8906afe6ed7a2b2cdb731c042f26d525b820
 MAGMA v2.9.0
+MLPerf main
 nerf-cuda main
 nixl e128059af332df6e05de218d24b04c66a64b030a
 nvflip 1eb247c
