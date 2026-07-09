@@ -34,3 +34,7 @@ sed -Ee 's|wgmma_sm90.cu|sgemm_sm80.cu|' -i ${SRCDIR}/examples/cute/tutorial/CMa
 
 # Disable SM-number checking to skip tests, so all tests always run.
 sed -Ee 's|supported = false;|supported = true;|' -i ${SRCDIR}/examples/13_two_tensor_op_fusion/test_run.h
+
+# The GEMM kernels launch through Kernel2 with no __launch_bounds__, so the AMDGPU backend assumes a 1024-thread block
+# and spills. Annotate it with the real block size. Kernel2 is GEMM-only, so every operator it takes has kThreadCount.
+sed -Ee 's|^void Kernel2\(typename Operator::Params params\)|__launch_bounds__(Operator::kThreadCount) void Kernel2(typename Operator::Params params)|' -i ${SRCDIR}/include/cutlass/device_kernel.h
