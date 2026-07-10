@@ -22,8 +22,6 @@ torch-arch() {
 export TORCH_CUDA_ARCH_LIST=$(torch-arch)
 
 export CFLAGS="\
-    -march=native \
-    -mtune=native \
     -Wno-inconsistent-missing-destructor-override \
     -Wno-deprecated-copy-with-user-provided-dtor \
     -Wno-dangling-reference \
