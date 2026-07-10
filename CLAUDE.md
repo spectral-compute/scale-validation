@@ -48,6 +48,19 @@ relies on the environment exported by the driver. Conventions:
   build as much as possible (more signal on what's unsupported).
 - Tests must exit non-zero on failure; correctness tests compare actual vs. expected
   output (see `hashcat/02-test-short.sh`).
+- **Multi-check files**: when a file verifies several related but independent claims
+  (e.g. multiple documented capabilities of one built binary), source `util/checks.sh`
+  and use `check "<label>" <fn>` for each one instead of plain `set -e`. This runs every
+  check even if earlier ones fail, and calls `check_exit` at the end to fail the script
+  only once, after every check has had a chance to report — so one broken claim doesn't
+  hide the pass/fail status of the others in the same file. Single-assertion files (e.g.
+  `hashcat/02-test-short.sh`) don't need this — it's for files with more than one
+  independent check (see e.g. `hashcat/05-test-hash-modes.sh`).
+- **Image fidelity checks**: a `psnr_ppm <ref> <dec> [<threshold_db>]` bash function
+  (PPM/PGM round-trip PSNR via an embedded Python snippet) is defined inline in
+  `GPUJPEG/04-test-claims.sh`, rather than shared from `util/` — kept in the file so it
+  stays self-contained, matching the MSE-via-ImageMagick-`compare` pattern already
+  duplicated inline in `cycles/03-test-examples.sh` and `nvflip/02-test.sh`.
 
 `util/args.sh` is a richer alternative arg-parser some tests source directly (supports
 `SKIP_N`/`STOP_AFTER_N` phase selection, `-check` to validate ordering, and
