@@ -4,6 +4,7 @@ set -e
 
 # Configure.
 cmake \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DUSE_CUDNN=OFF \
     -DUSE_OPENCV=OFF \
     -DBUILD_python=off \
