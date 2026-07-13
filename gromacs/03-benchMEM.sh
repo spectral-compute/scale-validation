@@ -12,5 +12,7 @@ fi
 
 source "install/bin/GMXRC"
 
+# TODO: Give context to the below comment. What is the difference?
+#
 # When comparing with hip we should use -pme cpu -bonded cpu -update cpu
 gmx mdrun -s "benchMEM.tpr" -v -ntmpi 1 -nb gpu
