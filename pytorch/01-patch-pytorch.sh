@@ -64,8 +64,3 @@ git apply "${SCRIPT_DIR}/patches/flash_attention_typename_patch.diff"
 FILE="${OUT_DIR}/pytorch/aten/src/ATen/native/transformers/cuda/mem_eff_attention/kernel_forward.h"
 sed -i 's/Params{MM1::LayoutB(/Params{typename MM1::LayoutB(/g' "${FILE}"
 
-# 6) Handle kernel failing to launch on scale due to register pressure. TODO(scale#1084)
-if [[ "$(nvcc --version)" == *" SCALE "* ]]; then
-    FILE="${OUT_DIR}/pytorch/aten/src/ATen/native/cuda/layer_norm_kernel.cu"
-    sed -i 's/ConfigureAndLaunchGammaBetaBackwardKernel<T, T_ACC, block_dim_x, 32, 256, rms_norm>/ConfigureAndLaunchGammaBetaBackwardKernel<T, T_ACC, block_dim_x, 16, 128, rms_norm>/' "${FILE}"
-fi
