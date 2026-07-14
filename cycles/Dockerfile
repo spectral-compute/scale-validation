@@ -19,16 +19,44 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libopenimageio-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# sm_* needs a real CUDA Toolkit to build. Build-stage only -- never reaches the
+# publicly-republished runtime stage; no driver installed.
+RUN if [[ "${GPU_ARCH}" == sm_* ]]; then \
+        wget -q https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb && \
+        dpkg -i cuda-keyring_1.1-1_all.deb && rm cuda-keyring_1.1-1_all.deb && \
+        apt-get update && \
+        apt-get install -y --no-install-recommends cuda-toolkit-12-9 && \
+        rm -rf /var/lib/apt/lists/*; \
+    fi
+
 COPY versions.txt /build/versions.txt
 COPY util/ /build/util/
 COPY cycles/ /build/cycles/
+COPY test.sh /build/test.sh
 
 # 00-clone.sh also initialises the lib/linux_x64 submodule (precompiled CUDA PTX libs).
-WORKDIR /build/cycles
-RUN source /opt/scale/bin/scaleenv ${GPU_ARCH} \
-    && bash 00-clone.sh \
-    && bash 01-patch.sh \
-    && bash 02-build.sh
+# Runs the clone/patch/build scripts via the same test.sh driver used below.
+# --keep is required here: without it test.sh would rm -rf /build/cycles (its
+# own OUT_DIR/TEST_NAME) before globbing scripts from that very directory.
+WORKDIR /build
+RUN bash test.sh /build /opt/scale "${GPU_ARCH}" cycles --match '-(clone|patch|build)' --keep
+
+# ── test stage ─────────────────────────────────────────────────────────────
+# Runs only the test/benchmark scripts (matched by filename, not hardcoded)
+# against the project dir the build stage already cloned+built above.
+FROM build AS test
+ARG GPU_ARCH=gfx1100
+ENV GPU_ARCH=${GPU_ARCH}
+# 03-test-examples.sh needs `time` (GNU time, /usr/bin/time -- not bash's
+# builtin) to time each render, plus imagemagick/python3 for the CPU-vs-CUDA
+# parity check (same packages the runtime stage installs below, for the same
+# reason -- `time` isn't needed there since nothing at runtime calls it).
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    time \
+    imagemagick \
+    python3 \
+    && rm -rf /var/lib/apt/lists/*
+ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" cycles --match '-(test|benchmark)' --keep"]
 
 # ── runtime stage ─────────────────────────────────────────────────────────────
 FROM ${SCALE_BASE_IMAGE}

@@ -12,6 +12,16 @@ else
     CMAKE_EXTRA_ARGS=()
 fi
 
+# On real NVIDIA targets, ${CUDA_PATH} (scaleenv's "Using cuda install at ..." pick) is a
+# runtime-only install that legacy find_package(CUDA) can't see a full toolkit under
+# (missing CUDA_INCLUDE_DIRS/CUDA_CUDART_LIBRARY) -- same environment whispercpp builds
+# against successfully by never hinting a root at all and letting CMake resolve nvcc (and
+# from it, the toolkit root) via $PATH instead. Only skip the hint for sm_* GPU_ARCH so
+# the AMD path (which works today with this hint) is untouched.
+if [[ "${GPU_ARCH}" != sm_* ]] ; then
+    CMAKE_EXTRA_ARGS+=(-DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}")
+fi
+
 # Configure.
 cmake \
     -DCMAKE_BUILD_TYPE=Release \
@@ -32,7 +42,6 @@ cmake \
     -DWITH_CYCLES_OPENVDB=OFF \
     -DWITH_CYCLES_OPENCOLORIO=ON \
     "${CMAKE_EXTRA_ARGS[@]}" \
-    -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}" \
     -DCMAKE_INSTALL_PREFIX="install" \
     -B"build" \
     "cycles"
