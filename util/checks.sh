@@ -20,13 +20,28 @@ _CHECKS_FAILED=0
 
 check() {
     local label="$1"; shift
+    local status
     _CHECKS_TOTAL=$(( _CHECKS_TOTAL + 1 ))
     echo -e "\x1b[1m--- ${label} ---\x1b[m"
     if "$@"; then
+        status="PASS"
         echo -e "\x1b[32;1mPASS\x1b[m: ${label}"
     else
+        status="FAIL"
         echo -e "\x1b[31;1mFAIL\x1b[m: ${label}"
         _CHECKS_FAILED=$(( _CHECKS_FAILED + 1 ))
+    fi
+
+    # Optional: only written when invoked via test.sh (SCALE_TEST_RESULTS_FILE
+    # set). Standalone runs of a script that sources this file (not via
+    # test.sh) keep working with no new required dependency. test.sh folds
+    # this into its unified per-script/per-check results table, grouping by
+    # the script name written here.
+    # NOTE: label must not itself contain a literal tab or newline.
+    if [ -n "${SCALE_TEST_RESULTS_FILE:-}" ]; then
+        printf '%s\t%s\t%s\n' \
+            "$(basename "$0")" "${status}" "${label}" \
+            >> "${SCALE_TEST_RESULTS_FILE}"
     fi
 }
 

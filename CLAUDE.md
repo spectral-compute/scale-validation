@@ -27,6 +27,41 @@ lexicographical order** with `set -o errexit` — the first failing script fails
   unmodified against stock `nvcc`. This dual-mode behavior is intentional.
 - GPU arch is AMD-style (`gfx1100`, `gfx90a`) for SCALE or `sm_120` for NVIDIA.
 
+## Logs and results
+
+Every `./test.sh` run writes one durable log file to `<workdir>/logs/` — one level above
+the per-test workdir, so it's shared across every project tested against that `WORKDIR`
+and survives the `rm -rf <workdir>/<test_name>` wipe at the top of each run. Nothing is
+ever overwritten: each invocation gets its own file,
+`<test_name>-<YYYYMMDDHHMMSSZ>.log` (UTC timestamp), so history accumulates across runs
+and projects in one place.
+
+Each file contains, in order:
+- The full chronological stdout+stderr of every script in the sequence, in execution
+  order, with the `--- Executing ... ---` banners, a small header (test name, gpu arch,
+  scale dir, mode, start time), and a final `ALL SCRIPTS PASSED` / `FAILED: ...` line.
+  Console output still streams live as normal; this is a copy, not a replacement.
+- A single `=== RESULTS ===` table at the bottom, fixed-width `KIND`/`SCRIPT`/`STATUS`
+  columns (easy to `grep`/`awk`) followed by a freeform `DETAIL` column (easy to read).
+  One `SCRIPT` row per script that ran (`exit=<code> duration=<seconds>s`), immediately
+  followed by any `CHECK` rows it recorded via `util/checks.sh` (see "Multi-check files"
+  below) — e.g.:
+  ```
+  KIND    SCRIPT                                      STATUS  DETAIL
+  SCRIPT  05-test-hash-modes.sh                        FAIL    exit=1 duration=8s
+  CHECK   05-test-hash-modes.sh                        PASS    crack MD5
+  CHECK   05-test-hash-modes.sh                        FAIL    dictionary attack (-a 0, build/example.dict)
+  ```
+  A script with no checks just has its `SCRIPT` row, no `CHECK` rows beneath it — that's
+  expected, not an error.
+
+This table is appended at the very end regardless of how the run finishes — success, a
+failing script, or an unexpected error — via a `trap ... EXIT` in `test.sh`, so the
+useful debugging context is always there even when a run aborts partway through.
+
+To hand a run's results to someone else for debugging without them needing to re-run
+anything: just point them at (or attach) that one `.log` file.
+
 ## Authoring / editing a test
 
 A test directory is a sequence of numbered scripts run in order:
