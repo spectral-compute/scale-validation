@@ -55,12 +55,3 @@ sed -Ee 's|supported = false;|supported = true;|' \
 # Disable fp8 - we don't support fp8/6/4 yet.
 sed -Ee 's|(# +define CUTLASS_ARCH_MMA_F32_SM89_ENABLED)|// \1|' -i include/cutlass/arch/mma_sm89.h
 
-# 3) Patch flash attention
-cd ../flash-attention
-git stash
-git apply "${SCRIPT_DIR}/patches/flash_attention_typename_patch.diff"
-
-# 4) Patch mem_eff_attention typename
-FILE="${OUT_DIR}/pytorch/aten/src/ATen/native/transformers/cuda/mem_eff_attention/kernel_forward.h"
-sed -i 's/Params{MM1::LayoutB(/Params{typename MM1::LayoutB(/g' "${FILE}"
-
