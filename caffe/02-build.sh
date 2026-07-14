@@ -11,8 +11,8 @@ cmake \
     -DBLAS=Open \
     -DBUILD_docs=OFF \
     -DCUDA_ARCH_NAME=Manual \
-    -DCUDA_ARCH_BIN="${GPU_ARCH}" \
-    -DCUDA_ARCH_PTX="${GPU_ARCH}" \
+    -DCUDA_ARCH_BIN="${CUDAARCHS}" \
+    -DCUDA_ARCH_PTX="${CUDAARCHS}" \
     -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}" \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX="$(pwd)/../install" \

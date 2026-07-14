@@ -4,7 +4,7 @@ set -e
 
 USAGE=$(cat <<-END
 
-    Usage: $0 WORKDIR PATH_TO_SCALE GPU_ARCHITECTURE TEST_NAME
+    Usage: $0 WORKDIR PATH_TO_SCALE GPU_ARCHITECTURE TEST_NAME [--match REGEX] [--keep]
 
     - WORKDIR
         A directory for the script to work in. Compilation results will
@@ -19,6 +19,17 @@ USAGE=$(cat <<-END
     - TEST_NAME
         The name of one of the test directories in this repo.
 
+    - --match REGEX (optional)
+        Only run scripts whose filename matches REGEX (bash =~), instead of
+        every "*.sh" in the test directory. Useful for running just the
+        test/benchmark scripts against an already-built project, e.g.
+        "-(test|benchmark)".
+
+    - --keep (optional)
+        Don't wipe WORKDIR/TEST_NAME before running. Use this to run scripts
+        against a directory that already has clone/build output in it (e.g.
+        one populated by an earlier build stage), instead of starting fresh.
+
 END
 )
 
@@ -32,6 +43,26 @@ OUT_DIR="$(realpath "$1")"
 SCALE_DIR="$(realpath "$2")"
 INPUT_GPU_ARCH="$3"
 TEST="$4"
+shift 4
+
+MATCH_REGEX=""
+KEEP=""
+while [[ $# -gt 0 ]] ; do
+    case "$1" in
+        --match)
+            MATCH_REGEX="$2"
+            shift 2
+            ;;
+        --keep)
+            KEEP=1
+            shift
+            ;;
+        *)
+            echo "${USAGE}" 1>&2
+            exit 1
+            ;;
+    esac
+done
 
 # The next argument should be a subdirectory of the directory this script is in.
 if [ "$TEST" == "util" ] || [ ! -d "${TEST_DIR}/${TEST}" ] ; then
@@ -39,8 +70,12 @@ if [ "$TEST" == "util" ] || [ ! -d "${TEST_DIR}/${TEST}" ] ; then
     exit 1
 fi
 
-rm -rf "${OUT_DIR}/${TEST}"
-mkdir -p "${OUT_DIR}/${TEST}"
+if [ -n "${KEEP}" ] ; then
+    mkdir -p "${OUT_DIR}/${TEST}"
+else
+    rm -rf "${OUT_DIR}/${TEST}"
+    mkdir -p "${OUT_DIR}/${TEST}"
+fi
 cd "${OUT_DIR}/${TEST}"
 
 # Activate SCALE or use Nvidia's CUDA.
@@ -157,6 +192,11 @@ trap finalize_log EXIT
 set -o errexit
 for i in "${TEST_DIR}/${TEST}"/*.sh; do
     NAME="$(basename "$i")"
+
+    if [ -n "${MATCH_REGEX}" ] && [[ ! "${NAME}" =~ ${MATCH_REGEX} ]] ; then
+        continue
+    fi
+
     echo "--------------- Executing $i ---------------" | tee -a "${LOG_FILE}"
 
     # Errexit must not fire on the pipeline's own (tee's) exit status -- we

@@ -13,11 +13,27 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY versions.txt /build/versions.txt
 COPY util/ /build/util/
 COPY nvflip/ /build/nvflip/
+COPY test.sh /build/test.sh
 
-WORKDIR /build/nvflip
-RUN source /opt/scale/bin/scaleenv ${GPU_ARCH} \
-    && bash 00-clone.sh \
-    && bash 01-build.sh
+# Runs the clone/build scripts via the same test.sh driver used below.
+# --keep is required here: without it test.sh would rm -rf /build/nvflip (its
+# own OUT_DIR/TEST_NAME) before globbing scripts from that very directory.
+WORKDIR /build
+RUN bash test.sh /build /opt/scale "${GPU_ARCH}" nvflip --match '-(clone|patch|build)' --keep
+
+# ── test stage ─────────────────────────────────────────────────────────────
+# Runs only the test/benchmark scripts (matched by filename, not hardcoded)
+# against the project dir the build stage already cloned+built above.
+FROM build AS test
+ARG GPU_ARCH=gfx1100
+ENV GPU_ARCH=${GPU_ARCH}
+# 02-test.sh's CPU-vs-GPU parity check needs these (same packages the runtime
+# stage installs below, for the same reason).
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    imagemagick \
+    python3 \
+    && rm -rf /var/lib/apt/lists/*
+ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" nvflip --match '-(test|benchmark)' --keep"]
 
 # ── runtime stage ─────────────────────────────────────────────────────────────
 FROM ${SCALE_BASE_IMAGE}
