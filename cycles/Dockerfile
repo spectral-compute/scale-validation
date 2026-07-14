@@ -30,6 +30,24 @@ RUN source /opt/scale/bin/scaleenv ${GPU_ARCH} \
     && bash 01-patch.sh \
     && bash 02-build.sh
 
+# ── test stage ─────────────────────────────────────────────────────────────
+# Runs only the test/benchmark scripts (matched by filename, not hardcoded)
+# against the project dir the build stage already cloned+built above.
+FROM build AS test
+ARG GPU_ARCH=gfx1100
+ENV GPU_ARCH=${GPU_ARCH}
+# 03-test-examples.sh needs `time` (GNU time, /usr/bin/time -- not bash's
+# builtin) to time each render, plus imagemagick/python3 for the CPU-vs-CUDA
+# parity check (same packages the runtime stage installs below, for the same
+# reason -- `time` isn't needed there since nothing at runtime calls it).
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    time \
+    imagemagick \
+    python3 \
+    && rm -rf /var/lib/apt/lists/*
+COPY test.sh /build/test.sh
+ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" cycles --match '-(test|benchmark)' --keep"]
+
 # ── runtime stage ─────────────────────────────────────────────────────────────
 FROM ${SCALE_BASE_IMAGE}
 USER root

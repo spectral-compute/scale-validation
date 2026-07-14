@@ -15,6 +15,15 @@ RUN source /opt/scale/bin/scaleenv ${GPU_ARCH} \
     && bash 00-clone.sh \
     && bash 01-build.sh
 
+# ── test stage ─────────────────────────────────────────────────────────────
+# Runs only the test/benchmark scripts (matched by filename, not hardcoded)
+# against the project dir the build stage already cloned+built above.
+FROM build AS test
+ARG GPU_ARCH=gfx1100
+ENV GPU_ARCH=${GPU_ARCH}
+COPY test.sh /build/test.sh
+ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" hashcat --match '-(test|benchmark)' --keep"]
+
 # ── runtime stage ─────────────────────────────────────────────────────────────
 FROM ${SCALE_BASE_IMAGE}
 USER root

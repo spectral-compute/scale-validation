@@ -19,6 +19,21 @@ RUN source /opt/scale/bin/scaleenv ${GPU_ARCH} \
     && bash 00-clone.sh \
     && bash 01-build.sh
 
+# ── test stage ─────────────────────────────────────────────────────────────
+# Runs only the test/benchmark scripts (matched by filename, not hardcoded)
+# against the project dir the build stage already cloned+built above.
+FROM build AS test
+ARG GPU_ARCH=gfx1100
+ENV GPU_ARCH=${GPU_ARCH}
+# 02-test.sh's CPU-vs-GPU parity check needs these (same packages the runtime
+# stage installs below, for the same reason).
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    imagemagick \
+    python3 \
+    && rm -rf /var/lib/apt/lists/*
+COPY test.sh /build/test.sh
+ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" nvflip --match '-(test|benchmark)' --keep"]
+
 # ── runtime stage ─────────────────────────────────────────────────────────────
 FROM ${SCALE_BASE_IMAGE}
 USER root

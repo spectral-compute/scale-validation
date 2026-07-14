@@ -27,6 +27,16 @@ lexicographical order** with `set -o errexit` — the first failing script fails
   unmodified against stock `nvcc`. This dual-mode behavior is intentional.
 - GPU arch is AMD-style (`gfx1100`, `gfx90a`) for SCALE or `sm_120` for NVIDIA.
 
+Two optional flags, appended after `<test_name>`, support running against an
+already-built project (used by the container test stage below) without changing
+default native behavior:
+
+- `--match <regex>`: only run scripts whose filename matches the regex, instead of
+  every `*.sh`. The test/benchmark naming convention (see "Authoring / editing a
+  test" below) means `--match '-(test|benchmark)'` runs just those.
+- `--keep`: don't wipe `<workdir>/<test_name>` first; just run against whatever's
+  already there (still creates the directory if it's missing).
+
 ## Logs and results
 
 Every `./test.sh` run writes one durable log file to `<workdir>/logs/` — one level above
@@ -101,6 +111,33 @@ relies on the environment exported by the driver. Conventions:
 `SKIP_N`/`STOP_AFTER_N` phase selection, `-check` to validate ordering, and
 `PARTIAL_PARSE`). It duplicates the `do_clone*`/`get_version` helpers from `git.sh`; keep
 the two in sync if you change them.
+
+The `00-clone`/`01-patch`/`0N-build` vs. `0N+1-test*`/`0N+2-benchmark*` naming convention
+above isn't just cosmetic — it's what the container test stage (below) matches on to
+find test scripts, so every new test/benchmark script must have `test` or `benchmark`
+somewhere in its filename, and setup scripts must not.
+
+## Container test stage
+
+Projects with a `Dockerfile` (all but `GPUJPEG`, which isn't containerized yet) have a
+`test` stage in addition to the usual `build` and (unnamed, final) runtime stages:
+
+```bash
+docker build --target test -t <project>:test --build-arg GPU_ARCH=gfx1100 -f <project>/Dockerfile .
+docker run --rm --device /dev/dri --device /dev/kfd <project>:test
+```
+
+The `test` stage is `FROM build`, so it starts from the already-cloned-and-built project
+with no extra work, then runs `test.sh` against that same directory with `--match
+'-(test|benchmark)' --keep` baked into its `ENTRYPOINT` (see "Running a test" above for
+what those flags do). Exit code is the only signal — 0 if every matched script passed,
+nonzero otherwise. GPU device access only exists at `docker run` time, not `docker
+build` time, which is why the tests run as the container's entrypoint rather than a
+`RUN` step during the build. If a test/benchmark script needs a package the `build`
+stage doesn't already install (e.g. `imagemagick`/`python3` for the CPU-vs-GPU parity
+checks in `cycles`/`nvflip`), add it to the `test` stage directly, same as `cycles/Dockerfile`
+and `nvflip/Dockerfile` do — don't rely on the runtime stage's packages, which the `test`
+stage doesn't inherit (it's `FROM build`, not `FROM` the runtime stage).
 
 ## README status table
 
