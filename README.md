@@ -5,31 +5,14 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <06b011fd>.**
+**This shows the test status for SCALE: master <c299c9ed>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
 Contributions welcome!
 
-| Project        | Version                    | gfx1100|
-|----------------|----------------------------| -|
-| alien          | v4.12.3       | ✅|
-| arrayfire          | v3.10.0       | 🛠️️|
-| bitnet          | 404980eecae38a...       | ✅|
-| caffe          | 9b891540183ddc...       | ✅|
-| ctranslate2          | v4.8.0       | 🛠️️|
-| cuml          | b17f2db       | 🛠️️|
-| cuSZ          | v0.17.3       | ✅|
-| cycles          | v5.1.0       | ✅|
-| FastEddy          | v5.0.0       | ✅|
-| ffmpeg          | n8.1.2       | ✅|
-| FLAMEGPU2          | v2.0.0-rc.4       | 🛠️️|
-| GPUJPEG          | 3e045d1       | ✅|
-| HeCBench          | 42e8f09f3f7fa9...       | ✅|
-| PhysX          | 1e44a0e       | 🛠️️|
-| RabbitCT          | 1f1359afad1355...       | ✅|
-| TCLB          | v6.7       | ✅|
-| UppASD          | gpu_new       | ✅|
+| Project        | Version                    | 
+|----------------|----------------------------| 
 
 *Key:*
 * ✅ Validated succesfully
@@ -37,7 +20,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 13912.
+Pipeline ID: 14146.
 
 ## Running Tests
 
