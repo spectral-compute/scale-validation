@@ -1,0 +1,261 @@
+{
+  "generated_at_utc": "2026-07-17T04:46:33.100769+00:00",
+  "generated_datasets": {
+    "model_inputs_v1": {
+      "files": [
+        {
+          "relative_path": "prepared/model_inputs_v1/attention_initial_state.npz",
+          "sha256": "d5ca1825a3a1f74f31ce2a6a054444febfb6707ce48b6afb16796d4e1778ecf5",
+          "size_bytes": 17716
+        },
+        {
+          "relative_path": "prepared/model_inputs_v1/block_inputs.npz",
+          "sha256": "d2bf4134c09010c8269140a8c2d8b5eeee5f4c465ae06286fcc0cf680bbc7a01",
+          "size_bytes": 158808
+        },
+        {
+          "relative_path": "prepared/model_inputs_v1/cnn_initial_state.npz",
+          "sha256": "8a73674248c4e9f9ed90eb3c1a6365367adaae0bfec9c27f42695670b2083c80",
+          "size_bytes": 193106
+        },
+        {
+          "relative_path": "prepared/model_inputs_v1/linear_initial_state.npz",
+          "sha256": "6d2dfed49c62462991af3f15a54545cfd9e3d2e6b0a57dc7001b46f16ac62415",
+          "size_bytes": 636
+        },
+        {
+          "relative_path": "prepared/model_inputs_v1/metadata.json",
+          "sha256": "0a289cbbd57c9963878bff1e85da45c3e87af0363afa3cf04ba29f1e784e3ec0",
+          "size_bytes": 168
+        },
+        {
+          "relative_path": "prepared/model_inputs_v1/mlp_initial_state.npz",
+          "sha256": "0d3bb1e93838e9cb10520bdf0a8fec1737759effd7a445594a52d1c3901d7dc8",
+          "size_bytes": 6764
+        },
+        {
+          "relative_path": "prepared/model_inputs_v1/sms_transformer_initial_state.npz",
+          "sha256": "994143d842ede80409748ec6fe787fcaaaadedcb76277cf86a62035266f5c8df",
+          "size_bytes": 560915
+        }
+      ],
+      "kind": "generated",
+      "prepared_directory": "prepared/model_inputs_v1"
+    },
+    "numerical_inputs_v1": {
+      "files": [
+        {
+          "relative_path": "prepared/numerical_inputs_v1/convolutions.npz",
+          "sha256": "8d35185950d3cbaef794a0a56c6917e6ecd93fc79a13610572f9c9916cdb4db1",
+          "size_bytes": 60173
+        },
+        {
+          "relative_path": "prepared/numerical_inputs_v1/elementwise.npz",
+          "sha256": "d45268592e4fa6421388f83c4436c2687d88aaa23cd951c5a1e56a5ef0fc462d",
+          "size_bytes": 14697
+        },
+        {
+          "relative_path": "prepared/numerical_inputs_v1/fft.npz",
+          "sha256": "d5781938da24a05958d8a7ee309e457391b309d9e7a6e2092372c0071e93f95a",
+          "size_bytes": 18671
+        },
+        {
+          "relative_path": "prepared/numerical_inputs_v1/indexing.npz",
+          "sha256": "aea6e648c9432dcbc4b066a0025260569c6035de849db1798b703626daec22fd",
+          "size_bytes": 12446
+        },
+        {
+          "relative_path": "prepared/numerical_inputs_v1/linear_algebra.npz",
+          "sha256": "155857456b3e989ab3903e209ef8099f681f952feebcdf119d0f47f56dc8e530",
+          "size_bytes": 12561
+        },
+        {
+          "relative_path": "prepared/numerical_inputs_v1/matrix_operations.npz",
+          "sha256": "c7d13c24e9d75aa56027bc53215d66be830076a627977d4e5f76c52b29800635",
+          "size_bytes": 411050
+        },
+        {
+          "relative_path": "prepared/numerical_inputs_v1/metadata.json",
+          "sha256": "8cb57df36e45288637ce32e8698c78f0f37fc455430379c94eac3a9d472720a7",
+          "size_bytes": 141
+        },
+        {
+          "relative_path": "prepared/numerical_inputs_v1/reductions.npz",
+          "sha256": "74e2b7e78ff7694826dc8d2da313d34fbe63808ad4df636fefd4a960e84ed5b1",
+          "size_bytes": 146623
+        },
+        {
+          "relative_path": "prepared/numerical_inputs_v1/special_functions.npz",
+          "sha256": "649c985f4a5a56d6506c7f23c679328311e832b5c6d7272070aa04717f8b9181",
+          "size_bytes": 13036
+        }
+      ],
+      "kind": "generated",
+      "prepared_directory": "prepared/numerical_inputs_v1"
+    }
+  },
+  "manifest_version": "1",
+  "prepared_datasets": {
+    "breast_cancer_wisconsin_v1": {
+      "files": [
+        {
+          "relative_path": "prepared/breast_cancer_wisconsin_v1/evaluation.npz",
+          "sha256": "172185a65b71599868dbcd3d7d6b5d8c88cc2a7af4f8bb3b80f8b43c8c5e64c2",
+          "size_bytes": 14017
+        },
+        {
+          "relative_path": "prepared/breast_cancer_wisconsin_v1/metadata.json",
+          "sha256": "3d949aba5541defcb2559c30393c22ace1b3c43b9e8aa666d2c467bad22218e2",
+          "size_bytes": 333
+        },
+        {
+          "relative_path": "prepared/breast_cancer_wisconsin_v1/preprocessing.npz",
+          "sha256": "aaf0f28e0bf4afbc7200bedc82578dbbc98523aef179cf69a26aece78e961815",
+          "size_bytes": 911
+        },
+        {
+          "relative_path": "prepared/breast_cancer_wisconsin_v1/train.npz",
+          "sha256": "57be34874be41c104e76047ca83edf6a85f1174e1a4427e5eeb6cfdc45654be7",
+          "size_bytes": 53119
+        }
+      ],
+      "prepared_directory": "prepared/breast_cancer_wisconsin_v1",
+      "source_id": "breast_cancer_wisconsin_diagnostic"
+    },
+    "fashion_mnist_v1": {
+      "files": [
+        {
+          "relative_path": "prepared/fashion_mnist_v1/evaluation.npz",
+          "sha256": "4a2ebf79dec08cd641924334ae412a497a57c3878657ea4727bc7d0c1517b3dc",
+          "size_bytes": 662950
+        },
+        {
+          "relative_path": "prepared/fashion_mnist_v1/metadata.json",
+          "sha256": "f89d0169db6ccde151c4bce9fb8aa4598605401f737d67abdfdd66c32713eaa5",
+          "size_bytes": 252
+        },
+        {
+          "relative_path": "prepared/fashion_mnist_v1/train.npz",
+          "sha256": "e5977b7f09fbd25f081305ef0ae6f3c4b963edbb650195d05633ba484d71fb20",
+          "size_bytes": 2661946
+        }
+      ],
+      "prepared_directory": "prepared/fashion_mnist_v1",
+      "source_id": "fashion_mnist"
+    },
+    "sms_spam_v1": {
+      "files": [
+        {
+          "relative_path": "prepared/sms_spam_v1/evaluation.npz",
+          "sha256": "7c812afec9f614f04d67e237589de2083fa45b35dd725c289c284595109d23d2",
+          "size_bytes": 49816
+        },
+        {
+          "relative_path": "prepared/sms_spam_v1/metadata.json",
+          "sha256": "5d00488342a0938519c82269b0c4f607c3b83f95bde546c735b7ad4ba61f74d4",
+          "size_bytes": 423
+        },
+        {
+          "relative_path": "prepared/sms_spam_v1/train.npz",
+          "sha256": "014212e58db81ede5bdbd725d98b8a0125f2020c5bc6d9f284a8c675ac73cdcd",
+          "size_bytes": 199241
+        },
+        {
+          "relative_path": "prepared/sms_spam_v1/vocabulary.json",
+          "sha256": "4a1990a6be15b48c09be49c709793403e9d9bc205ca68f1d061a0391a649b1e9",
+          "size_bytes": 71132
+        }
+      ],
+      "prepared_directory": "prepared/sms_spam_v1",
+      "source_id": "sms_spam_collection"
+    }
+  },
+  "root_seed": 42,
+  "sources": {
+    "breast_cancer_wisconsin_diagnostic": {
+      "doi": "10.24432/C5DW2B",
+      "download_urls": [
+        "https://archive.ics.uci.edu/static/public/17/breast%2Bcancer%2Bwisconsin%2Bdiagnostic.zip"
+      ],
+      "files": [
+        {
+          "expected_md5": null,
+          "md5": "97da86fb8aa67b905c88ad6c499f6bd4",
+          "relative_path": "downloaded/breast_cancer_wisconsin/breast_cancer_wisconsin_diagnostic.zip",
+          "required": true,
+          "sha256": "bc154869ef13f753f9e2b5a17e248cfe1ba4b6721db7c4da9f4880e40b05d3af",
+          "size_bytes": 51284
+        }
+      ],
+      "homepage_url": "https://archive.ics.uci.edu/dataset/17/breast%2Bcancer%2Bwisconsin%2Bdiagnostic",
+      "kind": "download",
+      "licence": "CC BY 4.0"
+    },
+    "fashion_mnist": {
+      "download_urls": [
+        "https://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-images-idx3-ubyte.gz",
+        "https://fashion-mnist.s3-website.eu-central-1.amazonaws.com/train-labels-idx1-ubyte.gz",
+        "https://fashion-mnist.s3-website.eu-central-1.amazonaws.com/t10k-images-idx3-ubyte.gz",
+        "https://fashion-mnist.s3-website.eu-central-1.amazonaws.com/t10k-labels-idx1-ubyte.gz"
+      ],
+      "files": [
+        {
+          "expected_md5": "8d4fb7e6c68d591d4c3dfef9ec88bf0d",
+          "md5": "8d4fb7e6c68d591d4c3dfef9ec88bf0d",
+          "relative_path": "downloaded/fashion_mnist/train-images-idx3-ubyte.gz",
+          "required": true,
+          "sha256": "3aede38d61863908ad78613f6a32ed271626dd12800ba2636569512369268a84",
+          "size_bytes": 26421880
+        },
+        {
+          "expected_md5": "25c81989df183df01b3e8a0aad5dffbe",
+          "md5": "25c81989df183df01b3e8a0aad5dffbe",
+          "relative_path": "downloaded/fashion_mnist/train-labels-idx1-ubyte.gz",
+          "required": true,
+          "sha256": "a04f17134ac03560a47e3764e11b92fc97de4d1bfaf8ba1a3aa29af54cc90845",
+          "size_bytes": 29515
+        },
+        {
+          "expected_md5": "bef4ecab320f06d8554ea6380940ec79",
+          "md5": "bef4ecab320f06d8554ea6380940ec79",
+          "relative_path": "downloaded/fashion_mnist/t10k-images-idx3-ubyte.gz",
+          "required": true,
+          "sha256": "346e55b948d973a97e58d2351dde16a484bd415d4595297633bb08f03db6a073",
+          "size_bytes": 4422102
+        },
+        {
+          "expected_md5": "bb300cfdad3c16e7a12a480ee83cd310",
+          "md5": "bb300cfdad3c16e7a12a480ee83cd310",
+          "relative_path": "downloaded/fashion_mnist/t10k-labels-idx1-ubyte.gz",
+          "required": true,
+          "sha256": "67da17c76eaffca5446c3361aaab5c3cd6d1c2608764d35dfb1850b086bf8dd5",
+          "size_bytes": 5148
+        }
+      ],
+      "homepage_url": "https://github.com/zalandoresearch/fashion-mnist",
+      "kind": "download",
+      "licence": "MIT"
+    },
+    "sms_spam_collection": {
+      "doi": "10.24432/C5CC84",
+      "download_urls": [
+        "https://archive.ics.uci.edu/static/public/228/sms%2Bspam%2Bcollection.zip"
+      ],
+      "files": [
+        {
+          "expected_md5": null,
+          "md5": "ab53f9571d479ee677e7b283a06a661a",
+          "relative_path": "downloaded/sms_spam_collection/sms_spam_collection.zip",
+          "required": true,
+          "sha256": "1587ea43e58e82b14ff1f5425c88e17f8496bfcdb67a583dbff9eefaf9963ce3",
+          "size_bytes": 203415
+        }
+      ],
+      "homepage_url": "https://archive.ics.uci.edu/dataset/228/sms%2Bspam%2Bcollection",
+      "kind": "download",
+      "licence": "CC BY 4.0"
+    }
+  },
+  "suite_name": "pytorch_extended_tests",
+  "suite_version": "v1"
+}

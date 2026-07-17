@@ -1,0 +1,5 @@
+{
+  "dataset_id": "numerical_inputs_v1",
+  "description": "Canonical inputs for core tensor and numerical kernel tests",
+  "root_seed": 42
+}

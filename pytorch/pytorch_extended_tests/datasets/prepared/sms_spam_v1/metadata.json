@@ -1,0 +1,17 @@
+{
+  "configured_maximum_vocabulary_size": 4096,
+  "dataset_id": "sms_spam_v1",
+  "evaluation_rows": 1114,
+  "label_mapping": {
+    "ham": 0,
+    "spam": 1
+  },
+  "maximum_sequence_length": 64,
+  "minimum_token_frequency": 1,
+  "root_seed": 42,
+  "source_encoding": "utf-8",
+  "source_rows": 5574,
+  "tokenisation": "Unicode NFKC, casefold, regex words and punctuation",
+  "training_rows": 4460,
+  "vocabulary_size": 4096
+}
