@@ -1,0 +1,6 @@
+{
+  "attention_heads": 4,
+  "dataset_id": "model_inputs_v1",
+  "description": "Fixed model inputs and initial states for block and workload tests",
+  "root_seed": 42
+}

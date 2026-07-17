@@ -1,0 +1,246 @@
+{
+  "comparison_policy_format_version": "comparison_policy_v1",
+  "policy_version": "v1",
+  "description": "Central numerical comparison policy. Static floors and hard ceilings are deliberate defaults. Per-output calibrated limits are added from reference repeatability without replacing existing values.",
+  "settings": {
+    "minimum_reference_runs": 3,
+    "minimum_candidate_runs": 3,
+    "reference_variability_multiplier": 3.0,
+    "maybe_limit_multiplier": 1.5,
+    "near_limit_fraction": 0.75,
+    "require_matching_suite_metadata": true
+  },
+  "policies": {
+    "exact.value.v1": {
+      "comparison_type": "exact",
+      "description": "Shapes, dtypes, indices, booleans, strings, integer tensors and other values which must match exactly",
+      "locked_fields": [
+        "comparison_type",
+        "require_exact",
+        "require_shape_match",
+        "require_dtype_match",
+        "require_exceptional_value_masks_match"
+      ],
+      "require_exact": true,
+      "require_shape_match": true,
+      "require_dtype_match": true,
+      "require_exceptional_value_masks_match": true
+    },
+    "numeric.float64.v1": {
+      "comparison_type": "numeric",
+      "description": "Ordinary FP64 and complex128 values",
+      "locked_fields": [
+        "comparison_type",
+        "base_limits",
+        "hard_limits",
+        "require_shape_match",
+        "require_dtype_match",
+        "require_exceptional_value_masks_match"
+      ],
+      "require_shape_match": true,
+      "require_dtype_match": true,
+      "require_exceptional_value_masks_match": true,
+      "base_limits": {
+        "repeatability": {
+          "atol": 1e-13,
+          "rtol": 1e-11,
+          "relative_l2": 1e-11,
+          "maximum_bad_fraction": 0.0
+        },
+        "cross_environment": {
+          "atol": 1e-12,
+          "rtol": 1e-10,
+          "relative_l2": 1e-10,
+          "maximum_bad_fraction": 0.0
+        }
+      },
+      "hard_limits": {
+        "atol": 1e-09,
+        "rtol": 1e-07,
+        "relative_l2": 1e-07,
+        "maximum_bad_fraction": 0.001
+      }
+    },
+    "numeric.float32.v1": {
+      "comparison_type": "numeric",
+      "description": "Ordinary FP32 and complex64 values",
+      "locked_fields": [
+        "comparison_type",
+        "base_limits",
+        "hard_limits",
+        "require_shape_match",
+        "require_dtype_match",
+        "require_exceptional_value_masks_match"
+      ],
+      "require_shape_match": true,
+      "require_dtype_match": true,
+      "require_exceptional_value_masks_match": true,
+      "base_limits": {
+        "repeatability": {
+          "atol": 1e-07,
+          "rtol": 1e-06,
+          "relative_l2": 1e-06,
+          "maximum_bad_fraction": 0.0
+        },
+        "cross_environment": {
+          "atol": 1e-06,
+          "rtol": 1e-05,
+          "relative_l2": 2e-05,
+          "maximum_bad_fraction": 0.0
+        }
+      },
+      "hard_limits": {
+        "atol": 0.001,
+        "rtol": 0.01,
+        "relative_l2": 0.01,
+        "maximum_bad_fraction": 0.01
+      }
+    },
+    "numeric.float16.v1": {
+      "comparison_type": "numeric",
+      "description": "Raw FP16 or AMP FP16 outputs",
+      "locked_fields": [
+        "comparison_type",
+        "base_limits",
+        "hard_limits",
+        "require_shape_match",
+        "require_dtype_match",
+        "require_exceptional_value_masks_match"
+      ],
+      "require_shape_match": true,
+      "require_dtype_match": true,
+      "require_exceptional_value_masks_match": true,
+      "base_limits": {
+        "repeatability": {
+          "atol": 0.0005,
+          "rtol": 0.002,
+          "relative_l2": 0.002,
+          "maximum_bad_fraction": 0.0
+        },
+        "cross_environment": {
+          "atol": 0.001,
+          "rtol": 0.005,
+          "relative_l2": 0.005,
+          "maximum_bad_fraction": 0.001
+        }
+      },
+      "hard_limits": {
+        "atol": 0.05,
+        "rtol": 0.1,
+        "relative_l2": 0.1,
+        "maximum_bad_fraction": 0.05
+      }
+    },
+    "numeric.bfloat16.v1": {
+      "comparison_type": "numeric",
+      "description": "Raw BF16 or AMP BF16 outputs",
+      "locked_fields": [
+        "comparison_type",
+        "base_limits",
+        "hard_limits",
+        "require_shape_match",
+        "require_dtype_match",
+        "require_exceptional_value_masks_match"
+      ],
+      "require_shape_match": true,
+      "require_dtype_match": true,
+      "require_exceptional_value_masks_match": true,
+      "base_limits": {
+        "repeatability": {
+          "atol": 0.002,
+          "rtol": 0.01,
+          "relative_l2": 0.01,
+          "maximum_bad_fraction": 0.0
+        },
+        "cross_environment": {
+          "atol": 0.005,
+          "rtol": 0.02,
+          "relative_l2": 0.02,
+          "maximum_bad_fraction": 0.001
+        }
+      },
+      "hard_limits": {
+        "atol": 0.1,
+        "rtol": 0.2,
+        "relative_l2": 0.2,
+        "maximum_bad_fraction": 0.05
+      }
+    },
+    "numeric.scalar.v1": {
+      "comparison_type": "numeric",
+      "description": "Python and JSON floating-point scalars where no tensor dtype is available",
+      "locked_fields": [
+        "comparison_type",
+        "base_limits",
+        "hard_limits",
+        "require_exceptional_value_masks_match"
+      ],
+      "require_exceptional_value_masks_match": true,
+      "base_limits": {
+        "repeatability": {
+          "atol": 1e-10,
+          "rtol": 1e-07,
+          "relative_l2": 1e-07,
+          "maximum_bad_fraction": 0.0
+        },
+        "cross_environment": {
+          "atol": 1e-08,
+          "rtol": 1e-05,
+          "relative_l2": 1e-05,
+          "maximum_bad_fraction": 0.0
+        }
+      },
+      "hard_limits": {
+        "atol": 0.01,
+        "rtol": 0.05,
+        "relative_l2": 0.05,
+        "maximum_bad_fraction": 0.0
+      }
+    },
+    "numeric.fallback.v1": {
+      "comparison_type": "numeric",
+      "description": "Fallback for an unrecognised floating-point dtype. This should be reviewed when first encountered",
+      "locked_fields": [
+        "comparison_type",
+        "base_limits",
+        "hard_limits",
+        "require_shape_match",
+        "require_dtype_match",
+        "require_exceptional_value_masks_match"
+      ],
+      "require_shape_match": true,
+      "require_dtype_match": true,
+      "require_exceptional_value_masks_match": true,
+      "base_limits": {
+        "repeatability": {
+          "atol": 1e-06,
+          "rtol": 1e-05,
+          "relative_l2": 1e-05,
+          "maximum_bad_fraction": 0.0
+        },
+        "cross_environment": {
+          "atol": 1e-05,
+          "rtol": 0.0001,
+          "relative_l2": 0.0001,
+          "maximum_bad_fraction": 0.001
+        }
+      },
+      "hard_limits": {
+        "atol": 0.1,
+        "rtol": 0.2,
+        "relative_l2": 0.2,
+        "maximum_bad_fraction": 0.05
+      }
+    }
+  },
+  "output_policies": {},
+  "calibration": {},
+  "reporting": {
+    "training_progress_checkpoint_count": 5,
+    "include_initial_checkpoint": true,
+    "inference_preview_value_count": 512,
+    "inference_scatter_point_count": 2000,
+    "inference_sample_error_count": 256,
+    "training_loss_step_count": 30
+  }
+}

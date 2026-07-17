@@ -1,0 +1,14 @@
+{
+  "augmentation": null,
+  "classes": 10,
+  "dataset_id": "fashion_mnist_v1",
+  "evaluation_rows": 1024,
+  "image_shape": [
+    1,
+    28,
+    28
+  ],
+  "normalisation": "uint8 pixel value divided by 255",
+  "root_seed": 42,
+  "training_rows": 4096
+}
