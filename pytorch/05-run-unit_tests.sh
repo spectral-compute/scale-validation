@@ -15,12 +15,5 @@ if [[ ! -d .venv ]]; then
 fi
 
 source "$SRCROOT/.venv/bin/activate"
-
 python -m pip install -q --upgrade expecttest hypothesis pytest numpy
-
-echo "Running tests..."
 python "$SRCROOT/test/test_torch.py" -v $(cat $SCRIPT_DIR/util/cuda-tests.txt)
-
-echo "All tests finished."
-# return success so MNIST/ImageNet models will run.
-exit 0
