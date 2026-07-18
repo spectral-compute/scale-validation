@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <542f1190>.**
+**This shows the test status for SCALE: master <a2e842ea>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -37,19 +37,19 @@ Contributions welcome!
 | hashinator          | 34cf188       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | HeCBench          | 42e8f09f3f7fa9...       | ✅|✅|✅|✅|✅|✅|
 | hypre          | v2.33.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| jitify          | master       | ❌|❌|🛠️️|❌|❌|✅|
+| jitify          | master       | ❌|❌|🛠️️|❌|❌|❌|
 | kokkos          |        | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | llama.cpp          | b9522       | ❌|❌|✅|✅|❌|❌|
 | llm.c          | 7ecd8906afe6ed...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | nixl          | e128059af332df...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|✅|
-| nvflip          | 1eb247c       | ✅|✅|✅|✅|✅|❌|
+| nvflip          | 1eb247c       | ✅|❌|✅|✅|✅|❌|
 | opencv          | 725e440       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | PhysX          | 1e44a0e       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | pytorch          | v2.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | quda          | 07822b61c6ab5f...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | RabbitCT          | main       | ✅|✅|✅|✅|✅|✅|
 | risc0          | v1.2.2       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| rodinia_suite          | spectral       | ✅|❌|✅|✅|✅|✅|
+| rodinia_suite          | spectral       | ✅|✅|✅|✅|✅|✅|
 | stdgpu          | 563dc59d6d08df...       | ❌|❌|❌|❌|❌|✅|
 | TCLB          | v6.7       | ✅|✅|✅|✅|✅|✅|
 | thrust          | 756c5af       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
@@ -66,7 +66,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 14573.
+Pipeline ID: 14780.
 
 ## Running Tests
 
