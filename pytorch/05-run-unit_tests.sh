@@ -16,10 +16,6 @@ fi
 
 source "$SRCROOT/.venv/bin/activate"
 
-TMP_RUN_DIR="$(mktemp -d)"
-trap 'rm -rf "$TMP_RUN_DIR"' EXIT
-cd "$TMP_RUN_DIR"
-
 python -m pip install -q --upgrade expecttest hypothesis pytest numpy
 
 echo "Running tests..."
