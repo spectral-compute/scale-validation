@@ -21,17 +21,6 @@ python -m pip install -q --upgrade expecttest hypothesis pytest numpy
 echo "Running tests..."
 python "$SRCROOT/test/test_torch.py" -v $(cat $SCRIPT_DIR/util/cuda-tests.txt)
 
-# Next try:
-# python "$SRCROOT/test/test_nn.py" -v
-# python "$SRCROOT/test/test_cuda.py" -v
-# test_autograd.py
-# test_tensor_creation_ops.py
-# test_indexing.py
-# test_reductions.py
-# test_linalg.py
-# test_view_ops.py
-# test_type_promotion.py
-
 echo "All tests finished."
 # return success so MNIST/ImageNet models will run.
 exit 0
