@@ -15,5 +15,5 @@ if [[ ! -d .venv ]]; then
 fi
 
 source "$SRCROOT/.venv/bin/activate"
-python -m pip install -q --upgrade expecttest hypothesis pytest numpy
+python -m pip install -q --upgrade expecttest
 python "$SRCROOT/test/test_torch.py" -v $(cat $SCRIPT_DIR/util/cuda-tests.txt)
