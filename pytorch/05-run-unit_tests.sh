@@ -16,8 +16,6 @@ fi
 
 source "$SRCROOT/.venv/bin/activate"
 
-PYTHON="${PYTHON:-python}"
-
 TMP_RUN_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_RUN_DIR"' EXIT
 cd "$TMP_RUN_DIR"
