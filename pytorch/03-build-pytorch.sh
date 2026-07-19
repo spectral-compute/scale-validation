@@ -1,8 +1,6 @@
 #!/bin/bash
 set -ETeuo pipefail
 
-CUDAARCHS="${CUDAARCHS:-89}"
-
 cd pytorch
 source $(dirname $0)/util/common.sh
 
