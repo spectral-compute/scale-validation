@@ -1,5 +1,5 @@
 #!/bin/bash
-set -u
+set -ETeuo pipefail
 
 OUT_DIR="$(realpath .)/HeCBench"
 RESULTS_DIR="/tmp/ci_benchmarks"

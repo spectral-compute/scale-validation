@@ -1,5 +1,6 @@
 #!/bin/bash
-set -euo pipefail
+set -ETeuo pipefail
+
 OUT_DIR="$(realpath .)"
 SRC_DIR="${SRC_DIR:-${OUT_DIR}/HeCBench}"
 

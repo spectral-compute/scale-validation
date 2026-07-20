@@ -1,5 +1,6 @@
 #!/bin/bash
-set -euo pipefail
+set -ETeuo pipefail
+
 # HeCBench requires `dvc` as part of its data management
 # We recommend installing via pipx or uv
 # See: https://doc.dvc.org/install/linux
