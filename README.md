@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <c56808b8>.**
+**This shows the test status for SCALE: master <b509bb3d>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -25,7 +25,7 @@ Contributions welcome!
 | CV-CUDA          | f769fe4       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | cycles          | v4.4.0       | ❌|❌|✅|✅|✅|✅|
 | faiss          | v1.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| FastEddy          | v2.0.0       | ❌|🛠️️|✅|✅|✅|✅|
+| FastEddy          | v2.0.0       | ❌|🛠️️|✅|✅|❌|✅|
 | ffmpeg          | n7.1.3       | ❌|✅|✅|✅|✅|✅|
 | FLAMEGPU2          | v2.0.0-rc.2       | 🛠️️|❌|🛠️️|🛠️️|🛠️️|✅|
 | ggml          | d3a58b0       | ❌|✅|✅|✅|✅|✅|
@@ -54,7 +54,7 @@ Contributions welcome!
 | TCLB          | v6.7       | ❌|✅|✅|✅|✅|✅|
 | thrust          | 756c5af       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | timemachine          | 01f14f8       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| UppASD          | gpu_new       | ❌|✅|✅|✅|✅|❌|
+| UppASD          | gpu_new       | ❌|✅|✅|✅|✅|✅|
 | vllm          | v0.6.3       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | warp          | v1.14.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | whispercpp          | v1.7.1       | ❌|✅|✅|✅|✅|✅|
@@ -66,7 +66,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 15194.
+Pipeline ID: 15402.
 
 ## Running Tests
 
