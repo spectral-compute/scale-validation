@@ -1,19 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# TODO(#1144): Kill.
+#
 # Pytorch tries to use and other GPUs leading to errors.
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-OUT_DIR="$(realpath .)"
-SRCROOT="${OUT_DIR}/pytorch"
 
-cd "$SRCROOT"
-
-if [[ ! -d .venv ]]; then
-  echo "Could not find .venv in $SRCROOT"
-  exit 1
-fi
-
-source "$SRCROOT/.venv/bin/activate"
+cd pytorch
+source .venv/bin/activate
 python -m pip install -q --upgrade expecttest
-python "$SRCROOT/test/test_torch.py" -v $(cat $SCRIPT_DIR/util/cuda-tests.txt)
+
+SCRIPT_DIR="$(dirname "$(realpath $0)")"
+python test/test_torch.py -v $(cat $SCRIPT_DIR/util/cuda-tests.txt)
