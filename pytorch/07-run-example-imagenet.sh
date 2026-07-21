@@ -1,3 +1,9 @@
+#
+# This file is not currently executable due to scale#1154. We need to
+# get access to the dataset. It is a couple hundreg GiB or so, so needs
+# to go on the NAS, probably.
+#
+
 #!/usr/bin/env bash
 set -euo pipefail
 
