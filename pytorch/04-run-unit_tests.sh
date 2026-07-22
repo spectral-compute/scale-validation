@@ -8,7 +8,6 @@ export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
 
 cd pytorch
 source .venv/bin/activate
-python -m pip install -q --upgrade expecttest
 
 SCRIPT_DIR="$(dirname "$(realpath $0)")"
 python test/test_torch.py -v $(cat $SCRIPT_DIR/util/cuda-tests.txt)
