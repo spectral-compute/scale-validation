@@ -8,10 +8,11 @@ source pytorch/.venv/bin/activate
 # Pytorch tries to use and other GPUs leading to errors.
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
 
-# mnist's requirements.txt only lists torch and torchvision. It should be a
-# noop to install deps via this file, except for pulling in deps, but rather
-# than risk having something break and CI mistakenly installing and running
-# the pip pytorch, let's just install pillow.
+# FIXME: This can hopefully be imminently deleted. Something weird is happening
+# with dependencies: it seemed that this install call was required or else mnist
+# complained about not being able to find pillow (PIL), but reading the log
+# after adding this call, the dependency is already satisfied and the example
+# happily runs.
 python -m pip install pillow
 
 EPOCHS="${EPOCHS:-5}"
