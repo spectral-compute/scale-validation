@@ -129,6 +129,15 @@ fi
 
 echo "Extracted to: ${SCALE_INSTALL_DIR}/${EXTRACTED_DIR}"
 
+# The tarball doesn't reliably ship bin/ with the execute bit set on every
+# file -- restore it explicitly rather than trusting upstream's packaging,
+# since a merely-present-but-not-executable scaleenv looks identical to
+# "not installed" from the [[ -x ]] check below, and is a much more
+# confusing failure to debug than fixing it here proactively.
+if [[ -d "${EXTRACTED_DIR}/bin" ]]; then
+	chmod -R u+x "${EXTRACTED_DIR}/bin"
+fi
+
 FINAL_NAME="$EXTRACTED_DIR"
 
 if [[ -n "$PREDICTED_NAME" ]] && [[ "$EXTRACTED_DIR" != "$PREDICTED_NAME" ]]; then
