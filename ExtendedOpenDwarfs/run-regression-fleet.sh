@@ -292,6 +292,15 @@ git checkout --detach "${EOD_REGRESSION_REF}"
 git reset --hard "${EOD_REGRESSION_REF}"
 cd ExtendedOpenDwarfs
 ${ensure_scale_block}
+# Materialize the nested EOD checkout via this project's own existing
+# clone+deps pipeline (00-clone.sh / 01-install-deps.sh), the same way
+# it's set up manually -- this directory is a fresh scratch clone on
+# first use per host, so nothing here exists until these run. Uses
+# whatever repo/ref this project's own versions.txt already pins, same
+# as every other project scale-validation manages.
+./00-clone.sh
+./01-install-deps.sh
+cd ExtendedOpenDwarfs
 ${RUN_ENV_PREFIX} ./scripts/run_scale_eod_paper.sh
 EOF
 }
