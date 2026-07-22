@@ -1,12 +1,5 @@
 # Create the build environments for torch and vision
 
-if [[ ! -d .venv ]]; then
-  python3 -m venv .venv
-fi
-
-source .venv/bin/activate
-python -m pip install --upgrade pip -r requirements.txt
-
 # Build the TORCH_CUDA_ARCH_LIST; <major>.<minor>
 torch-arch() {
   if ((${#CUDAARCHS} == 2)); then
@@ -24,7 +17,7 @@ export CFLAGS="\
     -Wno-redundant-move
 "
 
-# TODO: See if these can/should be pared down further: env vars which have no effect are noise in the script.
+# TODO(#1156): See if these can/should be pared down further: env vars which have no effect are noise in the script.
 export CXXFLAGS="${CFLAGS}"
 export CUDNN_INCLUDE_DIR=/usr/include
 export CUDNN_LIB_DIR=/usr/lib
