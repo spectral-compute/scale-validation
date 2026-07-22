@@ -7,9 +7,6 @@ fi
 source .venv/bin/activate
 python -m pip install --upgrade pip -r requirements.txt
 
-# Remove any previously installed incompatible torchvision
-python -m pip uninstall -y torchvision || true
-
 # Build the TORCH_CUDA_ARCH_LIST; <major>.<minor>
 torch-arch() {
   if ((${#CUDAARCHS} == 2)); then
