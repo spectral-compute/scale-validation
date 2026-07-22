@@ -67,3 +67,4 @@ cudahandbook 5bd3f275ca5ec109b78c7612432e7f1dd04b72f7
 warp v1.14.0
 colmap 4.0.4
 gpusnek 5aede38a1e94c10f6ca6f3b9161a0ba687b1091d
+ExtendedOpenDwarfs ec33be1
