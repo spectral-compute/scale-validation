@@ -5,8 +5,7 @@ if [[ ! -d .venv ]]; then
 fi
 
 source .venv/bin/activate
-python -m pip install --upgrade pip wheel pyyaml typing_extensions jinja2 numpy pillow ninja
-python -m pip install "setuptools==81.0.0"
+python -m pip install --upgrade pip -r requirements.txt
 
 # Remove any previously installed incompatible torchvision
 python -m pip uninstall -y torchvision || true

@@ -11,4 +11,5 @@ export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
 EPOCHS="${EPOCHS:-5}"
 
 cd examples/mnist
+python -m pip install -r requirements.txt
 python main.py --epochs "$EPOCHS"
