@@ -6,6 +6,17 @@ cd ExtendedOpenDwarfs
 export LC_ALL=C
 export LANG=C
 
+# Some hosts don't have libtool (hence libtoolize) installed system-wide,
+# and we can't apt-install it there without root. It's managed via pixi
+# instead (see pixi.toml, alongside R) -- activate that environment here
+# if it's available, so autoreconf below can find it. Falls through
+# silently to whatever's already on PATH if pixi isn't installed on this
+# host, or if this checkout has no pixi.toml.
+if command -v pixi >/dev/null 2>&1 && [[ -f "$(pwd)/pixi.toml" ]]; then
+	eval "$(pixi shell-hook --manifest-path "$(pwd)/pixi.toml")"
+fi
+
+
 export HOST="${HOST:-$(hostname -s)}"
 export LSB_SRC_DIR="${LSB_SRC_DIR:-$(pwd)/external/liblsb-src}"
 export LSB_INSTALL_ROOT="${LSB_INSTALL_ROOT:-$(pwd)/external/liblsb-install/${HOST}}"
