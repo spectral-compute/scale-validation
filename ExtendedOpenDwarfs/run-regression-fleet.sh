@@ -201,16 +201,40 @@ log "Workdir (per host):    ${EOD_REGRESSION_WORKDIR}"
 # every host in the fleet has already spent time on a doomed sweep.
 # ---------------------------------------------------------------------------
 
-if ! command -v Rscript >/dev/null 2>&1; then
-	echo "error: Rscript not found on this machine -- plot_heatmap.R cannot run at the end of this script." >&2
-	echo "       Install R (e.g. via conda/mamba if you don't have root), or run with EOD_REGRESSION_SKIP_PLOT=1" >&2
+if [[ -z "${EOD_REGRESSION_PLOT_HEATMAP_SCRIPT:-}" ]]; then
+	# plot_heatmap.R (and its lsb_common.R dependency) only ever run
+	# locally on whichever machine does the collecting -- they are never
+	# distributed to the fleet. Default to the real one in the actual EOD
+	# checkout, which on this machine lives as a sibling of
+	# scale-validation itself. Override explicitly if that's not where it
+	# lives on your machine.
+	EOD_REGRESSION_PLOT_HEATMAP_SCRIPT="$(dirname "$SCALE_VALIDATION_ROOT")/ExtendedOpenDwarfs/scripts/plot_heatmap.R"
+fi
+
+if [[ ! -f "$EOD_REGRESSION_PLOT_HEATMAP_SCRIPT" ]]; then
+	echo "error: plot_heatmap.R not found at ${EOD_REGRESSION_PLOT_HEATMAP_SCRIPT}." >&2
+	echo "       Set EOD_REGRESSION_PLOT_HEATMAP_SCRIPT explicitly to point at your EOD checkout's copy," >&2
+	echo "       or run with EOD_REGRESSION_SKIP_PLOT=1 to only collect results without generating the heatmap." >&2
+	if [[ "${EOD_REGRESSION_SKIP_PLOT:-0}" != "1" ]]; then
+		exit 1
+	fi
+fi
+
+# R itself is managed via pixi in the EOD repo (see its pixi.toml), not a
+# bare system/conda Rscript -- run everything through `pixi run` from
+# that repo's root instead of requiring Rscript directly on PATH.
+EOD_REPO_ROOT="$(dirname "$(dirname "$EOD_REGRESSION_PLOT_HEATMAP_SCRIPT")")"
+
+if ! command -v pixi >/dev/null 2>&1; then
+	echo "error: pixi not found on this machine -- R (managed via pixi in the EOD repo) cannot run at the end of this script." >&2
+	echo "       Install pixi (https://pixi.sh, no root required), or run with EOD_REGRESSION_SKIP_PLOT=1" >&2
 	echo "       to only collect results without generating the heatmap." >&2
 	if [[ "${EOD_REGRESSION_SKIP_PLOT:-0}" != "1" ]]; then
 		exit 1
 	fi
 fi
 
-for required_path in "ExtendedOpenDwarfs/00-clone.sh" "ExtendedOpenDwarfs/ensure_scale.sh"; do
+for required_path in "ExtendedOpenDwarfs/00-clone.sh" "ExtendedOpenDwarfs/ensure-scale.sh"; do
 	if ! git -C "$SCALE_VALIDATION_ROOT" cat-file -e "${EOD_REGRESSION_REF}:${required_path}" 2>/dev/null; then
 		echo "error: ${required_path} does not exist at ${EOD_REGRESSION_REF} in ${EOD_REGRESSION_REPO_URL}." >&2
 		echo "       Every host clones from EOD_REGRESSION_REPO_URL and checks out EOD_REGRESSION_REF -- if" >&2
@@ -249,7 +273,7 @@ build_host_command() {
 		# ensure_scale.sh has written the marker file there), not by this
 		# local heredoc right now.
 		ensure_scale_block=$(cat <<EOS
-SCALE_VERSION="${EOD_REGRESSION_SCALE_VERSION}" ./ensure_scale.sh
+SCALE_VERSION="${EOD_REGRESSION_SCALE_VERSION}" ./ensure-scale.sh
 export SCALE_ROOT="\$(cat .ensure_scale_last_root)"
 echo "Using SCALE_ROOT=\${SCALE_ROOT}"
 EOS
@@ -394,13 +418,13 @@ if [[ -n "$EOD_REGRESSION_METRIC" ]]; then
 fi
 
 HEATMAP_OK=1
-if command -v Rscript >/dev/null 2>&1; then
-	if ! Rscript "${SCRIPT_DIR}/plot_heatmap.R" "${PLOT_ARGS[@]}" 2>&1 | tee "${LOG_DIR}/plot_heatmap.log"; then
+if command -v pixi >/dev/null 2>&1; then
+	if ! (cd "$EOD_REPO_ROOT" && pixi run Rscript "$EOD_REGRESSION_PLOT_HEATMAP_SCRIPT" "${PLOT_ARGS[@]}") 2>&1 | tee "${LOG_DIR}/plot_heatmap.log"; then
 		log "WARNING: heatmap generation failed or exited non-zero -- see ${LOG_DIR}/plot_heatmap.log"
 		HEATMAP_OK=0
 	fi
 else
-	log "WARNING: Rscript unavailable -- skipping heatmap generation (EOD_REGRESSION_SKIP_PLOT=1 was set)"
+	log "WARNING: pixi unavailable -- skipping heatmap generation (EOD_REGRESSION_SKIP_PLOT=1 was set)"
 	HEATMAP_OK=0
 fi
 
