@@ -157,8 +157,8 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCALE_VALIDATION_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-: "${EOD_REGRESSION_REMOTE_TARGETS:=alpha epsilon beta andoria risa}"
-read -r -a REMOTE_TARGETS <<<"$EOD_REGRESSION_REMOTE_TARGETS"
+: "${EOD_REGRESSION_REMOTE_TARGETS:=alpha epsilon beta andoria}"  # risa omitted: its W7800 is already covered via trill
+read -r -a REMOTE_TARGETS <<< "$EOD_REGRESSION_REMOTE_TARGETS"
 
 : "${EOD_REGRESSION_RUN_LOCAL:=1}"
 : "${EOD_REGRESSION_WORKDIR:=/tmp/eod-regression}"

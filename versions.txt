@@ -67,7 +67,6 @@ cudahandbook 5bd3f275ca5ec109b78c7612432e7f1dd04b72f7
 warp v1.14.0
 colmap 4.0.4
 gpusnek 5aede38a1e94c10f6ca6f3b9161a0ba687b1091d
-ExtendedOpenDwarfs ec33be1e7252449e84b3647ad76504ee30d83059
 kokkos 60d8384266eba9ee28dacf21016ef414981ebba3
 llama-cpp-python e1af05f43f57d2b660edfb77935dd2d2641ec602
 nv-codec-headers n13.0.19.0
@@ -81,3 +80,4 @@ tensorflow-addons v0.10.0
 tensorflow-metadata v0.22.2
 tensorflow-datasets v3.1.0
 tensorflow-models v2.2.0
+ExtendedOpenDwarfs dcd0f15
