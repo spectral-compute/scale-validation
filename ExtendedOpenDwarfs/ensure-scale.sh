@@ -95,59 +95,55 @@ mkdir -p "$SCALE_INSTALL_DIR"
 cd "$SCALE_INSTALL_DIR"
 
 TMP_TARBALL="$(mktemp --tmpdir "scale-${SCALE_VERSION}-amd64.XXXXXX.tar.xz")"
-BEFORE_LISTING="$(mktemp)"
-AFTER_LISTING="$(mktemp)"
-trap 'rm -f "$TMP_TARBALL" "$BEFORE_LISTING" "$AFTER_LISTING"' EXIT
+STAGING_DIR="$(mktemp -d --tmpdir="$SCALE_INSTALL_DIR" ".scale_extract_staging.XXXXXX")"
+trap 'rm -f "$TMP_TARBALL"; rm -rf "$STAGING_DIR"' EXIT
 
 echo "Downloading tarball..."
 wget -q -O "$TMP_TARBALL" "$SCALE_TARBALL_URL"
 
-# Snapshot directory contents before/after extraction to detect exactly
-# what the tarball added, regardless of its internal directory name.
-find . -maxdepth 1 -mindepth 1 -printf '%f\n' | sort > "$BEFORE_LISTING"
-
+# Extract into a guaranteed-empty staging directory rather than directly
+# into SCALE_INSTALL_DIR and diffing directory listings before/after --
+# that approach broke on any re-run where a same-named directory already
+# existed from a prior attempt (e.g. a partially-failed install left
+# scale-1.7.2-Linux/ in place, so re-extracting the same tarball produced
+# no "new" top-level entry at all, even though tar genuinely re-wrote
+# every file inside it).
 echo "Extracting..."
-tar xf "$TMP_TARBALL"
-
-find . -maxdepth 1 -mindepth 1 -printf '%f\n' | sort > "$AFTER_LISTING"
-
-NEW_ENTRIES="$(comm -13 "$BEFORE_LISTING" "$AFTER_LISTING")"
+tar xf "$TMP_TARBALL" -C "$STAGING_DIR"
 
 EXTRACTED_DIR=""
-while IFS= read -r entry; do
-	[[ -n "$entry" ]] || continue
+while IFS= read -r -d '' entry; do
 	if [[ -d "$entry" ]]; then
-		EXTRACTED_DIR="$entry"
+		EXTRACTED_DIR="$(basename "$entry")"
 		break
 	fi
-done <<< "$NEW_ENTRIES"
+done < <(find "$STAGING_DIR" -maxdepth 1 -mindepth 1 -print0)
 
 if [[ -z "$EXTRACTED_DIR" ]]; then
-	echo "error: could not determine which directory the tarball extracted (new entries: ${NEW_ENTRIES:-none})" >&2
+	echo "error: could not determine which directory the tarball extracted (staging dir: ${STAGING_DIR})" >&2
 	exit 1
 fi
 
-echo "Extracted to: ${SCALE_INSTALL_DIR}/${EXTRACTED_DIR}"
+echo "Extracted to staging: ${STAGING_DIR}/${EXTRACTED_DIR}"
 
 # The tarball doesn't reliably ship bin/ with the execute bit set on every
 # file -- restore it explicitly rather than trusting upstream's packaging,
 # since a merely-present-but-not-executable scaleenv looks identical to
 # "not installed" from the [[ -x ]] check below, and is a much more
 # confusing failure to debug than fixing it here proactively.
-if [[ -d "${EXTRACTED_DIR}/bin" ]]; then
-	chmod -R u+x "${EXTRACTED_DIR}/bin"
+if [[ -d "${STAGING_DIR}/${EXTRACTED_DIR}/bin" ]]; then
+	chmod -R u+x "${STAGING_DIR}/${EXTRACTED_DIR}/bin"
 fi
 
-FINAL_NAME="$EXTRACTED_DIR"
-
-if [[ -n "$PREDICTED_NAME" ]] && [[ "$EXTRACTED_DIR" != "$PREDICTED_NAME" ]]; then
-	echo "Tarball's directory name (${EXTRACTED_DIR}) differs from the expected name (${PREDICTED_NAME}) for version ${SCALE_VERSION} -- renaming to match."
-	rm -rf "${PREDICTED_NAME:?}"
-	mv "$EXTRACTED_DIR" "$PREDICTED_NAME"
-	FINAL_NAME="$PREDICTED_NAME"
-fi
-
+FINAL_NAME="${PREDICTED_NAME:-$EXTRACTED_DIR}"
 RESOLVED_ROOT="${SCALE_INSTALL_DIR}/${FINAL_NAME}"
+
+if [[ -d "$RESOLVED_ROOT" ]]; then
+	echo "Removing previous install at ${RESOLVED_ROOT} before replacing it."
+	rm -rf "${RESOLVED_ROOT:?}"
+fi
+
+mv "${STAGING_DIR}/${EXTRACTED_DIR}" "$RESOLVED_ROOT"
 
 if [[ ! -x "${RESOLVED_ROOT}/bin/scaleenv" ]]; then
 	echo "error: ${RESOLVED_ROOT}/bin/scaleenv not found after install -- tarball layout may not match what setup-backends.sh expects" >&2
