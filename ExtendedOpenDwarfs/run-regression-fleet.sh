@@ -294,10 +294,15 @@ cd ExtendedOpenDwarfs
 ${ensure_scale_block}
 # Materialize the nested EOD checkout via this project's own existing
 # clone+deps pipeline (00-clone.sh / 01-install-deps.sh), the same way
-# it's set up manually -- this directory is a fresh scratch clone on
-# first use per host, so nothing here exists until these run. Uses
-# whatever repo/ref this project's own versions.txt already pins, same
-# as every other project scale-validation manages.
+# it's set up manually. 00-clone.sh's own clone helpers do a plain `git
+# clone` with no handling for the destination already existing -- fine
+# for scale-validation's normal usage (a fresh workdir per invocation),
+# but this fleet script deliberately reuses a persistent workdir across
+# runs for speed, so a nested checkout left over from a prior (possibly
+# failed) run causes `git clone` to fail outright on every subsequent
+# run. Remove it first every time so 00-clone.sh always starts clean,
+# regardless of what a previous run left behind.
+rm -rf ExtendedOpenDwarfs
 ./00-clone.sh
 ./01-install-deps.sh
 cd ExtendedOpenDwarfs
