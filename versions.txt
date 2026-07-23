@@ -5,6 +5,7 @@ bitnet 404980eecae38affa4871c3e419eae3f44536a95
 Bonsai 581fa8e70501ce85660c7eac0d61c0e5c5bece4a
 caffe 9b891540183ddc834a02b2bd81b31afae71b2153
 ctranslate2 v4.5.0
+cp2k support/v2026.1
 cuda-samples v12.9
 cudf v25.04.00
 cugraph fc880db
