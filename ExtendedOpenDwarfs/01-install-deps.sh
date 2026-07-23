@@ -8,12 +8,28 @@ export LANG=C
 
 # Some hosts don't have libtool (hence libtoolize) installed system-wide,
 # and we can't apt-install it there without root. It's managed via pixi
-# instead (see pixi.toml, alongside R) -- activate that environment here
-# if it's available, so autoreconf below can find it. Falls through
-# silently to whatever's already on PATH if pixi isn't installed on this
-# host, or if this checkout has no pixi.toml.
-if command -v pixi >/dev/null 2>&1 && [[ -f "$(pwd)/pixi.toml" ]]; then
-	eval "$(pixi shell-hook --manifest-path "$(pwd)/pixi.toml")"
+# instead (see pixi.toml, alongside R). Each Spectral Compute host
+# provisions independently (no shared filesystem), so pixi itself may or
+# may not already be present -- install it locally (no root required) if
+# missing, rather than silently skipping activation and reproducing the
+# exact autoreconf/libtoolize failure this exists to prevent.
+PIXI_BIN=""
+if command -v pixi >/dev/null 2>&1; then
+	PIXI_BIN="pixi"
+elif [[ -x "${HOME}/.pixi/bin/pixi" ]]; then
+	PIXI_BIN="${HOME}/.pixi/bin/pixi"
+else
+	echo "pixi not found on this host -- installing locally into ~/.pixi (no root required)"
+	curl -fsSL https://pixi.sh/install.sh | sh
+	if [[ -x "${HOME}/.pixi/bin/pixi" ]]; then
+		PIXI_BIN="${HOME}/.pixi/bin/pixi"
+	else
+		echo "warning: pixi install did not produce ${HOME}/.pixi/bin/pixi -- continuing without it" >&2
+	fi
+fi
+
+if [[ -n "$PIXI_BIN" && -f "$(pwd)/pixi.toml" ]]; then
+	eval "$("$PIXI_BIN" shell-hook --manifest-path "$(pwd)/pixi.toml")"
 fi
 
 
