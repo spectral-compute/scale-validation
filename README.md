@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <c20184cb>.**
+**This shows the test status for SCALE: master <01065a38>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -13,7 +13,7 @@ Contributions welcome!
 
 | Project        | Version                    | gfx90a|gfx900|gfx1201|gfx1100|gfx1030|sm_120|
 |----------------|----------------------------| -|-|-|-|-|-|
-| alien          | v4.12.3       | ✅|✅|✅|✅|✅|✅|
+| alien          | v4.12.3       | ❌|✅|✅|✅|✅|✅|
 | AMGX          | v2.4.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | arrayfire          | v3.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | bitnet          | 404980eecae38a...       | ✅|✅|✅|✅|✅|✅|
@@ -21,23 +21,23 @@ Contributions welcome!
 | ctranslate2          | v4.5.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | cuml          | b17f2db       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | cuSZ          | v0.16.2       | ✅|✅|✅|✅|✅|✅|
-| cutlass          | v4.1.0       | ❌|❌|❌|❌|❌|🛠️️|
+| cutlass          | v4.1.0       | ❌|❌|❌|❌|✅|🛠️️|
 | CV-CUDA          | f769fe4       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | cycles          | v4.4.0       | ❌|❌|✅|✅|✅|✅|
 | faiss          | v1.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | FastEddy          | v2.0.0       | ✅|🛠️️|✅|✅|✅|✅|
 | ffmpeg          | n7.1.3       | ✅|✅|✅|✅|✅|✅|
-| FLAMEGPU2          | v2.0.0-rc.2       | 🛠️️|❌|🛠️️|🛠️️|🛠️️|✅|
+| FLAMEGPU2          | v2.0.0-rc.2       | 🛠️️|✅|🛠️️|🛠️️|🛠️️|✅|
 | ggml          | d3a58b0       | ✅|✅|✅|✅|✅|✅|
 | gomc          | 4c12477       | ✅|✅|✅|✅|✅|✅|
 | gpu_jpeg2k          | ee715e9       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | GPUJPEG          | 3e045d1       | ✅|✅|✅|✅|✅|✅|
-| gromacs          | v2025.4       | ❌|❌|❌|❌|✅|✅|
+| gromacs          | v2025.4       | ❌|❌|❌|❌|❌|✅|
 | hashcat          | 6716447dfce969...       | ✅|✅|✅|✅|✅|✅|
 | hashinator          | 34cf188       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| HeCBench          | 42e8f09f3f7fa9...       | ✅|❌|✅|✅|✅|✅|
+| HeCBench          | 42e8f09f3f7fa9...       | ✅|✅|✅|✅|✅|✅|
 | hypre          | v2.33.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| jitify          | master       | ❌|❌|🛠️️|❌|❌|❌|
+| jitify          | master       | ❌|❌|🛠️️|❌|❌|✅|
 | kokkos          |        | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | llama.cpp          | b9522       | ❌|❌|❌|✅|❌|❌|
 | llm.c          | 7ecd8906afe6ed...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
@@ -66,7 +66,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 16031.
+Pipeline ID: 16244.
 
 ## Running Tests
 
