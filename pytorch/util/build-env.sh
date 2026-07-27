@@ -1,5 +1,13 @@
 # Create the build environments for torch and vision
 
+# If this is exported, pytorch wants to install `.ci/docker/requirements-ci.txt`. While it doesn't
+# seem *necessary* to build (it builds happily in our CI), rather than risking surprises (and to
+# maintain better consistency testing pytorch in and out of CI), let's just persuade it to be
+# normal.
+#
+# (Also see the comment in the unit tests running script about vetting the large file.)
+unset CI
+
 # Build the TORCH_CUDA_ARCH_LIST; <major>.<minor>
 torch-arch() {
   if ((${#CUDAARCHS} == 2)); then

@@ -10,4 +10,10 @@ cd pytorch
 source .venv/bin/activate
 
 SCRIPT_DIR="$(dirname "$(realpath $0)")"
+
+# If this is exported, pytorch requires installing `.ci/docker/requirements-ci.txt`, which is not
+# necessary to run the tests, and seems rather huge, so vetting that everything it installs is
+# things that we don't need to think about is a mild pain, for now.
+unset CI
+
 python test/test_torch.py -v $(cat $SCRIPT_DIR/util/cuda-tests.txt)
