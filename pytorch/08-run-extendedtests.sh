@@ -9,6 +9,13 @@ export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
 # Do not let packages from the runner's user site leak into the PyTorch venv
 export PYTHONNOUSERSITE=1
 
+# PyTorch's addmm uses cuBLASLt, which SCALE does not support yet. Without this the 
+# TF32 runs fail with:
+#   RuntimeError: CUDA error: CUBLAS_STATUS_NOT_SUPPORTED when calling
+#   `cublasLtMatmulDescCreate(&raw_descriptor, compute_type, scale_type)`
+# This makes PyTorch fall back to plain cuBLAS.
+export DISABLE_ADDMM_CUDA_LT=1
+
 SCRIPT_DIR="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 SUITE_ROOT="${SCRIPT_DIR}/pytorch_extended_tests"
 OUT_DIR="$(realpath .)"
