@@ -26,7 +26,9 @@ source pytorch/.venv/bin/activate
 
 python -u - <<'PY'
 import contextlib
+import os
 import sys
+import time
 
 import torch
 from torch import nn
@@ -203,11 +205,23 @@ a, b = torch.randn(256, 256), torch.randn(256, 256)
 if not torch.allclose(a @ b, (a.cuda() @ b.cuda()).cpu(), atol=1e-3, rtol=1e-3):
     sys.exit("GPU matmul does not match the CPU result.")
 
+# Constructing the datasets downloads MNIST on first use, so start the clock
+# after this line to keep the (network-dependent) download out of the timing.
 train_loader, test_loader = dataloaders()
+
+time_start = time.perf_counter()
 for model_name in EXPECTATIONS:
     for precision in PRECISIONS:
         initial, curve = train(model_name, precision, train_loader, test_loader)
         check_curve(model_name, precision, initial, curve)
+elapsed = time.perf_counter() - time_start
+
+# Record the training+evaluation time in the build artifacts, whether or not
+# the curve checks passed.
+print(f"\nTotal training+evaluation time: {elapsed:.3f} seconds")
+os.makedirs("/tmp/ci_benchmarks", exist_ok=True)
+with open("/tmp/ci_benchmarks/datatypetests.txt", "w") as f:
+    f.write(f"training_seconds={elapsed:.3f}\n")
 
 if failures:
     print(f"\n{len(failures)} check(s) failed:")
