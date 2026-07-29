@@ -1,0 +1,14 @@
+{
+  "dataset_id": "breast_cancer_wisconsin_v1",
+  "evaluation_fraction": 0.2,
+  "evaluation_rows": 113,
+  "feature_count": 30,
+  "label_mapping": {
+    "benign": 0,
+    "malignant": 1
+  },
+  "root_seed": 42,
+  "source_rows": 569,
+  "standardisation": "Training split mean and population standard deviation",
+  "training_rows": 456
+}
