@@ -11,6 +11,10 @@ export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
 # Every example trains for this many epochs.
 EPOCHS="${EPOCHS:-5}"
 
+# If not writing to a terminal, make sure we still get all the logs despite
+# abnormal sudden exit.
+export PYTHONUNBUFFERED=1
+
 echo "=== mnist ==="
 (
   cd examples/mnist

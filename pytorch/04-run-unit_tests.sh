@@ -16,4 +16,4 @@ SCRIPT_DIR="$(dirname "$(realpath $0)")"
 # things that we don't need to think about is a mild pain, for now.
 unset CI
 
-python test/test_torch.py -v $(cat $SCRIPT_DIR/util/cuda-tests.txt)
+python -u test/test_torch.py -v $(cat $SCRIPT_DIR/util/cuda-tests.txt)
