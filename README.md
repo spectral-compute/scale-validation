@@ -27,15 +27,15 @@ Contributions welcome!
 | faiss          | v1.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | FastEddy          | v2.0.0       | ✅|🛠️️|✅|✅|✅|❌|
 | ffmpeg          | n7.1.3       | ✅|✅|✅|❌|✅|❌|
-| FLAMEGPU2          | v2.0.0-rc.2       | 🛠️️|❌|🛠️️|🛠️️|🛠️️|✅|
+| FLAMEGPU2          | v2.0.0-rc.2       | 🛠️️|✅|🛠️️|🛠️️|🛠️️|✅|
 | ggml          | d3a58b0       | ✅|✅|✅|❌|✅|❌|
 | gomc          | 4c12477       | ✅|✅|✅|❌|✅|❌|
 | gpu_jpeg2k          | ee715e9       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| GPUJPEG          | 3e045d1       | ✅|✅|✅|✅|✅|✅|
-| gromacs          | v2025.4       | ❌|❌|❌|❌|✅|❌|
-| hashcat          | 6716447dfce969...       | ✅|✅|✅|❌|✅|✅|
+| GPUJPEG          | 3e045d1       | ✅|✅|✅|❌|✅|✅|
+| gromacs          | v2025.4       | ❌|❌|❌|❌|❌|❌|
+| hashcat          | 6716447dfce969...       | ✅|✅|✅|❌|✅|❌|
 | hashinator          | 34cf188       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| HeCBench          | 42e8f09f3f7fa9...       | ✅|❌|✅|❌|✅|✅|
+| HeCBench          | 42e8f09f3f7fa9...       | ✅|✅|✅|✅|✅|✅|
 | hypre          | v2.33.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | jitify          | master       | ❌|❌|🛠️️|❌|❌|❌|
 | kokkos          |        | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
@@ -47,10 +47,10 @@ Contributions welcome!
 | PhysX          | 1e44a0e       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | pytorch          | v2.9.0       | ❌|❌|❌|❌|❌|❌|
 | quda          | 07822b61c6ab5f...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| RabbitCT          | main       | ✅|✅|✅|✅|✅|❌|
+| RabbitCT          | main       | ✅|✅|✅|❌|✅|❌|
 | risc0          | v1.2.2       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | rodinia_suite          | spectral       | ✅|✅|✅|❌|✅|❌|
-| stdgpu          | 563dc59d6d08df...       | ✅|✅|✅|❌|✅|❌|
+| stdgpu          | 563dc59d6d08df...       | ✅|✅|❌|❌|✅|❌|
 | TCLB          | v6.7       | ✅|✅|✅|❌|✅|❌|
 | thrust          | 756c5af       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | timemachine          | 01f14f8       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
@@ -66,7 +66,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 17755.
+Pipeline ID: 17961.
 
 ## Running Tests
 
