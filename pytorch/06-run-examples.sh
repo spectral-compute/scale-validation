@@ -42,12 +42,16 @@ echo "=== siamese_network ==="
 
 # Train each language model type on the bundled wikitext-2 corpus, then
 # generate text from the model.pt checkpoint that training leaves behind.
+
+# RNN_RELU's default learning rate of 20 is far too high and sends the weights
+# to inf/nan.
+declare -A EXTRA=( [RNN_RELU]="--lr 1" )
 for model in RNN_TANH RNN_RELU LSTM GRU Transformer ; do
   echo "=== word_language_model ($model) ==="
   (
     cd examples/word_language_model
     # The GPU is opt-in here too.
-    python main.py --accel --model "$model" --epochs "$EPOCHS"
+    python main.py --accel --model "$model" --epochs "$EPOCHS" ${EXTRA[$model]:-}
     python generate.py --accel
   )
 done
