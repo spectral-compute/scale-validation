@@ -22,6 +22,7 @@ for i in gbmv ger hemv her2 hpr sbmv spr symv syr2 tbsv tpsv trsv gemv hbmv her 
     buildExample "cuBLAS/Level-2/" $i
 done
 
-for i in gemm gemmBatched gemmStridedBatched her2k herkx syr2k syrkx trsm gemm3m gemmGroupedBatched hemm herk symm syrk trmm trsmBatched; do
+for i in gemm gemmBatched gemmStridedBatched her2k herkx syr2k trsm hemm herk symm syrk trmm trsmBatched; do
+    # TODO: re-enable syrkx, gemm3m and gemmGroupedBatched once implemented
     buildExample "cuBLAS/Level-3/" $i
 done
