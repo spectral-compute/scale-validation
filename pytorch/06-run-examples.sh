@@ -46,7 +46,7 @@ echo "=== siamese_network ==="
 # RNN_RELU's default learning rate of 20 is far too high and sends the weights
 # to inf/nan.
 # Transformer's mem-efficient attention kernel with head_dim=128 requires >64kB
-# smem, but RDNA3 maxes out at 64kB. Use head_dim=64 (emsize / nhead).
+# smem, but most AMD GPUs max out at 64kB per workgroup. Use head_dim=64.
 declare -A EXTRA=(
   [RNN_RELU]="--lr 1"
   [Transformer]="--emsize 256 --nhead 4"
