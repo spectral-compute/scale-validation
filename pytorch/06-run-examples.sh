@@ -45,7 +45,12 @@ echo "=== siamese_network ==="
 
 # RNN_RELU's default learning rate of 20 is far too high and sends the weights
 # to inf/nan.
-declare -A EXTRA=( [RNN_RELU]="--lr 1" )
+# Transformer's mem-efficient attention kernel with head_dim=128 requires >64kB
+# smem, but RDNA3 maxes out at 64kB. Use head_dim=64 (emsize / nhead).
+declare -A EXTRA=(
+  [RNN_RELU]="--lr 1"
+  [Transformer]="--emsize 256 --nhead 4"
+)
 for model in RNN_TANH RNN_RELU LSTM GRU Transformer ; do
   echo "=== word_language_model ($model) ==="
   (
