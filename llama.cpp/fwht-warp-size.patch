@@ -1,0 +1,22 @@
+diff --git a/ggml/src/ggml-cuda/fwht.cu b/ggml/src/ggml-cuda/fwht.cu
+--- a/ggml/src/ggml-cuda/fwht.cu
++++ b/ggml/src/ggml-cuda/fwht.cu
+@@ -65,5 +65,17 @@
+     const float * src_d = (const float *) src->data;
+     float *       dst_d = (float *) dst->data;
+-    const int warp_size = ggml_cuda_info().devices[ggml_cuda_get_device()].warp_size;
++    // ggml_cuda_get_physical_warp_size() (used by fwht_cuda's __launch_bounds__ and its
++    // internal el_w/lane math) is a __device__-only compile-time constant that returns 64
++    // only when GGML_USE_HIP && (__GFX9__ || __GFX8__) are defined. SCALE compiles this
++    // file as plain CUDA, so those are never defined and it returns 32 unconditionally --
++    // but the real device warp_size for gfx90a is 64. Launching a block sized from the
++    // real (64) warp size into a kernel whose __launch_bounds__ was compiled against 32
++    // is a host/device mismatch that trips cudaErrorInvalidValue at launch. Match the
++    // kernel's compile-time assumption here instead of querying the real hardware value.
++#if defined(GGML_USE_HIP) && (defined(__GFX9__) || defined(__GFX8__))
++    const int warp_size = 64;
++#else
++    const int warp_size = 32;
++#endif
+     const int rows_per_block = 4;
+     const int64_t num_blocks = (rows + rows_per_block - 1) / rows_per_block;

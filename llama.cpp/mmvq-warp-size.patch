@@ -1,0 +1,24 @@
+diff --git a/ggml/src/ggml-cuda/mmvq.cu b/ggml/src/ggml-cuda/mmvq.cu
+--- a/ggml/src/ggml-cuda/mmvq.cu
++++ b/ggml/src/ggml-cuda/mmvq.cu
+@@ -854,6 +854,19 @@
+     const int device = ggml_cuda_get_device();
+     const int                     cc        = ggml_cuda_info().devices[device].cc;
+-    const int warp_size = ggml_cuda_info().devices[device].warp_size;
++    // mul_mat_vec_q_moe's __launch_bounds__ is get_mmvq_mmid_max_batch_for_device<type>() *
++    // ggml_cuda_get_physical_warp_size(), a __device__-only compile-time constant that returns 64
++    // only when GGML_USE_HIP && (__GFX9__ || __GFX8__) are defined. SCALE compiles this file as
++    // plain CUDA, so those are never defined and it returns 32 unconditionally -- but the real
++    // device warp_size for gfx90a is 64. Building mul_mat_vec_q_moe_launch's block_dims from the
++    // real (64) warp size while the kernel's __launch_bounds__ was compiled against 32 is a
++    // host/device mismatch that trips cudaErrorInvalidValue at launch (same failure mode as
++    // fwht.cu). Match the host side to the kernel's compile-time assumption instead of querying
++    // the real hardware value.
++#if defined(GGML_USE_HIP) && (defined(__GFX9__) || defined(__GFX8__))
++    const int warp_size = 64;
++#else
++    const int warp_size = 32;
++#endif
+     const mmvq_parameter_table_id table_id  = get_device_table_id(cc);
+
+     const bool has_ids = ids != nullptr;
