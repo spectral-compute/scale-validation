@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <0f70d5f5>.**
+**This shows the test status for SCALE: master <7020b4f1>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -38,9 +38,9 @@ Contributions welcome!
 | hashinator          | 34cf188       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | HeCBench          | 42e8f09f3f7fa9...       | ✅|✅|✅|✅|✅|✅|
 | hypre          | v2.33.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| jitify          | master       | ❌|❌|🛠️️|❌|❌|✅|
+| jitify          | master       | ❌|❌|🛠️️|❌|❌|❌|
 | kokkos          |        | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| llama.cpp          | b9522       | ❌|✅|❌|✅|❌|❌|
+| llama.cpp          | b9522       | ❌|❌|❌|✅|❌|❌|
 | llm.c          | 7ecd8906afe6ed...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | nixl          | e128059af332df...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|✅|
 | nvflip          | 1eb247c       | ✅|✅|✅|✅|✅|❌|
@@ -67,7 +67,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 19328.
+Pipeline ID: 19534.
 
 ## Running Tests
 
