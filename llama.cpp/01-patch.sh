@@ -13,6 +13,11 @@ git -C llama.cpp apply "${SCRIPT_DIR}/fp4-scale-decode.patch"
 # device's actual limit), so it adapts to targets with differing shared-memory sizes.
 git -C llama.cpp apply "${SCRIPT_DIR}/fattn-shared-mem-fallback.patch"
 
+# Flash attention: align the array of zeroes that stands in for out-of-bounds rows of K and V. The
+# kernels copy it sixteen bytes at a time, so a four-byte-aligned array is read through a pointer
+# that promises more alignment than it has, and on sm_120 that faults with a misaligned address.
+git -C llama.cpp apply "${SCRIPT_DIR}/fattn-oob-zero-align.patch"
+
 # Use the single-block soft-max reduction (the only consumer of cooperative launch) by reporting
 # cooperative launch as unsupported.
 git -C llama.cpp apply "${SCRIPT_DIR}/disable-cooperative-launch.patch"
