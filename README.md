@@ -5,14 +5,21 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <814132a5>.**
+**This shows the test status for SCALE: master <1cfc0cc1>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
 Contributions welcome!
 
-| Project        | Version                    | 
-|----------------|----------------------------| 
+| Project        | Version                    | gfx1030|
+|----------------|----------------------------| -|
+| AMGX          | v2.4.0       | 🛠️️|
+| CUDALibrarySamples          | 5ac0f9a8032a10...       | 🛠️️|
+| CV-CUDA          | f769fe4       | 🛠️️|
+| FastEddy          | v2.0.0       | ❌|
+| FLAMEGPU2          | v2.0.0-rc.2       | 🛠️️|
+| GPUJPEG          | 3e045d1       | ❌|
+| HeCBench          | 42e8f09f3f7fa9...       | ❌|
 
 *Key:*
 * ✅ Validated succesfully
@@ -20,7 +27,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 20185.
+Pipeline ID: 20321.
 
 ## Running Tests
 
