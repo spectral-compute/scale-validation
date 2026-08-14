@@ -12,7 +12,6 @@ fi
 
 # Configure.
 cmake \
-    -DGMX_CUDA_TARGET_SM=86 \
     -DGMX_TEST_TIMEOUT_FACTOR=4 \
     -DGMX_DISABLE_CUDA_TEXTURES=ON \
     -DCMAKE_INSTALL_PREFIX="comp_install" \
