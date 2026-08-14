@@ -78,6 +78,12 @@ the normal CUDA build instructions for the corresponding project.
 Note that you may need to install the system dependencies described on the project
 website before this will succeed.
 
+On RHEL 8 (and derivatives, like Rocky 8), you may also wish to use a newer GCC compiler,
+which some projects require for their host-side code.
+GCC 15 should be automatically installed from the AppStream repository when you install SCALE.
+You can use the newer version in a shell by running `. /opt/rh/gcc-toolset-15/enable`.
+See [Red Hat's documentation](https://developers.redhat.com/articles/2025/04/16/gcc-and-gcc-toolset-versions-rhel-explainer) for more information.
+
 The test driver script `test.sh` may be used to conveniently execute an
 entire test:
 

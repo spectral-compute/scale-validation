@@ -78,6 +78,13 @@ else
 fi
 cd "${OUT_DIR}/${TEST}"
 
+# On RHEL 8, use an appstream compiler, if available
+# This avoids problems coming from projects that require a new-ish version of GCC
+. /etc/os-release
+if [[ "${PLATFORM_ID:-}" == "platform:el8" ]]; then
+    . /opt/rh/gcc-toolset-15/enable || true
+fi
+
 # Activate SCALE or use Nvidia's CUDA.
 if [ -e "${SCALE_DIR}/bin/scaleenv" ] ; then
     echo "Using SCALE at ${SCALE_DIR}"
