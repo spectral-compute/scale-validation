@@ -13,7 +13,7 @@ Contributions welcome!
 
 | Project        | Version                    | gfx90a|gfx900|gfx1201|gfx1100|gfx1030|sm_120|
 |----------------|----------------------------| -|-|-|-|-|-|
-| alien          | v4.12.3       | ✅|✅|❌|✅|✅|✅|
+| alien          | v4.12.3       | ✅|✅|✅|✅|✅|✅|
 | AMGX          | v2.4.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | arrayfire          | v3.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | bitnet          | 404980eecae38a...       | ✅|✅|✅|✅|✅|✅|
@@ -21,22 +21,22 @@ Contributions welcome!
 | ctranslate2          | v4.5.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | CUDALibrarySamples          | 5ac0f9a8032a10...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | cuml          | b17f2db       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| cuSZ          | v0.16.2       | ❓|✅|✅|✅|✅|✅|
-| cutlass          | v4.1.0       | ❓|❌|❌|❌|❌|🛠️️|
+| cuSZ          | v0.16.2       | ❌|✅|✅|✅|✅|✅|
+| cutlass          | v4.1.0       | ❌|❌|❌|❌|❌|🛠️️|
 | CV-CUDA          | f769fe4       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| cycles          | v4.4.0       | ❓|❌|✅|✅|✅|✅|
+| cycles          | v4.4.0       | ❌|❌|✅|✅|✅|✅|
 | faiss          | v1.9.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| FastEddy          | v2.0.0       | ❌|🛠️️|❌|✅|❌|✅|
-| ffmpeg          | n7.1.3       | ❓|✅|✅|✅|✅|✅|
+| FastEddy          | v2.0.0       | ❌|🛠️️|✅|✅|✅|✅|
+| ffmpeg          | n7.1.3       | ✅|✅|✅|✅|✅|✅|
 | FLAMEGPU2          | v2.0.0-rc.2       | 🛠️️|✅|🛠️️|🛠️️|🛠️️|✅|
-| ggml          | d3a58b0       | ❓|✅|✅|✅|✅|✅|
+| ggml          | d3a58b0       | ❌|✅|✅|✅|✅|✅|
 | gomc          | 4c12477       | ❓|✅|✅|✅|✅|✅|
 | gpu_jpeg2k          | ee715e9       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | GPUJPEG          | 3e045d1       | ❌|❌|❌|❌|❌|❌|
 | gromacs          | v2025.4       | ❓|❌|❌|❌|❌|✅|
 | hashcat          | 6716447dfce969...       | ❓|✅|✅|✅|✅|✅|
 | hashinator          | 34cf188       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
-| HeCBench          | 42e8f09f3f7fa9...       | ❌|✅|✅|✅|❌|✅|
+| HeCBench          | 42e8f09f3f7fa9...       | ✅|✅|✅|✅|✅|✅|
 | hypre          | v2.33.0       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | jitify          | master       | ❓|❌|🛠️️|❌|❌|✅|
 | kokkos          | 60d8384266eba9...       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
@@ -51,7 +51,7 @@ Contributions welcome!
 | RabbitCT          | main       | ✅|✅|✅|✅|✅|✅|
 | risc0          | v1.2.2       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | rodinia_suite          | spectral       | ❓|✅|✅|✅|✅|✅|
-| stdgpu          | 563dc59d6d08df...       | ❓|✅|❌|✅|✅|✅|
+| stdgpu          | 563dc59d6d08df...       | ❓|✅|✅|✅|✅|✅|
 | TCLB          | v6.7       | ✅|✅|✅|✅|✅|✅|
 | thrust          | 756c5af       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
 | timemachine          | 01f14f8       | 🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|🛠️️|
@@ -67,7 +67,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 20911.
+Pipeline ID: 21121.
 
 ## Running Tests
 
