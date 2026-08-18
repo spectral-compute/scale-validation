@@ -71,11 +71,13 @@ Pipeline ID: 21331.
 
 ## Running Tests
 
-Each directory (except `util`) contains a set of scripts that should be executed
+Each directory (except `util`[^1]) contains a set of scripts that should be executed
 in lexicographical order for a complete test. These scripts are mostly just
 the normal CUDA build instructions for the corresponding project.
 
-Note that you may need to install the system dependencies described on the project
+### Running Directly on the Host
+
+Note that you may need to install the system dependencies described on each project's respective
 website before this will succeed.
 
 The test driver script `test.sh` may be used to conveniently execute an
@@ -90,7 +92,34 @@ For example: `./test.sh ~/cuda_tests /opt/scale gfx1100 hashcat`.
 See the `test.sh` usage message for more detailed information and other
 options for adjusting how tests are run.
 
-### The `util` directory
+### Running Tests via Docker
 
-This directory contains scripts used by the test scripts. See the individual
-scripts for information about what they do.
+The `Dockerfile` at the root of the project is provided for convenience, using the latest version of SCALE, based on Ubuntu 24.04 and imitating CUDA 13.0.2.
+
+1. Build the image:
+
+    ```cli
+    docker build -f Dockerfile -t scale-validation:latest .
+    ```
+
+2. Launch into an interactive bash session inside the container, making sure to mount the current directory and giving it appropriate [GPU device access](https://docs.docker.com/engine/containers/gpu/), e.g.:
+
+    ```cli
+    docker run --rm --gpus all -e SCALE_LICENSE_ACCEPT=1 -v "$(pwd):/scale-validation" -w /scale-validation -it scale-validation:latest bash
+    ```
+
+    a. (Optional) If looking to validate SCALE on NVIDIA hardware, when inside the container install the respective version of CUDA by following the instructions on [NVIDIA's download page](https://developer.nvidia.com/cuda-toolkit-archive).
+
+3. Source the SCALE environment for the device architecture you're validating on:
+
+    ```cli
+    source /opt/scale/bin/scaleenv gfx90a
+    ```
+
+4. Run a test via the same script invocation as directly on host, specifying your parameters as before. SCALE will always be located under `/opt/scale` in Spectral-provided Docker containers. For example:
+
+    ```cli
+    ./test.sh ~/cuda_tests /opt/scale gfx1100 hashcat
+    ```
+
+[^1]: The `util` directory contains scripts used by the test scripts. See the individual scripts for information about what they do.
