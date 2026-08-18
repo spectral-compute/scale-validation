@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-17T05:20:54.058426+00:00",
+  "generated_at": "2026-08-18T09:20:57.731811+00:00",
   "projects": [
     {
       "name": "Caffe",
@@ -16,13 +16,13 @@
       "description": "A fast open framework for deep learning. Caffe is known for its expressive architecture, extensible code, and speed \u2014 widely used in academic research and production deployments for image classification and segmentation.",
       "validation": {
         "summary": "partial",
-        "pass_count": 3,
+        "pass_count": 4,
         "total_count": 6,
-        "last_run": "2026-08-17T05:20:52.698731+00:00",
+        "last_run": "2026-08-18T09:20:56.495251+00:00",
         "architectures": {
           "gfx1030": "success",
           "gfx1100": "success",
-          "gfx1201": "failure",
+          "gfx1201": "success",
           "gfx900": "failure",
           "gfx90a": "failure",
           "sm_120": "success"
@@ -47,7 +47,7 @@
         "summary": "partial",
         "pass_count": 4,
         "total_count": 6,
-        "last_run": "2026-08-17T05:20:52.698731+00:00",
+        "last_run": "2026-08-18T09:20:56.495251+00:00",
         "architectures": {
           "gfx1030": "success",
           "gfx1100": "success",
@@ -76,7 +76,7 @@
         "summary": "partial",
         "pass_count": 5,
         "total_count": 6,
-        "last_run": "2026-08-17T05:20:52.698731+00:00",
+        "last_run": "2026-08-18T09:20:56.495251+00:00",
         "architectures": {
           "gfx1030": "success",
           "gfx1100": "success",
@@ -106,7 +106,7 @@
         "summary": "partial",
         "pass_count": 4,
         "total_count": 6,
-        "last_run": "2026-08-17T05:20:52.698731+00:00",
+        "last_run": "2026-08-18T09:20:56.495251+00:00",
         "architectures": {
           "gfx1030": "success",
           "gfx1100": "success",
@@ -135,7 +135,7 @@
         "summary": "partial",
         "pass_count": 5,
         "total_count": 6,
-        "last_run": "2026-08-17T05:20:52.698731+00:00",
+        "last_run": "2026-08-18T09:20:56.495251+00:00",
         "architectures": {
           "gfx1030": "success",
           "gfx1100": "success",
