@@ -23,17 +23,16 @@ for URL in https://data.spectralcompute.co.uk/gromacs/benchMEM.zip \
            https://data.spectralcompute.co.uk/gromacs/benchSTC.zip \
            https://data.spectralcompute.co.uk/gromacs/benchSTI.zip ; do
     if [ ! -e "$(echo "${URL}" | sed -E 's;.*/;;')" ] ; then
-        wget -q "${URL}"
+        wget -nv "${URL}"
     fi
 done
 cd -
 
-# Create somewhere for results.
-RESULT_FILE="${OUT_DIR}/$(basename -s .sh "$0").csv"
-rm -f "${RESULT_FILE}"
-
 RESULT_DIR="${OUT_DIR}/benchmarks/MaxPlanckInstitute"
 mkdir -p "${RESULT_DIR}"
+
+RESULT_FILE="${OUT_DIR}/benchmarks/MaxPlanckInstitute/summary.csv"
+echo "" > "${RESULT_FILE}"
 
 # Run all the tests.
 RETCODE=0
@@ -47,7 +46,7 @@ for ZIP in "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks/"*.zip ; do
     cd "${RESULT_DIR}/${NAME}"
 
     # Some tests want special treatment.
-    EXTRA_ARGS=
+    EXTRA_ARGS=""
     case "${NAME}" in
         benchBFI)
             # The default is too slow for this benchmark.
@@ -74,20 +73,14 @@ for ZIP in "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks/"*.zip ; do
             # The default is a little fast for this benchmark.
             EXTRA_ARGS="-nsteps 100000"
         ;;
-        benchSTC)
-            # This benchmark doesn't work (with NVCC or Clang).
-            continue
-        ;;
-        benchSTI)
-            # This benchmark doesn't work (with NVCC or Clang).
-            continue
-        ;;
     esac
 
     # Actually extract and run the test.
     unzip "${ZIP}"
+
+    # See comment in bench-short on comparison to HIP
+    echo "Running ${NAME}.tpr with extra args: ${EXTRA_ARGS}"
     set +e
-    # NOTE: Seem comment in previous benchmark script about what command to run for comparing with hip.
     gmx mdrun -s "${NAME}.tpr" ${EXTRA_ARGS} -ntmpi 1 -nb gpu
     if [ "$?" != 0 ] ; then
         set -e
