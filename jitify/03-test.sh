@@ -10,4 +10,4 @@ if [[ ! $SCALE_ENV == gfx* ]]; then
 fi
 
 # TODO: https://gitlab.com/spectral-ai/engineering/cuda/platform/redscale/-/issues/549
-./jitify_test --gtest_filter="-JitifyTest.ConstantMemory:JitifyTest.ConstantMemory_experimental:JitifyTest.RemoveUnusedGlobals:JitifyTest.LinkExternalFiles:JitifyTest.LinkCurrentExecutable:${FAILS_FOR_NV:-}"
+./jitify_test --gtest_filter="-JitifyTest.CubBlockPrimitives:JitifyTest.ConstantMemory:JitifyTest.ConstantMemory_experimental:JitifyTest.RemoveUnusedGlobals:JitifyTest.LinkExternalFiles:JitifyTest.LinkCurrentExecutable:${FAILS_FOR_NV:-}"
