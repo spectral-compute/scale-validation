@@ -1,7 +1,8 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+# shellcheck disable=2329
+. "$(dirname "$0")"/../util/prelude.sh
 
-source "$(dirname "$0")"/../util/checks.sh
+source "$SCALE_VALIDATION/util/checks.sh"
 
 check_cuda_backend_detected() {
     local out
@@ -34,8 +35,8 @@ check_length_limit_on() {
     echo "${out}" | grep -iE 'exceeds|limit|length|31'
 }
 
-check "CUDA backend detected via -I"                  check_cuda_backend_detected
-check "32-char mask starts cleanly without -O"        check_length_limit_off
-check "-O triggers 31-char length warning"            check_length_limit_on
+check "CUDA backend detected via -I" check_cuda_backend_detected
+check "32-char mask starts cleanly without -O" check_length_limit_off
+check "-O triggers 31-char length warning" check_length_limit_on
 
 check_exit
