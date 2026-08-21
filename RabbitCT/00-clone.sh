@@ -1,12 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -e
-
-source "$(dirname "$0")"/../util/git.sh
-
-do_clone_hash RabbitCT https://github.com/spectral-compute/RabbitCT "$(get_version RabbitCT)"
-
-cd RabbitCT
+do_clone RabbitCT https://github.com/spectral-compute/RabbitCT "$(get_version RabbitCT)"
 
 # TODO: Find some way to cache this?
-./download-input.sh <<< "y"
+(cd RabbitCT && ./download-input.sh <<<"y")
