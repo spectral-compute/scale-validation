@@ -11,11 +11,16 @@ export TF_SET_ANDROID_WORKSPACE=0
 
 # Bazel arguments to turn things on and off.
 BAZEL_CONFIG= # For example: "--config=noaws"
+export BAZEL_CONFIG
 
 # Compiler.
-export GCC_HOST_COMPILER_PATH="$(realpath "${CUDA_PATH}/bin/gcc")"
-export HOST_C_COMPILER="$(realpath "${CUDA_PATH}/bin/gcc")"
-export HOST_CXX_COMPILER="$(realpath "${CUDA_PATH}/bin/g++")"
+GCC_HOST_COMPILER_PATH="$(realpath "${CUDA_PATH}/bin/gcc")"
+HOST_C_COMPILER="$(realpath "${CUDA_PATH}/bin/gcc")"
+HOST_CXX_COMPILER="$(realpath "${CUDA_PATH}/bin/g++")"
+export GCC_HOST_COMPILER_PATH
+export HOST_C_COMPILER
+export HOST_CXX_COMPILER
+
 export CC_OPT_FLAGS="-march=native -mtune=native"
 export TF_CUDA_CLANG=0
 export TF_DOWNLOAD_CLANG=0
@@ -29,8 +34,10 @@ export TF_NEED_CUDA=1
 export CUDA_TOOLKIT_PATH="${CUDA_PATH}"
 export CUDNN_INSTALL_PATH="${CUDA_PATH}"
 export TF_CUDA_PATHS="${CUDA_PATH}"
-export TF_CUDA_VERSION=$("${CUDA_PATH}/bin/nvcc" --version | sed -n 's/^.*release \(.*\),.*/\1/p')
-export TF_CUDA_COMPUTE_CAPABILITIES=$(echo $CUDAARCHS | sed -E 's/sm_([0-9]+)([0-9])/\1.\2/')
+TF_CUDA_VERSION=$("${CUDA_PATH}/bin/nvcc" --version | sed -n 's/^.*release \(.*\),.*/\1/p')
+TF_CUDA_COMPUTE_CAPABILITIES=$(echo "$CUDAARCHS" | sed -E 's/sm_([0-9]+)([0-9])/\1.\2/')
+export TF_CUDA_VERSION
+export TF_CUDA_COMPUTE_CAPABILITIES
 
 # Other things that apparently can't be autodetected.
 export TMP=/tmp
