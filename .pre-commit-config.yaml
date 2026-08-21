@@ -19,5 +19,5 @@ repos:
         name: shfmt
         description: "Run 'shfmt' to format bash code"
         entry: 'shfmt -w'
-        language: shell
+        language: unsupported
         files: '^.*\.sh'
