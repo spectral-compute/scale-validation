@@ -1,6 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
-
-# Test.
 meson test -C hashinator/build
