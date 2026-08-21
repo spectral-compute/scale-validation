@@ -1,16 +1,15 @@
-#!/bin/bash
-
-set -eo pipefail
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 # Download the benchmark data if it doesn't already exist.
 BENCH_MEM="data/MaxPlanckInstituteGromacsBenchmarks"
 mkdir -p "$BENCH_MEM"
-if [ ! -e "$BENCH_MEM/benchMEM.zip" ] ; then
+if [ ! -e "$BENCH_MEM/benchMEM.zip" ]; then
     wget https://data.spectralcompute.co.uk/gromacs/benchMEM.zip -O "$BENCH_MEM/benchMEM.zip"
     unzip "$BENCH_MEM/benchMEM.zip"
 fi
 
-source "install/bin/GMXRC"
+. "install/bin/GMXRC"
 
 # If trying to compare with the HIP build of GROMACS, you may consider using:
 #   -pme cpu -bonded cpu -update cpu
@@ -18,5 +17,5 @@ source "install/bin/GMXRC"
 # on the GPU, but the CUDA version does.
 # So, adding those arguments gives a closer comparison of what we're actually running on the GPU
 # If GROMACS is your workload and you just want to know which is faster, you may wish to leave it out.
-echo "Running only benchMEM"
+log "Running only benchMEM"
 time gmx mdrun -s "benchMEM.tpr" -v -ntmpi 1 -nb gpu
