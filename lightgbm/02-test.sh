@@ -1,15 +1,12 @@
-#!/bin/bash
-
-set -ETeuo pipefail
-
-cd "install/bin"
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 if ! [ -f HIGGS_prepared.tar.xz ]; then
-    wget -q https://data.spectralcompute.co.uk/lightgbm/HIGGS_prepared.tar.xz
+    wget -nv -nc https://data.spectralcompute.co.uk/lightgbm/HIGGS_prepared.tar.xz
     tar -xf HIGGS_prepared.tar.xz
 fi
 
-cat > lightgbm_gpu.conf <<EOF
+cat >lightgbm_gpu.conf <<EOF
 max_bin = 63
 num_leaves = 255
 num_iterations = 50
@@ -24,6 +21,6 @@ device = cuda
 gpu_platform_id = 0
 gpu_device_id = 0
 EOF
-echo "num_threads=$(nproc)" >> lightgbm_gpu.conf
+echo "num_threads=$(nproc)" >>lightgbm_gpu.conf
 
-./lightgbm config=lightgbm_gpu.conf data=higgs.train valid=higgs.test objective=binary metric=rmse
+./install/bin/lightgbm config=lightgbm_gpu.conf data=higgs.train valid=higgs.test objective=binary metric=rmse
