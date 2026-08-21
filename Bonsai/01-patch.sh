@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -euo pipefail
-
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-
-for P in "${SCRIPT_DIR}"/*.patch ; do
+for P in "${SCRIPT_DIR}"/*.patch; do
     git -C Bonsai apply "${P}"
 done

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-
-set -euo pipefail
+. "$(dirname "$0")"/../util/prelude.sh
 
 ulimit -s unlimited
 
