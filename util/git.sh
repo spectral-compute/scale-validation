@@ -1,24 +1,29 @@
-# Two tiny helper functions for cloning things.
+#!/usr/bin/env bash
+# Tiny helper functions for cloning things.
 
 # Clone and sync submodules for a project.
-function do_clone() {
-  git clone --recursive --depth 1 --shallow-submodules --branch $3 $2 $1
-}
-
-# Slower, but allows random hashes.
-function do_clone_hash() {
-  git clone --recursive $2 $1
-  git -C $1 checkout $3
-  git -C $1 submodule update --init --recursive
-}
-
-# Extract version from matching version.txt
-get_version () {
-    local dir=""
-    if [[ $# == 1 ]]; then
-        dir="$(dirname $0)"
-    else
-        dir="$2"
+do_clone() {
+    if [[ -d "$1" ]]; then
+        echo "WARNING: Source directory exists, so skipping git clone. You may have the wrong version."
     fi
-    echo $(cat "$dir/../versions.txt" | grep "$1 " | sed "s/$1 //g")
+
+    if echo "$3" | grep -E '[a-Z0-9]{40,64}' >/dev/null; then
+        log "Checking out commit $3 of $2 into $1"
+        git clone --recursive "$2" "$1"
+        git -C "$1" checkout "$3"
+        git -C "$1" submodule update --init --recursive
+    else
+        log "Checking out branch $3 of $2 into $1"
+        git clone --recursive --depth 1 --shallow-submodules --branch "$3" "$2" "$1"
+    fi
+}
+
+# Old name for when the above was two functions. Remove soon
+do_clone_hash() {
+    do_clone "$@"
+}
+
+# Extract version from scale-validation's version.txt
+get_version() {
+    cat "$SCALE_VALIDATION/versions.txt" | grep "$1 " | sed "s/$1 //g"
 }
