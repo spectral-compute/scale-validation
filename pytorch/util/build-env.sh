@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Create the build environments for torch and vision
 
 # If this is exported, pytorch wants to install `.ci/docker/requirements-ci.txt`. While it doesn't
@@ -10,13 +11,14 @@ unset CI
 
 # Build the TORCH_CUDA_ARCH_LIST; <major>.<minor>
 torch-arch() {
-  if ((${#CUDAARCHS} == 2)); then
-    echo "${CUDAARCHS:0:1}.${CUDAARCHS:1:1}"
-  else
-    echo "${CUDAARCHS:0:2}.${CUDAARCHS:2:1}"
-  fi
+    if ((${#CUDAARCHS} == 2)); then
+        echo "${CUDAARCHS:0:1}.${CUDAARCHS:1:1}"
+    else
+        echo "${CUDAARCHS:0:2}.${CUDAARCHS:2:1}"
+    fi
 }
-export TORCH_CUDA_ARCH_LIST=$(torch-arch)
+TORCH_CUDA_ARCH_LIST=$(torch-arch)
+export TORCH_CUDA_ARCH_LIST
 
 export CFLAGS="\
     -Wno-inconsistent-missing-destructor-override \
@@ -55,7 +57,8 @@ export BUILD_BINARY=OFF
 export BUILD_TEST=OFF
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 export FORCE_CUDA=1
-export MAX_JOBS=$(nproc)
+MAX_JOBS="$(nproc)"
+export MAX_JOBS
 
 # PyTorch has its own env var to set the CUDA compiler
 export PYTORCH_NVCC=${CUDACXX}
@@ -65,9 +68,9 @@ export TORCH_EXTENSION_SKIP_NVCC_GEN_DEPENDENCIES=1
 
 # clang >= 18 use c++20 mangling, but PyTorch expects c++17 mangling
 if [[ "$(nvcc --version)" == *" SCALE "* ]]; then
-  # This has to CMAKE_CUDA_FLAGS, not CUDAFLAGS (TODO: maybe we want to go around setup.py and call
-  # cmake directly? The pytorch build instructions are pretty sparse)
-  export CMAKE_CUDA_FLAGS="-fclang-abi-compat=17"
+    # This has to CMAKE_CUDA_FLAGS, not CUDAFLAGS (TODO: maybe we want to go around setup.py and call
+    # cmake directly? The pytorch build instructions are pretty sparse)
+    export CMAKE_CUDA_FLAGS="-fclang-abi-compat=17"
 fi
 
 export CMAKE_ARGS="-DBUILD_BINARY=OFF -DBUILD_TEST=OFF"
