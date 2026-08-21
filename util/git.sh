@@ -5,9 +5,10 @@
 do_clone() {
     if [[ -d "$1" ]]; then
         echo "WARNING: Source directory exists, so skipping git clone. You may have the wrong version."
+        return 0
     fi
 
-    if echo "$3" | grep -E '[a-Z0-9]{40,64}' >/dev/null; then
+    if echo "$3" | grep -E '[a-zA-Z0-9]{40,64}' >/dev/null; then
         log "Checking out commit $3 of $2 into $1"
         git clone --recursive "$2" "$1"
         git -C "$1" checkout "$3"
