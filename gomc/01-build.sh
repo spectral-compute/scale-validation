@@ -1,14 +1,13 @@
-#!/bin/bash
-
-set -e
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 # Compile for the architectures we want.
-for F in GOMC/CMake/GOMCCUDASetup.cmake GOMC/test/BuildGPUTests.cmake ; do
+for F in GOMC/CMake/GOMCCUDASetup.cmake GOMC/test/BuildGPUTests.cmake; do
     sed -E "s/(\s+CUDA_ARCHITECTURES ).*/\1${CUDAARCHS}/" -i "${F}"
 done
 
 # CMake detects that we're Clang, and GOMC enables libc++ for that in a way that seems to be broken.
-for F in GOMC/CMakeLists.txt GOMC/lib/cereal-1.3.0/CMakeLists.txt ; do
+for F in GOMC/CMakeLists.txt GOMC/lib/cereal-1.3.0/CMakeLists.txt; do
     sed -E 's/-stdlib=libc[+][+]//' -i "${F}"
 done
 
@@ -19,15 +18,19 @@ sed -E 's/find_package\(OpenMP\)//' -i "GOMC/CMakeLists.txt"
 # Fix the call to Difference to be non-ambiguous (needed on Nvidia too).
 sed -E 's/ Difference/ ::Difference/g' -i "GOMC/src/GPU/CalculateForceCUDAKernel.cu"
 
-# Configure.
+args=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_CUDA_COMPILER="nvcc"
+    -DCMAKE_CXX_FLAGS="-fPIC"
+    -DCMAKE_CUDA_FLAGS="-fPIC"
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}"
+    -DCMAKE_INSTALL_PREFIX="install"
+
+    -DGOMC_GTEST=On
+)
+
 cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CUDA_COMPILER="nvcc" \
-    -DCMAKE_CXX_FLAGS="-fPIC" \
-    -DCMAKE_CUDA_FLAGS="-fPIC" \
-    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
-    -DGOMC_GTEST=On \
-    -DCMAKE_INSTALL_PREFIX="install" \
+    "${args[@]}" \
     -B"build" \
     "GOMC"
 
