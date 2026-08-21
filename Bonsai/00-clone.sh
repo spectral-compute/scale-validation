@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -euo pipefail
-source "$(dirname "$0")"/../util/git.sh
-
-do_clone_hash Bonsai https://github.com/treecode/Bonsai.git "$(get_version Bonsai)"
+do_clone Bonsai https://github.com/treecode/Bonsai.git "$(get_version Bonsai)"
