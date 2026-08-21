@@ -1,30 +1,36 @@
-#!/bin/bash
-
-set -e
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 OUT_DIR=$(realpath ../)
-if [ ! -e "${OUT_DIR}/openmpi/install" ] ; then
+if [ ! -e "${OUT_DIR}/openmpi/install" ]; then
     echo "Please build the OpenMPI third party project first. Use the same working directory." 1>&2
     exit 1
 fi
 
+args=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_CXX_COMPILER=clang++
+    -DCMAKE_CUDA_COMPILER=clang++
+    -DCMAKE_CXX_STANDARD=20
+
+    -DMPI_HOME="${OUT_DIR}/openmpi/install"
+    -DBUILD_TESTING=OFF
+
+    -DKokkos_ARCH_AMPERE86=ON
+    -DKokkos_ENABLE_CUDA=ON
+
+    -DNovapp_EOS=PerfectGas
+    -DNovapp_GEOM=Cartesian
+    -DNovapp_GRAVITY=Uniform
+    -DNovapp_NDIM=3
+    -DNovapp_SETUP=rayleigh_taylor3d
+    -DNovapp_inih_DEPENDENCY_POLICY=EMBEDDED
+    -DNovapp_Kokkos_DEPENDENCY_POLICY=EMBEDDED
+)
+
 cmake \
-  -D MPI_HOME=${OUT_DIR}/openmpi/install \
-  -D BUILD_TESTING=OFF \
-  -D CMAKE_BUILD_TYPE=Release \
-  -D CMAKE_CXX_COMPILER=clang++ \
-  -D CMAKE_CUDA_COMPILER=clang++ \
-  -D CMAKE_CXX_STANDARD=20 \
-  -D Kokkos_ARCH_AMPERE86=ON \
-  -D Kokkos_ENABLE_CUDA=ON \
-  -D Novapp_EOS=PerfectGas \
-  -D Novapp_GEOM=Cartesian \
-  -D Novapp_GRAVITY=Uniform \
-  -D Novapp_NDIM=3 \
-  -D Novapp_SETUP=rayleigh_taylor3d \
-  -D Novapp_inih_DEPENDENCY_POLICY=EMBEDDED \
-  -D Novapp_Kokkos_DEPENDENCY_POLICY=EMBEDDED \
-  -B build \
-  "heraclespp"
+    "${args[@]}" \
+    -B build \
+    "heraclespp"
 
 make -O -C "build" -j"$(nproc)"
