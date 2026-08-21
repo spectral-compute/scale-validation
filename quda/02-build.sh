@@ -1,14 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
+args=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}"
+    -DCMAKE_INSTALL_PREFIX="install"
 
-# Configure.
+    -DQUDA_TARGET_TYPE="CUDA"
+    -DQUDA_GPU_ARCH="${CUDAARCHS}"
+
+)
 cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DQUDA_TARGET_TYPE="CUDA" \
-    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
-    -DQUDA_GPU_ARCH="${CUDAARCHS}" \
-    -DCMAKE_INSTALL_PREFIX="install" \
+    "${args[@]}" \
     -B"build" \
     "quda"
 
