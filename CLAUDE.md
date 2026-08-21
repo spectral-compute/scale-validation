@@ -88,12 +88,11 @@ A test directory is a sequence of numbered scripts run in order:
 00-clone.sh   01-build.sh   02-test-*.sh   03-benchmark-*.sh
 ```
 
-Each script is standalone (`#!/bin/bash` + `set -e`, often `set -ETeuo pipefail`) and
+Each script is standalone (but should start with `#!/usr/bin/env bash\n. "$(dirname "$0")"/../util/prelude.sh`) and
 relies on the environment exported by the driver. Conventions:
 
 - **Clone** via `util/git.sh` helpers — `source "$(dirname "$0")"/../util/git.sh`, then
-  `do_clone <dir> <url> <ref>` (shallow, branch/tag) or `do_clone_hash` (full clone,
-  arbitrary commit). Pin the ref with `get_version <name>`, which reads `versions.txt`.
+  `do_clone <dir> <url> <ref>` (shallow, branch/tag). Pin the ref with `get_version <name>`, which reads `versions.txt`.
 - **`versions.txt`** is the single source of truth for which ref of each project is
   tested — update it here, never hardcode refs in scripts.
 - **Build** out-of-source; use `${CUDAARCHS}` for the arch and `nvcc` as the CUDA
