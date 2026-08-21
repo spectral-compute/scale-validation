@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -e
 git clone https://github.com/pytorch/examples.git examples

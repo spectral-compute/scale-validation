@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-
-set -ETeuo pipefail
+. "$(dirname "$0")"/../util/prelude.sh
 
 # TODO(#1144): Kill each of these if possible.
 #
@@ -18,14 +17,13 @@ export DISABLE_ADDMM_CUDA_LT=1
 source pytorch/.venv/bin/activate
 
 # Setup import paths
-SCRIPT_DIR="$(dirname "$(realpath $0)")"
 SUITE_ROOT="$SCRIPT_DIR/pytorch_extended_tests"
 export PYTHONPATH="$SUITE_ROOT/src:$SUITE_ROOT:${PYTHONPATH-}"
 
-[ -d results ] || mkdir results
+mkdir -p results
 
 python -u -m pytorch_extended_tests.orchestrator.run_suite \
-    --results-dir $(realpath results) \
+    --results-dir "$(realpath results)" \
     --keep-existing \
-    "$@" \
-    |& tee "$(basename $0).log"
+    "$@" |&
+    tee "$(basename "$0").log"

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+. "$(dirname "$0")"/../util/prelude.sh
 
 # This script tests PyTorch datatypes by training two small models on MNIST data with
 # three different precisions. We check the training curve follows "roughly  the right
@@ -7,12 +7,10 @@ set -euo pipefail
 # to completion (with all precisions) and our criterion for the training curve
 # following the right shape is satisfied.
 
-
 # TODO(#1144): Kill.
 #
 # Pytorch tries to use and other GPUs leading to errors.
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
-
 
 # PyTorch's addmm uses cuBLASLt, which SCALE does not support yet. Without this the
 # TF32 runs fail with:
@@ -20,7 +18,6 @@ export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
 #   `cublasLtMatmulDescCreate(&raw_descriptor, compute_type, scale_type)`
 # This makes PyTorch fall back to plain cuBLAS.
 export DISABLE_ADDMM_CUDA_LT=1
-
 
 source pytorch/.venv/bin/activate
 

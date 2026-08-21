@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+. "$(dirname "$0")"/../util/prelude.sh
 
 source pytorch/.venv/bin/activate
 
@@ -17,27 +17,27 @@ export PYTHONUNBUFFERED=1
 
 echo "=== mnist ==="
 (
-  cd examples/mnist
-  python main.py --epochs "$EPOCHS"
+    cd examples/mnist
+    python main.py --epochs "$EPOCHS"
 )
 
 echo "=== mnist_rnn ==="
 (
-  cd examples/mnist_rnn
-  # Unlike most of the examples, the GPU is opt-in here, not opt-out.
-  python main.py --accel --epochs "$EPOCHS"
+    cd examples/mnist_rnn
+    # Unlike most of the examples, the GPU is opt-in here, not opt-out.
+    python main.py --accel --epochs "$EPOCHS"
 )
 
 echo "=== mnist_forward_forward ==="
 (
-  cd examples/mnist_forward_forward
-  python main.py --epochs "$EPOCHS"
+    cd examples/mnist_forward_forward
+    python main.py --epochs "$EPOCHS"
 )
 
 echo "=== siamese_network ==="
 (
-  cd examples/siamese_network
-  python main.py --epochs "$EPOCHS"
+    cd examples/siamese_network
+    python main.py --epochs "$EPOCHS"
 )
 
 # Train each language model type on the bundled wikitext-2 corpus, then
@@ -48,15 +48,16 @@ echo "=== siamese_network ==="
 # Transformer's mem-efficient attention kernel with head_dim=128 requires >64kB
 # smem, but most AMD GPUs max out at 64kB per workgroup. Use head_dim=64.
 declare -A EXTRA=(
-  [RNN_RELU]="--lr 1"
-  [Transformer]="--emsize 256 --nhead 4"
+    [RNN_RELU]="--lr 1"
+    [Transformer]="--emsize 256 --nhead 4"
 )
-for model in RNN_TANH RNN_RELU LSTM GRU Transformer ; do
-  echo "=== word_language_model ($model) ==="
-  (
-    cd examples/word_language_model
-    # The GPU is opt-in here too.
-    python main.py --accel --model "$model" --epochs "$EPOCHS" ${EXTRA[$model]:-}
-    python generate.py --accel
-  )
+for model in RNN_TANH RNN_RELU LSTM GRU Transformer; do
+    echo "=== word_language_model ($model) ==="
+    (
+        cd examples/word_language_model
+        # The GPU is opt-in here too.
+        # shellcheck disable=SC2086
+        python main.py --accel --model "$model" --epochs "$EPOCHS" ${EXTRA[$model]:-}
+        python generate.py --accel
+    )
 done
