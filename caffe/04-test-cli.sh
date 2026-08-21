@@ -1,7 +1,5 @@
-#!/bin/bash
-set -e
-
-source "$(dirname "$0")"/../util/checks.sh
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 check_device_query() {
     local out
@@ -24,8 +22,8 @@ check_no_cudnn() {
     [ -z "${libs}" ]
 }
 
-check "device_query reports GPU"  check_device_query
-check "--help lists subcommands"  check_help
-check "no cuDNN linked (ldd)"     check_no_cudnn
+check "device_query reports GPU" check_device_query
+check "--help lists subcommands" check_help
+check "no cuDNN linked (ldd)" check_no_cudnn
 
 check_exit

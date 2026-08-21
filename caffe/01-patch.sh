@@ -1,6 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-
-patch -p0 -d "caffe" < "${SCRIPT_DIR}/protobuf.patch"
+patch -p0 -d "caffe" <"${SCRIPT_DIR}/protobuf.patch"

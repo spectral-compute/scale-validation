@@ -1,7 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -e
-
-source "$(dirname "$0")"/../util/git.sh
-
-do_clone_hash caffe https://github.com/BVLC/caffe.git "$(get_version caffe)"
+do_clone caffe https://github.com/BVLC/caffe.git "$(get_version caffe)"
