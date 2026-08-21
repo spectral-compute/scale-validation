@@ -1,5 +1,5 @@
-#!/bin/bash
-set -ETeuo pipefail
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 OUT_DIR="$(realpath .)/HeCBench"
 RESULTS_DIR="/tmp/ci_benchmarks"
@@ -12,14 +12,14 @@ DATA_FILE="hecbench.scale.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.$TEST_DT.csv"
 
 mkdir -p "$RESULTS_DIR"
 if [ -x /opt/scale/bin/scaleinfo ]; then
-    /opt/scale/bin/scaleinfo > "${RESULTS_DIR}/scale_info.txt"
+    /opt/scale/bin/scaleinfo >"${RESULTS_DIR}/scale_info.txt"
 else
-    lspci | grep -i vga > "${RESULTS_DIR}/pci_info.txt"
+    lspci | grep -i vga >"${RESULTS_DIR}/pci_info.txt"
 fi
 
-python3 $OUT_DIR/tools/hecbench run \
-  --model cuda \
-  --preset scale-cuda-sm$CUDA_ARCH_NUM \
-  --store "hecbench-results.scale.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.db" \
-  --format csv \
-  --output "$RESULTS_DIR/$DATA_FILE"
+python3 "$OUT_DIR/tools/hecbench" run \
+    --model cuda \
+    --preset "scale-cuda-sm$CUDA_ARCH_NUM" \
+    --store "hecbench-results.scale.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.db" \
+    --format csv \
+    --output "$RESULTS_DIR/$DATA_FILE"
