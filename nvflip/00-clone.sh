@@ -1,7 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -e
-
-source "$(dirname "$0")"/../util/git.sh
-
-do_clone_hash nvflip https://github.com/NVlabs/flip.git "$(get_version nvflip)"
+do_clone nvflip https://github.com/NVlabs/flip.git "$(get_version nvflip)"
