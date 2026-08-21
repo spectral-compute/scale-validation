@@ -1,6 +1,5 @@
-#!/bin/bash
-
-set -ETeuo pipefail
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 # Disable nccl. The makefile uses dpkg and grep to see if it's installed, which makes
 # it false-positive on any package with the substring "nccl" in its name (such as

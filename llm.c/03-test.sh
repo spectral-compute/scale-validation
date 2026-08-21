@@ -1,12 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
-
-cd llm.c
-./train_gpt2fp32cu | tee output.log
+(cd llm.c && ./train_gpt2fp32cu | tee output.log)
 
 # Check the output matches that obtained on the nvidia device.
-cat << EOF > expected.log
+cat <<EOF >expected.log
 generating:
 ---
 
@@ -31,5 +29,9 @@ Strong should a bellow
 ---
 EOF
 
-cat output.log | sed -n '/generating:/,/step/p' | grep -v "step 40" | grep -v "step 20" > test.log
-diff test.log expected.log
+cat output.log | sed -n '/generating:/,/step/p' | grep -v "step 40" | grep -v "step 20" >test.log
+
+if ! diff test.log expected.log; then
+    log "actual output differed from expected!"
+    exit 1
+fi
