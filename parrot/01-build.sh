@@ -1,12 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -e
-
-# Configure.
+args=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_C_COMPILER="clang"
+    -DCMAKE_CXX_COMPILER="clang++"
+)
 cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_C_COMPILER="clang" \
-    -DCMAKE_CXX_COMPILER="clang++" \
+    "${args[@]}" \
     -B"build" \
     "parrot"
 
