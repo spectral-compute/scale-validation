@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -euo pipefail
+# colmap wants to spit some stuff out to our home directory
+export HOME="$PWD"
 
-export HOME=$PWD
-ctest --output-on-failure -j$(nproc)
+ctest --output-on-failure "-j$(nproc)"
