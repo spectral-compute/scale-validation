@@ -1,9 +1,8 @@
-#!/bin/bash
-#
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
+
 # Run NIXL's bundled C++ example end-to-end and confirm it reports a
 # completed transfer.
-
-set -ETeuo pipefail
 
 # Point NIXL's plugin manager at the freshly-built UCX backend.
 NIXL_PLUGIN_DIR="$(realpath nixl/build/src/plugins/ucx)"
@@ -21,6 +20,6 @@ export LD_LIBRARY_PATH
 # Absence of that line means the run failed, even if the program exited
 # cleanly.
 if ! grep -q "Test done" test.log; then
-  echo "Error: NIXL example did not print 'Test done' — see test.log." >&2
-  exit 1
+    echo "Error: NIXL example did not print 'Test done' — see test.log." >&2
+    exit 1
 fi
