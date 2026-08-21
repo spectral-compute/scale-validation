@@ -1,18 +1,16 @@
-#!/bin/bash
-set -ETeuo pipefail
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 OUT_DIR="$(realpath .)"
 SRC_DIR="${SRC_DIR:-${OUT_DIR}/HeCBench}"
 
 # Expect CUDAARCHS like 80, 86, 90 — not sm_80
 CUDA_ARCH_NUM="${CUDAARCHS#sm_}"
-BUILD_DIR="${SRC_DIR}/build/cuda-sm${CUDA_ARCH_NUM}"
-
 
 # Create configure and build presets for available architectures that aren't already
 # provided by HeCBench presets, and obviously the SCALE targets.
 # Already given: hip-gfx90a, hip-gfx942
-cat << EOF > $SRC_DIR/CMakeUserPresets.json
+cat <<EOF >"$SRC_DIR/CMakeUserPresets.json"
 {
     "version": 3,
 
@@ -74,7 +72,6 @@ cat << EOF > $SRC_DIR/CMakeUserPresets.json
     ]
 }
 EOF
-
 
 (
     cd "$SRC_DIR"
