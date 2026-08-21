@@ -1,11 +1,9 @@
-#!/bin/bash
-
-set -e
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 cd "UppASD/benchmarks/bccFe"
 # The full set is 10 20 30 40 50 60, but we don't want to run a full benchmark
-for nx in 10 20 30
-do
+for nx in 10 20 30; do
     # MC GPU
     mkdir MCGPUN$nx/ 2>/dev/null
     echo "NX: " $nx
@@ -17,7 +15,7 @@ do
     sed -i "s/MODE/M/g" inpsd.dat
     sed -i "s/nstep/mcnstep/g" inpsd.dat
     sed -i "s/GPU/1/g" inpsd.dat
-    time ../../../bin/sd.f95.cuda > out.log
+    time ../../../bin/sd.f95.cuda >out.log
     cd ..
 done
 exit
