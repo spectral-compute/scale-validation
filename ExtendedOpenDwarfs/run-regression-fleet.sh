@@ -158,7 +158,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCALE_VALIDATION_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 : "${EOD_REGRESSION_REMOTE_TARGETS:=alpha epsilon beta andoria risa}"
-read -r -a REMOTE_TARGETS <<< "$EOD_REGRESSION_REMOTE_TARGETS"
+read -r -a REMOTE_TARGETS <<<"$EOD_REGRESSION_REMOTE_TARGETS"
 
 : "${EOD_REGRESSION_RUN_LOCAL:=1}"
 : "${EOD_REGRESSION_WORKDIR:=/tmp/eod-regression}"
@@ -172,23 +172,23 @@ read -r -a REMOTE_TARGETS <<< "$EOD_REGRESSION_REMOTE_TARGETS"
 : "${EOD_REGRESSION_METRIC:=}"
 
 if [[ -z "${EOD_REGRESSION_REPO_URL:-}" ]]; then
-	if ! EOD_REGRESSION_REPO_URL="$(git -C "$SCALE_VALIDATION_ROOT" remote get-url origin 2>/dev/null)"; then
-		echo "error: could not auto-detect the git origin URL from ${SCALE_VALIDATION_ROOT}." >&2
-		echo "       Set EOD_REGRESSION_REPO_URL explicitly and re-run." >&2
-		exit 1
-	fi
+    if ! EOD_REGRESSION_REPO_URL="$(git -C "$SCALE_VALIDATION_ROOT" remote get-url origin 2>/dev/null)"; then
+        echo "error: could not auto-detect the git origin URL from ${SCALE_VALIDATION_ROOT}." >&2
+        echo "       Set EOD_REGRESSION_REPO_URL explicitly and re-run." >&2
+        exit 1
+    fi
 fi
 
 if [[ -z "${EOD_REGRESSION_REF:-}" ]]; then
-	if ! EOD_REGRESSION_REF="$(git -C "$SCALE_VALIDATION_ROOT" rev-parse HEAD 2>/dev/null)"; then
-		echo "error: could not auto-detect the current commit from ${SCALE_VALIDATION_ROOT}." >&2
-		echo "       Set EOD_REGRESSION_REF explicitly (a commit, tag, or branch) and re-run." >&2
-		exit 1
-	fi
+    if ! EOD_REGRESSION_REF="$(git -C "$SCALE_VALIDATION_ROOT" rev-parse HEAD 2>/dev/null)"; then
+        echo "error: could not auto-detect the current commit from ${SCALE_VALIDATION_ROOT}." >&2
+        echo "       Set EOD_REGRESSION_REF explicitly (a commit, tag, or branch) and re-run." >&2
+        exit 1
+    fi
 fi
 
 log() {
-	printf '[%s] %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"
+    printf '[%s] %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"
 }
 
 log "scale-validation repo: ${EOD_REGRESSION_REPO_URL}"
@@ -202,22 +202,22 @@ log "Workdir (per host):    ${EOD_REGRESSION_WORKDIR}"
 # ---------------------------------------------------------------------------
 
 if [[ -z "${EOD_REGRESSION_PLOT_HEATMAP_SCRIPT:-}" ]]; then
-	# plot_heatmap.R (and its lsb_common.R dependency) only ever run
-	# locally on whichever machine does the collecting -- they are never
-	# distributed to the fleet. Default to the real one in the actual EOD
-	# checkout, which on this machine lives as a sibling of
-	# scale-validation itself. Override explicitly if that's not where it
-	# lives on your machine.
-	EOD_REGRESSION_PLOT_HEATMAP_SCRIPT="$(dirname "$SCALE_VALIDATION_ROOT")/ExtendedOpenDwarfs/scripts/plot_heatmap.R"
+    # plot_heatmap.R (and its lsb_common.R dependency) only ever run
+    # locally on whichever machine does the collecting -- they are never
+    # distributed to the fleet. Default to the real one in the actual EOD
+    # checkout, which on this machine lives as a sibling of
+    # scale-validation itself. Override explicitly if that's not where it
+    # lives on your machine.
+    EOD_REGRESSION_PLOT_HEATMAP_SCRIPT="$(dirname "$SCALE_VALIDATION_ROOT")/ExtendedOpenDwarfs/scripts/plot_heatmap.R"
 fi
 
 if [[ ! -f "$EOD_REGRESSION_PLOT_HEATMAP_SCRIPT" ]]; then
-	echo "error: plot_heatmap.R not found at ${EOD_REGRESSION_PLOT_HEATMAP_SCRIPT}." >&2
-	echo "       Set EOD_REGRESSION_PLOT_HEATMAP_SCRIPT explicitly to point at your EOD checkout's copy," >&2
-	echo "       or run with EOD_REGRESSION_SKIP_PLOT=1 to only collect results without generating the heatmap." >&2
-	if [[ "${EOD_REGRESSION_SKIP_PLOT:-0}" != "1" ]]; then
-		exit 1
-	fi
+    echo "error: plot_heatmap.R not found at ${EOD_REGRESSION_PLOT_HEATMAP_SCRIPT}." >&2
+    echo "       Set EOD_REGRESSION_PLOT_HEATMAP_SCRIPT explicitly to point at your EOD checkout's copy," >&2
+    echo "       or run with EOD_REGRESSION_SKIP_PLOT=1 to only collect results without generating the heatmap." >&2
+    if [[ "${EOD_REGRESSION_SKIP_PLOT:-0}" != "1" ]]; then
+        exit 1
+    fi
 fi
 
 # R itself is managed via pixi in the EOD repo (see its pixi.toml), not a
@@ -226,22 +226,22 @@ fi
 EOD_REPO_ROOT="$(dirname "$(dirname "$EOD_REGRESSION_PLOT_HEATMAP_SCRIPT")")"
 
 if ! command -v pixi >/dev/null 2>&1; then
-	echo "error: pixi not found on this machine -- R (managed via pixi in the EOD repo) cannot run at the end of this script." >&2
-	echo "       Install pixi (https://pixi.sh, no root required), or run with EOD_REGRESSION_SKIP_PLOT=1" >&2
-	echo "       to only collect results without generating the heatmap." >&2
-	if [[ "${EOD_REGRESSION_SKIP_PLOT:-0}" != "1" ]]; then
-		exit 1
-	fi
+    echo "error: pixi not found on this machine -- R (managed via pixi in the EOD repo) cannot run at the end of this script." >&2
+    echo "       Install pixi (https://pixi.sh, no root required), or run with EOD_REGRESSION_SKIP_PLOT=1" >&2
+    echo "       to only collect results without generating the heatmap." >&2
+    if [[ "${EOD_REGRESSION_SKIP_PLOT:-0}" != "1" ]]; then
+        exit 1
+    fi
 fi
 
 for required_path in "ExtendedOpenDwarfs/00-clone.sh" "ExtendedOpenDwarfs/ensure-scale.sh"; do
-	if ! git -C "$SCALE_VALIDATION_ROOT" cat-file -e "${EOD_REGRESSION_REF}:${required_path}" 2>/dev/null; then
-		echo "error: ${required_path} does not exist at ${EOD_REGRESSION_REF} in ${EOD_REGRESSION_REPO_URL}." >&2
-		echo "       Every host clones from EOD_REGRESSION_REPO_URL and checks out EOD_REGRESSION_REF -- if" >&2
-		echo "       that repo/ref doesn't contain this file, every host's sweep will fail with 'command not" >&2
-		echo "       found' after cloning. Commit and push it, then re-run." >&2
-		exit 1
-	fi
+    if ! git -C "$SCALE_VALIDATION_ROOT" cat-file -e "${EOD_REGRESSION_REF}:${required_path}" 2>/dev/null; then
+        echo "error: ${required_path} does not exist at ${EOD_REGRESSION_REF} in ${EOD_REGRESSION_REPO_URL}." >&2
+        echo "       Every host clones from EOD_REGRESSION_REPO_URL and checks out EOD_REGRESSION_REF -- if" >&2
+        echo "       that repo/ref doesn't contain this file, every host's sweep will fail with 'command not" >&2
+        echo "       found' after cloning. Commit and push it, then re-run." >&2
+        exit 1
+    fi
 done
 
 TIMESTAMP="$(date -u +%Y%m%dT%H%M%SZ)"
@@ -266,21 +266,22 @@ EOD_NESTED_DIR="${SV_CHECKOUT_DIR}/ExtendedOpenDwarfs/ExtendedOpenDwarfs"
 # ---------------------------------------------------------------------------
 
 build_host_command() {
-	local ensure_scale_block=""
-	if [[ "$EOD_REGRESSION_ENSURE_SCALE" == "1" ]]; then
-		# The `\$(cat ...)` below is deliberately escaped: it must be
-		# evaluated on the host that actually runs this command (after
-		# ensure_scale.sh has written the marker file there), not by this
-		# local heredoc right now.
-		ensure_scale_block=$(cat <<EOS
+    local ensure_scale_block=""
+    if [[ "$EOD_REGRESSION_ENSURE_SCALE" == "1" ]]; then
+        # The `\$(cat ...)` below is deliberately escaped: it must be
+        # evaluated on the host that actually runs this command (after
+        # ensure_scale.sh has written the marker file there), not by this
+        # local heredoc right now.
+        ensure_scale_block=$(
+            cat <<EOS
 SCALE_VERSION="${EOD_REGRESSION_SCALE_VERSION}" ./ensure-scale.sh
 export SCALE_ROOT="\$(cat .ensure_scale_last_root)"
 echo "Using SCALE_ROOT=\${SCALE_ROOT}"
 EOS
-)
-	fi
+        )
+    fi
 
-	cat <<EOF
+    cat <<EOF
 set -e
 mkdir -p "${EOD_REGRESSION_WORKDIR}"
 if [ ! -d "${SV_CHECKOUT_DIR}/.git" ]; then
@@ -307,47 +308,45 @@ HOST_COMMAND="$(build_host_command)"
 # ---------------------------------------------------------------------------
 
 run_remote_host() {
-	local target="$1"
-	local logfile="${LOG_DIR}/${target}.log"
-	local statusfile="${RUN_DIR}/status.${target}"
+    local target="$1"
+    local logfile="${LOG_DIR}/${target}.log"
+    local statusfile="${RUN_DIR}/status.${target}"
 
-	log "==> [$target] starting remote sweep"
+    log "==> [$target] starting remote sweep"
 
-	if timeout "${EOD_REGRESSION_TIMEOUT}" ssh \
-			-o BatchMode=yes \
-			-o ConnectTimeout=15 \
-			-o StrictHostKeyChecking=accept-new \
-			"$target" \
-			"$HOST_COMMAND" \
-			> "$logfile" 2>&1
-	then
-		log "==> [$target] sweep completed OK (log: $logfile)"
-		echo "OK" > "$statusfile"
-	else
-		local rc=$?
-		log "==> [$target] sweep FAILED (exit $rc) -- see $logfile"
-		echo "FAILED" > "$statusfile"
-	fi
+    if timeout "${EOD_REGRESSION_TIMEOUT}" ssh \
+        -o BatchMode=yes \
+        -o ConnectTimeout=15 \
+        -o StrictHostKeyChecking=accept-new \
+        "$target" \
+        "$HOST_COMMAND" \
+        >"$logfile" 2>&1; then
+        log "==> [$target] sweep completed OK (log: $logfile)"
+        echo "OK" >"$statusfile"
+    else
+        local rc=$?
+        log "==> [$target] sweep FAILED (exit $rc) -- see $logfile"
+        echo "FAILED" >"$statusfile"
+    fi
 }
 
 run_local_host() {
-	local host_label
-	host_label="$(hostname -s)"
-	local logfile="${LOG_DIR}/${host_label}.log"
-	local statusfile="${RUN_DIR}/status.${host_label}"
+    local host_label
+    host_label="$(hostname -s)"
+    local logfile="${LOG_DIR}/${host_label}.log"
+    local statusfile="${RUN_DIR}/status.${host_label}"
 
-	log "==> [$host_label] starting LOCAL sweep"
+    log "==> [$host_label] starting LOCAL sweep"
 
-	if timeout "${EOD_REGRESSION_TIMEOUT}" bash -c "$HOST_COMMAND" \
-			> "$logfile" 2>&1
-	then
-		log "==> [$host_label] LOCAL sweep completed OK (log: $logfile)"
-		echo "OK" > "$statusfile"
-	else
-		local rc=$?
-		log "==> [$host_label] LOCAL sweep FAILED (exit $rc) -- see $logfile"
-		echo "FAILED" > "$statusfile"
-	fi
+    if timeout "${EOD_REGRESSION_TIMEOUT}" bash -c "$HOST_COMMAND" \
+        >"$logfile" 2>&1; then
+        log "==> [$host_label] LOCAL sweep completed OK (log: $logfile)"
+        echo "OK" >"$statusfile"
+    else
+        local rc=$?
+        log "==> [$host_label] LOCAL sweep FAILED (exit $rc) -- see $logfile"
+        echo "FAILED" >"$statusfile"
+    fi
 }
 
 # ---------------------------------------------------------------------------
@@ -358,24 +357,24 @@ run_local_host() {
 # ---------------------------------------------------------------------------
 
 if [[ "$EOD_REGRESSION_SKIP_RUN" == "1" ]]; then
-	log "EOD_REGRESSION_SKIP_RUN=1: skipping clone/sync, SCALE-install-check, and build+run steps -- will collect + plot from whatever results/ already exist under ${EOD_REGRESSION_WORKDIR} on each host"
+    log "EOD_REGRESSION_SKIP_RUN=1: skipping clone/sync, SCALE-install-check, and build+run steps -- will collect + plot from whatever results/ already exist under ${EOD_REGRESSION_WORKDIR} on each host"
 else
-	PIDS=()
+    PIDS=()
 
-	if [[ "$EOD_REGRESSION_RUN_LOCAL" == "1" ]]; then
-		run_local_host &
-		PIDS+=($!)
-	fi
+    if [[ "$EOD_REGRESSION_RUN_LOCAL" == "1" ]]; then
+        run_local_host &
+        PIDS+=($!)
+    fi
 
-	for target in "${REMOTE_TARGETS[@]}"; do
-		run_remote_host "$target" &
-		PIDS+=($!)
-	done
+    for target in "${REMOTE_TARGETS[@]}"; do
+        run_remote_host "$target" &
+        PIDS+=($!)
+    done
 
-	log "Waiting for ${#PIDS[@]} sweep(s) to complete (per-host timeout ${EOD_REGRESSION_TIMEOUT}s)..."
-	for pid in "${PIDS[@]}"; do
-		wait "$pid" || true
-	done
+    log "Waiting for ${#PIDS[@]} sweep(s) to complete (per-host timeout ${EOD_REGRESSION_TIMEOUT}s)..."
+    for pid in "${PIDS[@]}"; do
+        wait "$pid" || true
+    done
 fi
 
 # ---------------------------------------------------------------------------
@@ -388,21 +387,21 @@ fi
 
 log "==> Collecting results into ${LOCAL_RESULTS_BASE}"
 
-RSYNC_OPTS=(-az --info=stats1,name1 --partial)
+RSYNC_OPTS=(-az --info="stats1,name1" --partial)
 
 if [[ "$EOD_REGRESSION_RUN_LOCAL" == "1" ]]; then
-	local_host_label="$(hostname -s)"
-	mkdir -p "${LOCAL_RESULTS_BASE}/${local_host_label}"
-	if ! rsync "${RSYNC_OPTS[@]}" "${EOD_NESTED_DIR}/results/" "${LOCAL_RESULTS_BASE}/${local_host_label}/"; then
-		log "WARNING: local results copy failed -- ${local_host_label} may be missing from the heatmap"
-	fi
+    local_host_label="$(hostname -s)"
+    mkdir -p "${LOCAL_RESULTS_BASE}/${local_host_label}"
+    if ! rsync "${RSYNC_OPTS[@]}" "${EOD_NESTED_DIR}/results/" "${LOCAL_RESULTS_BASE}/${local_host_label}/"; then
+        log "WARNING: local results copy failed -- ${local_host_label} may be missing from the heatmap"
+    fi
 fi
 
 for target in "${REMOTE_TARGETS[@]}"; do
-	mkdir -p "${LOCAL_RESULTS_BASE}/${target}"
-	if ! rsync "${RSYNC_OPTS[@]}" "${target}:${EOD_NESTED_DIR}/results/" "${LOCAL_RESULTS_BASE}/${target}/"; then
-		log "WARNING: rsync from ${target} failed -- its results may be partial or missing from this run's heatmap"
-	fi
+    mkdir -p "${LOCAL_RESULTS_BASE}/${target}"
+    if ! rsync "${RSYNC_OPTS[@]}" "${target}:${EOD_NESTED_DIR}/results/" "${LOCAL_RESULTS_BASE}/${target}/"; then
+        log "WARNING: rsync from ${target} failed -- its results may be partial or missing from this run's heatmap"
+    fi
 done
 
 # ---------------------------------------------------------------------------
@@ -414,18 +413,18 @@ log "==> Generating heatmap"
 
 PLOT_ARGS=("$LOCAL_RESULTS_BASE" "$PLOTS_DIR" --force-reparse)
 if [[ -n "$EOD_REGRESSION_METRIC" ]]; then
-	PLOT_ARGS+=("--metric=${EOD_REGRESSION_METRIC}")
+    PLOT_ARGS+=("--metric=${EOD_REGRESSION_METRIC}")
 fi
 
 HEATMAP_OK=1
 if command -v pixi >/dev/null 2>&1; then
-	if ! (cd "$EOD_REPO_ROOT" && pixi run Rscript "$EOD_REGRESSION_PLOT_HEATMAP_SCRIPT" "${PLOT_ARGS[@]}") 2>&1 | tee "${LOG_DIR}/plot_heatmap.log"; then
-		log "WARNING: heatmap generation failed or exited non-zero -- see ${LOG_DIR}/plot_heatmap.log"
-		HEATMAP_OK=0
-	fi
+    if ! (cd "$EOD_REPO_ROOT" && pixi run Rscript "$EOD_REGRESSION_PLOT_HEATMAP_SCRIPT" "${PLOT_ARGS[@]}") 2>&1 | tee "${LOG_DIR}/plot_heatmap.log"; then
+        log "WARNING: heatmap generation failed or exited non-zero -- see ${LOG_DIR}/plot_heatmap.log"
+        HEATMAP_OK=0
+    fi
 else
-	log "WARNING: pixi unavailable -- skipping heatmap generation (EOD_REGRESSION_SKIP_PLOT=1 was set)"
-	HEATMAP_OK=0
+    log "WARNING: pixi unavailable -- skipping heatmap generation (EOD_REGRESSION_SKIP_PLOT=1 was set)"
+    HEATMAP_OK=0
 fi
 
 # ---------------------------------------------------------------------------
@@ -436,12 +435,12 @@ log "==> Host status summary:"
 FAIL_COUNT=0
 TOTAL=0
 for f in "${RUN_DIR}"/status.*; do
-	[[ -e "$f" ]] || continue
-	TOTAL=$((TOTAL + 1))
-	status="$(cat "$f")"
-	host="$(basename "$f" | sed 's/^status\.//')"
-	log "    ${host}: ${status}"
-	[[ "$status" == "OK" ]] || FAIL_COUNT=$((FAIL_COUNT + 1))
+    [[ -e "$f" ]] || continue
+    TOTAL=$((TOTAL + 1))
+    status="$(cat "$f")"
+    host="$(basename "$f" | sed 's/^status\.//')"
+    log "    ${host}: ${status}"
+    [[ "$status" == "OK" ]] || FAIL_COUNT=$((FAIL_COUNT + 1))
 done
 
 ln -sfn "$RUN_DIR" "${SCALE_VALIDATION_ROOT}/regression-runs/latest"
@@ -457,12 +456,12 @@ log "    Latest link:   ${SCALE_VALIDATION_ROOT}/regression-runs/latest"
 EXIT_CODE=0
 
 if [[ "$FAIL_COUNT" -gt 0 ]]; then
-	log "WARNING: ${FAIL_COUNT}/${TOTAL} host(s) failed to complete their sweep -- heatmap may have missing devices for this run"
-	EXIT_CODE=1
+    log "WARNING: ${FAIL_COUNT}/${TOTAL} host(s) failed to complete their sweep -- heatmap may have missing devices for this run"
+    EXIT_CODE=1
 fi
 
 if [[ "$HEATMAP_OK" -eq 0 ]]; then
-	EXIT_CODE=1
+    EXIT_CODE=1
 fi
 
 exit "$EXIT_CODE"
