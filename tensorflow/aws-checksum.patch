@@ -413,7 +413,7 @@
 +--- a/source/crc.c
 ++++ b/source/crc.c
 +@@ -25,11 +25,7 @@
-+ 
++
 + uint32_t aws_checksums_crc32c(const uint8_t *input, int length, uint32_t previousCrc32) {
 +     if (!s_crc32c_fn_ptr) {
 +-        if (aws_checksums_is_sse42_present()) {

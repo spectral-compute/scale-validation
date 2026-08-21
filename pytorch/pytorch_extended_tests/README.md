@@ -2,7 +2,7 @@
 
 A set of really extended PyTorch numerical tests which to run against different compiler and GPU builds
 
-The CI job runs the cases and saves raw outputs. It does not decide whether one build matches another. 
+The CI job runs the cases and saves raw outputs. It does not decide whether one build matches another.
 For now, please somebody manually retrieve the CI artifacts and run the repeatability and cross-environment comparisons separately with the scripts in `manual_comparison_stuff/`
 
 That can be automated as well in future and put in CI somewhere, but doesn't fit into the way CI runs the scale validation repo. Should save reference standards somewhere, once there's enough accumulated.
@@ -29,11 +29,11 @@ For the default Level 0 run, generate the fixed model inputs once:
 python datasets/generate_datasets.py --only generated
 ```
 
-Commit the generated `datasets/prepared/` files and the updated `datasets/dataset_manifest.json`. 
+Commit the generated `datasets/prepared/` files and the updated `datasets/dataset_manifest.json`.
 
 I want CI to only consume those prepared files, not regenerate data. Just in case that's a source of differences. But these should get moved to somewhere that CI can read from eventually, not stay in the scale validation repo xxx
 
-Level 0 does not need the externally downloaded datasets. 
+Level 0 does not need the externally downloaded datasets.
 But we do need to download and prepare those from `datasets/README.md` before enabling Level 6
 
 The normal CI entry point runs Level 0 only. Once that looks sensible, enable the other levels. This example runs the complete suite:
@@ -164,11 +164,11 @@ Do not add FP16 to the CPU reference job. CPU runs use FP32 by default; BF16 aut
 
 ## Current scope and CUDA backend notes
 
-Currently tests one CPU or one GPU process at a time. It does **not** test multi-GPU stuff. 
+Currently tests one CPU or one GPU process at a time. It does **not** test multi-GPU stuff.
 
 Sparse tensors store only the non-zero parts of data which is mostly zero, using formats such as COO or CSR. They have their own storage invariants, operator coverage, autograd behaviour and CUDA kernels. I have left them out for now because the current suite is deliberately a dense-tensor baseline; adding a few sparse operations would probably just give an illusion of coverage without testing the important format and coalescing cases properly. Sparse support should be added later as a distinct category rather than mixed into the dense tests...
 
-Most CUDA maths in the suite will dispatch through the backend PyTorch selects, for example cuBLAS or cuBLASLt for matrix multiplication and cuFFT for FFTs. The repository tree marks test files containing cases which would normally use **cuDNN** on CUDA when cuDNN is available. Because no cuDNN yet. The marker does not mean that every case in that file uses cuDNN. 
+Most CUDA maths in the suite will dispatch through the backend PyTorch selects, for example cuBLAS or cuBLASLt for matrix multiplication and cuFFT for FFTs. The repository tree marks test files containing cases which would normally use **cuDNN** on CUDA when cuDNN is available. Because no cuDNN yet. The marker does not mean that every case in that file uses cuDNN.
 
 The suite does not require `torch.backends.cudnn.is_available()` to be true. If PyTorch was built without cuDNN, convolution or normalisation operations will use a native CUDA implementation where PyTorch provides one. These paths can be slower and can produce different numerical results from cuDNN, which is useful to observe but means reference and candidate environments should have matching cuDNN availability when the aim is a like-for-like comparison. If a particular operation, dtype or shape has no fallback, the case fails and the exception is retained in the result bundle; it is not silently skipped. Maybe we should disable it for all of them for now actually rather than assuming that the installs mirror SCALE? Does our CUDA install have any packages that we don't do?
 
@@ -435,5 +435,4 @@ Everything that is expected to stay consistent between builds should be centrali
 
 Stable test, case and output IDs live in `config/test_catalogue.py`
 
-Numerical tolerances live in `manual_comparison_stuff/comparison_policy_template.json` and are populated from the reference repeatability analysis. 
-
+Numerical tolerances live in `manual_comparison_stuff/comparison_policy_template.json` and are populated from the reference repeatability analysis.

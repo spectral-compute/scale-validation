@@ -9,7 +9,7 @@ cd RabbitCT
 cat <<- EOF > config.mk
 TOOLCHAIN = NVCC
 ENABLE_CUDA = true
-CPPFLAGS = 
+CPPFLAGS =
 SIMD = AVX512
 
 OPTIONS +=  -DARRAY_ALIGNMENT=64

@@ -14,4 +14,3 @@ pip install scipy
 pip install huggingface_hub
 
 PYTHONPATH=. python -m pytest
-
