@@ -1,4 +1,9 @@
-FROM docker.io/spectralcompute/scale:latest
+ARG CUDA_VERSION=13.0.2
+ARG TARGET=devel
+ARG DISTRO=ubuntu24.04
+
+FROM docker.io/spectralcompute/scale:${CUDA_VERSION}-${TARGET}-${DISTRO}
+
 
 RUN apt update && \
     apt install -y apt-transport-https gnupg patch ninja-build gfortran curl python3 python3-pip python3-pytest python3-venv autoconf meson cargo

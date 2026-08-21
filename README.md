@@ -96,11 +96,7 @@ options for adjusting how tests are run.
 
 The `Dockerfile` at the root of the project is provided for convenience, using the latest version of SCALE, based on Ubuntu 24.04 and imitating CUDA 13.0.2.
 
-1. Build the image:
-
-    ```cli
-    docker build -f Dockerfile -t scale-validation:latest .
-    ```
+1. Build the image using the `./build-docker-image.sh` script.
 
 2. Launch into an interactive bash session inside the container, making sure to mount the current directory and giving it appropriate [GPU device access](https://docs.docker.com/engine/containers/gpu/), e.g.:
 
