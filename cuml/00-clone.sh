@@ -1,7 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
-
-source "$(dirname "$0")"/../util/git.sh
-
-do_clone_hash cuml https://github.com/rapidsai/cuml.git "$(get_version cuml)"
+do_clone cuml https://github.com/rapidsai/cuml.git "$(get_version cuml)"
