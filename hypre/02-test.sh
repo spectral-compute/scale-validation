@@ -1,9 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
-
-cd "build/src/test"
-
-for T in bench error fac gpumemcheck ij lobpcg longdouble single sstruct struct superlu timing ; do
-    ./runtest.sh -t TEST_${T}/*.sh
+for T in bench error fac gpumemcheck ij lobpcg longdouble single sstruct struct superlu timing; do
+    (cd "build/src/test" && ./runtest.sh -t TEST_${T}/*.sh)
 done
