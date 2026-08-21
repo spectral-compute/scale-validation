@@ -1,10 +1,7 @@
-#!/bin/bash
-set -ETeuo pipefail
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-source "${SCRIPT_DIR}"/../util/args.sh "$@"
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-SRCDIR="${OUT_DIR}/scaling-elections/ScalingElections"
-cd "${SRCDIR}"
+cd "ScalingElections"
 
 python - <<'PY'
 import re
