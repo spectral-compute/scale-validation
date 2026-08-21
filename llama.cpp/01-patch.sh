@@ -1,8 +1,5 @@
-#!/bin/bash
-
-set -e
-
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 # Decode the MXFP4 (E8M0) and NVFP4 (UE4M3) block scales via the portable software path, so the
 # dequantized values are bit-identical to the CPU reference on every target.
