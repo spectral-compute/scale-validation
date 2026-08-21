@@ -1,5 +1,5 @@
-#!/bin/bash
-set -ETeuo pipefail
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 if ! [ -f BSDS300-images.tgz ]; then
     # Some images, and the result of running them through this on nvidia.
@@ -14,7 +14,7 @@ output_dir="BSDS300_Out"
 native_dir="BSDS300_Nat"
 
 if [ ! -d "$native_dir" ]; then
-    echo "Error: Directory $native_dir does not exist."
+    log "Error: Directory $native_dir does not exist."
     exit 1
 fi
 
@@ -41,13 +41,13 @@ for file in "$input_dir"/*.jpg; do
 
     # Run the encoding command
     ./build/encoder -i "$file" -o "$output_dir/$filename.j2k"
-    echo "Encoded $file to $output_file"
+    log "Encoded $file to $output_file"
 
     if check_difference "$output_file" "$native_file"; then
-        echo -e "\x1b[32;1mPassed\x1b[m with \x1b[1m${CMP}\x1b[m\n"
+        log "Passed with ${CMP}"
     else
         EXIT_CODE=1
-        echo -e "\x1b[31;1mFailed\x1b[m with \x1b[1m${CMP}\x1b[m for \x1b[33;1m${filename}.j2k\x1b[m vs \x1b[33;1m${native_file}\x1b[m\n"
+        echo -e "Failed with ${CMP} for ${filename}.j2k vs ${native_file}"
     fi
 done
 
