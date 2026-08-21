@@ -1,1 +1,4 @@
 shell=bash
+disable=SC1091
+external-sources=true
+source-path=SCRIPTDIR/../util/
