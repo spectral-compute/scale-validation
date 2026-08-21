@@ -1,29 +1,25 @@
-#!/bin/bash
-
-set -e
-set -u
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 OUT_DIR=$(realpath ../)
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
+
+# Use openmpi
 export PATH="${OUT_DIR}/openmpi/install/bin:${CUDA_DIR}/bin:${PATH}"
 export LD_LIBRARY_PATH="${OUT_DIR}/openmpi/install/lib:${LD_LIBRARY_PATH}"
 export OMPI_MCA_accelerator=cuda
-
-# Note: There are other examples in that directory. If you edit the file, lines
-# right at the top allow you to use an `np` other than 4.
 
 # Create a directory for the example.
 EXAMPLES="${OUT_DIR}/FastEddy/examples"
 EXAMPLE=Example01_NBL
 
-rm -rf "${EXAMPLES}/${EXAMPLE}"
+rm -rf "${EXAMPLES:?}/${EXAMPLE:?}"
 mkdir -p "${EXAMPLES}/${EXAMPLE}/output"
 
 cd "${EXAMPLES}/${EXAMPLE}"
 cp "${OUT_DIR}/FastEddy/FastEddy/tutorials/examples/Example01_NBL.in" .
 
 # Choose how many processes to require.
-if [ -z "$(which scalediag)" ] || scalediag full-driver p2p ; then
+if [ -z "$(which scalediag)" ] || scalediag full-driver p2p; then
     NP=4
 else
     NP=1
@@ -59,14 +55,13 @@ sed -E "s/FE_timestep_avg = \['540000','555000','570000','585000','600000','6150
 jupyter execute MAKE_FE_TUTORIAL_PLOTS.ipynb
 
 # Compare these graphs against a reference.
-function cmp
-{
+function cmp {
     NAME=$1
     LIMIT=$2
     CMP="$(compare -metric mse "${SCRIPT_DIR}/ref-${NP}/${NAME}" \
-                               "${EXAMPLE}/FIGS/${NAME}" /dev/null 2>&1 | cut -f 1 -d ' ')"
+        "${EXAMPLE}/FIGS/${NAME}" /dev/null 2>&1 | cut -f 1 -d ' ')"
     echo "MSE ${NAME}: ${CMP} (maximum ${LIMIT})"
-    if [ "$(echo "print(${CMP} < ${LIMIT})" | python3)" != "True" ] ; then
+    if [ "$(echo "print(${CMP} < ${LIMIT})" | python3)" != "True" ]; then
         echo "TOO DIFFERENT"
         exit 1
     fi
