@@ -1,12 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
+args=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_CUDA_COMPILER="nvcc"
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}"
+
+    -DFLAMEGPU_BUILD_TESTS=ON
+)
 
 cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CUDA_COMPILER="nvcc" \
-    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
-    -DFLAMEGPU_BUILD_TESTS=ON \
+    "${args[@]}" \
     -B"build" \
     "FLAMEGPU2"
 

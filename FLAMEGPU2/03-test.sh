@@ -1,11 +1,8 @@
-#!/bin/bash
-
-set -ETeuo pipefail
-
-export FLAMEGPU_INC_DIR="$(pwd)/FLAMEGPU2/include"
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 # Err why is this needed only in CI?
-export CUDA_PATH="${CUDA_PATH}"
+export CUDA_PATH
 
 FILTERS='-LoggingTest.CUDAEnsembleSimulate:DependencyGraphTest.UnattachedFunctionWarning:*DeathTest*'
 
@@ -15,7 +12,10 @@ FILTERS='-LoggingTest.CUDAEnsembleSimulate:DependencyGraphTest.UnattachedFunctio
 # disabled in SCALE on affected AMD architectures until we finish migrating away from AQL to
 # something that works (but is, regrettably, undocumented).
 if [[ "$SCALE_ENV" == gfx9* ]]; then
-  FILTERS="$FILTERS:TestCUDASimulationConcurrency*"
+    FILTERS="$FILTERS:TestCUDASimulationConcurrency*"
 fi
 
-./build/bin/Release/tests --gtest_filter=$FILTERS
+FLAMEGPU_INC_DIR="$(pwd)/FLAMEGPU2/include"
+export FLAMEGPU_INC_DIR
+
+./build/bin/Release/tests "--gtest_filter=$FILTERS"
