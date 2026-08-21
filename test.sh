@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 
-USAGE=$(cat <<-END
+USAGE=$(
+    cat <<-END
 
     Usage: $0 WORKDIR PATH_TO_SCALE GPU_ARCHITECTURE TEST_NAME [--match REGEX] [--keep]
 
@@ -33,7 +34,7 @@ USAGE=$(cat <<-END
 END
 )
 
-if [[ $# -lt 3 ]] ; then
+if [[ $# -lt 3 ]]; then
     echo "${USAGE}" 1>&2
     exit 1
 fi
@@ -47,33 +48,33 @@ shift 4
 
 MATCH_REGEX=""
 KEEP=""
-while [[ $# -gt 0 ]] ; do
+while [[ $# -gt 0 ]]; do
     case "$1" in
-        --match)
-            MATCH_REGEX="$2"
-            shift 2
-            ;;
-        --keep)
-            KEEP=1
-            shift
-            ;;
-        *)
-            echo "${USAGE}" 1>&2
-            exit 1
-            ;;
+    --match)
+        MATCH_REGEX="$2"
+        shift 2
+        ;;
+    --keep)
+        KEEP=1
+        shift
+        ;;
+    *)
+        echo "${USAGE}" 1>&2
+        exit 1
+        ;;
     esac
 done
 
 # The next argument should be a subdirectory of the directory this script is in.
-if [ "$TEST" == "util" ] || [ ! -d "${TEST_DIR}/${TEST}" ] ; then
+if [ "$TEST" == "util" ] || [ ! -d "${TEST_DIR}/${TEST}" ]; then
     echo "Unknown test: ${TEST}" 2>&1
     exit 1
 fi
 
-if [ -n "${KEEP}" ] ; then
+if [ -n "${KEEP}" ]; then
     mkdir -p "${OUT_DIR}/${TEST}"
 else
-    rm -rf "${OUT_DIR}/${TEST}"
+    rm -rf "${OUT_DIR:?}/${TEST:?}"
     mkdir -p "${OUT_DIR}/${TEST}"
 fi
 cd "${OUT_DIR}/${TEST}"
@@ -86,10 +87,10 @@ if [[ "${PLATFORM_ID:-}" == "platform:el8" ]]; then
 fi
 
 # Activate SCALE or use Nvidia's CUDA.
-if [ -e "${SCALE_DIR}/bin/scaleenv" ] ; then
+if [ -e "${SCALE_DIR}/bin/scaleenv" ]; then
     echo "Using SCALE at ${SCALE_DIR}"
     TEST_MODE="scale"
-    source "${SCALE_DIR}/bin/scaleenv" $INPUT_GPU_ARCH
+    source "${SCALE_DIR}/bin/scaleenv" "$INPUT_GPU_ARCH"
 
     # This also serves to conveniently explode if we accidentially end up using nvidia nvcc.
     export NVCC_PREPEND_FLAGS="-fdiagnostics-color=always"
@@ -101,7 +102,7 @@ if [ -e "${SCALE_DIR}/bin/scaleenv" ] ; then
     # These warnings matter, but nvidia ignores them and the torrent makes CI runs
     # overflow the output limit.
     export NVCC_APPEND_FLAGS="-Wno-deprecated-literal-operator -Wno-format -Wno-unknown-warning-option -Wno-ignored-qualifiers -Wno-cuda-wrong-side -Wno-unused-function -Wno-unused-local-typedef -Wno-unused-parameter -Wno-int-conversion -Wno-sign-conversion -Wno-shorten-64-to-32 -Wno-template-id-cdtor -Wno-switch -Wno-vla-cxx-extension -Wno-missing-template-arg-list-after-template-kw -Wno-deprecated-declarations -Wno-c++11-narrowing-const-reference -Wno-typename-missing -Wno-unknown-pragmas -Wno-inconsistent-missing-override -Wno-unused-private-field -Wno-sign-compare -Wno-pessimizing-move -Wno-unused-result -Wno-invalid-constexpr -Wno-unused-but-set-variable -Wno-unused-variable -Wno-unused-value -Wno-implicit-const-int-float-conversion -Wno-pass-failed"
-elif [ ! -e "${SCALE_DIR}/bin/nvcc" ] ; then
+elif [ ! -e "${SCALE_DIR}/bin/nvcc" ]; then
     echo "${SCALE_DIR} is not a valid SCALE or NVIDIA CUDA installation directory!" 1>&2
     exit 1
 else
@@ -121,7 +122,8 @@ else
     export CUCC="${SCALE_DIR}/bin/nvcc"
     export CUDA_INC_DIR="${SCALE_DIR}/include"
     export PATH="${SCALE_DIR}/bin:${PATH-}"
-    export CUDAARCHS="$(echo $INPUT_GPU_ARCH | sed -Ee 's|sm_||g')"
+    CUDAARCHS="$(echo "$INPUT_GPU_ARCH" | sed -Ee 's|sm_||g')"
+    export CUDAARCHS
     export LD_LIBRARY_PATH="${SCALE_DIR}/lib64:${LD_LIBRARY_PATH-}"
     export LIBRARY_PATH="${SCALE_DIR}/lib64:${LIBRARY_PATH-}"
     export CPATH="${SCALE_DIR}/include:${CPATH-}"
@@ -143,7 +145,7 @@ LOG_DIR="${OUT_DIR}/logs"
 mkdir -p "${LOG_DIR}"
 TIMESTAMP="$(date -u +%Y%m%d%H%M%SZ)"
 LOG_FILE="${LOG_DIR}/${TEST}-${TIMESTAMP}.log"
-: > "${LOG_FILE}"
+: >"${LOG_FILE}"
 
 # util/checks.sh's check() appends PASS/FAIL rows here as scripts run (each a
 # fresh child process, so this can't be an in-memory variable). Folded into
@@ -167,7 +169,7 @@ finalize_log() {
         echo "=== RESULTS ==="
         printf '%-6s  %-42s  %-6s  %s\n' "KIND" "SCRIPT" "STATUS" "DETAIL"
         for row in "${SUMMARY_ROWS[@]}"; do
-            IFS=$'\t' read -r name rc duration <<< "${row}"
+            IFS=$'\t' read -r name rc duration <<<"${row}"
             if [ "${rc}" -eq 0 ]; then status="PASS"; else status="FAIL"; fi
             printf '%-6s  %-42s  %-6s  %s\n' \
                 "SCRIPT" "${name}" "${status}" "exit=${rc} duration=${duration}s"
@@ -177,11 +179,11 @@ finalize_log() {
                     [ "${check_script}" == "${name}" ] || continue
                     printf '%-6s  %-42s  %-6s  %s\n' \
                         "CHECK" "${check_script}" "${check_status}" "${check_label}"
-                done < "${RESULTS_TMP}"
+                done <"${RESULTS_TMP}"
             fi
         done
         true
-    } >> "${LOG_FILE}"
+    } >>"${LOG_FILE}"
     rm -f "${RESULTS_TMP}"
 }
 trap finalize_log EXIT
@@ -200,7 +202,7 @@ set -o errexit
 for i in "${TEST_DIR}/${TEST}"/*.sh; do
     NAME="$(basename "$i")"
 
-    if [ -n "${MATCH_REGEX}" ] && [[ ! "${NAME}" =~ ${MATCH_REGEX} ]] ; then
+    if [ -n "${MATCH_REGEX}" ] && [[ ! "${NAME}" =~ ${MATCH_REGEX} ]]; then
         continue
     fi
 
@@ -218,7 +220,7 @@ for i in "${TEST_DIR}/${TEST}"/*.sh; do
 
     SUMMARY_ROWS+=("$(printf '%s\t%s\t%s' "${NAME}" "${RC}" "${DURATION}")")
 
-    if [ "${RC}" -ne 0 ] ; then
+    if [ "${RC}" -ne 0 ]; then
         echo "FAILED: ${NAME} (exit ${RC}) -- log: ${LOG_FILE}" | tee -a "${LOG_FILE}"
         exit "${RC}"
     fi
