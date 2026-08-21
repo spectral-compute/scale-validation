@@ -13,4 +13,3 @@ pip install jupyter-lab
 python -m ipykernel install --user --name=my-project-venv --display-name="Python 3 (My Project)"
 
 pip install matplotlib ipympl
-
