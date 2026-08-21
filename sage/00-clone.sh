@@ -1,7 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
-
-source "$(dirname "$0")"/../util/git.sh
-
-do_clone_hash sage https://github.com/spcl/sage.git cdb3b06
+do_clone sage https://github.com/spcl/sage.git "$(get_version sage)"
