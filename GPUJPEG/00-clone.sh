@@ -1,7 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -e
-
-source "$(dirname "$0")"/../util/git.sh
-
-do_clone_hash GPUJPEG https://github.com/CESNET/GPUJPEG "$(get_version GPUJPEG)"
+do_clone GPUJPEG https://github.com/CESNET/GPUJPEG "$(get_version GPUJPEG)"
