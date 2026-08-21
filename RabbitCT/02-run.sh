@@ -1,11 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -e
+(
+    cd RabbitCT &&
+        ./rabbitRunner-NVCC \
+            -i ./RabbitInput/RabbitInput.rct \
+            -m LolaCUDA \
+            -s 1024 \
+            -c ./RabbitInput/Reference1024.vol
 
-cd RabbitCT
-
-./rabbitRunner-NVCC \
-  -i ./RabbitInput/RabbitInput.rct \
-  -m LolaCUDA \
-  -s 1024 \
-  -c ./RabbitInput/Reference1024.vol
+)
