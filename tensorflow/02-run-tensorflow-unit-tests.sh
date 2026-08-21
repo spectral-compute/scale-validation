@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -e
 cd "build"
 
 source "${SCRIPT_DIR}/config.sh"
