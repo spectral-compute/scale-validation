@@ -1,6 +1,5 @@
-#!/bin/bash
-
-set -e
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 # Skip faulty tests. See scale#385.
 SKIP="stdgpu_deque.simultaneous_push_back_and_pop_back
@@ -44,6 +43,6 @@ stdgpu_unordered_set.clear
 stdgpu_unordered_set.clear_custom_execution_policy
 stdgpu_vector.simultaneous_push_back_and_pop_back"
 
-SKIP=$(echo $SKIP | sed 's/ /:/g')
+SKIP="${SKIP// /:}"
 
 build/bin/teststdgpu --gtest_filter="-${SKIP}" --gtest_output=xml:stdgpu.xml
