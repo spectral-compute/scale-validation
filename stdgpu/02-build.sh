@@ -1,13 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -e
-
-# Configure.
+args=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_CUDA_COMPILER="nvcc"
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}"
+    -DCMAKE_INSTALL_PREFIX="install"
+)
 cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CUDA_COMPILER="nvcc" \
-    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
-    -DCMAKE_INSTALL_PREFIX="install" \
+    "${args[@]}" \
     -B"build" \
     "stdgpu"
 
