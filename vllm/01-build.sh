@@ -1,16 +1,19 @@
-#!/bin/bash
-
-set -e
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 # Configure.
+args=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_CUDA_COMPILER="nvcc"
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}"
+    -DCMAKE_CTEST_ARGUMENTS="--output-on-failure --output-junit vllm.xml"
+    -DCMAKE_INSTALL_PREFIX="install"
+
+    -DVLLM_PYTHON_EXECUTABLE="$(which python3)"
+    -DBUILD_TESTING=ON
+)
 cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DVLLM_PYTHON_EXECUTABLE=`which python3` \
-    -DCMAKE_CUDA_COMPILER="nvcc" \
-    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
-    -DBUILD_TESTING=ON \
-    -DCMAKE_CTEST_ARGUMENTS="--output-on-failure --output-junit vllm.xml" \
-    -DCMAKE_INSTALL_PREFIX="install" \
+    "${args[@]}" \
     -B"build" \
     "vllm"
 
