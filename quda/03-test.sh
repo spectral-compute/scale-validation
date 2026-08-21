@@ -1,7 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
-
-for F in $(find install/bin/ -type f -executable) ; do
+while read -r F; do
     "${F}"
-done
+done < <(find install/bin/ -type f -executable)
