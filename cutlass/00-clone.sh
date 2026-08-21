@@ -1,8 +1,5 @@
-#!/bin/bash
-
-set -ETeuo pipefail
-
-source "$(dirname "$0")"/../util/git.sh
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 do_clone cutlass https://github.com/NVIDIA/cutlass.git "$(get_version cutlass)"
 
