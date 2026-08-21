@@ -1,10 +1,4 @@
-#!/bin/bash
-
-set -ETeuo pipefail
-SCRIPT_DIR="$(dirname "$(realpath $0)")"
-
-source "$(dirname "$0")"/../util/git.sh
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 do_clone cuda-samples https://github.com/NVIDIA/cuda-samples.git "$(get_version cuda-samples)"
-
-git -C cuda-samples apply "${SCRIPT_DIR}/disable-stuff.patch"
