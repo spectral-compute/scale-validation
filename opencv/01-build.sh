@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
+
+args=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCUDA_ARCH_BIN="${GPU_ARCH}"
+    -DCUDA_ARCH_PTX=""
+    -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}"
+    -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/opencv/install"
+
+    -DBUILD_EXAMPLES=On
+    -DBUILD_TESTS=On
+    -DBUILD_PERF_TESTS=On
+    -DINSTALL_BIN_EXAMPLES=On
+    -DINSTALL_C_EXAMPLES=On
+    -DINSTALL_TESTS=On
+
+    -DWITH_CUDA=On
+    -DWITH_CUFFT=Off
+    -DWITH_CUBLAS=Off
+    -DWITH_CUDNN=Off
+    -DWITH_NVCUVID=Off
+    -DWITH_NVCUVENC=Off
+
+    -DBUILD_opencv_cudalegacy=Off
+    -DOPENCV_EXTRA_MODULES_PATH="${OUT_DIR}/opencv/opencv_contrib/modules"
+)
+cmake \
+    "${args[@]}" \
+    -B"build" \
+    "opencv"
+
+make -O -C "build" install -j"$(nproc)"
