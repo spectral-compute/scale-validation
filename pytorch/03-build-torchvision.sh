@@ -1,6 +1,5 @@
-#!/bin/bash
-set -ETeuo pipefail
-SCRIPT_DIR="$(dirname "$(realpath $0)")"
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 source "$SCRIPT_DIR/../util/git.sh"
 cd pytorch
