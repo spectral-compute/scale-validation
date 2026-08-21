@@ -1,6 +1,5 @@
-#!/bin/bash
-
-set -e
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 # The Allocator.OOM test segfaults even with an nvcc/nvidia build.
 # The *Death tests are testing for correct operation in the presence of process crashes,
