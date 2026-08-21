@@ -73,3 +73,11 @@ llama-cpp-python e1af05f43f57d2b660edfb77935dd2d2641ec602
 nv-codec-headers n13.0.19.0
 parrot c88d995
 ScalingElections a7222a000edb9c2a4eb3dc5f97d2472785fa38c2
+tensorflow-tensorflow v2.2.0
+tensorflow-tensorboard 2.2.0
+tensorflow-estimator v2.2.0
+tensorflow-model-optimization v0.3.0
+tensorflow-addons v0.10.0
+tensorflow-metadata v0.22.2
+tensorflow-datasets v3.1.0
+tensorflow-models v2.2.0
