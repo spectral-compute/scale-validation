@@ -1,23 +1,23 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
+args=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}"
+    -DCMAKE_INSTALL_PREFIX="install"
+    -DQUDA_TARGET_TYPE="CUDA"
+    -DQUDA_GPU_ARCH="${CUDAARCHS}"
+)
 
-EXTRA_CMAKE_ARGS=()
 if [ "$(basename "$(realpath "$(which nvcc)")")" == "clang" ] ; then
-    EXTRA_CMAKE_ARGS+=(
+    args+=(
         "-DCMAKE_C_COMPILER=$(realpath "$(which nvcc)")"
         "-DCMAKE_CXX_COMPILER=$(realpath "$(which nvcc)")++"
     )
 fi
 
-# Configure.
 cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DQUDA_TARGET_TYPE="CUDA" \
-    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
-    -DQUDA_GPU_ARCH="${CUDAARCHS}" \
-    -DCMAKE_INSTALL_PREFIX="install" \
-    "${EXTRA_CMAKE_ARGS[@]}" \
+    "${args[@]}" \
     -B"build" \
     "quda"
 
