@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
+do_clone alien https://github.com/chrxh/alien.git "$(get_version alien)"
 
-source "$(dirname "$0")"/../util/git.sh
-
-do_clone_hash alien https://github.com/chrxh/alien.git "$(get_version alien)"
+# do_clone uses --shallow-submodules by default to save space, but this makes vcpkg unhappy
+git -C alien/external/vcpkg fetch --unshallow

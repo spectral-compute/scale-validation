@@ -1,7 +1,5 @@
-#!/bin/bash
-
-set -e
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 # Make Ninja quiet
 # This way there is no build log spam
