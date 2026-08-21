@@ -1,14 +1,12 @@
-#!/bin/bash
-
-set -ETeuo pipefail
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 LOGFILE="examples.log"
-echo "Writing to $LOGFILE"
-rm -f "$LOGFILE"
+log "Writing to $LOGFILE"
+: >"$LOGFILE"
 
-TESTS=(
-    $(find build/examples -type f -perm /100 | sort)
-)
+mapfile -t TESTS < <(find build/examples -perm /100 | sort)
+
 SKIP=(
     # These require external input and require special handling to provide it.
     build/examples/41_fused_multi_head_attention/41_fused_multi_head_attention_backward
@@ -41,7 +39,7 @@ SKIP=(
     build/examples/59_ampere_gather_scatter_conv/59_ampere_gather_scatter_conv
 )
 
-if [ "${CUTLASS_TEST_SKIP_SLOW:-0}" == "1" ] ; then
+if [ "${CUTLASS_TEST_SKIP_SLOW:-0}" == "1" ]; then
     # Some older GPUs (e.g: gfx900) run these examples very slowly.
     SKIP+=(
         build/examples/45_dual_gemm/45_dual_gemm
@@ -52,26 +50,25 @@ fi
 
 set +e
 FAILURES=()
-for T in "${TESTS[@]}" ; do
+for T in "${TESTS[@]}"; do
     echo "======== ${T} ========" | tee -a "${LOGFILE}"
-    if [[ " ${SKIP[@]} " =~ " ${T} " ]]; then
+    if [[ " ${SKIP[*]} " == *"${T}"* ]]; then
         echo " -- SKIPPED --" | tee -a "${LOGFILE}"
         continue
     fi
 
-    "${T}" |& tee -a "${LOGFILE}"
-    if [ "$?" != "0" ] ; then
+    if ! "${T}" |& tee -a "${LOGFILE}"; then
         FAILURES+=("${T}")
     fi
 done
 set -e
 
-for T in "${SKIP[@]}" ; do
+for T in "${SKIP[@]}"; do
     echo "Skipped: ${T}"
 done
-for T in "${FAILURES[@]}" ; do
+for T in "${FAILURES[@]}"; do
     echo "Failed: ${T}"
 done
-if [ "${#FAILURES[@]}" != "0" ] ; then
+if [ "${#FAILURES[@]}" != "0" ]; then
     exit 1
 fi
