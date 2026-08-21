@@ -1,11 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
-
-# Configure.
-cd "hashinator"
-mkdir subprojects
-meson wrap install gtest
-meson setup -Dwerror=false build --buildtype=release
-meson compile -C build --jobs=8
-cd -
+(cd "hashinator" &&
+    mkdir subprojects &&
+    meson wrap install gtest &&
+    meson setup -Dwerror=false build --buildtype=release &&
+    meson compile -C build --jobs=8)
