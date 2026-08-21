@@ -14,7 +14,7 @@ set -euo pipefail
 export CUDA_VISIBLE_DEVICES="${CUDA_VISIBLE_DEVICES:-0}"
 
 
-# PyTorch's addmm uses cuBLASLt, which SCALE does not support yet. Without this the 
+# PyTorch's addmm uses cuBLASLt, which SCALE does not support yet. Without this the
 # TF32 runs fail with:
 #   RuntimeError: CUDA error: CUBLAS_STATUS_NOT_SUPPORTED when calling
 #   `cublasLtMatmulDescCreate(&raw_descriptor, compute_type, scale_type)`

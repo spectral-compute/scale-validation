@@ -1,6 +1,6 @@
 # Configuration
 
-The suite uses Python configuration rather than machine-specific YAML files. 
+The suite uses Python configuration rather than machine-specific YAML files.
 They are a bit more readable.
 
 ## Files
@@ -96,4 +96,4 @@ The individual case files should not add their own learning rates, optimiser bet
 
 `LEVEL_0_DEMOS` holds the CSV filename, prediction preview length and the linear example's optimiser settings
 
-The MLP, CNN and attention examples deliberately reuse `BLOCK_TESTS` and the public Level 5 execution functions. This means the quick demonstrations and the detailed composite tests use the same calculations. 
+The MLP, CNN and attention examples deliberately reuse `BLOCK_TESTS` and the public Level 5 execution functions. This means the quick demonstrations and the detailed composite tests use the same calculations.

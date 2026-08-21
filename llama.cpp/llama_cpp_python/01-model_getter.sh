@@ -20,7 +20,7 @@ fi
 
 if [ ! -e bert-base-uncased-Q8_0.gguf ] ; then
     wget https://huggingface.co/ggml-org/bert-base-uncased/resolve/main/bert-base-uncased-Q8_0.gguf
-fi 
+fi
 
 cd ../..
 mkdir -p multimodal/llava
@@ -33,4 +33,3 @@ fi
 if [ ! -e llava-v1.6-mistral-7b-mmproj-model-f16.gguf ] ; then
     wget https://huggingface.co/cjpais/llava-1.6-mistral-7b-gguf/resolve/main/mmproj-model-f16.gguf -O llava-v1.6-mistral-7b-mmproj-model-f16.gguf
 fi
-

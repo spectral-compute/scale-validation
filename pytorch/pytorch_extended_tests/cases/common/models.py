@@ -290,4 +290,3 @@ def build_sms_transformer() -> Any:
             return logits
 
     return FixedSMSTransformer()
-

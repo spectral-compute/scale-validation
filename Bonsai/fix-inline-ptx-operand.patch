@@ -42,5 +42,5 @@ index ee25139..2741e9c 100644
 +      : "=r"(result), "+r"(partial) : "r"(up_offset), "r"(distance));
 +  return result;
  }
- 
+
    template<const int SIZE2>
