@@ -1,8 +1,5 @@
-#!/bin/bash
-
-set -e
-
-source "$(dirname "$0")"/../util/git.sh
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 do_clone cycles https://projects.blender.org/blender/cycles.git "$(get_version cycles)"
 
