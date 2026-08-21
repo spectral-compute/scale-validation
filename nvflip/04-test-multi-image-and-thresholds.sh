@@ -1,5 +1,6 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+# shellcheck disable=2329
+. "$(dirname "$0")"/../util/prelude.sh
 
 source "$(dirname "$0")"/../util/checks.sh
 
@@ -29,7 +30,7 @@ check_threshold_low_fails() {
 }
 
 check "single reference vs two test images reports 2 Mean: lines" check_multi_image_invocation
-check "high threshold (0.99) passes"                              check_threshold_high_passes
-check "low threshold (0.01) triggers failure"                     check_threshold_low_fails
+check "high threshold (0.99) passes" check_threshold_high_passes
+check "low threshold (0.01) triggers failure" check_threshold_low_fails
 
 check_exit

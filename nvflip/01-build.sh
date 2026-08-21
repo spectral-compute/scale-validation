@@ -1,12 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -e
+args=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_CUDA_FLAGS="-arch=sm_$CUDAARCHS"
 
-# Configure.
+    -DFLIP_ENABLE_CUDA=ON
+)
+
 cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DFLIP_ENABLE_CUDA=ON \
-    -DCMAKE_CUDA_FLAGS="-arch=sm_$CUDAARCHS" \
+    "${args[@]}" \
     -B"build" \
     "nvflip/src"
 
