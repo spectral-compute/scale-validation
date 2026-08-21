@@ -1,0 +1,1 @@
+((sh-mode . ((format-all-mode . 1) (format-all-formatters . ("Shell" (shfmt "-i" "4"))))))
