@@ -110,13 +110,7 @@ The `Dockerfile` at the root of the project is provided for convenience, using t
 
     a. (Optional) If looking to validate SCALE on NVIDIA hardware, when inside the container install the respective version of CUDA by following the instructions on [NVIDIA's download page](https://developer.nvidia.com/cuda-toolkit-archive).
 
-3. Source the SCALE environment for the device architecture you're validating on:
-
-    ```cli
-    source /opt/scale/bin/scaleenv gfx90a
-    ```
-
-4. Run a test via the same script invocation as directly on host, specifying your parameters as before. SCALE will always be located under `/opt/scale` in Spectral-provided Docker containers. For example:
+3. Run a test via the same script invocation as directly on host, specifying your parameters as before. SCALE will always be located under `/opt/scale` in Spectral-provided Docker containers. The `test.sh` script will automatically configure your environment for running with SCALE for you. An example command would be:
 
     ```cli
     ./test.sh ~/cuda_tests /opt/scale gfx1100 hashcat
