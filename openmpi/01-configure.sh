@@ -1,6 +1,5 @@
-#!/bin/bash
-
-set -e
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 OUT_DIR=$(realpath ../)
 
@@ -11,7 +10,8 @@ cd build
 # is going to be installed to (e.g: in the case of the tarball, or during development, or whatever), we can't just
 # distribute one in all cases.
 mkdir -p "${OUT_DIR}/openmpi/lib/pkgconfig"
-echo "cudaroot="${CUDA_PATH}"
+cat >"${OUT_DIR}/openmpi/lib/pkgconfig/cuda.pc" <<EOF
+cudaroot="${CUDA_PATH}"
 libdir=\${cudaroot}/lib
 includedir=\${cudaroot}/include
 
@@ -19,10 +19,15 @@ Name: cuda
 Description: SCALE or CUDA
 Version: 12.5
 Libs: -L\${libdir} -lcuda
-Cflags: -I\${includedir}" > "${OUT_DIR}/openmpi/lib/pkgconfig/cuda.pc"
+Cflags: -I\${includedir}
+EOF
 
-../source/configure \
-  --prefix "${OUT_DIR}/openmpi/install" \
-  --enable-mca-dso=accelerator_cuda,btl_smcuda \
-  --with-cuda="${CUDA_PATH}" \
-  --with-cuda-libdir="${OUT_DIR}/openmpi/lib"
+args=(
+    --with-cuda="${CUDA_PATH}"
+    --with-cuda-libdir="${OUT_DIR}/openmpi/lib"
+    --prefix "${OUT_DIR}/openmpi/install"
+
+    --enable-mca-dso="accelerator_cuda,btl_smcuda"
+)
+
+../source/configure "${args[@]}"
