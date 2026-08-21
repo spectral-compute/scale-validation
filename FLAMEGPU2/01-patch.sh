@@ -1,13 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
-
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
-
-cd "FLAMEGPU2"
-
-for P in "${SCRIPT_DIR}"/*.patch ; do
-    patch -p0 < "${P}"
+for P in "${SCRIPT_DIR}"/*.patch; do
+    (cd FLAMEGPU2 && patch -p0 <"${P}")
 done
-
-cd -
