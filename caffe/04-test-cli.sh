@@ -1,5 +1,6 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+# shellcheck disable=2329
+. "$(dirname "$0")"/../util/prelude.sh
 
 source "$(dirname "$0")"/../util/checks.sh
 
@@ -24,8 +25,8 @@ check_no_cudnn() {
     [ -z "${libs}" ]
 }
 
-check "device_query reports GPU"  check_device_query
-check "--help lists subcommands"  check_help
-check "no cuDNN linked (ldd)"     check_no_cudnn
+check "device_query reports GPU" check_device_query
+check "--help lists subcommands" check_help
+check "no cuDNN linked (ldd)" check_no_cudnn
 
 check_exit

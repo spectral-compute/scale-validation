@@ -1,5 +1,6 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+# shellcheck disable=2329
+. "$(dirname "$0")"/../util/prelude.sh
 
 source "$(dirname "$0")"/../util/checks.sh
 
