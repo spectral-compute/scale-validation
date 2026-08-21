@@ -1,12 +1,9 @@
-#!/bin/bash
-
-set -e
-
-cd RabbitCT
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 # Copied from their mk/config-default.mk but need a few overriding
 # options to stop a few build errors
-cat <<- EOF > config.mk
+cat <<-EOF >RabbitCT/config.mk
 TOOLCHAIN = NVCC
 ENABLE_CUDA = true
 CPPFLAGS =
@@ -30,6 +27,6 @@ OPTIONS +=  -DVECTORSIZE=4
 endif
 EOF
 
-make info
+make -C RabbitCT info
 
-make -j"$(nproc)" CFLAGS="-O3 -g"
+make -C RabbitCT -j"$(nproc)" CFLAGS="-O3 -g"
