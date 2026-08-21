@@ -1,15 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
+args=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_CXX_FLAGS="-fpermissive"
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}"
+    -DBUILD_TESTING=On
+    -DPSZ_BUILD_EXAMPLES=On
+    -DCMAKE_INSTALL_PREFIX="install"
+)
 
-# Configure.
 cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CXX_FLAGS="-fpermissive" \
-    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
-    -DBUILD_TESTING=On \
-    -DPSZ_BUILD_EXAMPLES=On \
-    -DCMAKE_INSTALL_PREFIX="install" \
+    "${args[@]}" \
     -B"build" \
     "cuSZ"
 
