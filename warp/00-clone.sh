@@ -1,7 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
-
-source "$(dirname "$0")"/../util/git.sh
-
-do_clone_hash warp  https://github.com/NVIDIA/warp.git "$(get_version warp)"
+do_clone warp https://github.com/NVIDIA/warp.git "$(get_version warp)"
