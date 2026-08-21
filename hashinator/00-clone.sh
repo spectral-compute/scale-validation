@@ -1,7 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
-
-source "$(dirname "$0")"/../util/git.sh
-
-do_clone_hash hashinator https://github.com/kstppd/hashinator.git "$(get_version hashinator)"
+do_clone hashinator https://github.com/kstppd/hashinator.git "$(get_version hashinator)"
