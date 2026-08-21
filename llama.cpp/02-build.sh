@@ -1,16 +1,20 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
+args=(
+    -DCMAKE_CUDA_COMPILER="nvcc"
+    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}"
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_INSTALL_PREFIX="install"
 
-# Configure.
+    -DGGML_CUDA=ON
+    -DGGML_NATIVE=OFF
+
+    -DLLAMA_BUILD_UI=OFF
+)
+
 cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_CUDA_COMPILER="nvcc" \
-    -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}" \
-    -DGGML_CUDA=ON \
-    -DGGML_NATIVE=OFF \
-    -DLLAMA_BUILD_UI=OFF \
-    -DCMAKE_INSTALL_PREFIX="install" \
+    "${args[@]}" \
     -B"build" \
     "llama.cpp"
 

@@ -1,8 +1,5 @@
-#!/bin/bash
-
-set -e
-
-SCRIPT_DIR="$(realpath "$(dirname "$0")")"
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 # Flash attention: when an MMA config needs more shared memory than the device provides, fall back
 # to the shared-memory-frugal tile kernel. The check is device-adaptive (actual requirement vs the
