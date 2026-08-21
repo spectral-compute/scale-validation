@@ -1,7 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-cd "bitnet/gpu"
-
-cd bitnet_kernels
-bash compile.sh
-cd ..
+(cd "bitnet/gpu/bitnet_kernels" && bash compile.sh)
