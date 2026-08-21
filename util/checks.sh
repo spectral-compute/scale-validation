@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Run a batch of independent checks inside one test script, continuing past
 # individual failures so later checks still get a chance to run and report.
 # The script's own exit code is decided at the end by check_exit, based on
@@ -19,9 +20,10 @@ _CHECKS_TOTAL=0
 _CHECKS_FAILED=0
 
 check() {
-    local label="$1"; shift
+    local label="$1"
+    shift
     local status
-    _CHECKS_TOTAL=$(( _CHECKS_TOTAL + 1 ))
+    _CHECKS_TOTAL=$((_CHECKS_TOTAL + 1))
     echo -e "\x1b[1m--- ${label} ---\x1b[m"
     if "$@"; then
         status="PASS"
@@ -29,7 +31,7 @@ check() {
     else
         status="FAIL"
         echo -e "\x1b[31;1mFAIL\x1b[m: ${label}"
-        _CHECKS_FAILED=$(( _CHECKS_FAILED + 1 ))
+        _CHECKS_FAILED=$((_CHECKS_FAILED + 1))
     fi
 
     # Optional: only written when invoked via test.sh (SCALE_TEST_RESULTS_FILE
@@ -41,7 +43,7 @@ check() {
     if [ -n "${SCALE_TEST_RESULTS_FILE:-}" ]; then
         printf '%s\t%s\t%s\n' \
             "$(basename "$0")" "${status}" "${label}" \
-            >> "${SCALE_TEST_RESULTS_FILE}"
+            >>"${SCALE_TEST_RESULTS_FILE}"
     fi
 }
 

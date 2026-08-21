@@ -1,5 +1,8 @@
+#!/usr/bin/env bash
 # Parse and validate the test script's arguments. This script is intended to be sourced.
-USAGE=$(cat <<-END
+# shellcheck disable=2034
+USAGE=$(
+    cat <<-END
 
     Usage: $0 WORKDIR PATH_TO_SCALE GPU_ARCHITECTURE [-s] [-v]${USAGE_SUFFIX:-}
 
@@ -26,27 +29,27 @@ USAGE=$(cat <<-END
 END
 )
 
-if [[ $# -lt 3 ]] ; then
+if [[ $# -lt 3 ]]; then
     echo "${USAGE}" 1>&2
     exit 1
 fi
 
 OUT_DIR="$(realpath "$1")"
-if [ "${PARTIAL_PARSE:-}" != "1" ] && [ ! -e "${OUT_DIR}" ] ; then
+if [ "${PARTIAL_PARSE:-}" != "1" ] && [ ! -e "${OUT_DIR}" ]; then
     echo "Error: Test output directory \"${OUT_DIR}\" does not exist" 1>&2
     exit 1
 fi
 shift
 
 SCALE_DIR="$(realpath "$1")"
-if [ ! -e "${SCALE_DIR}" ] ; then
+if [ ! -e "${SCALE_DIR}" ]; then
     echo "Error: directory \"${SCALE_DIR}\" does not exist" 1>&2
     exit 1
 fi
 shift
 
 INPUT_GPU_ARCH="$1"
-if [ ! -e "${SCALE_DIR}/bin/scaleenv" ] ; then
+if [ ! -e "${SCALE_DIR}/bin/scaleenv" ]; then
     echo -e "\x1b[33;1mNOTE: \"${SCALE_DIR}\" is not a SCALE installation; using default environment\x1b[m" 1>&2
     GPU_ARCH=$INPUT_GPU_ARCH
 
@@ -63,7 +66,7 @@ if [ ! -e "${SCALE_DIR}/bin/scaleenv" ] ; then
     export CUDA_BIN_PATH="${SCALE_DIR}/bin"
 else
     # Activate SCALE
-    source "${SCALE_DIR}/bin/scaleenv" $INPUT_GPU_ARCH
+    source "${SCALE_DIR}/bin/scaleenv" "$INPUT_GPU_ARCH"
     GPU_ARCH=sm_${CUDAARCHS}
 
     export CXXFLAGS="-fdiagnostics-color=always"
@@ -82,33 +85,10 @@ shift
 # GPU_ARCH_NUM: 86
 # GPU_ARCH_DEC: 8.6
 GPU_ARCH_NUM=$(echo "${GPU_ARCH}" | sed -E 's/sm_//g')
-GPU_ARCH_DEC="${GPU_ARCH_NUM: :-1}"."${GPU_ARCH_NUM: -1}"
+GPU_ARCH_DEC="${GPU_ARCH_NUM::-1}"."${GPU_ARCH_NUM: -1}"
 
-if [ "${PARTIAL_PARSE:-}" == "1" ] ; then
+if [ "${PARTIAL_PARSE:-}" == "1" ]; then
     return 0
 fi
-
-# Clone and sync submodules for a project.
-function do_clone() {
-  git clone --recursive --depth 1 --shallow-submodules --branch $3 $2 $1
-}
-
-# Slower, but allows random hashes.
-function do_clone_hash() {
-  git clone --recursive $2 $1
-  git -C $1 checkout $3
-  git -C $1 submodule update --init --recursive
-}
-
-# Extract version from matching version.txt
-get_version () {
-    local dir=""
-    if [[ $# == 1 ]]; then
-        dir="$(dirname $0)"
-    else
-        dir="$2"
-    fi
-    echo $(cat "$dir/../versions.txt" | grep "$1" | sed "s/$1 //g")
-}
 
 PY_VER_PATH=$(python3 --version | cut -d ' ' -f 2 | cut -d '.' -f 1-2) # Like "3.12"
