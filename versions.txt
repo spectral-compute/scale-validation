@@ -69,3 +69,4 @@ colmap 4.0.4
 gpusnek 5aede38a1e94c10f6ca6f3b9161a0ba687b1091d
 ExtendedOpenDwarfs ec33be1
 kokkos 60d8384266eba9ee28dacf21016ef414981ebba3
+nv-codec-headers n13.0.19.0

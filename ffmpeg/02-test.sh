@@ -1,6 +1,5 @@
-#!/bin/bash
-
-set -e
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 FFMPEG="$(pwd)/install/bin/ffmpeg"
 
