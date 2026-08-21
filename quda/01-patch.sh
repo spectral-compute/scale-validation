@@ -1,12 +1,7 @@
-#!/bin/bash
-
-set -ETeuo pipefail
-
-cd "quda"
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 # Libstdc++ has become more strict about includes.
-for F in $(grep 'std::exchange' -rn | sed -E 's/:.*//' | sort -u) ; do
+while read -r F; do
     sed '1s/^/#include <utility>\n/' -i "${F}"
-done
-
-cd -
+done < <(grep 'std::exchange' quda/ -rn | sed -E 's/:.*//' | sort -u)
