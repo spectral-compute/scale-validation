@@ -1,12 +1,8 @@
-#!/bin/bash
-set -ETeuo pipefail
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 cd ExtendedOpenDwarfs
 
-export LC_ALL=C
-export LANG=C
-
-export HOST="${HOST:-$(hostname -s)}"
 export LSB_SRC_DIR="${LSB_SRC_DIR:-$(pwd)/external/liblsb-src}"
 export LSB_INSTALL_ROOT="${LSB_INSTALL_ROOT:-$(pwd)/external/liblsb-install/${HOST}}"
 export LSB_GIT_URL="${LSB_GIT_URL:-https://github.com/spcl/liblsb.git}"
@@ -18,10 +14,14 @@ echo "  LSB_INSTALL_ROOT=${LSB_INSTALL_ROOT}"
 mkdir -p "$(dirname "${LSB_SRC_DIR}")"
 
 if [[ ! -d "${LSB_SRC_DIR}/.git" ]]; then
-	git clone "${LSB_GIT_URL}" "${LSB_SRC_DIR}"
+    git clone "${LSB_GIT_URL}" "${LSB_SRC_DIR}"
 fi
 
 cd "${LSB_SRC_DIR}"
+
+export LC_ALL=C
+export LANG=C
+export HOST="${HOST:-$(hostname -s)}"
 
 make distclean >/dev/null 2>&1 || true
 rm -rf .deps .libs tests/.deps tests/.libs
@@ -47,10 +47,10 @@ PATCH_LIBLSB
 autoreconf -fi
 
 env CC=/usr/bin/gcc CXX=/usr/bin/g++ \
-	./configure \
-		--prefix="${LSB_INSTALL_ROOT}" \
-		--without-mpi \
-		--without-papi
+    ./configure \
+    --prefix="${LSB_INSTALL_ROOT}" \
+    --without-mpi \
+    --without-papi
 
 make CC=/usr/bin/gcc CXX=/usr/bin/g++
 make install

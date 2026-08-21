@@ -67,7 +67,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 : "${SCALE_FORCE_REINSTALL:=0}"
 
 if [[ -z "${SCALE_TARBALL_URL:-}" ]]; then
-	SCALE_TARBALL_URL="https://pkgs.scale-lang.com/tar/scale-${SCALE_VERSION}-amd64.tar.xz"
+    SCALE_TARBALL_URL="https://pkgs.scale-lang.com/tar/scale-${SCALE_VERSION}-amd64.tar.xz"
 fi
 
 MARKER_FILE="${SCALE_INSTALL_DIR}/.ensure_scale_last_root"
@@ -78,14 +78,14 @@ MARKER_FILE="${SCALE_INSTALL_DIR}/.ensure_scale_last_root"
 # isn't known until after downloading -- so it always re-checks.
 PREDICTED_NAME=""
 if [[ "$SCALE_VERSION" != "latest" ]]; then
-	PREDICTED_NAME="scale-${SCALE_VERSION}-Linux"
+    PREDICTED_NAME="scale-${SCALE_VERSION}-Linux"
 
-	if [[ "$SCALE_FORCE_REINSTALL" != "1" ]] && [[ -x "${SCALE_INSTALL_DIR}/${PREDICTED_NAME}/bin/scaleenv" ]]; then
-		echo "SCALE ${SCALE_VERSION} already present at ${SCALE_INSTALL_DIR}/${PREDICTED_NAME} -- skipping install"
-		echo "(set SCALE_FORCE_REINSTALL=1 to force a fresh download/extract)"
-		echo "${SCALE_INSTALL_DIR}/${PREDICTED_NAME}" > "$MARKER_FILE"
-		exit 0
-	fi
+    if [[ "$SCALE_FORCE_REINSTALL" != "1" ]] && [[ -x "${SCALE_INSTALL_DIR}/${PREDICTED_NAME}/bin/scaleenv" ]]; then
+        echo "SCALE ${SCALE_VERSION} already present at ${SCALE_INSTALL_DIR}/${PREDICTED_NAME} -- skipping install"
+        echo "(set SCALE_FORCE_REINSTALL=1 to force a fresh download/extract)"
+        echo "${SCALE_INSTALL_DIR}/${PREDICTED_NAME}" >"$MARKER_FILE"
+        exit 0
+    fi
 fi
 
 echo "Installing SCALE (version: ${SCALE_VERSION}) into ${SCALE_INSTALL_DIR}"
@@ -104,27 +104,27 @@ wget -q -O "$TMP_TARBALL" "$SCALE_TARBALL_URL"
 
 # Snapshot directory contents before/after extraction to detect exactly
 # what the tarball added, regardless of its internal directory name.
-find . -maxdepth 1 -mindepth 1 -printf '%f\n' | sort > "$BEFORE_LISTING"
+find . -maxdepth 1 -mindepth 1 -printf '%f\n' | sort >"$BEFORE_LISTING"
 
 echo "Extracting..."
 tar xf "$TMP_TARBALL"
 
-find . -maxdepth 1 -mindepth 1 -printf '%f\n' | sort > "$AFTER_LISTING"
+find . -maxdepth 1 -mindepth 1 -printf '%f\n' | sort >"$AFTER_LISTING"
 
 NEW_ENTRIES="$(comm -13 "$BEFORE_LISTING" "$AFTER_LISTING")"
 
 EXTRACTED_DIR=""
 while IFS= read -r entry; do
-	[[ -n "$entry" ]] || continue
-	if [[ -d "$entry" ]]; then
-		EXTRACTED_DIR="$entry"
-		break
-	fi
-done <<< "$NEW_ENTRIES"
+    [[ -n "$entry" ]] || continue
+    if [[ -d "$entry" ]]; then
+        EXTRACTED_DIR="$entry"
+        break
+    fi
+done <<<"$NEW_ENTRIES"
 
 if [[ -z "$EXTRACTED_DIR" ]]; then
-	echo "error: could not determine which directory the tarball extracted (new entries: ${NEW_ENTRIES:-none})" >&2
-	exit 1
+    echo "error: could not determine which directory the tarball extracted (new entries: ${NEW_ENTRIES:-none})" >&2
+    exit 1
 fi
 
 echo "Extracted to: ${SCALE_INSTALL_DIR}/${EXTRACTED_DIR}"
@@ -135,24 +135,24 @@ echo "Extracted to: ${SCALE_INSTALL_DIR}/${EXTRACTED_DIR}"
 # "not installed" from the [[ -x ]] check below, and is a much more
 # confusing failure to debug than fixing it here proactively.
 if [[ -d "${EXTRACTED_DIR}/bin" ]]; then
-	chmod -R u+x "${EXTRACTED_DIR}/bin"
+    chmod -R u+x "${EXTRACTED_DIR}/bin"
 fi
 
 FINAL_NAME="$EXTRACTED_DIR"
 
 if [[ -n "$PREDICTED_NAME" ]] && [[ "$EXTRACTED_DIR" != "$PREDICTED_NAME" ]]; then
-	echo "Tarball's directory name (${EXTRACTED_DIR}) differs from the expected name (${PREDICTED_NAME}) for version ${SCALE_VERSION} -- renaming to match."
-	rm -rf "${PREDICTED_NAME:?}"
-	mv "$EXTRACTED_DIR" "$PREDICTED_NAME"
-	FINAL_NAME="$PREDICTED_NAME"
+    echo "Tarball's directory name (${EXTRACTED_DIR}) differs from the expected name (${PREDICTED_NAME}) for version ${SCALE_VERSION} -- renaming to match."
+    rm -rf "${PREDICTED_NAME:?}"
+    mv "$EXTRACTED_DIR" "$PREDICTED_NAME"
+    FINAL_NAME="$PREDICTED_NAME"
 fi
 
 RESOLVED_ROOT="${SCALE_INSTALL_DIR}/${FINAL_NAME}"
 
 if [[ ! -x "${RESOLVED_ROOT}/bin/scaleenv" ]]; then
-	echo "error: ${RESOLVED_ROOT}/bin/scaleenv not found after install -- tarball layout may not match what setup-backends.sh expects" >&2
-	exit 1
+    echo "error: ${RESOLVED_ROOT}/bin/scaleenv not found after install -- tarball layout may not match what setup-backends.sh expects" >&2
+    exit 1
 fi
 
 echo "SCALE ${SCALE_VERSION} installed and verified at ${RESOLVED_ROOT}"
-echo "$RESOLVED_ROOT" > "$MARKER_FILE"
+echo "$RESOLVED_ROOT" >"$MARKER_FILE"
