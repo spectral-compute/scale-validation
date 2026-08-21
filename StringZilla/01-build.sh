@@ -1,13 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -e
+args=(
+    -DCMAKE_BUILD_TYPE=Release
+    -DCMAKE_C_COMPILER="clang"
+    -DCMAKE_CXX_COMPILER="clang++"
 
-# Configure.
+    -DSTRINGZILLA_BUILD_TEST=1
+)
 cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_C_COMPILER="clang" \
-    -DCMAKE_CXX_COMPILER="clang++" \
-    -DSTRINGZILLA_BUILD_TEST=1 \
+    "${args[@]}" \
     -B"build" \
     "StringZilla"
 
