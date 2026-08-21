@@ -25,4 +25,4 @@ else
     lspci | grep -i vga > "${OUTDIR}/pci_info.txt"
 fi
 echo "Copying ${OUTDIR} to ${RESULTS_DIR}/"
-cp -r "${OUTDIR}" "${RESULTS_DIR}/" 
+cp -r "${OUTDIR}" "${RESULTS_DIR}/"

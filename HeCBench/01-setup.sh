@@ -95,7 +95,7 @@ EOF
 
     # We have also encountered the following compilation failures
     # with the following compilers
-    # 
+    #
     # NVCC
     # - dp4a
     # - cm
@@ -104,7 +104,7 @@ EOF
     # - mdh
     # - laplace
     # - logic-rewrite
-    # 
+    #
     # HIP
     # - cm
     # - opticalFlow

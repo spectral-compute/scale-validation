@@ -4,7 +4,7 @@ index 59c3d40c..2c02b997 100644
 +++ b/physx/source/compiler/cmake/linux/CMakeLists.txt
 @@ -27,7 +27,7 @@
  STRING(TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE_LOWERCASE)
- 
+
  #TODO: Fix warnings
 -SET(CLANG_WARNINGS "-ferror-limit=0 -Wall -Wextra -Werror -Weverything\
 +SET(CLANG_WARNINGS "-ferror-limit=0 -Wall -Wextra -Weverything\
@@ -14,7 +14,7 @@ index 59c3d40c..2c02b997 100644
 @@ -78,7 +78,7 @@ SET(CLANG_WARNINGS "-ferror-limit=0 -Wall -Wextra -Werror -Weverything\
      -Wno-undefined-func-template \
  ")
- 
+
 -SET(GCC_WARNINGS "-Wall -Werror \
 +SET(GCC_WARNINGS "-Wall \
  	-Wno-address \
@@ -26,13 +26,13 @@ index a8c06f83..40eeb848 100644
 +++ b/physx/source/compiler/cmakegpu/CMakeLists.txt
 @@ -97,7 +97,7 @@ set(CMAKE_CUDA_USE_RESPONSE_FILE_FOR_LIBRARIES 0)
  set(CMAKE_CUDA_USE_RESPONSE_FILE_FOR_OBJECTS 0)
- 
+
  # Cuda setup that is the same for all platforms and sub-projects
 -SET(PHYSX_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Werror=all-warnings -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -t0 -D_CONSOLE" CACHE INTERNAL "PhysX CUDA")
 +SET(PHYSX_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -use_fast_math -ftz=true -prec-div=false -prec-sqrt=false -t0 -D_CONSOLE" CACHE INTERNAL "PhysX CUDA")
  # Include the platform specific CMakeLists (The other CUDA flags that are specific to each platform are defined there)
  INCLUDE(${PHYSX_ROOT_DIR}/${PROJECT_CMAKE_FILES_DIR}/${TARGET_BUILD_PLATFORM}/CMakeLists.txt)
- 
+
 diff --git a/physx/source/compiler/cmakegpu/linux/CMakeLists.txt b/physx/source/compiler/cmakegpu/linux/CMakeLists.txt
 index 790164b0..80f97cac 100644
 --- a/physx/source/compiler/cmakegpu/linux/CMakeLists.txt
@@ -46,4 +46,3 @@ index 790164b0..80f97cac 100644
 +	SET(MSSE2_OPTIONS "")
  	SET(AARCH64_DIAG_SUPPRESS_FLAGS "")
  ENDIF()
-

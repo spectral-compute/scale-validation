@@ -18,6 +18,6 @@ index 962e4b1..18be437 100644
  		std::shared_ptr<NetworkWithInputEncoding<precision_t>> network = std::make_shared<NetworkWithInputEncoding<precision_t>>(n_input_dims, n_output_dims, encoding_opts, network_opts);
 -		network->set_jit_fusion(tcnn::supports_jit_fusion());
 +		network->set_jit_fusion(false);
- 
+
  		if (network->jit_fusion()) {
  			std::cout << "JIT fusion is enabled." << std::endl;

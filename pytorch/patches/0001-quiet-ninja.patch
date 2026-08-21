@@ -16,7 +16,7 @@ index 02ab011..eb2b182 100644
 @@ -457,8 +459,26 @@ class CMake:
              # os.sched_getaffinity(0) on platforms that support it.
              max_jobs = max_jobs or str(multiprocessing.cpu_count())
- 
+
 -            # CMake 3.12 provides a '-j' option.
 -            build_args += ["-j", max_jobs]
 +            if IS_WINDOWS and not USE_NINJA:
@@ -40,5 +40,5 @@ index 02ab011..eb2b182 100644
 +            print(f"[DEBUG] build_args AFTER  = {build_args}")
 +
          self.run(build_args, my_env)
- 
+
      def clear_cache(self) -> None:
