@@ -1,7 +1,4 @@
-#!/bin/bash
-
-set -ETeuo pipefail
-
-source "$(dirname "$0")"/../util/git.sh
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 do_clone flashinfer https://github.com/flashinfer-ai/flashinfer.git "$(get_version flashinfer)"
