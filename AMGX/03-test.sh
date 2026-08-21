@@ -1,8 +1,5 @@
-#!/bin/bash
-
-set -e
-
-cd "build"
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 # Just running ./src/amgx_tests_launcher generates a lot of failures even on Nvidia. So only run the tests that pass
 # there.
@@ -28,9 +25,8 @@ EXCLUSIONS=(
     CAPIFailure FGMRESConvergencePoisson NestedSolvers
 )
 EXCLUSIONS_SED=
-for TEST in "${EXCLUSIONS[@]}" ; do
+for TEST in "${EXCLUSIONS[@]}"; do
     EXCLUSIONS_SED="${EXCLUSIONS_SED};/${TEST}/d"
 done
-./src/amgx_tests_launcher $(./src/amgx_tests_launcher --help | sed -E "1,/Available tests are:/d;${EXCLUSIONS_SED}")
 
-cd -
+(cd "build" && ./src/amgx_tests_launcher "$(./src/amgx_tests_launcher --help | sed -E "1,/Available tests are:/d;${EXCLUSIONS_SED}")")
