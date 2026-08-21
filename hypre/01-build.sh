@@ -1,26 +1,30 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 MPI_DIR="$(realpath ../)/openmpi/install"
-if [ ! -e "${MPI_DIR}" ] ; then
+if [ ! -e "${MPI_DIR}" ]; then
     echo "Please build the OpenMPI third party project first. Use the same working directory." 1>&2
     exit 1
 fi
 
-# Copy the source tree for in-tree build because the cmake build system builds fewer tests.
 cp -r "hypre" "build"
 
-# Configure
+args=(
+    --with-cuda
+    --with-gpu-arch="${CUDAARCHS}"
 
-cd "build/src"
-./configure \
-  --enable-unified-memory \
-  --with-cuda \
-  --with-gpu-arch="${CUDAARCHS}" \
-  --disable-onemklsparse \
-  --disable-onemklblas \
-  --disable-onemklrand \
-  --with-MPI-include="${MPI_DIR}/include" \
-  --with-MPI-libs="mpi" \
-  --with-MPI-lib-dirs="${MPI_DIR}/lib" \
+    --enable-unified-memory
+    --disable-onemklsparse
+    --disable-onemklblas
+    --disable-onemklrand
 
-make test -j$(nproc) -O
+    --with-MPI-include="${MPI_DIR}/include"
+    --with-MPI-libs="mpi"
+    --with-MPI-lib-dirs="${MPI_DIR}/lib"
+)
+
+(
+    cd "build/src"
+    ./configure "${args[@]}"
+    make test -j"$(nproc)" -O
+)
