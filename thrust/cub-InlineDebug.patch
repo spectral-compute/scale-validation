@@ -1,6 +1,8 @@
---- include/cub/util_debug.cuh
-+++ include/cub/util_debug.cuh
-@@ -300,12 +300,9 @@
+diff --git a/cub/util_debug.cuh b/cub/util_debug.cuh
+index 80b2bd33..0651c1df 100644
+--- a/cub/util_debug.cuh
++++ b/cub/util_debug.cuh
+@@ -300,12 +300,9 @@ inline __host__ __device__ void va_printf(char const *format,
  #endif
  }
  #ifndef __CUDA_ARCH__

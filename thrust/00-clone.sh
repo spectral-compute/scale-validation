@@ -1,7 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -ETeuo pipefail
-
-source "$(dirname "$0")"/../util/git.sh
-
-do_clone_hash thrust https://github.com/NVIDIA/thrust.git "$(get_version thrust)"
+do_clone thrust https://github.com/NVIDIA/thrust.git "$(get_version thrust)"
