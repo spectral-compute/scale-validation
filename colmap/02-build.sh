@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
-set -euo pipefail
-
-ninja
+ninja -C build
