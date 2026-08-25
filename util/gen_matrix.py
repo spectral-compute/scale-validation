@@ -7,11 +7,13 @@
 
 import json
 import os
+import re
 from pathlib import Path
 
 REPO_BASE = Path.cwd()
 IGNORE_LIST = [".jj", ".forgejo", ".git", "util", ".claude"]
 
+TARGETS_REGEX = re.compile(os.environ["TARGETS_REGEX"] or ".*")
 ISAS = json.loads(os.environ["ISAS"])
 
 should_build = set()
@@ -25,6 +27,12 @@ for subdir in REPO_BASE.iterdir():
 
     if subdir.name in IGNORE_LIST:
         print(f"skip : {subdir} - in ignore list")
+        continue
+
+    if not TARGETS_REGEX.fullmatch(subdir.name):
+        print(
+            f"skip : {subdir} - name does not match TARGETS_REGEX ({subdir.name} does not match {TARGETS_REGEX})"
+        )
         continue
 
     if (subdir / ".skip-ci").is_file():
@@ -81,7 +89,7 @@ matrix = list(
 
 print("---")
 print(f"building {len(should_build)} projects")
-print(f"running {len(should_build)} projects")
+print(f"running {len(should_run)} projects")
 
 with open(os.environ["FORGEJO_OUTPUT"], "a") as out:
     out.write(f"matrix={json.dumps(matrix)}\n")

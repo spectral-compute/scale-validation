@@ -17,3 +17,5 @@ You can debug this with the following one-liner:
 ```
 export FORGEJO_OUTPUT=$(mktemp) && echo "" > $FORGEJO_OUTPUT && ISAS='["gfx1100", "sm_120"]' python util/gen_matrix.py && (cat $FORGEJO_OUTPUT | cut -c 8- | jq .)
 ```
+
+When invoking the extended test workflow, you can also specify a regex to match the names of targets against. The name of a test must fully match the regex in order to run.
