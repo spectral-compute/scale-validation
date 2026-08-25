@@ -9,6 +9,10 @@ args=(
     -DWITH_CYCLES_DEVICE_CUDA=ON
     -DWITH_CYCLES_CUDA_BINARIES=ON
     -DCYCLES_CUDA_BINARIES_ARCH="${GPU_ARCH}"
+    # On NVIDIA targets, ${CUDA_PATH} (scaleenv's "Using cuda install at ..." pick) might be a runtime-only install.
+    # In this case, `find_package(CUDA)` can't see a full toolkit (missing CUDA_INCLUDE_DIRS/CUDA_CUDART_LIBRARY)
+    # This is only a problem because cycles calls that explicitly, rather than inferring the cuda toolkit based off of where nvcc is.
+    -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}"
 
     -DWITH_CYCLES_DEVICE_HIP=OFF
     -DWITH_CYCLES_HIP_BINARIES=OFF
@@ -37,14 +41,6 @@ if echo "$(
 elif cat /etc/issue | grep -F 'Ubuntu'; then
     log "Forcibly using vendored libglog"
     args+=(-DGLOG_LIBRARY="$(realpath "$(dirname "$0")")/libglog_ubuntu.a")
-fi
-
-# On NVIDIA targets, ${CUDA_PATH} (scaleenv's "Using cuda install at ..." pick) might be a runtime-only install.
-# In this case, `find_package(CUDA)` can't see a full toolkit (missing CUDA_INCLUDE_DIRS/CUDA_CUDART_LIBRARY)
-# This is only a problem because cyclces calls that explicitly, rather than inferring the cuda toolkit based off of where nvcc is.
-# In these cases, explicitly tell cmake where cuda is, bypassing this overly-strict check.
-if [[ "${GPU_ARCH}" != sm_* ]]; then
-    args+=(-DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}")
 fi
 
 cmake \
