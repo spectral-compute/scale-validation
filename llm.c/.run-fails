@@ -1,0 +1,1 @@
+llm.c: AMD/Scale compatibility fixes for train_gpt2_fp32: https://code.spectralcompute.com/spectral-compute/scale/issues/619
