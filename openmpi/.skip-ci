@@ -1,0 +1,1 @@
+OpenMPI gets built as a dependency of a few other projects, so we don't bother running it on its own.
