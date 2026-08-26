@@ -1,1 +1,6 @@
-regression-runs/
+scale-release-*.tar.xz
+scale-release/
+../compiler_repros/
+../lsb.fft.r0
+../regression-runs/
+../versions.txt.orig
