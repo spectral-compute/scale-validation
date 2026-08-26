@@ -2,7 +2,7 @@
 # shellcheck disable=2329
 . "$(dirname "$0")"/../util/prelude.sh
 
-source "$SCALE_VALIDATION/../util/checks.sh"
+source "$SCALE_VALIDATION/util/checks.sh"
 
 cd "whispercpp"
 
