@@ -1,0 +1,1 @@
+vllm build in CI: fix torch dependency in build script; turn off xfail: https://code.spectralcompute.com/spectral-compute/scale/issues/1178
