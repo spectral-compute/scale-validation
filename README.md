@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <d49685b9>.**
+**This shows the test status for SCALE: master <928f4df4>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -67,7 +67,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 23360.
+Pipeline ID: 23594.
 
 ## Running Tests
 
