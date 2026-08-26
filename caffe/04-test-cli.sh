@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
+# shellcheck disable=2329
 . "$(dirname "$0")"/../util/prelude.sh
+
+source "$(dirname "$0")"/../util/checks.sh
 
 check_device_query() {
     local out
