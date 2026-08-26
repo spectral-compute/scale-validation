@@ -4,8 +4,8 @@
 OUT_DIR=$(realpath ../)
 
 # Use openmpi
-export PATH="${OUT_DIR}/openmpi/install/bin:${CUDA_DIR}/bin:${PATH}"
-export LD_LIBRARY_PATH="${OUT_DIR}/openmpi/install/lib:${LD_LIBRARY_PATH}"
+export PATH="${OUT_DIR}/openmpi/install/bin:${CUDA_DIR}/bin:${PATH:-}"
+export LD_LIBRARY_PATH="${OUT_DIR}/openmpi/install/lib:${LD_LIBRARY_PATH:-}"
 export OMPI_MCA_accelerator=cuda
 
 # Create a directory for the example.
@@ -59,7 +59,7 @@ function cmp {
     NAME=$1
     LIMIT=$2
     CMP="$(compare -metric mse "${SCRIPT_DIR}/ref-${NP}/${NAME}" \
-        "${EXAMPLE}/FIGS/${NAME}" /dev/null 2>&1 | cut -f 1 -d ' ')"
+        "${EXAMPLES}/${EXAMPLE}/FIGS/${NAME}" /dev/null 2>&1 | cut -f 1 -d ' ' || true)"
     echo "MSE ${NAME}: ${CMP} (maximum ${LIMIT})"
     if [ "$(echo "print(${CMP} < ${LIMIT})" | python3)" != "True" ]; then
         echo "TOO DIFFERENT"
