@@ -9,7 +9,7 @@ args=(
     -DQUDA_GPU_ARCH="${CUDAARCHS}"
 )
 
-if [ "$(basename "$(realpath "$(which nvcc)")")" == "clang" ] ; then
+if [ "$(basename "$(realpath "$(which nvcc)")")" == "clang" ]; then
     args+=(
         "-DCMAKE_C_COMPILER=$(realpath "$(which nvcc)")"
         "-DCMAKE_CXX_COMPILER=$(realpath "$(which nvcc)")++"
