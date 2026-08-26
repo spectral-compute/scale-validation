@@ -33,7 +33,7 @@ index e6e50e041..0571bc447 100644
  #else
      if (x == 0 || (x == 0x7F && x != 0xFF)) { // Convert NaN to 0.0f
          return 0.0f;
-@@ -852,7 +842,6 @@ static __device__ __forceinline__ float ggml_cuda_ue4m3_to_fp32(uint8_t x) {
+@@ -852,6 +842,5 @@ static __device__ __forceinline__ float ggml_cuda_ue4m3_to_fp32(uint8_t x) {
          raw = ldexpf(1.0f + (float) man / 8.0f, exp - 7);
      }
      return static_cast<float>(raw / 2);
