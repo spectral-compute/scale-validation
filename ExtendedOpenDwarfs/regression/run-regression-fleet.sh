@@ -2,11 +2,21 @@
 #
 # run_regression_fleet.sh
 #
-# Lives in scale-validation/ExtendedOpenDwarfs/, alongside 00-clone.sh,
-# 01-install-deps.sh, ensure_scale.sh, etc. -- deliberately NOT inside the
-# ExtendedOpenDwarfs project's own repo, since that's a public upstream
-# (ANU-HPC) benchmark suite and this is Spectral-Compute-internal fleet
-# orchestration tooling.
+# Lives in scale-validation/ExtendedOpenDwarfs/regression/, alongside
+# ensure-scale.sh, compare-scale-versions.sh, and
+# plot-scale-version-diff.R -- deliberately one level below
+# scale-validation/ExtendedOpenDwarfs/ (which holds 00-clone.sh,
+# 01-install-deps.sh, etc., and is NOT itself inside the public upstream
+# ANU-HPC ExtendedOpenDwarfs checkout -- that's the NESTED
+# ExtendedOpenDwarfs/ExtendedOpenDwarfs/ directory 00-clone.sh creates).
+# Living in regression/ specifically (rather than directly alongside the
+# 00-03 numbered scripts) matters for a second reason beyond tidiness:
+# scale-validation's test.sh driver globs "${TEST_DIR}/${TEST}"/*.sh
+# non-recursively and runs everything it finds with set -o errexit as
+# part of an ordinary per-project smoke test. This script (and the rest
+# of the regression tooling) is not that -- it's a deliberately-triggered,
+# multi-host, multi-hour sweep -- so it lives one directory level below
+# where that glob reaches.
 #
 # Farms scripts/run_scale_eod_paper.sh (see NOTE below) out to every
 # configured Spectral Compute host, waits for each host's sweep to finish
@@ -48,7 +58,7 @@
 #     real working checkout.
 #
 # By default this also ensures a specific SCALE version is installed on
-# each host before sweeping (see ensure_scale.sh, alongside this script).
+# each host before sweeping (see ensure-scale.sh, alongside this script).
 # Different SCALE versions install side by side under the same scratch
 # checkout, so toggling EOD_REGRESSION_SCALE_VERSION between runs -- e.g.
 # to compare 1.7.1 against 1.7.2 -- only pays a download cost the first
@@ -78,6 +88,11 @@
 #   ./run_regression_fleet.sh
 #   EOD_REGRESSION_SCALE_VERSION=1.7.1 ./run_regression_fleet.sh
 #   EOD_REGRESSION_SCALE_VERSION=1.7.2 ./run_regression_fleet.sh
+#   # Distribute a proprietary local build (not on pkgs.scale-lang.com) to
+#   # every host instead of downloading a named release:
+#   EOD_REGRESSION_SCALE_VERSION=master \
+#   EOD_REGRESSION_LOCAL_SCALE_BUILD=/home/beau/roll-scale/scale-wip \
+#     ./run_regression_fleet.sh
 #
 # Configuration is via environment variables (all optional, sane defaults
 # shown). This intentionally mirrors the style of setup-backends.sh /
@@ -98,7 +113,7 @@
 #       scale-validation into and work from. Reused across runs (fetch +
 #       reset rather than a fresh clone every time), so repeated runs are
 #       fast. SCALE version(s) get installed inside the nested
-#       ExtendedOpenDwarfs/ directory, per ensure_scale.sh's own default.
+#       ExtendedOpenDwarfs/ directory, per ensure-scale.sh's own default.
 #       Default: "/tmp/eod-regression"
 #
 #   EOD_REGRESSION_REPO_URL
@@ -115,7 +130,7 @@
 #       testing.
 #
 #   EOD_REGRESSION_ENSURE_SCALE
-#       1 (default) to run ensure_scale.sh on each host before the sweep,
+#       1 (default) to run ensure-scale.sh on each host before the sweep,
 #       installing the requested SCALE_VERSION if it's missing, and
 #       exporting SCALE_ROOT to point at it. 0 to skip this entirely and
 #       use whatever SCALE_ROOT (or setup-backends.sh's own default) is
@@ -125,12 +140,34 @@
 #       Which SCALE version to ensure/use on every host, e.g. "1.7.1",
 #       "1.7.2", or "latest". See https://pkgs.scale-lang.com/tar/ for the
 #       full list of available versions. Default: "latest"
-#       Only meaningful when EOD_REGRESSION_ENSURE_SCALE=1.
+#       Only meaningful when EOD_REGRESSION_ENSURE_SCALE=1 and
+#       EOD_REGRESSION_LOCAL_SCALE_BUILD is unset. Still used as the
+#       *label* for this run's regression-runs/ directory and heatmap
+#       filenames either way (e.g. "master", "wip-foo") -- see
+#       EOD_REGRESSION_LOCAL_SCALE_BUILD below.
+#
+#   EOD_REGRESSION_LOCAL_SCALE_BUILD
+#       Absolute path, on THIS machine (the one invoking this script), to
+#       an already-built SCALE install directory (containing bin/scaleenv)
+#       that isn't published to pkgs.scale-lang.com -- e.g. a proprietary
+#       local build off a WIP branch, where source can't be shared and so
+#       ensure-scale.sh's normal tarball download can't be used at all.
+#       When set, this takes priority over EOD_REGRESSION_ENSURE_SCALE:
+#       ensure-scale.sh is skipped entirely, and instead this exact
+#       directory is rsync'd out to every host taking part in the sweep
+#       (local and remote alike), landing at the same
+#       scale-<EOD_REGRESSION_SCALE_VERSION>-Linux path a normal
+#       ensure-scale.sh install would have used -- so SCALE_ROOT, the
+#       .ensure_scale_last_root marker file, and everything downstream
+#       that reads either one stays identical in shape to the normal path.
+#       Pair this with a distinct EOD_REGRESSION_SCALE_VERSION label (e.g.
+#       "master") so the resulting run doesn't collide with, or get
+#       confused for, an actual downloaded release. Unset by default.
 #
 #   EOD_REGRESSION_TIMEOUT
 #       Per-host wall-clock timeout in seconds, covering the clone/sync,
 #       SCALE install check (if enabled), and the sweep itself.
-#       Default: 1800 (30 minutes). A stuck host is killed and marked
+#       Default: 14400 (4 hours). A stuck host is killed and marked
 #       FAILED rather than hanging the whole fleet run indefinitely.
 #
 #   EOD_REGRESSION_APP / EOD_REGRESSION_SIZE / EOD_REGRESSION_ITERS
@@ -153,13 +190,13 @@
 #       "total" in one invocation).
 #
 set -uo pipefail
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCALE_VALIDATION_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-
-: "${EOD_REGRESSION_REMOTE_TARGETS:=alpha epsilon beta andoria}"  # risa omitted: its W7800 is already covered via trill
+# This script now lives in .../ExtendedOpenDwarfs/regression/, one level
+# below .../ExtendedOpenDwarfs/ -- scale-validation's own root is
+# therefore two levels up from here, not one.
+SCALE_VALIDATION_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+: "${EOD_REGRESSION_REMOTE_TARGETS:=alpha epsilon beta andoria}"  # risa omitted: it has the same hardware as trill
 read -r -a REMOTE_TARGETS <<< "$EOD_REGRESSION_REMOTE_TARGETS"
-
 : "${EOD_REGRESSION_RUN_LOCAL:=1}"
 : "${EOD_REGRESSION_WORKDIR:=/tmp/eod-regression}"
 : "${EOD_REGRESSION_ENSURE_SCALE:=1}"
@@ -170,7 +207,18 @@ read -r -a REMOTE_TARGETS <<< "$EOD_REGRESSION_REMOTE_TARGETS"
 : "${EOD_REGRESSION_ITERS:=5}"
 : "${EOD_REGRESSION_SKIP_RUN:=0}"
 : "${EOD_REGRESSION_METRIC:=}"
-
+: "${EOD_REGRESSION_LOCAL_SCALE_BUILD:=}"
+if [[ -n "$EOD_REGRESSION_LOCAL_SCALE_BUILD" ]]; then
+	if [[ ! -x "${EOD_REGRESSION_LOCAL_SCALE_BUILD}/bin/scaleenv" ]]; then
+		echo "error: EOD_REGRESSION_LOCAL_SCALE_BUILD (${EOD_REGRESSION_LOCAL_SCALE_BUILD}) does not look like a SCALE install -- ${EOD_REGRESSION_LOCAL_SCALE_BUILD}/bin/scaleenv not found or not executable." >&2
+		exit 1
+	fi
+	# Resolve to an absolute path once, up front -- this gets embedded into
+	# an rsync command run later, on a potentially different cwd (inside a
+	# backgrounded function), so a relative path given by the caller would
+	# silently break.
+	EOD_REGRESSION_LOCAL_SCALE_BUILD="$(cd "$EOD_REGRESSION_LOCAL_SCALE_BUILD" && pwd)"
+fi
 if [[ -z "${EOD_REGRESSION_REPO_URL:-}" ]]; then
 	if ! EOD_REGRESSION_REPO_URL="$(git -C "$SCALE_VALIDATION_ROOT" remote get-url origin 2>/dev/null)"; then
 		echo "error: could not auto-detect the git origin URL from ${SCALE_VALIDATION_ROOT}." >&2
@@ -178,7 +226,6 @@ if [[ -z "${EOD_REGRESSION_REPO_URL:-}" ]]; then
 		exit 1
 	fi
 fi
-
 if [[ -z "${EOD_REGRESSION_REF:-}" ]]; then
 	if ! EOD_REGRESSION_REF="$(git -C "$SCALE_VALIDATION_ROOT" rev-parse HEAD 2>/dev/null)"; then
 		echo "error: could not auto-detect the current commit from ${SCALE_VALIDATION_ROOT}." >&2
@@ -186,31 +233,36 @@ if [[ -z "${EOD_REGRESSION_REF:-}" ]]; then
 		exit 1
 	fi
 fi
-
 log() {
 	printf '[%s] %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"
 }
-
 log "scale-validation repo: ${EOD_REGRESSION_REPO_URL}"
 log "scale-validation ref:  ${EOD_REGRESSION_REF}"
-log "SCALE version:         ${EOD_REGRESSION_SCALE_VERSION} (ensure=${EOD_REGRESSION_ENSURE_SCALE})"
+if [[ -n "$EOD_REGRESSION_LOCAL_SCALE_BUILD" ]]; then
+	log "SCALE version:         ${EOD_REGRESSION_SCALE_VERSION} (distributing local build: ${EOD_REGRESSION_LOCAL_SCALE_BUILD})"
+else
+	log "SCALE version:         ${EOD_REGRESSION_SCALE_VERSION} (ensure=${EOD_REGRESSION_ENSURE_SCALE})"
+fi
 log "Workdir (per host):    ${EOD_REGRESSION_WORKDIR}"
-
 # ---------------------------------------------------------------------------
 # Fail fast, locally, rather than discovering these problems only after
 # every host in the fleet has already spent time on a doomed sweep.
 # ---------------------------------------------------------------------------
-
 if [[ -z "${EOD_REGRESSION_PLOT_HEATMAP_SCRIPT:-}" ]]; then
 	# plot_heatmap.R (and its lsb_common.R dependency) only ever run
 	# locally on whichever machine does the collecting -- they are never
 	# distributed to the fleet. Default to the real one in the actual EOD
-	# checkout, which on this machine lives as a sibling of
-	# scale-validation itself. Override explicitly if that's not where it
-	# lives on your machine.
+	# checkout, which is a SEPARATE, standalone clone of ExtendedOpenDwarfs
+	# living as a sibling of scale-validation itself
+	# (i.e. dirname(scale-validation)/ExtendedOpenDwarfs/scripts/) -- NOT
+	# the ephemeral nested checkout 00-clone.sh recreates fresh inside
+	# scale-validation/ExtendedOpenDwarfs/ExtendedOpenDwarfs/ for each
+	# fleet host's own scratch workdir. This default is unaffected by
+	# where this script itself lives (regression/ or otherwise), since
+	# it's computed relative to SCALE_VALIDATION_ROOT, not $SCRIPT_DIR.
+	# Override explicitly if that's not where it lives on your machine.
 	EOD_REGRESSION_PLOT_HEATMAP_SCRIPT="$(dirname "$SCALE_VALIDATION_ROOT")/ExtendedOpenDwarfs/scripts/plot_heatmap.R"
 fi
-
 if [[ ! -f "$EOD_REGRESSION_PLOT_HEATMAP_SCRIPT" ]]; then
 	echo "error: plot_heatmap.R not found at ${EOD_REGRESSION_PLOT_HEATMAP_SCRIPT}." >&2
 	echo "       Set EOD_REGRESSION_PLOT_HEATMAP_SCRIPT explicitly to point at your EOD checkout's copy," >&2
@@ -219,12 +271,10 @@ if [[ ! -f "$EOD_REGRESSION_PLOT_HEATMAP_SCRIPT" ]]; then
 		exit 1
 	fi
 fi
-
 # R itself is managed via pixi in the EOD repo (see its pixi.toml), not a
 # bare system/conda Rscript -- run everything through `pixi run` from
 # that repo's root instead of requiring Rscript directly on PATH.
 EOD_REPO_ROOT="$(dirname "$(dirname "$EOD_REGRESSION_PLOT_HEATMAP_SCRIPT")")"
-
 if ! command -v pixi >/dev/null 2>&1; then
 	echo "error: pixi not found on this machine -- R (managed via pixi in the EOD repo) cannot run at the end of this script." >&2
 	echo "       Install pixi (https://pixi.sh, no root required), or run with EOD_REGRESSION_SKIP_PLOT=1" >&2
@@ -233,8 +283,7 @@ if ! command -v pixi >/dev/null 2>&1; then
 		exit 1
 	fi
 fi
-
-for required_path in "ExtendedOpenDwarfs/00-clone.sh" "ExtendedOpenDwarfs/ensure-scale.sh"; do
+for required_path in "ExtendedOpenDwarfs/00-clone.sh" "ExtendedOpenDwarfs/regression/ensure-scale.sh"; do
 	if ! git -C "$SCALE_VALIDATION_ROOT" cat-file -e "${EOD_REGRESSION_REF}:${required_path}" 2>/dev/null; then
 		echo "error: ${required_path} does not exist at ${EOD_REGRESSION_REF} in ${EOD_REGRESSION_REPO_URL}." >&2
 		echo "       Every host clones from EOD_REGRESSION_REPO_URL and checks out EOD_REGRESSION_REF -- if" >&2
@@ -243,43 +292,46 @@ for required_path in "ExtendedOpenDwarfs/00-clone.sh" "ExtendedOpenDwarfs/ensure
 		exit 1
 	fi
 done
-
 TIMESTAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 RUN_DIR="${SCALE_VALIDATION_ROOT}/regression-runs/${TIMESTAMP}-scale${EOD_REGRESSION_SCALE_VERSION}"
 LOCAL_RESULTS_BASE="${RUN_DIR}/results"
 LOG_DIR="${RUN_DIR}/logs"
 PLOTS_DIR="${RUN_DIR}/plots"
 mkdir -p "$LOCAL_RESULTS_BASE" "$LOG_DIR" "$PLOTS_DIR"
-
 RUN_ENV_PREFIX="APP=${EOD_REGRESSION_APP} SIZE=${EOD_REGRESSION_SIZE} ITERS=${EOD_REGRESSION_ITERS}"
-
 SV_CHECKOUT_DIR="${EOD_REGRESSION_WORKDIR}/scale-validation"
 # Nested EOD checkout that scale-validation's own 00-clone.sh creates.
 EOD_NESTED_DIR="${SV_CHECKOUT_DIR}/ExtendedOpenDwarfs/ExtendedOpenDwarfs"
-
+# Where a locally-built SCALE install (EOD_REGRESSION_LOCAL_SCALE_BUILD)
+# lands on each host -- same relative location a normal ensure-scale.sh
+# install would use (a sibling of 00-clone.sh, i.e. directly inside the
+# OUTER ExtendedOpenDwarfs/, not the nested checkout), just placed there
+# by rsync instead of by download.
+REMOTE_SCALE_TARGET="${SV_CHECKOUT_DIR}/ExtendedOpenDwarfs/scale-${EOD_REGRESSION_SCALE_VERSION}-Linux"
 # ---------------------------------------------------------------------------
-# The command run on every host, local and remote alike. Builds/reuses the
-# scale-validation scratch clone, hard-resets it to the pinned ref (safe
-# here -- this directory is scratch space, not anyone's real working
-# checkout), ensures the requested SCALE version is installed and exports
-# SCALE_ROOT to point at it, then runs the paper sweep.
+# The commands run on every host, local and remote alike, split into two
+# phases rather than the single combined script this used to be:
+#
+#   build_setup_command  -- clone/reset the scale-validation scratch
+#                            checkout. This is what CREATES the outer
+#                            ExtendedOpenDwarfs/ directory on each host.
+#   build_sweep_command   -- everything after that: get SCALE in place
+#                            (download via ensure-scale.sh, distribute a
+#                            local build, or use whatever's already there),
+#                            materialize the nested EOD checkout, and run
+#                            the sweep.
+#
+# The split exists specifically for EOD_REGRESSION_LOCAL_SCALE_BUILD: that
+# mode needs to rsync a local SCALE build into
+# ExtendedOpenDwarfs/scale-<version>-Linux/ on each host BETWEEN these two
+# phases -- the target directory doesn't exist until build_setup_command's
+# `git clone` creates it (git clone refuses to clone into a non-empty
+# directory, so the build can't be pushed there first), but
+# build_sweep_command needs it already in place before it runs. When
+# EOD_REGRESSION_LOCAL_SCALE_BUILD is unset, both phases still run
+# back-to-back as before -- see run_remote_host/run_local_host below.
 # ---------------------------------------------------------------------------
-
-build_host_command() {
-	local ensure_scale_block=""
-	if [[ "$EOD_REGRESSION_ENSURE_SCALE" == "1" ]]; then
-		# The `\$(cat ...)` below is deliberately escaped: it must be
-		# evaluated on the host that actually runs this command (after
-		# ensure_scale.sh has written the marker file there), not by this
-		# local heredoc right now.
-		ensure_scale_block=$(cat <<EOS
-SCALE_VERSION="${EOD_REGRESSION_SCALE_VERSION}" ./ensure-scale.sh
-export SCALE_ROOT="\$(cat .ensure_scale_last_root)"
-echo "Using SCALE_ROOT=\${SCALE_ROOT}"
-EOS
-)
-	fi
-
+build_setup_command() {
 	cat <<EOF
 set -e
 mkdir -p "${EOD_REGRESSION_WORKDIR}"
@@ -290,7 +342,41 @@ cd "${SV_CHECKOUT_DIR}"
 git fetch origin
 git checkout --detach "${EOD_REGRESSION_REF}"
 git reset --hard "${EOD_REGRESSION_REF}"
-cd ExtendedOpenDwarfs
+EOF
+}
+build_sweep_command() {
+	local ensure_scale_block=""
+	if [[ -n "$EOD_REGRESSION_LOCAL_SCALE_BUILD" ]]; then
+		# The build itself was already rsync'd into place (into
+		# REMOTE_SCALE_TARGET) between build_setup_command and this, by
+		# run_remote_host/run_local_host -- see their own comments. Just
+		# point SCALE_ROOT at it and write the same marker file
+		# ensure-scale.sh itself would (same location: cwd here is already
+		# the outer ExtendedOpenDwarfs/), so anything downstream that reads
+		# .ensure_scale_last_root doesn't need to know SCALE came from a
+		# push rather than a download.
+		ensure_scale_block=$(cat <<EOS
+export SCALE_ROOT="\$(pwd)/scale-${EOD_REGRESSION_SCALE_VERSION}-Linux"
+echo "\${SCALE_ROOT}" > .ensure_scale_last_root
+echo "Using locally-distributed SCALE_ROOT=\${SCALE_ROOT}"
+EOS
+)
+	elif [[ "$EOD_REGRESSION_ENSURE_SCALE" == "1" ]]; then
+		# The `\$(cat ...)` below is deliberately escaped: it must be
+		# evaluated on the host that actually runs this command (after
+		# ensure-scale.sh has written the marker file there), not by this
+		# local heredoc right now. ensure-scale.sh lives in regression/
+		# now, one level below where this cwd (ExtendedOpenDwarfs/) sits.
+		ensure_scale_block=$(cat <<EOS
+SCALE_VERSION="${EOD_REGRESSION_SCALE_VERSION}" ./regression/ensure-scale.sh
+export SCALE_ROOT="\$(cat .ensure_scale_last_root)"
+echo "Using SCALE_ROOT=\${SCALE_ROOT}"
+EOS
+)
+	fi
+	cat <<EOF
+set -e
+cd "${SV_CHECKOUT_DIR}/ExtendedOpenDwarfs"
 ${ensure_scale_block}
 # Materialize the nested EOD checkout via this project's own existing
 # clone+deps pipeline (00-clone.sh / 01-install-deps.sh), the same way
@@ -309,31 +395,45 @@ cd ExtendedOpenDwarfs
 ${RUN_ENV_PREFIX} ./scripts/run_scale_eod_paper.sh
 EOF
 }
-
-HOST_COMMAND="$(build_host_command)"
-
+SETUP_COMMAND="$(build_setup_command)"
+SWEEP_COMMAND="$(build_sweep_command)"
 # ---------------------------------------------------------------------------
 # Per-host sweep execution. Each of these writes a status.<host> file
 # containing exactly "OK" or "FAILED" -- that file, not the background
 # job's own exit code, is the source of truth read back after `wait`,
 # since relying on a backgrounded function's exit code across job control
 # is fragile in bash.
+#
+# NOTE on timeouts in EOD_REGRESSION_LOCAL_SCALE_BUILD mode: each of the
+# (now up to four) steps -- setup, mkdir, rsync, sweep -- gets its own
+# EOD_REGRESSION_TIMEOUT budget rather than one shared budget for the
+# whole host, unlike the normal (non-local-build) path where setup+sweep
+# run as a single ssh call under one timeout. That means worst-case time
+# for a host is now higher than EOD_REGRESSION_TIMEOUT alone in this mode.
+# Simpler and safer than trying to thread one shared deadline across a
+# multi-step remote+local sequence; raise EOD_REGRESSION_TIMEOUT if a
+# large local SCALE build's transfer alone needs more room.
 # ---------------------------------------------------------------------------
-
 run_remote_host() {
 	local target="$1"
 	local logfile="${LOG_DIR}/${target}.log"
 	local statusfile="${RUN_DIR}/status.${target}"
-
 	log "==> [$target] starting remote sweep"
-
-	if timeout "${EOD_REGRESSION_TIMEOUT}" ssh \
-			-o BatchMode=yes \
-			-o ConnectTimeout=15 \
-			-o StrictHostKeyChecking=accept-new \
-			"$target" \
-			"$HOST_COMMAND" \
-			> "$logfile" 2>&1
+	local ssh_opts=(-o BatchMode=yes -o ConnectTimeout=15 -o StrictHostKeyChecking=accept-new)
+	if (
+			set -e
+			if [[ -n "$EOD_REGRESSION_LOCAL_SCALE_BUILD" ]]; then
+				timeout "${EOD_REGRESSION_TIMEOUT}" ssh "${ssh_opts[@]}" "$target" "$SETUP_COMMAND"
+				timeout "${EOD_REGRESSION_TIMEOUT}" ssh "${ssh_opts[@]}" "$target" "mkdir -p '${REMOTE_SCALE_TARGET}'"
+				log "==> [$target] pushing local SCALE build (${EOD_REGRESSION_LOCAL_SCALE_BUILD}) -> ${target}:${REMOTE_SCALE_TARGET}"
+				timeout "${EOD_REGRESSION_TIMEOUT}" rsync -az --delete -e "ssh ${ssh_opts[*]}" \
+					"${EOD_REGRESSION_LOCAL_SCALE_BUILD}/" "${target}:${REMOTE_SCALE_TARGET}/"
+				timeout "${EOD_REGRESSION_TIMEOUT}" ssh "${ssh_opts[@]}" "$target" "$SWEEP_COMMAND"
+			else
+				timeout "${EOD_REGRESSION_TIMEOUT}" ssh "${ssh_opts[@]}" "$target" "${SETUP_COMMAND}
+${SWEEP_COMMAND}"
+			fi
+		) > "$logfile" 2>&1
 	then
 		log "==> [$target] sweep completed OK (log: $logfile)"
 		echo "OK" > "$statusfile"
@@ -343,17 +443,26 @@ run_remote_host() {
 		echo "FAILED" > "$statusfile"
 	fi
 }
-
 run_local_host() {
 	local host_label
 	host_label="$(hostname -s)"
 	local logfile="${LOG_DIR}/${host_label}.log"
 	local statusfile="${RUN_DIR}/status.${host_label}"
-
 	log "==> [$host_label] starting LOCAL sweep"
-
-	if timeout "${EOD_REGRESSION_TIMEOUT}" bash -c "$HOST_COMMAND" \
-			> "$logfile" 2>&1
+	if (
+			set -e
+			if [[ -n "$EOD_REGRESSION_LOCAL_SCALE_BUILD" ]]; then
+				timeout "${EOD_REGRESSION_TIMEOUT}" bash -c "$SETUP_COMMAND"
+				mkdir -p "${REMOTE_SCALE_TARGET}"
+				log "==> [$host_label] placing local SCALE build (${EOD_REGRESSION_LOCAL_SCALE_BUILD}) -> ${REMOTE_SCALE_TARGET}"
+				timeout "${EOD_REGRESSION_TIMEOUT}" rsync -az --delete \
+					"${EOD_REGRESSION_LOCAL_SCALE_BUILD}/" "${REMOTE_SCALE_TARGET}/"
+				timeout "${EOD_REGRESSION_TIMEOUT}" bash -c "$SWEEP_COMMAND"
+			else
+				timeout "${EOD_REGRESSION_TIMEOUT}" bash -c "${SETUP_COMMAND}
+${SWEEP_COMMAND}"
+			fi
+		) > "$logfile" 2>&1
 	then
 		log "==> [$host_label] LOCAL sweep completed OK (log: $logfile)"
 		echo "OK" > "$statusfile"
@@ -363,35 +472,29 @@ run_local_host() {
 		echo "FAILED" > "$statusfile"
 	fi
 }
-
 # ---------------------------------------------------------------------------
 # Launch fleet -- all hosts in parallel. Safe because each Spectral Compute
 # host has its own independent filesystem (no shared NFS), so there's no
 # contention writing results, installing SCALE, or building EOD binaries
 # concurrently across hosts.
 # ---------------------------------------------------------------------------
-
 if [[ "$EOD_REGRESSION_SKIP_RUN" == "1" ]]; then
 	log "EOD_REGRESSION_SKIP_RUN=1: skipping clone/sync, SCALE-install-check, and build+run steps -- will collect + plot from whatever results/ already exist under ${EOD_REGRESSION_WORKDIR} on each host"
 else
 	PIDS=()
-
 	if [[ "$EOD_REGRESSION_RUN_LOCAL" == "1" ]]; then
 		run_local_host &
 		PIDS+=($!)
 	fi
-
 	for target in "${REMOTE_TARGETS[@]}"; do
 		run_remote_host "$target" &
 		PIDS+=($!)
 	done
-
 	log "Waiting for ${#PIDS[@]} sweep(s) to complete (per-host timeout ${EOD_REGRESSION_TIMEOUT}s)..."
 	for pid in "${PIDS[@]}"; do
 		wait "$pid" || true
 	done
 fi
-
 # ---------------------------------------------------------------------------
 # Collect results from every host into one local tree. Kept per-host in
 # subdirectories, matching the existing collector script's convention --
@@ -399,11 +502,8 @@ fi
 # filename tags themselves (e.g. lsb.needle_cuda_nvcc_tiny_rtx5090.r0), not
 # from directory structure, so this nesting is for human inspection only.
 # ---------------------------------------------------------------------------
-
 log "==> Collecting results into ${LOCAL_RESULTS_BASE}"
-
 RSYNC_OPTS=(-az --info=stats1,name1 --partial)
-
 if [[ "$EOD_REGRESSION_RUN_LOCAL" == "1" ]]; then
 	local_host_label="$(hostname -s)"
 	mkdir -p "${LOCAL_RESULTS_BASE}/${local_host_label}"
@@ -411,26 +511,21 @@ if [[ "$EOD_REGRESSION_RUN_LOCAL" == "1" ]]; then
 		log "WARNING: local results copy failed -- ${local_host_label} may be missing from the heatmap"
 	fi
 fi
-
 for target in "${REMOTE_TARGETS[@]}"; do
 	mkdir -p "${LOCAL_RESULTS_BASE}/${target}"
 	if ! rsync "${RSYNC_OPTS[@]}" "${target}:${EOD_NESTED_DIR}/results/" "${LOCAL_RESULTS_BASE}/${target}/"; then
 		log "WARNING: rsync from ${target} failed -- its results may be partial or missing from this run's heatmap"
 	fi
 done
-
 # ---------------------------------------------------------------------------
 # Generate the heatmap. plot_heatmap.R (and its lsb_common.R dependency)
 # only ever runs locally -- keep it alongside this script.
 # ---------------------------------------------------------------------------
-
 log "==> Generating heatmap"
-
 PLOT_ARGS=("$LOCAL_RESULTS_BASE" "$PLOTS_DIR" --force-reparse)
 if [[ -n "$EOD_REGRESSION_METRIC" ]]; then
 	PLOT_ARGS+=("--metric=${EOD_REGRESSION_METRIC}")
 fi
-
 HEATMAP_OK=1
 if command -v pixi >/dev/null 2>&1; then
 	if ! (cd "$EOD_REPO_ROOT" && pixi run Rscript "$EOD_REGRESSION_PLOT_HEATMAP_SCRIPT" "${PLOT_ARGS[@]}") 2>&1 | tee "${LOG_DIR}/plot_heatmap.log"; then
@@ -441,11 +536,9 @@ else
 	log "WARNING: pixi unavailable -- skipping heatmap generation (EOD_REGRESSION_SKIP_PLOT=1 was set)"
 	HEATMAP_OK=0
 fi
-
 # ---------------------------------------------------------------------------
 # Summary
 # ---------------------------------------------------------------------------
-
 log "==> Host status summary:"
 FAIL_COUNT=0
 TOTAL=0
@@ -457,9 +550,7 @@ for f in "${RUN_DIR}"/status.*; do
 	log "    ${host}: ${status}"
 	[[ "$status" == "OK" ]] || FAIL_COUNT=$((FAIL_COUNT + 1))
 done
-
 ln -sfn "$RUN_DIR" "${SCALE_VALIDATION_ROOT}/regression-runs/latest"
-
 log "==> Regression run complete: ${RUN_DIR}"
 log "    SCALE version: ${EOD_REGRESSION_SCALE_VERSION}"
 log "    scale-validation ref tested: ${EOD_REGRESSION_REF}"
@@ -467,16 +558,12 @@ log "    Heatmaps:      ${PLOTS_DIR}"
 log "    Raw results:   ${LOCAL_RESULTS_BASE}"
 log "    Logs:          ${LOG_DIR}"
 log "    Latest link:   ${SCALE_VALIDATION_ROOT}/regression-runs/latest"
-
 EXIT_CODE=0
-
 if [[ "$FAIL_COUNT" -gt 0 ]]; then
 	log "WARNING: ${FAIL_COUNT}/${TOTAL} host(s) failed to complete their sweep -- heatmap may have missing devices for this run"
 	EXIT_CODE=1
 fi
-
 if [[ "$HEATMAP_OK" -eq 0 ]]; then
 	EXIT_CODE=1
 fi
-
 exit "$EXIT_CODE"

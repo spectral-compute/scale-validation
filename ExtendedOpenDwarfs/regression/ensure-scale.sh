@@ -2,13 +2,20 @@
 #
 # ensure_scale.sh
 #
-# Lives in scale-validation/ExtendedOpenDwarfs/, alongside 00-clone.sh,
-# 01-install-deps.sh, etc. Ensures a given version of SCALE is installed
-# as a sibling of the nested EOD checkout that 00-clone.sh creates (i.e.
+# Lives in scale-validation/ExtendedOpenDwarfs/regression/, alongside
+# compare-scale-versions.sh, run-regression-fleet.sh, and
+# plot-scale-version-diff.R -- deliberately one level below
+# scale-validation/ExtendedOpenDwarfs/ (which holds 00-clone.sh,
+# 01-install-deps.sh, etc.), so test.sh's own driver -- which globs
+# "${TEST_DIR}/${TEST}"/*.sh non-recursively and runs everything it finds
+# with set -o errexit -- never picks these up as part of an ordinary
+# per-project smoke test. Ensures a given version of SCALE is installed as
+# a sibling of the nested EOD checkout that 00-clone.sh creates (i.e.
 # scale-validation/ExtendedOpenDwarfs/scale-<version>-Linux), matching the
 # location setup-backends.sh's own default SCALE_ROOT computation expects
-# -- one level above wherever this script lives, not tied to any
-# particular git repo structure.
+# -- one level ABOVE wherever this script itself lives, since this script
+# now lives one level deeper (in regression/) than the location SCALE
+# actually needs to install into.
 #
 # Downloads and extracts the requested version if it isn't already
 # present. Different versions install side by side (e.g.
@@ -28,10 +35,10 @@
 # whichever version was just ensured, without needing to parse this
 # script's human-readable log output.
 #
-# Usage (from scale-validation/ExtendedOpenDwarfs/):
-#   ./ensure_scale.sh
-#   SCALE_VERSION=1.7.1 ./ensure_scale.sh
-#   SCALE_VERSION=1.6.1 ./ensure_scale.sh   # a different version, installed alongside, not overwriting the above
+# Usage (from scale-validation/ExtendedOpenDwarfs/regression/):
+#   ./ensure-scale.sh
+#   SCALE_VERSION=1.7.1 ./ensure-scale.sh
+#   SCALE_VERSION=1.6.1 ./ensure-scale.sh   # a different version, installed alongside, not overwriting the above
 #
 # Environment variables (all optional):
 #
@@ -40,11 +47,13 @@
 #       moving latest-alias currently points to. Default: "latest"
 #
 #   SCALE_INSTALL_DIR
-#       Directory to install SCALE into. Default: the directory this
-#       script itself lives in (scale-validation/ExtendedOpenDwarfs/) --
-#       i.e. a sibling of the nested EOD checkout 00-clone.sh creates
-#       there, matching setup-backends.sh's own default SCALE_ROOT parent
-#       directory.
+#       Directory to install SCALE into. Default: the PARENT of the
+#       directory this script itself lives in -- i.e.
+#       scale-validation/ExtendedOpenDwarfs/ (a sibling of 00-clone.sh and
+#       the nested EOD checkout 00-clone.sh creates there), matching
+#       setup-backends.sh's own default SCALE_ROOT parent directory. This
+#       script lives one level below that, in regression/, so the default
+#       is $(dirname "$SCRIPT_DIR") rather than "$SCRIPT_DIR" itself.
 #
 #   SCALE_TARBALL_URL
 #       Full override of the download URL, if you need something other
@@ -59,19 +68,14 @@
 #       already appears to be installed. Default: 0
 #
 set -euo pipefail
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
 : "${SCALE_VERSION:=latest}"
-: "${SCALE_INSTALL_DIR:=$SCRIPT_DIR}"
+: "${SCALE_INSTALL_DIR:=$(dirname "$SCRIPT_DIR")}"
 : "${SCALE_FORCE_REINSTALL:=0}"
-
 if [[ -z "${SCALE_TARBALL_URL:-}" ]]; then
 	SCALE_TARBALL_URL="https://pkgs.scale-lang.com/tar/scale-${SCALE_VERSION}-amd64.tar.xz"
 fi
-
 MARKER_FILE="${SCALE_INSTALL_DIR}/.ensure_scale_last_root"
-
 # For a pinned (non-"latest") version we can predict the installed
 # directory's expected name up front and skip the download entirely if
 # it's already there. "latest" is a moving target -- its actual version
@@ -79,7 +83,6 @@ MARKER_FILE="${SCALE_INSTALL_DIR}/.ensure_scale_last_root"
 PREDICTED_NAME=""
 if [[ "$SCALE_VERSION" != "latest" ]]; then
 	PREDICTED_NAME="scale-${SCALE_VERSION}-Linux"
-
 	if [[ "$SCALE_FORCE_REINSTALL" != "1" ]] && [[ -x "${SCALE_INSTALL_DIR}/${PREDICTED_NAME}/bin/scaleenv" ]]; then
 		echo "SCALE ${SCALE_VERSION} already present at ${SCALE_INSTALL_DIR}/${PREDICTED_NAME} -- skipping install"
 		echo "(set SCALE_FORCE_REINSTALL=1 to force a fresh download/extract)"
@@ -87,20 +90,15 @@ if [[ "$SCALE_VERSION" != "latest" ]]; then
 		exit 0
 	fi
 fi
-
 echo "Installing SCALE (version: ${SCALE_VERSION}) into ${SCALE_INSTALL_DIR}"
 echo "  source: ${SCALE_TARBALL_URL}"
-
 mkdir -p "$SCALE_INSTALL_DIR"
 cd "$SCALE_INSTALL_DIR"
-
 TMP_TARBALL="$(mktemp --tmpdir "scale-${SCALE_VERSION}-amd64.XXXXXX.tar.xz")"
 STAGING_DIR="$(mktemp -d --tmpdir="$SCALE_INSTALL_DIR" ".scale_extract_staging.XXXXXX")"
 trap 'rm -f "$TMP_TARBALL"; rm -rf "$STAGING_DIR"' EXIT
-
 echo "Downloading tarball..."
 wget -q -O "$TMP_TARBALL" "$SCALE_TARBALL_URL"
-
 # Extract into a guaranteed-empty staging directory rather than directly
 # into SCALE_INSTALL_DIR and diffing directory listings before/after --
 # that approach broke on any re-run where a same-named directory already
@@ -110,7 +108,6 @@ wget -q -O "$TMP_TARBALL" "$SCALE_TARBALL_URL"
 # every file inside it).
 echo "Extracting..."
 tar xf "$TMP_TARBALL" -C "$STAGING_DIR"
-
 EXTRACTED_DIR=""
 while IFS= read -r -d '' entry; do
 	if [[ -d "$entry" ]]; then
@@ -118,14 +115,11 @@ while IFS= read -r -d '' entry; do
 		break
 	fi
 done < <(find "$STAGING_DIR" -maxdepth 1 -mindepth 1 -print0)
-
 if [[ -z "$EXTRACTED_DIR" ]]; then
 	echo "error: could not determine which directory the tarball extracted (staging dir: ${STAGING_DIR})" >&2
 	exit 1
 fi
-
 echo "Extracted to staging: ${STAGING_DIR}/${EXTRACTED_DIR}"
-
 # The tarball doesn't reliably ship bin/ with the execute bit set on every
 # file -- restore it explicitly rather than trusting upstream's packaging,
 # since a merely-present-but-not-executable scaleenv looks identical to
@@ -134,21 +128,16 @@ echo "Extracted to staging: ${STAGING_DIR}/${EXTRACTED_DIR}"
 if [[ -d "${STAGING_DIR}/${EXTRACTED_DIR}/bin" ]]; then
 	chmod -R u+x "${STAGING_DIR}/${EXTRACTED_DIR}/bin"
 fi
-
 FINAL_NAME="${PREDICTED_NAME:-$EXTRACTED_DIR}"
 RESOLVED_ROOT="${SCALE_INSTALL_DIR}/${FINAL_NAME}"
-
 if [[ -d "$RESOLVED_ROOT" ]]; then
 	echo "Removing previous install at ${RESOLVED_ROOT} before replacing it."
 	rm -rf "${RESOLVED_ROOT:?}"
 fi
-
 mv "${STAGING_DIR}/${EXTRACTED_DIR}" "$RESOLVED_ROOT"
-
 if [[ ! -x "${RESOLVED_ROOT}/bin/scaleenv" ]]; then
 	echo "error: ${RESOLVED_ROOT}/bin/scaleenv not found after install -- tarball layout may not match what setup-backends.sh expects" >&2
 	exit 1
 fi
-
 echo "SCALE ${SCALE_VERSION} installed and verified at ${RESOLVED_ROOT}"
 echo "$RESOLVED_ROOT" > "$MARKER_FILE"
