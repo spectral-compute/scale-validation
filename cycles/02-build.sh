@@ -8,7 +8,7 @@ args=(
 
     -DWITH_CYCLES_DEVICE_CUDA=ON
     -DWITH_CYCLES_CUDA_BINARIES=ON
-    -DCYCLES_CUDA_BINARIES_ARCH="${GPU_ARCH}"
+    -DCYCLES_CUDA_BINARIES_ARCH="${CUDAARCHS}"
     # On NVIDIA targets, ${CUDA_PATH} (scaleenv's "Using cuda install at ..." pick) might be a runtime-only install.
     # In this case, `find_package(CUDA)` can't see a full toolkit (missing CUDA_INCLUDE_DIRS/CUDA_CUDART_LIBRARY)
     # This is only a problem because cycles calls that explicitly, rather than inferring the cuda toolkit based off of where nvcc is.
