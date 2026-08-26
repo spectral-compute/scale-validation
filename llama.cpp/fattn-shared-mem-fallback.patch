@@ -11,7 +11,7 @@ index 83478a02c..405e03f63 100644
  using namespace ggml_cuda_mma;
 
  // Config options for the MMA kernel.
-@@ -1926,6 +1928,11 @@ void ggml_cuda_flash_attn_ext_mma_f16_case(ggml_backend_cuda_context & ctx, ggml
+@@ -1926,5 +1928,10 @@ void ggml_cuda_flash_attn_ext_mma_f16_case(ggml_backend_cuda_context & ctx, ggml
          std::max(nbytes_shared_Q,  nbytes_shared_KV + nbytes_shared_mask) :
                   nbytes_shared_Q + nbytes_shared_KV + nbytes_shared_mask);
 
