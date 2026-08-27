@@ -1,0 +1,8 @@
+{
+  "name": "ALIEN",
+  "license": "BSD-3-Clause",
+  "upstream_repo": "https://github.com/chrxh/alien",
+  "tags": ["simulation", "artificial-life", "physics"],
+  "github_issue_label": "alien",
+  "description": "A GPU-accelerated artificial life simulation program built on a specialized 2D particle physics engine in CUDA, where digital organisms evolve via mutation and natural selection. ALIEN is primarily an interactive desktop application upstream; this suite builds and validates its headless CUDA simulation engine core, including its own command-line runner and GoogleTest suites, which with SCALE runs on AMD GPUs without modification."
+}
