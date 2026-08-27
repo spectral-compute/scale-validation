@@ -1,0 +1,8 @@
+{
+  "name": "RabbitCT",
+  "license": "MIT",
+  "upstream_repo": "https://github.com/spectral-compute/RabbitCT",
+  "tags": ["medical-imaging", "reconstruction", "benchmark"],
+  "github_issue_label": "RabbitCT",
+  "description": "A cone-beam CT backprojection benchmark using a real clinical C-arm CT dataset of a rabbit. RabbitCT provides an open platform for comparing reconstruction performance across architectures, including a naive CUDA implementation (LolaCUDA). With SCALE, LolaCUDA runs on AMD GPUs without modification."
+}
