@@ -1,0 +1,8 @@
+{
+  "name": "FastEddy",
+  "license": "Apache-2.0",
+  "upstream_repo": "https://github.com/NCAR/FastEddy-model",
+  "tags": ["atmospheric-simulation", "weather-modeling", "large-eddy-simulation"],
+  "github_issue_label": "FastEddy",
+  "description": "NCAR/NOAA's GPU-accelerated large-eddy-simulation model for atmospheric boundary-layer and complex-terrain weather research. FastEddy is MPI-parallel across GPUs, with its numerical core written directly in CUDA. With SCALE, that CUDA core runs on AMD GPUs without modification."
+}
