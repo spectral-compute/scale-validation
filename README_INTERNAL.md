@@ -19,3 +19,6 @@ export FORGEJO_OUTPUT=$(mktemp) && echo "" > $FORGEJO_OUTPUT && ISAS='["gfx1100"
 ```
 
 When invoking the extended test workflow, you can also specify a regex to match the names of targets against. The name of a test must fully match the regex in order to run.
+
+After all build steps are completed, we run `narrow_matrix.py` to narrow down the matrix to only ones whose build phase actually succeeded, and who have test scripts to run.
+This is needed due to limitations in forgejo - see #1182 internally.
