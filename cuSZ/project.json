@@ -1,0 +1,8 @@
+{
+  "name": "cuSZ",
+  "license": "BSD-3-Clause",
+  "upstream_repo": "https://github.com/szcompressor/cuSZ",
+  "tags": ["compression", "scientific-computing", "hpc"],
+  "github_issue_label": "cuSZ",
+  "description": "A GPU implementation of the SZ error-bounded lossy compressor for scientific data. cuSZ compresses floating-point simulation output while guaranteeing the reconstructed data stays within a user-specified error bound, using CUDA to accelerate prediction, quantization, and Huffman coding."
+}
