@@ -13,7 +13,7 @@ from pathlib import Path
 REPO_BASE = Path.cwd()
 IGNORE_LIST = [".jj", ".forgejo", ".git", "util", ".claude"]
 
-TARGETS_REGEX = re.compile(os.environ["TARGETS_REGEX"] or ".*")
+TARGETS_REGEX = re.compile(os.environ.get("TARGETS_REGEX", ".*"))
 ISAS = json.loads(os.environ["ISAS"])
 
 should_build = set()
