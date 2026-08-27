@@ -1,0 +1,8 @@
+{
+  "name": "GPUJPEG",
+  "license": "BSD-2-Clause",
+  "upstream_repo": "https://github.com/CESNET/GPUJPEG",
+  "tags": ["image-processing", "compression", "codec"],
+  "github_issue_label": "GPUJPEG",
+  "description": "A CUDA-accelerated JPEG encoder and decoder. GPUJPEG offloads JPEG compression and decompression to the GPU for high-throughput image processing, with a command-line tool and a C library. With SCALE, its CUDA kernels run on AMD GPUs without modification."
+}
