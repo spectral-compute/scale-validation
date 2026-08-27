@@ -18,14 +18,14 @@
 # multi-host, multi-hour sweep -- so it lives one directory level below
 # where that glob reaches.
 #
-# Farms scripts/run_scale_eod_paper.sh (see NOTE below) out to every
+# Farms scripts/run_scale_eod_regression.sh (see NOTE below) out to every
 # configured Spectral Compute host, waits for each host's sweep to finish
 # (independently -- one host's failure or timeout does not block the
 # others), rsyncs every host's results/ back to a single timestamped local
 # directory, and runs plot_heatmap.R against the combined dataset to
 # produce the SCALE-vs-native heatmap.
 #
-# Hosts are all Spectral Compute machines (trill, alpha, epsilon, beta,
+# Hosts are all Spectral Compute machines (trill, benzar, epsilon, beta,
 # andoria, risa) -- ExCL is intentionally excluded. Each host has its own
 # independent filesystem (no shared NFS between them), so there is no lock
 # contention or shared-state risk running every host's sweep at the same
@@ -64,21 +64,26 @@
 # to compare 1.7.1 against 1.7.2 -- only pays a download cost the first
 # time each version is used on a given host.
 #
-# NOTE on run_scale_eod_paper.sh: this script currently still shells out
-# to run_scale_eod_paper.sh for the actual per-device sweep (it knows how
-# to fan a single host out across multiple physical GPUs with the correct
-# arch/backend/compiler pairing for each -- necessary on multi-GPU boxes
-# like trill and alpha). That script has the same "Spectral-Compute-
-# specific, shouldn't live in public upstream EOD" problem this one did --
-# it's currently invoked as "cd ExtendedOpenDwarfs && ./runner.sh" from
-# one directory level relative to where IT lives, which needs to match
-# wherever it actually ends up. If/when you relocate it here too (next to
-# this script, alongside the 00-03 numbered scripts), its internal calls
-# into runner.sh will need a "cd ExtendedOpenDwarfs" prefix added, since
-# from here the nested EOD checkout is one level down
-# (scale-validation/ExtendedOpenDwarfs/ExtendedOpenDwarfs/), not the
-# current directory. Happy to produce that as a precise TPP once you
-# paste its current contents.
+# NOTE on run_scale_eod_regression.sh: this script shells out to
+# scripts/run_scale_eod_regression.sh (inside the nested EOD checkout,
+# same location run_scale_eod_paper.sh already lived at -- no directory
+# fix was actually needed, that was speculation before either script's
+# contents had been reviewed) for the actual per-device sweep. It knows
+# how to fan a single host out across multiple physical GPUs with the
+# correct arch/backend/compiler/visible-device pairing for each --
+# necessary on multi-GPU boxes like trill and benzar.
+#
+# This is a SEPARATE script from run_scale_eod_paper.sh, not a renamed or
+# relocated version of it. run_scale_eod_paper.sh stays as-is (it still
+# reproduces the paper's original fixed-host results, including ORNL
+# machines -- zenith, milan0, hudson, faraday, cousteau, explorer, troi --
+# that are not part of, and will never be added to, this regression
+# fleet). run_scale_eod_regression.sh targets only the current regression
+# fleet hosts and must be committed at
+# scripts/run_scale_eod_regression.sh in the EOD repo/ref this script
+# checks out (EOD_REGRESSION_REPO_URL / EOD_REGRESSION_REF) -- 00-clone.sh
+# does a fresh clone every run, so an uncommitted local-only copy will not
+# survive onto any fleet host.
 #
 # NOTE on plot_heatmap.R: only ever runs locally, on whichever machine
 # collects results -- it is never distributed to the fleet hosts. Keep it
@@ -102,7 +107,7 @@
 #       Space-separated list of ssh destinations to farm the sweep out to.
 #       Plain hostnames by default -- no username is prepended, so ssh
 #       resolves it the normal way (current user, or ~/.ssh/config).
-#       Default: "alpha epsilon beta andoria risa"
+#       Default: "benzar epsilon beta andoria risa"
 #
 #   EOD_REGRESSION_RUN_LOCAL
 #       1 to also run the sweep on the machine invoking this script (e.g.
@@ -171,7 +176,7 @@
 #       FAILED rather than hanging the whole fleet run indefinitely.
 #
 #   EOD_REGRESSION_APP / EOD_REGRESSION_SIZE / EOD_REGRESSION_ITERS
-#       Passed through as APP/SIZE/ITERS to run_scale_eod_paper.sh on
+#       Passed through as APP/SIZE/ITERS to run_scale_eod_regression.sh on
 #       every host. Defaults match that script's own defaults (all/all/5).
 #       Override to e.g. SIZE=tiny ITERS=1 for a fast smoke-test run
 #       rather than a full release sweep.
@@ -195,7 +200,15 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # below .../ExtendedOpenDwarfs/ -- scale-validation's own root is
 # therefore two levels up from here, not one.
 SCALE_VALIDATION_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-: "${EOD_REGRESSION_REMOTE_TARGETS:=alpha epsilon beta andoria}"  # risa omitted: it has the same hardware as trill
+# ${VAR:=default} treats an explicitly-empty value the same as "unset" and
+# re-fills it with the default -- which silently defeats
+# EOD_REGRESSION_REMOTE_TARGETS="" (used to mean "no remote hosts, local
+# only"; this is a real command from prior usage, not a hypothetical).
+# ${VAR+x} is true even for an explicitly-empty string, so only a
+# genuinely unset var gets the default here; an explicit "" is honored.
+if [[ -z "${EOD_REGRESSION_REMOTE_TARGETS+x}" ]]; then
+	EOD_REGRESSION_REMOTE_TARGETS="benzar epsilon beta andoria"  # risa omitted: it has the same hardware as trill
+fi
 read -r -a REMOTE_TARGETS <<< "$EOD_REGRESSION_REMOTE_TARGETS"
 : "${EOD_REGRESSION_RUN_LOCAL:=1}"
 : "${EOD_REGRESSION_WORKDIR:=/tmp/eod-regression}"
@@ -236,6 +249,18 @@ fi
 log() {
 	printf '[%s] %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"
 }
+# Best-effort auto-cleanup on Ctrl-C / SIGTERM: killing THIS process does
+# not reliably kill the remote work it started (an ssh child dying locally
+# doesn't guarantee the remote command gets torn down), so on a graceful
+# interrupt, proactively run the same kill-everything logic
+# kill-regression-fleet.sh exposes standalone. This is deliberately
+# best-effort only -- it cannot catch SIGKILL (`kill -9`, which bypasses
+# traps entirely by design), a closed terminal, or a crash. For those,
+# kill-regression-fleet.sh still needs to be run by hand afterward -- that
+# script is safe to (re-)run any time regardless of whether this trap
+# already ran, since it pattern-matches on the workdir rather than
+# depending on any state this run left behind.
+trap 'log "Caught interrupt -- attempting to kill in-flight remote/local sweeps via kill-regression-fleet.sh..."; "${SCRIPT_DIR}/kill-regression-fleet.sh" || true; exit 130' INT TERM
 log "scale-validation repo: ${EOD_REGRESSION_REPO_URL}"
 log "scale-validation ref:  ${EOD_REGRESSION_REF}"
 if [[ -n "$EOD_REGRESSION_LOCAL_SCALE_BUILD" ]]; then
@@ -342,6 +367,8 @@ cd "${SV_CHECKOUT_DIR}"
 git fetch origin
 git checkout --detach "${EOD_REGRESSION_REF}"
 git reset --hard "${EOD_REGRESSION_REF}"
+: # deliberately not the tail command -- see build_sweep_command's own
+  # comment on this same trick, just below.
 EOF
 }
 build_sweep_command() {
@@ -392,7 +419,22 @@ rm -rf ExtendedOpenDwarfs
 ./00-clone.sh
 ./01-install-deps.sh
 cd ExtendedOpenDwarfs
-${RUN_ENV_PREFIX} ./scripts/run_scale_eod_paper.sh
+${RUN_ENV_PREFIX} ./scripts/run_scale_eod_regression.sh
+: # NOT a no-op in practice: when a command is the literal last thing a
+  # "bash -c '...'" (or sshd-invoked "sh -c '...'") script will ever run,
+  # bash/sh may skip forking and exec() straight into it instead --
+  # replacing that process's own argv with just
+  # "./scripts/run_scale_eod_regression.sh" (or whatever
+  # run_scale_eod_regression.sh itself execs into next), silently dropping every "cd \$WORKDIR/..."
+  # this heredoc built up. kill-regression-fleet.sh's pkill -f
+  # \$EOD_REGRESSION_WORKDIR then has nothing left to match on that
+  # process -- confirmed empirically: without this trailing no-op, a
+  # spawned "bash -c \"cd \$DIR && sleep 300\"" process's own argv, once
+  # exec-optimized, showed up as bare "sleep 300", with \$DIR nowhere in
+  # it. Keeping a command after the real one here forces bash/sh to fork
+  # and keep the whole script (workdir path included) as this process's
+  # argv for as long as the sweep runs, which is exactly what
+  # kill-regression-fleet.sh needs to be able to find and kill it later.
 EOF
 }
 SETUP_COMMAND="$(build_setup_command)"
@@ -419,7 +461,18 @@ run_remote_host() {
 	local logfile="${LOG_DIR}/${target}.log"
 	local statusfile="${RUN_DIR}/status.${target}"
 	log "==> [$target] starting remote sweep"
-	local ssh_opts=(-o BatchMode=yes -o ConnectTimeout=15 -o StrictHostKeyChecking=accept-new)
+	# ServerAliveInterval/CountMax: a multi-hour sweep spends long stretches
+	# silently computing on the remote GPU between printed lines -- NAT
+	# gateways/firewalls commonly kill SSH connections they judge "idle"
+	# after some timeout, even though the session is genuinely still
+	# alive and working. That shows up as a mid-run "client_loop: send
+	# disconnect: Broken pipe" with no application-side cause at all --
+	# confirmed live on beta (cwt/hip/small, 3.8 iterations in, mid-sweep,
+	# no error from the benchmark itself). Sending a keepalive probe every
+	# 60s (tolerating up to 10 missed = ~10 minutes before genuinely
+	# giving up) keeps the connection looking active to anything in
+	# between, without masking a real, prolonged network/host failure.
+	local ssh_opts=(-o BatchMode=yes -o ConnectTimeout=15 -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=60 -o ServerAliveCountMax=10)
 	if (
 			set -e
 			if [[ -n "$EOD_REGRESSION_LOCAL_SCALE_BUILD" ]]; then
@@ -449,17 +502,25 @@ run_local_host() {
 	local logfile="${LOG_DIR}/${host_label}.log"
 	local statusfile="${RUN_DIR}/status.${host_label}"
 	log "==> [$host_label] starting LOCAL sweep"
+	# setsid: puts each local host's bash -c invocation in its own new
+	# process group, separate from run-regression-fleet.sh's own group and
+	# from every other backgrounded host job. Local jobs here are launched
+	# as plain background jobs (`&`) rather than through ssh, so without
+	# this they'd inherit THIS script's own process group -- meaning
+	# kill-regression-fleet.sh's process-group kill (see its own comments)
+	# would risk hitting run-regression-fleet.sh itself, or unrelated
+	# sibling host jobs, instead of just this one host's sweep tree.
 	if (
 			set -e
 			if [[ -n "$EOD_REGRESSION_LOCAL_SCALE_BUILD" ]]; then
-				timeout "${EOD_REGRESSION_TIMEOUT}" bash -c "$SETUP_COMMAND"
+				timeout "${EOD_REGRESSION_TIMEOUT}" setsid bash -c "$SETUP_COMMAND"
 				mkdir -p "${REMOTE_SCALE_TARGET}"
 				log "==> [$host_label] placing local SCALE build (${EOD_REGRESSION_LOCAL_SCALE_BUILD}) -> ${REMOTE_SCALE_TARGET}"
 				timeout "${EOD_REGRESSION_TIMEOUT}" rsync -az --delete \
 					"${EOD_REGRESSION_LOCAL_SCALE_BUILD}/" "${REMOTE_SCALE_TARGET}/"
-				timeout "${EOD_REGRESSION_TIMEOUT}" bash -c "$SWEEP_COMMAND"
+				timeout "${EOD_REGRESSION_TIMEOUT}" setsid bash -c "$SWEEP_COMMAND"
 			else
-				timeout "${EOD_REGRESSION_TIMEOUT}" bash -c "${SETUP_COMMAND}
+				timeout "${EOD_REGRESSION_TIMEOUT}" setsid bash -c "${SETUP_COMMAND}
 ${SWEEP_COMMAND}"
 			fi
 		) > "$logfile" 2>&1
