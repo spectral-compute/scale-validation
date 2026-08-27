@@ -12,6 +12,8 @@ CI decides what to run by calling `util/gen_matrix.py`. The logic of that is:
   - If `subfolder/.build-fails` or `subfolder/.run-fails` exists, then we expect either building or running to fail.
   - Similarly, if `subfolder/.build-fails-on-$ISA` or `subfolder/.run-fails-on-$ISA` exists, then we expect either building or running to fail only for that specific ISA.
 
+When you create one of these marker files, please populate it with a reference to an issue you've filed internally to track removing it.
+
 You can debug this with the following one-liner:
 
 ```
@@ -22,3 +24,5 @@ When invoking the extended test workflow, you can also specify a regex to match 
 
 After all build steps are completed, we run `narrow_matrix.py` to narrow down the matrix to only ones whose build phase actually succeeded, and who have test scripts to run.
 This is needed due to limitations in forgejo - see #1182 internally.
+
+You can use `util/report_failures.sh` to get a summary of what is xfail'd, along with the contents of the marker files (which should include the reasons).
