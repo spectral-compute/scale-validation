@@ -1,0 +1,8 @@
+{
+  "name": "llama.cpp",
+  "license": "MIT",
+  "upstream_repo": "https://github.com/ggerganov/llama.cpp",
+  "tags": ["large-language-models", "inference"],
+  "github_issue_label": "llama.cpp",
+  "description": "A C/C++ inference engine for large language models in the GGUF format. llama.cpp implements the GGML tensor library with CUDA-accelerated GPU offload for fast local text generation. With SCALE, llama.cpp's CUDA backend runs on AMD GPUs."
+}
