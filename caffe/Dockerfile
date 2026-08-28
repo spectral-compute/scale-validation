@@ -42,6 +42,12 @@ RUN bash test.sh /build /opt/scale "${GPU_ARCH}" caffe --match '-(clone|patch|bu
 FROM build AS test
 ARG GPU_ARCH=gfx1100
 ENV GPU_ARCH=${GPU_ARCH}
+# The Forgejo Actions runner needs curl inside any container-job image to report
+# step completion (https://github.com/nektos/act/issues/107) - without it the test
+# stage's own scripts can pass and the job still gets marked failed.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" caffe --match '-(test|benchmark)' --keep"]
 
 # ── runtime stage ─────────────────────────────────────────────────────────────

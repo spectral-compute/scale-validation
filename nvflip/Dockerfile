@@ -37,11 +37,14 @@ RUN bash test.sh /build /opt/scale "${GPU_ARCH}" nvflip --match '-(clone|patch|b
 FROM build AS test
 ARG GPU_ARCH=gfx1100
 ENV GPU_ARCH=${GPU_ARCH}
-# 02-test.sh's CPU-vs-GPU parity check needs these (same packages the runtime
-# stage installs below, for the same reason).
+# 02-test.sh's CPU-vs-GPU parity check needs imagemagick/python3 (same packages
+# the runtime stage installs below, for the same reason). curl is needed by the
+# Forgejo Actions runner itself to report step completion
+# (https://github.com/nektos/act/issues/107), not by the test script.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     imagemagick \
     python3 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" nvflip --match '-(test|benchmark)' --keep"]
 

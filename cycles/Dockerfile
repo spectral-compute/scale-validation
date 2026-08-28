@@ -50,11 +50,14 @@ ENV GPU_ARCH=${GPU_ARCH}
 # 03-test-examples.sh needs `time` (GNU time, /usr/bin/time -- not bash's
 # builtin) to time each render, plus imagemagick/python3 for the CPU-vs-CUDA
 # parity check (same packages the runtime stage installs below, for the same
-# reason -- `time` isn't needed there since nothing at runtime calls it).
+# reason -- `time` isn't needed there since nothing at runtime calls it). curl is
+# needed by the Forgejo Actions runner itself to report step completion
+# (https://github.com/nektos/act/issues/107), not by the test scripts.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     time \
     imagemagick \
     python3 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" cycles --match '-(test|benchmark)' --keep"]
 
