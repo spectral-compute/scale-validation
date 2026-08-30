@@ -1,0 +1,13 @@
+diff --git a/timemachine/cpp/CMakeLists.txt b/timemachine/cpp/CMakeLists.txt
+index bf87a65a..fb01725d 100644
+--- a/timemachine/cpp/CMakeLists.txt
++++ b/timemachine/cpp/CMakeLists.txt
+@@ -20,6 +20,6 @@ endif()
+
+
+-string(APPEND CMAKE_CXX_FLAGS "${COMMON_COMPILER_FLAGS} -Werror")
+-string(APPEND CMAKE_CUDA_FLAGS "${COMMON_COMPILER_FLAGS}")
++string(APPEND CMAKE_CXX_FLAGS " ${COMMON_COMPILER_FLAGS} -Werror")
++string(APPEND CMAKE_CUDA_FLAGS " ${COMMON_COMPILER_FLAGS}")
+
+ string(APPEND CMAKE_CUDA_FLAGS

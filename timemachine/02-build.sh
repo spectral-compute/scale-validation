@@ -2,10 +2,14 @@
 
 set -ETeuo pipefail
 
-# args.sh sets colour-diagnostics in CXXFLAGS, but timemachine uses
-# string concatenation to add `-Wall` with no leading space, and cmake
-# provides no way to preserve a trailing space, sooo:
-unset CXXFLAGS
+EXTRA_CMAKE_ARGS=()
+if [ "$(basename "$(realpath "$(which nvcc)")")" == "clang" ] ; then
+    EXTRA_CMAKE_ARGS+=(
+        "-DCMAKE_C_COMPILER=$(realpath "$(which nvcc)")"
+        "-DCMAKE_CXX_COMPILER=$(realpath "$(which nvcc)")++"
+        "-DCMAKE_CUDA_FLAGS=-rdc=true"
+    )
+fi
 
 mkdir -p "build"
 
@@ -15,5 +19,5 @@ source venv/bin/activate
 pip install mypy
 
 pip install -r requirements.txt
-CMAKE_ARGS=-DCUDA_ARCH=${CUDAARCHS} pip install -e .[dev,test]
+CMAKE_ARGS="-DCUDA_ARCH=${CUDAARCHS} ${EXTRA_CMAKE_ARGS[@]}" pip install -e .[dev,test]
 cd -
