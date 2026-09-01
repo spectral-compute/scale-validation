@@ -11,6 +11,6 @@ cmake \
     -DPSZ_BUILD_EXAMPLES=On \
     -DCMAKE_INSTALL_PREFIX="install" \
     -B"build" \
-    "cuSZ"
+    "cusz"
 
 make -O -C "build" install -j"$(nproc)"

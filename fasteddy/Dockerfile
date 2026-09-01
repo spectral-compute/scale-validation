@@ -31,14 +31,14 @@ RUN if [[ "${GPU_ARCH}" == sm_* ]]; then \
 COPY versions.txt /build/versions.txt
 COPY util/ /build/util/
 COPY openmpi/ /build/openmpi/
-COPY FastEddy/ /build/FastEddy/
+COPY fasteddy/ /build/fasteddy/
 COPY test.sh /build/test.sh
 
 WORKDIR /build
 
 # openmpi is a build-only dependency (.build-only, .skip-ci -- never scheduled as its
-# own CI matrix entry) that FastEddy/01-build.sh refuses to build without: it checks
-# for ${OUT_DIR}/openmpi/install (a sibling of FastEddy's own workdir, i.e.
+# own CI matrix entry) that fasteddy/01-build.sh refuses to build without: it checks
+# for ${OUT_DIR}/openmpi/install (a sibling of fasteddy's own workdir, i.e.
 # /build/openmpi/install) and exports PATH/LD_LIBRARY_PATH to it. Build it first, into
 # the same shared /build workdir, via the same test.sh driver every other project
 # uses. All three of openmpi's scripts (00-clone, 01-configure, 02-build) are
@@ -51,9 +51,9 @@ RUN bash test.sh /build /opt/scale "${GPU_ARCH}" openmpi --keep
 
 # Now build FastEddy itself against the openmpi install produced above.
 # --match excludes 02-benchmark-example.sh (the renamed benchmark/comparison script --
-# see FastEddy/02-benchmark-example.sh -- run only in the test stage below); FastEddy
+# see fasteddy/02-benchmark-example.sh -- run only in the test stage below); FastEddy
 # has no patch step, so only clone/build remain. Same --keep requirement as above.
-RUN bash test.sh /build /opt/scale "${GPU_ARCH}" FastEddy --match '-(clone|build)' --keep
+RUN bash test.sh /build /opt/scale "${GPU_ARCH}" fasteddy --match '-(clone|build)' --keep
 
 # ── test stage ─────────────────────────────────────────────────────────────
 # Runs only the test/benchmark scripts (matched by filename, not hardcoded)
@@ -85,7 +85,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-ipykernel \
     curl \
     && rm -rf /var/lib/apt/lists/*
-ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" FastEddy --match '-(test|benchmark)' --keep"]
+ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" fasteddy --match '-(test|benchmark)' --keep"]
 
 # ── runtime stage ─────────────────────────────────────────────────────────────
 FROM ${SCALE_BASE_IMAGE}
@@ -103,9 +103,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy the built FastEddy binary and the bundled OpenMPI install it needs at runtime
 # (mpirun + libmpi/libopen-pal/etc are not part of the SCALE base image).
 COPY --from=build /build/openmpi/install /build/openmpi/install
-COPY --from=build /build/FastEddy/FastEddy/SRC/FEMAIN/FastEddy /build/FastEddy/FastEddy/SRC/FEMAIN/FastEddy
+COPY --from=build /build/fasteddy/fasteddy/SRC/FEMAIN/FastEddy /build/fasteddy/fasteddy/SRC/FEMAIN/FastEddy
 
-ENV PATH="/opt/scale/bin:/build/openmpi/install/bin:/build/FastEddy/FastEddy/SRC/FEMAIN:${PATH}"
+ENV PATH="/opt/scale/bin:/build/openmpi/install/bin:/build/fasteddy/fasteddy/SRC/FEMAIN:${PATH}"
 # Both SCALE dirs are needed: targets/<arch>/lib has libredscale; lib64 has CUDA API
 # libs. openmpi/install/lib has libmpi and friends.
 ENV LD_LIBRARY_PATH="/opt/scale/targets/${GPU_ARCH}/lib:/opt/scale/lib64:/build/openmpi/install/lib"

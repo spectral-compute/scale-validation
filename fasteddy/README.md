@@ -53,13 +53,13 @@ OpenMPI dependency's) -- no drift between what you build and what CI validates.
 
 ```bash
 # From the scale-validation repository root:
-docker build --build-arg GPU_ARCH=gfx1100 -t fasteddy:scale -f FastEddy/Dockerfile .
+docker build --build-arg GPU_ARCH=gfx1100 -t fasteddy:scale -f fasteddy/Dockerfile .
 ```
 
 Pass `--build-arg GPU_ARCH=<your-gfx>` to target a different AMD GPU (e.g. `gfx942`, `gfx1201`).
 Substitute `fasteddy:scale` for the pulled tag in any example above.
 
-This [Dockerfile](https://github.com/spectral-compute/scale-validation/blob/feature/app-hub/FastEddy/Dockerfile)
+This [Dockerfile](https://github.com/spectral-compute/scale-validation/blob/feature/app-hub/fasteddy/Dockerfile)
 lives in this directory of the `scale-validation` repository. It's meant to be used in-tree, not
 standalone: it runs the numbered build scripts alongside it and depends on `util/`, `versions.txt`,
 and the sibling `openmpi/` project's scripts from the repository root, so build it from there (as
@@ -74,7 +74,7 @@ GPUs), renders diagnostic plots from it via a Jupyter notebook, and compares eac
 against checked-in reference images, failing if any comparison exceeds its threshold:
 
 ```bash
-docker build --target test -t fasteddy:test --build-arg GPU_ARCH=gfx1100 -f FastEddy/Dockerfile .
+docker build --target test -t fasteddy:test --build-arg GPU_ARCH=gfx1100 -f fasteddy/Dockerfile .
 docker run --rm --device /dev/dri --device /dev/kfd fasteddy:test
 ```
 

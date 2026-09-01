@@ -61,13 +61,13 @@ what you build and what CI validates.
 
 ```bash
 # From the scale-validation repository root:
-docker build --build-arg GPU_ARCH=gfx1100 -t gpujpeg:scale -f GPUJPEG/Dockerfile .
+docker build --build-arg GPU_ARCH=gfx1100 -t gpujpeg:scale -f gpujpeg/Dockerfile .
 ```
 
 Pass `--build-arg GPU_ARCH=<your-gfx>` to target a different AMD GPU (e.g. `gfx942`, `gfx1201`).
 Substitute `gpujpeg:scale` for the pulled tag in any example above.
 
-This [Dockerfile](https://github.com/spectral-compute/scale-validation/blob/feature/app-hub/GPUJPEG/Dockerfile)
+This [Dockerfile](https://github.com/spectral-compute/scale-validation/blob/feature/app-hub/gpujpeg/Dockerfile)
 lives in this directory of the `scale-validation` repository. It's meant to be used in-tree, not
 standalone: it runs the numbered build scripts alongside it and depends on `util/` and
 `versions.txt` from the repository root, so build it from there (as shown above).
@@ -75,7 +75,7 @@ standalone: it runs the numbered build scripts alongside it and depends on `util
 To run the same correctness checks CI runs, including the test stage:
 
 ```bash
-docker build --target test -t gpujpeg:test --build-arg GPU_ARCH=gfx1100 -f GPUJPEG/Dockerfile .
+docker build --target test -t gpujpeg:test --build-arg GPU_ARCH=gfx1100 -f gpujpeg/Dockerfile .
 docker run --rm --device /dev/dri --device /dev/kfd gpujpeg:test
 ```
 

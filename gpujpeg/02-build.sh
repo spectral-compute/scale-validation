@@ -11,7 +11,7 @@ cmake \
     -DCMAKE_CXX_FLAGS="-Wno-stringop-overread" \
     -DCMAKE_CUDA_FLAGS="-Wno-error=implicit-const-int-float-conversion" \
     -B"build" \
-    "GPUJPEG"
+    "gpujpeg"
 
 # Build.
 cmake --build "build" -j"$(nproc)"

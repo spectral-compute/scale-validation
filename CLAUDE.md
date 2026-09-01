@@ -111,7 +111,7 @@ relies on the environment exported by the driver. Conventions:
   independent check (see e.g. `hashcat/05-test-hash-modes.sh`).
 - **Image fidelity checks**: a `psnr_ppm <ref> <dec> [<threshold_db>]` bash function
   (PPM/PGM round-trip PSNR via an embedded Python snippet) is defined inline in
-  `GPUJPEG/04-test-claims.sh`, rather than shared from `util/` — kept in the file so it
+  `gpujpeg/04-test-claims.sh`, rather than shared from `util/` — kept in the file so it
   stays self-contained, matching the MSE-via-ImageMagick-`compare` pattern already
   duplicated inline in `cycles/03-test-examples.sh` and `nvflip/02-test.sh`.
 
@@ -127,8 +127,8 @@ somewhere in its filename, and setup scripts must not.
 
 ## Container test stage
 
-Projects with a `Dockerfile` (all but `GPUJPEG`, which isn't containerized yet) have a
-`test` stage in addition to the usual `build` and (unnamed, final) runtime stages:
+Projects with a `Dockerfile` have a `test` stage in addition to the usual `build` and
+(unnamed, final) runtime stages:
 
 ```bash
 docker build --target test -t <project>:test --build-arg GPU_ARCH=gfx1100 -f <project>/Dockerfile .

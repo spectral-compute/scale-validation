@@ -2,7 +2,7 @@
 
 set -e
 
-cd RabbitCT
+cd rabbitct
 
 ./rabbitRunner-NVCC \
   -i ./RabbitInput/RabbitInput.rct \

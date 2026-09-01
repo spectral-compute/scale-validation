@@ -13,14 +13,14 @@ export OMPI_MCA_accelerator=cuda
 # right at the top allow you to use an `np` other than 4.
 
 # Create a directory for the example.
-EXAMPLES="${OUT_DIR}/FastEddy/examples"
+EXAMPLES="${OUT_DIR}/fasteddy/examples"
 EXAMPLE=Example01_NBL
 
 rm -rf "${EXAMPLES}/${EXAMPLE}"
 mkdir -p "${EXAMPLES}/${EXAMPLE}/output"
 
 cd "${EXAMPLES}/${EXAMPLE}"
-cp "${OUT_DIR}/FastEddy/FastEddy/tutorials/examples/Example01_NBL.in" .
+cp "${OUT_DIR}/fasteddy/fasteddy/tutorials/examples/Example01_NBL.in" .
 
 # Choose how many processes to require.
 if [ -z "$(which scalediag)" ] || scalediag full-driver p2p ; then
@@ -43,11 +43,11 @@ sed -E "s/^frqOutput = 7500 /frqOutput = ${BATCH} /;s/^NtBatch = 7500 /NtBatch =
 sed -E "s/^Nt = 630000 /Nt = ${TIME} /" -i Example01_NBL.in
 
 # Run FastEddy.
-/usr/bin/time -f 'Time: %e' mpirun -np ${NP} "${OUT_DIR}/FastEddy/FastEddy/SRC/FEMAIN/FastEddy" Example01_NBL.in
+/usr/bin/time -f 'Time: %e' mpirun -np ${NP} "${OUT_DIR}/fasteddy/fasteddy/SRC/FEMAIN/FastEddy" Example01_NBL.in
 
 # Generate the graphs.
 cd "${EXAMPLES}"
-cp "${OUT_DIR}/FastEddy/FastEddy/tutorials/notebooks"/{MAKE_FE_TUTORIAL_PLOTS.ipynb,feplot.mplstyle,fetutorialfunctions.py} .
+cp "${OUT_DIR}/fasteddy/fasteddy/tutorials/notebooks"/{MAKE_FE_TUTORIAL_PLOTS.ipynb,feplot.mplstyle,fetutorialfunctions.py} .
 
 sed -E "s|INSERT_PATH_TO_YOUR_RUN_DIRECTORY\\\\\\\\|${EXAMPLES}/|" -i MAKE_FE_TUTORIAL_PLOTS.ipynb
 sed -E 's/save_plot_opt = 0/save_plot_opt = 1/' -i MAKE_FE_TUTORIAL_PLOTS.ipynb

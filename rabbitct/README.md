@@ -39,7 +39,7 @@ docker run --rm --device /dev/dri --device /dev/kfd \
 ```bash
 docker run --rm --device /dev/dri --device /dev/kfd \
   docker.io/spectralcompute/rabbitct:latest \
-  -i /build/RabbitCT/RabbitCT/RabbitInput/RabbitInput.rct -m LolaCUDA -s 256
+  -i /build/rabbitct/rabbitct/RabbitInput/RabbitInput.rct -m LolaCUDA -s 256
 ```
 
 **Write the reconstructed volume out** (mount a host directory at `/work`):
@@ -47,7 +47,7 @@ docker run --rm --device /dev/dri --device /dev/kfd \
 ```bash
 docker run --rm --device /dev/dri --device /dev/kfd \
   -v "$PWD:/work" docker.io/spectralcompute/rabbitct:latest \
-  -i /build/RabbitCT/RabbitCT/RabbitInput/RabbitInput.rct -m LolaCUDA -s 1024 \
+  -i /build/rabbitct/rabbitct/RabbitInput/RabbitInput.rct -m LolaCUDA -s 1024 \
   -o /work/reconstructed.vol
 ```
 
@@ -58,7 +58,7 @@ build and what CI validates.
 
 ```bash
 # From the scale-validation repository root:
-docker build --build-arg GPU_ARCH=gfx1100 -t rabbitct:scale -f RabbitCT/Dockerfile .
+docker build --build-arg GPU_ARCH=gfx1100 -t rabbitct:scale -f rabbitct/Dockerfile .
 ```
 
 Pass `--build-arg GPU_ARCH=<your-gfx>` to target a different AMD GPU (e.g. `gfx942`, `gfx1201`).
@@ -68,11 +68,11 @@ Substitute `rabbitct:scale` for the pulled tag in any example above.
 `02-test-run.sh`'s reference-volume comparison via `-c`):
 
 ```bash
-docker build --target test -t rabbitct:test --build-arg GPU_ARCH=gfx1100 -f RabbitCT/Dockerfile .
+docker build --target test -t rabbitct:test --build-arg GPU_ARCH=gfx1100 -f rabbitct/Dockerfile .
 docker run --rm --device /dev/dri --device /dev/kfd rabbitct:test
 ```
 
-This [Dockerfile](https://github.com/spectral-compute/scale-validation/blob/feature/app-hub/RabbitCT/Dockerfile)
+This [Dockerfile](https://github.com/spectral-compute/scale-validation/blob/feature/app-hub/rabbitct/Dockerfile)
 lives in this directory of the `scale-validation` repository. It's meant to be used in-tree, not
 standalone: it runs the numbered build scripts alongside it and depends on `util/` and
 `versions.txt` from the repository root, so build it from there (as shown above).

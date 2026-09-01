@@ -44,7 +44,7 @@ When unsure whether a pin is intentional, ask before changing it rather than sil
 2. `git ls-remote --tags --refs <url>` to find the latest appropriate ref (no rate limit).
 3. **Verify the chosen ref exists before writing it:** `git ls-remote --tags <url> '<newref>'`
    must return a hit. Never write an unverified ref — a truncated tag list once falsely
-   reported `warp v1.14.0` / `cuSZ v0.16.2` as missing when both existed.
+   reported `warp v1.14.0` / `cusz v0.16.2` as missing when both existed.
 4. Edit only the ref token in `versions.txt`, preserving the `<name> <ref>` format and line order.
 5. Report a `versions.txt` diff plus a per-project summary (`old → new`, and which pins were
    left untouched and why). Do not commit unless asked.

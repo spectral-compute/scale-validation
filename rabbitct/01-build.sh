@@ -2,7 +2,7 @@
 
 set -e
 
-cd RabbitCT
+cd rabbitct
 
 # Copied from their mk/config-default.mk but need a few overriding
 # options to stop a few build errors

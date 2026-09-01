@@ -41,7 +41,7 @@ Report, for each project under test, how far behind upstream the pinned ref is.
 - **nv-codec-headers** (the `ffmpeg` project) uses `nX.Y.Z`. **openmpi** is pinned to the 4.1 series; 5.0.x is the active line.
 - **thrust** standalone repo is archived (moved into NVIDIA/cccl); **caffe**, **nerf-cuda** are unmaintained;
   **pytorch-1.8.1** is intentionally legacy. Report these as frozen-by-design, not "behind".
-- Repos with no real tags (placeholder `v0.0.0` or none): timemachine, heraclespp, RabbitCT, hashinator,
+- Repos with no real tags (placeholder `v0.0.0` or none): timemachine, heraclespp, rabbitct, hashinator,
   gpu_jpeg2k, llm.c, HeCBench, CUDALibrarySamples, nvflip, House-Prices, datasets — commit-pin is the only option.
 - **cycles** is hosted on Gitea (projects.blender.org), NOT GitHub — `ls-remote` only, no GitHub API.
 - The three opencv repos (opencv / opencv_contrib / opencv_extra) are pinned in lockstep to one release era.
@@ -54,7 +54,7 @@ There are ~66 projects, each an independent upstream query — fan out with para
 mechanical clone+build agents — see the `subagent-model-selection` memory.)
 
 Always VERIFY surprising findings yourself before reporting (a subagent's truncated tag list once falsely
-claimed `warp v1.14.0` and `cuSZ v0.16.2` didn't exist — both do). A quick `git ls-remote --tags <url> '<tag>'`
+claimed `warp v1.14.0` and `cusz v0.16.2` didn't exist — both do). A quick `git ls-remote --tags <url> '<tag>'`
 confirms existence.
 
 ## Output

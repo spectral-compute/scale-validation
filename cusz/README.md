@@ -50,7 +50,7 @@ what you build and what CI validates.
 
 ```bash
 # From the scale-validation repository root:
-docker build --build-arg GPU_ARCH=gfx1100 -t cusz:scale -f cuSZ/Dockerfile .
+docker build --build-arg GPU_ARCH=gfx1100 -t cusz:scale -f cusz/Dockerfile .
 ```
 
 Pass `--build-arg GPU_ARCH=<your-gfx>` to target a different AMD GPU (e.g. `gfx942`, `gfx1201`).
@@ -60,11 +60,11 @@ To run the same correctness suite CI runs (a set of unit-test binaries under `bu
 covering the core compression kernels):
 
 ```bash
-docker build --target test -t cusz:test --build-arg GPU_ARCH=gfx1100 -f cuSZ/Dockerfile .
+docker build --target test -t cusz:test --build-arg GPU_ARCH=gfx1100 -f cusz/Dockerfile .
 docker run --rm --device /dev/dri --device /dev/kfd cusz:test
 ```
 
-This [Dockerfile](https://github.com/spectral-compute/scale-validation/blob/feature/app-hub/cuSZ/Dockerfile)
+This [Dockerfile](https://github.com/spectral-compute/scale-validation/blob/feature/app-hub/cusz/Dockerfile)
 lives in this directory of the `scale-validation` repository. It's meant to be used in-tree, not
 standalone: it runs the numbered build scripts alongside it and depends on `util/` and
 `versions.txt` from the repository root, so build it from there (as shown above).

@@ -22,15 +22,15 @@ RUN if [[ "${GPU_ARCH}" == sm_* ]]; then \
 
 COPY versions.txt /build/versions.txt
 COPY util/ /build/util/
-COPY cuSZ/ /build/cuSZ/
+COPY cusz/ /build/cusz/
 COPY test.sh /build/test.sh
 
-# cuSZ installs to $(pwd)/install relative to workdir = /build/cuSZ/install.
+# cusz installs to $(pwd)/install relative to workdir = /build/cusz/install.
 # Runs the clone/build scripts via the same test.sh driver used below.
-# --keep is required here: without it test.sh would rm -rf /build/cuSZ (its
+# --keep is required here: without it test.sh would rm -rf /build/cusz (its
 # own OUT_DIR/TEST_NAME) before globbing scripts from that very directory.
 WORKDIR /build
-RUN bash test.sh /build /opt/scale "${GPU_ARCH}" cuSZ --match '-(clone|patch|build)' --keep
+RUN bash test.sh /build /opt/scale "${GPU_ARCH}" cusz --match '-(clone|patch|build)' --keep
 
 # ── test stage ─────────────────────────────────────────────────────────────
 # Runs only the test/benchmark scripts (matched by filename, not hardcoded)
@@ -44,7 +44,7 @@ ENV GPU_ARCH=${GPU_ARCH}
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
-ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" cuSZ --match '-(test|benchmark)' --keep"]
+ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" cusz --match '-(test|benchmark)' --keep"]
 
 # ── runtime stage ─────────────────────────────────────────────────────────────
 FROM ${SCALE_BASE_IMAGE}
@@ -55,11 +55,11 @@ ENV GPU_ARCH=${GPU_ARCH}
 ENV CUDA_PATH=/opt/scale
 
 # Copy the installed cusz binary and its shared libraries.
-COPY --from=build /build/cuSZ/install /build/cuSZ/install
+COPY --from=build /build/cusz/install /build/cusz/install
 
-ENV PATH="/opt/scale/bin:/build/cuSZ/install/bin:${PATH}"
+ENV PATH="/opt/scale/bin:/build/cusz/install/bin:${PATH}"
 # Both SCALE dirs are needed: targets/<arch>/lib has libredscale; lib64 has CUDA API libs.
-ENV LD_LIBRARY_PATH="/opt/scale/targets/${GPU_ARCH}/lib:/opt/scale/lib64:/build/cuSZ/install/lib"
+ENV LD_LIBRARY_PATH="/opt/scale/targets/${GPU_ARCH}/lib:/opt/scale/lib64:/build/cusz/install/lib"
 
 WORKDIR /work
 
