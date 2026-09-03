@@ -61,7 +61,8 @@ RUN bash test.sh /build /opt/scale "${GPU_ARCH}" fasteddy --match '-(clone|build
 FROM build AS test
 ARG GPU_ARCH=gfx1100
 ENV GPU_ARCH=${GPU_ARCH}
-# 02-benchmark-example.sh runs a real simulation via mpirun, renders plots from a
+# 02-benchmark-example.sh needs `time` (GNU time, /usr/bin/time -- not bash's
+# builtin) to time the mpirun simulation, runs it via mpirun, renders plots from a
 # Jupyter notebook (tutorials/notebooks/MAKE_FE_TUTORIAL_PLOTS.ipynb upstream, which
 # itself imports numpy/pandas/xarray/netCDF4/scipy/matplotlib), then compares each
 # plot's MSE against the bundled ref-1/ref-4 reference images via ImageMagick's
@@ -71,6 +72,7 @@ ENV GPU_ARCH=${GPU_ARCH}
 # the Forgejo Actions runner itself to report step completion
 # (https://github.com/nektos/act/issues/107), not by the test script.
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    time \
     imagemagick \
     python3 \
     python3-numpy \
