@@ -4,6 +4,11 @@ set -e
 
 SCRIPT_DIR="$(realpath "$(dirname "$0")")"
 
+# Add the __syncwarp() the CUDA model requires in the f32 tensor-core matmul kernels (mul_mat_f /
+# mul_mat_f_ids) and the MoE id-compaction helper (mm_ids_helper), which exchange data across warp
+# lanes through shared memory (warp-lockstep execution is not guaranteed).
+git -C llama.cpp apply "${SCRIPT_DIR}/mmf-warp-sync.patch"
+
 # Decode the MXFP4 (E8M0) and NVFP4 (UE4M3) block scales via the portable software path, so the
 # dequantized values are bit-identical to the CPU reference on every target.
 git -C llama.cpp apply "${SCRIPT_DIR}/fp4-scale-decode.patch"
