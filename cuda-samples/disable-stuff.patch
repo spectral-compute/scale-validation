@@ -11,8 +11,7 @@ index 7453475..8d60d66 100644
  add_subdirectory(simpleDrvRuntime)
  add_subdirectory(simpleHyperQ)
  add_subdirectory(simpleIPC)
--add_subdirectory(simpleLayeredTexture)
-+#add_subdirectory(simpleLayeredTexture)
+ add_subdirectory(simpleLayeredTexture)
  add_subdirectory(simpleMPI)
  add_subdirectory(simpleMultiCopy)
  add_subdirectory(simpleMultiGPU)
@@ -55,21 +54,6 @@ index 63cceff..e872d68 100644
  add_subdirectory(FunctionPointers)
  add_subdirectory(MC_EstimatePiInlineP)
  add_subdirectory(MC_EstimatePiInlineQ)
-@@ -25,8 +27,11 @@ add_subdirectory(scan)
- add_subdirectory(segmentationTreeThrust)
- add_subdirectory(shfl_scan)
- add_subdirectory(sortingNetworks)
--add_subdirectory(streamOrderedAllocation)
--add_subdirectory(streamOrderedAllocationIPC)
--add_subdirectory(streamOrderedAllocationP2P)
-+
-+# Stream ordered memory allocator.
-+#add_subdirectory(streamOrderedAllocation)
-+#add_subdirectory(streamOrderedAllocationIPC)
-+#add_subdirectory(streamOrderedAllocationP2P)
-+
- add_subdirectory(threadFenceReduction)
- add_subdirectory(threadMigration)
 diff --git a/Samples/3_CUDA_Features/CMakeLists.txt b/Samples/3_CUDA_Features/CMakeLists.txt
 index d7416b2..6d25558 100644
 --- a/Samples/3_CUDA_Features/CMakeLists.txt
@@ -152,22 +136,6 @@ diff --git a/Samples/5_Domain_Specific/CMakeLists.txt b/Samples/5_Domain_Specifi
 index 9ded8e5..d51cdbb 100644
 --- a/Samples/5_Domain_Specific/CMakeLists.txt
 +++ b/Samples/5_Domain_Specific/CMakeLists.txt
-@@ -17,9 +17,13 @@ add_subdirectory(dxtc)
- add_subdirectory(fastWalshTransform)
- add_subdirectory(fluidsGL)
- add_subdirectory(marchingCubes)
--add_subdirectory(nbody)
-+
-+# Graphics interop
-+#add_subdirectory(nbody)
- add_subdirectory(p2pBandwidthLatencyTest)
--add_subdirectory(postProcessGL)
-+
-+# OpenGL interop
-+#add_subdirectory(postProcessGL)
- add_subdirectory(quasirandomGenerator)
- add_subdirectory(quasirandomGenerator_nvrtc)
- add_subdirectory(recursiveGaussian)
 @@ -30,7 +34,11 @@ add_subdirectory(simpleGL)
  add_subdirectory(simpleVulkan)
  add_subdirectory(simpleVulkanMMAP)
