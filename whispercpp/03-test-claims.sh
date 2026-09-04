@@ -11,13 +11,15 @@ cd "whispercpp"
 bash ./models/download-ggml-model.sh tiny.en
 bash ./models/download-ggml-model.sh small.en
 
+# GPU inference has hung indefinitely under SCALE before (see caffe/03-test.sh); timeout
+# bounds each invocation to 5m instead of an unbounded hang.
 check_tiny_transcribes_jfk() {
-    ../build/bin/main -m ./models/ggml-tiny.en.bin -f samples/jfk.wav &> jfk_tiny.out \
+    timeout --kill-after=30s 5m ../build/bin/main -m ./models/ggml-tiny.en.bin -f samples/jfk.wav &> jfk_tiny.out \
         && grep -qi 'Americans' jfk_tiny.out
 }
 
 check_small_transcribes_jfk() {
-    ../build/bin/main -m ./models/ggml-small.en.bin -f samples/jfk.wav &> jfk_small.out \
+    timeout --kill-after=30s 5m ../build/bin/main -m ./models/ggml-small.en.bin -f samples/jfk.wav &> jfk_small.out \
         && grep -qi 'Americans' jfk_small.out
 }
 

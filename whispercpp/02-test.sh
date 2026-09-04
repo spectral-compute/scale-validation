@@ -22,9 +22,11 @@ wget -nv -O samples/mm1.wav https://data.spectralcompute.co.uk/whispercpp/mm0.wa
 # Like the `make base.en target`, except run the sample on the GPU build
 # That is ./main is cpu-only, ./build/bin/main is the gpu build
 
+# GPU inference has hung indefinitely under SCALE before (see caffe/03-test.sh); timeout
+# bounds each sample to 5m instead of an unbounded hang.
 for f in samples/*.wav; do
     echo "Processing $f..."
-    ../build/bin/main -m ./models/ggml-base.en.bin -f "$f" &> "$f.out"
+    timeout --kill-after=30s 5m ../build/bin/main -m ./models/ggml-base.en.bin -f "$f" &> "$f.out"
 done
 
 
