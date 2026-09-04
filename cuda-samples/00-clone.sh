@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -ETeuo pipefail
+SCRIPT_DIR="$(dirname "$(realpath $0)")"
 
 source "$(dirname "$0")"/../util/git.sh
 
