@@ -80,4 +80,4 @@ tensorflow-addons v0.10.0
 tensorflow-metadata v0.22.2
 tensorflow-datasets v3.1.0
 tensorflow-models v2.2.0
-ExtendedOpenDwarfs dcd0f15
+ExtendedOpenDwarfs 6e7f7dde106b429e427dc03c4bdf0d2047c4fbe6
