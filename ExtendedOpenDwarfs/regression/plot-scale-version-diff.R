@@ -2,231 +2,297 @@
 #
 # plot-scale-version-diff.R
 #
-# Compares SCALE's own measured runtime across two regression-fleet runs
-# (i.e. two different SCALE versions, or the same version at two
-# different points in time), independent of any comparison against
-# native toolchains. This is a separate question from
-# scale_vs_native_ratio_<metric>.csv (which run-regression-fleet.sh
-# already produces via plot_heatmap.R for every run, and which remains
-# the default/primary comparison): "is SCALE correct/fast relative to
-# nvcc/hipcc" vs "did this SCALE release change anything relative to the
-# last one" are different questions and are kept as separate outputs
-# rather than combined into one heatmap.
-#
-# Reuses each run's own scale_vs_native_ratio_<metric>.csv rather than
-# re-parsing raw LSB files -- that CSV already has the median SCALE
-# runtime per (benchmark, size, device, architecture), which is exactly
-# what's needed here. No dependency on lsb_common.R or the raw results/
-# directory at all.
+# Diffs SCALE's OWN measured runtime between two regression-fleet runs of
+# different SCALE versions (baseline vs candidate) -- distinct from, and
+# independent of, plot_heatmap.R's SCALE-vs-native comparison, which this
+# script does not touch or reproduce. Written to answer "did anything
+# regress between these two SCALE versions", for
+# compare-scale-versions.sh / run-regression-ci.sh's version-diff and both
+# modes -- both of which already call this script; it is not usually
+# invoked directly, but can be (see Usage) against any two existing
+# regression-runs/ directories without re-running the fleet.
 #
 # Usage:
-#   Rscript plot-scale-version-diff.R <run_dir_a> <run_dir_b> [out_dir] [--metric=kernel|total|both] [--label-a=X] [--label-b=Y]
+#   Rscript plot-scale-version-diff.R <baseline_run_dir> <candidate_run_dir> [--metric=total|kernel|runtime|auto]
 #
-# <run_dir_a> / <run_dir_b>: two regression-runs/<timestamp>-scale<version>
-#   directories, as produced by run-regression-fleet.sh. Order matters
-#   only for which side is "before" and which is "after" in the ratio
-#   (B / A) -- pass the older/baseline run as run_dir_a.
+# <baseline_run_dir> / <candidate_run_dir> are two
+# regression-runs/<timestamp>-scale<version>/ directories as produced by
+# run-regression-fleet.sh (each must contain a results/ subdirectory). The
+# SCALE version compared is parsed from each directory's own name (the
+# "-scale<version>" suffix) -- not passed as a separate argument -- so
+# both directories must follow that naming convention.
 #
-# [out_dir]: where to write outputs. Default: a new
-#   regression-runs/version-diff-<labelA>-vs-<labelB>/ directory,
-#   sibling to both run directories.
+# Cell value: median(candidate metric) / median(baseline metric), per
+# (benchmark, size, device, implementation).
+#   ratio < 1  -> candidate faster than baseline (improvement)
+#   ratio = 1  -> parity
+#   ratio > 1  -> candidate slower than baseline (regression)
 #
-# --metric: which metric's ratio CSV to diff (kernel, total, or both).
-#   Default: both, matching plot_heatmap.R's own default.
+# Metric selection: same semantics as plot_heatmap.R (--metric=total|kernel|runtime|auto,
+# default runs both kernel and total in one invocation). See that script's
+# own header for the detailed caveats on each metric choice, particularly
+# why "runtime" can understate real differences for stabilize-to-~2s
+# benchmarks -- unchanged here.
 #
-# --label-a / --label-b: override the version labels used in output
-#   filenames and plot titles. Default: auto-detected from each run
-#   directory's own "-scale<version>" suffix.
+# Only SCALE's own implementations (cuda/scale-nvidia, cuda/scale-amd) are
+# compared -- native toolchains (cuda/nvcc, hip/hipcc) are deliberately
+# excluded, since whether nvcc/hipcc itself changed between two SCALE
+# release checkouts isn't a SCALE regression question. If the underlying
+# system (driver, native compiler) changed between the two runs, that's a
+# separate question this script doesn't answer -- plot_heatmap.R's own
+# per-run native numbers are the place to look for that, one run at a
+# time.
+#
+# Output: nested under out_dir/<metric>/, one heatmap/CSV pair per
+# architecture present in the data:
+#   scale_version_diff_heatmap_nvidia.pdf / scale_version_diff_ratio_nvidia.csv
+#   scale_version_diff_heatmap_amd.pdf    / scale_version_diff_ratio_amd.csv
+#
+# out_dir is auto-derived as a sibling of both input directories:
+#   <parent-of-both>/version-diff-<baseline_version>-vs-<candidate_version>-<UTC timestamp>/
+# matching what run-regression-ci.sh's collation step
+# (copy_version_diff_heatmap()) already globs for by that exact naming
+# pattern -- if you change this naming, update that function too.
 #
 suppressPackageStartupMessages({
   library(ggplot2)
   library(dplyr)
-  library(readr)
   library(stringr)
   library(tidyr)
+  library(readr)
   library(scales)
 })
-
-log_msg <- function(fmt, ...) {
-  message(sprintf(paste0("[%s] ", fmt), format(Sys.time(), "%H:%M:%S"), ...))
+# Resolve this script's own directory the same way plot_heatmap.R and
+# plot_lsb.R do -- but unlike those two, this script does NOT live next
+# to lsb_common.R. compare-scale-versions.sh invokes this from
+# scale-validation/ExtendedOpenDwarfs/regression/ (see that script's own
+# header for why it lives there), whereas lsb_common.R lives in the
+# SEPARATE standalone EOD checkout's scripts/ directory (a sibling of
+# scale-validation itself) -- the same place plot_heatmap.R and
+# plot_lsb.R live. Mirror compare-scale-versions.sh's own EOD_REPO_ROOT
+# computation (three dirnames up from regression/, then into
+# ExtendedOpenDwarfs/scripts/) rather than assuming "next to me", which
+# would look in regression/ and fail to find it.
+.script_dir <- tryCatch({
+  file_arg <- grep("^--file=", commandArgs(trailingOnly = FALSE), value = TRUE)
+  if (length(file_arg) > 0) {
+    dirname(normalizePath(sub("^--file=", "", file_arg[1])))
+  } else {
+    getwd()
+  }
+}, error = function(e) getwd())
+.lsb_common_path <- file.path(
+  dirname(dirname(dirname(.script_dir))), "ExtendedOpenDwarfs", "scripts", "lsb_common.R"
+)
+if (!file.exists(.lsb_common_path)) {
+  stop(
+    "Could not find lsb_common.R at ", .lsb_common_path, " -- expected the standalone EOD checkout ",
+    "(sibling of scale-validation, holding plot_heatmap.R/plot_lsb.R/lsb_common.R) to live there, ",
+    "three directories above wherever this script (", .script_dir, ") itself lives. ",
+    "If either checkout has moved, update this path computation to match."
+  )
 }
+source(.lsb_common_path)
 
 args <- commandArgs(trailingOnly = TRUE)
-
+VALID_METRICS <- c("auto", "runtime", "total", "kernel")
+DEFAULT_METRICS <- c("kernel", "total")
 metric_flag <- str_match(args, "^--metric=(.+)$")[, 2]
 metric_flag <- metric_flag[!is.na(metric_flag)]
-requested_metric <- if (length(metric_flag) > 0) metric_flag[1] else "both"
-
-VALID_METRICS <- c("kernel", "total", "both")
-if (!(requested_metric %in% VALID_METRICS)) {
-  stop("Unknown --metric value: ", requested_metric, " (expected one of: ", paste(VALID_METRICS, collapse = ", "), ")")
-}
-metrics_to_run <- if (requested_metric == "both") c("kernel", "total") else requested_metric
-
-label_a_flag <- str_match(args, "^--label-a=(.+)$")[, 2]
-label_a_flag <- label_a_flag[!is.na(label_a_flag)]
-label_b_flag <- str_match(args, "^--label-b=(.+)$")[, 2]
-label_b_flag <- label_b_flag[!is.na(label_b_flag)]
-
-positional <- args[!str_detect(args, "^--(metric|label-a|label-b)=")]
-
-if (length(positional) < 2) {
-  stop("Usage: Rscript plot-scale-version-diff.R <run_dir_a> <run_dir_b> [out_dir] [--metric=kernel|total|both] [--label-a=X] [--label-b=Y]")
-}
-
-run_dir_a <- positional[[1]]
-run_dir_b <- positional[[2]]
-
-if (!dir.exists(run_dir_a)) stop("run_dir_a does not exist: ", run_dir_a)
-if (!dir.exists(run_dir_b)) stop("run_dir_b does not exist: ", run_dir_b)
-
-infer_label <- function(run_dir) {
-  m <- str_match(basename(run_dir), "-scale(.+)$")
-  if (!is.na(m[1, 2])) m[1, 2] else basename(run_dir)
-}
-
-label_a <- if (length(label_a_flag) > 0) label_a_flag[1] else infer_label(run_dir_a)
-label_b <- if (length(label_b_flag) > 0) label_b_flag[1] else infer_label(run_dir_b)
-
-if (label_a == label_b) {
-  log_msg("WARNING: both runs resolved to the same version label ('%s') -- pass --label-a/--label-b explicitly if these are genuinely different versions.", label_a)
-}
-
-out_dir <- if (length(positional) >= 3) {
-  positional[[3]]
+if (length(metric_flag) > 0) {
+  requested_metrics <- str_split(metric_flag[1], ",")[[1]]
 } else {
-  file.path(dirname(run_dir_a), paste0("version-diff-", label_a, "-vs-", label_b))
+  requested_metrics <- DEFAULT_METRICS
 }
-dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+bad_metrics <- setdiff(requested_metrics, VALID_METRICS)
+if (length(bad_metrics) > 0) {
+  stop(
+    "Unknown --metric value(s): ", paste(bad_metrics, collapse = ", "),
+    " (expected one or more of: ", paste(VALID_METRICS, collapse = ", "), ")"
+  )
+}
+positional <- args[!str_detect(args, "^--metric=")]
+if (length(positional) < 2) {
+  stop("Usage: Rscript plot-scale-version-diff.R <baseline_run_dir> <candidate_run_dir> [--metric=total|kernel|runtime|auto]")
+}
+baseline_run_dir <- normalizePath(positional[[1]])
+candidate_run_dir <- normalizePath(positional[[2]])
 
-log_msg("Comparing SCALE %s (a) vs SCALE %s (b)", label_a, label_b)
-log_msg("  run_dir_a: %s", run_dir_a)
-log_msg("  run_dir_b: %s", run_dir_b)
-log_msg("  out_dir:   %s", out_dir)
-
-architecture_labels <- list(nvidia = "NVIDIA", amd = "AMD")
-
-for (metric in metrics_to_run) {
-  csv_a <- file.path(run_dir_a, "plots", metric, paste0("scale_vs_native_ratio_", metric, ".csv"))
-  csv_b <- file.path(run_dir_b, "plots", metric, paste0("scale_vs_native_ratio_", metric, ".csv"))
-
-  if (!file.exists(csv_a)) {
-    log_msg("SKIPPING metric=%s: %s not found (did that run's heatmap step complete?)", metric, csv_a)
-    next
+extract_scale_version <- function(run_dir) {
+  m <- str_match(basename(run_dir), "-scale(.+)$")
+  if (is.na(m[1, 2])) {
+    stop(
+      "Could not parse a SCALE version out of directory name '", basename(run_dir),
+      "' -- expected it to end in '-scale<version>' (the naming run-regression-fleet.sh itself uses)."
+    )
   }
-  if (!file.exists(csv_b)) {
-    log_msg("SKIPPING metric=%s: %s not found (did that run's heatmap step complete?)", metric, csv_b)
-    next
-  }
+  m[1, 2]
+}
+baseline_version <- extract_scale_version(baseline_run_dir)
+candidate_version <- extract_scale_version(candidate_run_dir)
+log_msg(
+  "comparing SCALE %s (baseline: %s) vs SCALE %s (candidate: %s)",
+  baseline_version, baseline_run_dir, candidate_version, candidate_run_dir
+)
 
-  df_a <- read_csv(csv_a, show_col_types = FALSE) |>
-    select(benchmark, size, device, architecture, scale_implementation, scale_runtime_s) |>
-    rename(scale_runtime_s_a = scale_runtime_s, scale_implementation_a = scale_implementation)
+if (!identical(dirname(baseline_run_dir), dirname(candidate_run_dir))) {
+  log_msg(
+    "WARNING: baseline and candidate run directories are not siblings (%s vs %s) -- output will be written next to the baseline run",
+    dirname(baseline_run_dir), dirname(candidate_run_dir)
+  )
+}
+runs_root <- dirname(baseline_run_dir)
+timestamp <- format(Sys.time(), "%Y%m%dT%H%M%SZ", tz = "UTC")
+out_root <- file.path(runs_root, sprintf("version-diff-%s-vs-%s-%s", baseline_version, candidate_version, timestamp))
+dir.create(out_root, recursive = TRUE, showWarnings = FALSE)
+log_msg("writing output to %s", out_root)
 
-  df_b <- read_csv(csv_b, show_col_types = FALSE) |>
-    select(benchmark, size, device, architecture, scale_implementation, scale_runtime_s) |>
-    rename(scale_runtime_s_b = scale_runtime_s, scale_implementation_b = scale_implementation)
+baseline_results_dir <- file.path(baseline_run_dir, "results")
+candidate_results_dir <- file.path(candidate_run_dir, "results")
+if (!dir.exists(baseline_results_dir)) {
+  stop("No results/ directory under baseline run: ", baseline_run_dir)
+}
+if (!dir.exists(candidate_results_dir)) {
+  stop("No results/ directory under candidate run: ", candidate_run_dir)
+}
 
-  joined <- full_join(df_a, df_b, by = c("benchmark", "size", "device", "architecture"))
+df_baseline <- read_lsb_cached(baseline_results_dir) |> mutate(role = "baseline")
+df_candidate <- read_lsb_cached(candidate_results_dir) |> mutate(role = "candidate")
+df <- bind_rows(df_baseline, df_candidate)
+log_msg(
+  "loaded %s rows total (baseline=%s, candidate=%s)",
+  comma(nrow(df)), comma(nrow(df_baseline)), comma(nrow(df_candidate))
+)
 
-  mismatched_impl <- joined |>
-    filter(!is.na(scale_implementation_a), !is.na(scale_implementation_b), scale_implementation_a != scale_implementation_b)
+# Only SCALE's own implementations -- see file header for why native
+# toolchains are excluded here.
+SCALE_IMPLS <- c(
+  "cuda/scale-nvidia" = "nvidia",
+  "cuda/scale-amd" = "amd"
+)
+df <- df |>
+  filter(implementation %in% names(SCALE_IMPLS)) |>
+  mutate(architecture = unname(SCALE_IMPLS[implementation]))
+if (nrow(df) == 0) {
+  stop("No cuda/scale-nvidia or cuda/scale-amd rows found in either run -- nothing to diff.")
+}
 
-  if (nrow(mismatched_impl) > 0) {
-    log_msg("WARNING metric=%s: %d row(s) have a different SCALE implementation name between the two runs (e.g. cuda/scale-nvidia vs cuda/scale-amd) for the same benchmark/size/device/architecture -- check for a device-labeling mixup before trusting this comparison:", metric, nrow(mismatched_impl))
-    for (i in seq_len(min(nrow(mismatched_impl), 10))) {
-      row <- mismatched_impl[i, ]
-      log_msg("  %s / %s / %s / %s: a=%s b=%s", row$architecture, row$benchmark, row$size, row$device, row$scale_implementation_a, row$scale_implementation_b)
+run_for_metric <- function(metric, df, out_root) {
+  if (metric == "auto") {
+    runtime_coverage_df <- df |>
+      distinct(role, benchmark, size, device, implementation, run, runtime_s)
+    frac_with_runtime <- mean(!is.na(runtime_coverage_df$runtime_s))
+    if (frac_with_runtime >= 0.5) {
+      metric <- "runtime"
+    } else {
+      metric <- "total"
+      log_msg(
+        "auto metric: only %.0f%% of configs have a '# Runtime:' header -- falling back to metric=total. Pass --metric=runtime or --metric=kernel to override.",
+        100 * frac_with_runtime
+      )
     }
   }
-
-  missing <- joined |> filter(is.na(scale_runtime_s_a) | is.na(scale_runtime_s_b))
-  if (nrow(missing) > 0) {
-    log_msg(
-      "%d (architecture, benchmark, size, device) combination(s) present in only one run -- skipped:",
-      nrow(missing)
+  out_dir <- file.path(out_root, metric)
+  dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+  log_msg("--- metric=%s: writing outputs to %s ---", metric, out_dir)
+  if (metric == "runtime") {
+    runtime_df <- df |>
+      distinct(role, benchmark, size, device, implementation, architecture, run, runtime_s) |>
+      filter(!is.na(runtime_s))
+  } else {
+    region_filter <- df
+    if (metric == "kernel") {
+      region_filter <- df |> filter(region_class == "Kernel")
+    }
+    # Same per-region, per-repeat normalisation as plot_heatmap.R: divide
+    # each region's summed time by its own repeat count BEFORE summing
+    # across regions, so a stabilize-to-~2s region doesn't get compared
+    # against a non-repeating region on unequal footing.
+    runtime_df <- region_filter |>
+      mutate(time_us_per_repeat = total_time_us / n_repeats) |>
+      group_by(role, benchmark, size, device, implementation, architecture, run) |>
+      summarise(runtime_s = sum(time_us_per_repeat) / 1e6, .groups = "drop")
+  }
+  if (nrow(runtime_df) == 0) {
+    log_msg("SKIPPING metric=%s: no data found for cuda/scale-nvidia or cuda/scale-amd.", metric)
+    return(invisible(NULL))
+  }
+  median_runtime <- runtime_df |>
+    group_by(role, benchmark, size, device, implementation, architecture) |>
+    summarise(runtime_s = median(runtime_s), n_runs = n(), .groups = "drop")
+  wide_df <- median_runtime |>
+    select(role, benchmark, size, device, implementation, architecture, runtime_s, n_runs) |>
+    pivot_wider(
+      names_from = role,
+      values_from = c(runtime_s, n_runs),
+      names_glue = "{role}_{.value}"
     )
-    for (i in seq_len(min(nrow(missing), 20))) {
-      row <- missing[i, ]
+  missing_pairs <- wide_df |>
+    filter(is.na(baseline_runtime_s) | is.na(candidate_runtime_s))
+  if (nrow(missing_pairs) > 0) {
+    log_msg(
+      "%d (architecture, benchmark, size, device) combination(s) only ran on one side -- skipped:",
+      nrow(missing_pairs)
+    )
+    for (i in seq_len(min(nrow(missing_pairs), 20))) {
+      row <- missing_pairs[i, ]
       log_msg(
         "  missing %s: %s / %s / %s / %s",
-        ifelse(is.na(row$scale_runtime_s_a), paste0("from ", label_a), paste0("from ", label_b)),
+        ifelse(is.na(row$baseline_runtime_s), "baseline", "candidate"),
         row$architecture, row$benchmark, row$size, row$device
       )
     }
-    if (nrow(missing) > 20) log_msg("  ... and %d more", nrow(missing) - 20)
-  }
-
-  diff_df <- joined |>
-    filter(!is.na(scale_runtime_s_a), !is.na(scale_runtime_s_b)) |>
-    mutate(
-      ratio = scale_runtime_s_b / scale_runtime_s_a,
-      log2_ratio = log2(ratio)
-    )
-
-  if (nrow(diff_df) == 0) {
-    log_msg("SKIPPING metric=%s: no (benchmark, size, device) combination present in both runs.", metric)
-    next
-  }
-
-  metric_out_dir <- file.path(out_dir, metric)
-  dir.create(metric_out_dir, recursive = TRUE, showWarnings = FALSE)
-
-  csv_out <- file.path(metric_out_dir, paste0("scale_version_diff_", metric, ".csv"))
-  write_csv(diff_df, csv_out)
-  log_msg("wrote diff table: %s (%d rows)", csv_out, nrow(diff_df))
-
-  max_abs_log2 <- max(abs(diff_df$log2_ratio), na.rm = TRUE)
-  colour_limit <- max(max_abs_log2, 0.1)
-
-  metric_label <- switch(metric,
-    kernel = "kernel-region time",
-    total = "total measured region time"
-  )
-
-  for (arch in names(architecture_labels)) {
-    arch_df <- diff_df |> filter(architecture == arch)
-    if (nrow(arch_df) == 0) {
-      log_msg("skipping %s heatmap: no data for this architecture", arch)
-      next
+    if (nrow(missing_pairs) > 20) {
+      log_msg("  ... and %d more", nrow(missing_pairs) - 20)
     }
-
-    arch_label <- architecture_labels[[arch]]
+  }
+  paired_df <- wide_df |>
+    filter(!is.na(baseline_runtime_s), !is.na(candidate_runtime_s)) |>
+    mutate(ratio = candidate_runtime_s / baseline_runtime_s, log2_ratio = log2(ratio))
+  if (nrow(paired_df) == 0) {
+    log_msg("SKIPPING metric=%s: no complete baseline/candidate pairs.", metric)
+    return(invisible(NULL))
+  }
+  for (arch in sort(unique(paired_df$architecture))) {
+    arch_df <- paired_df |> filter(architecture == arch)
+    csv_path <- file.path(out_dir, sprintf("scale_version_diff_ratio_%s.csv", arch))
+    write_csv(arch_df, csv_path)
+    log_msg("wrote %s (%d rows)", csv_path, nrow(arch_df))
     n_devices <- n_distinct(arch_df$device)
-    n_benchmarks <- n_distinct(arch_df$benchmark)
-
-    p <- ggplot(arch_df, aes(x = device, y = benchmark, fill = log2_ratio)) +
-      geom_tile(colour = "white", linewidth = 0.4) +
-      geom_text(aes(label = paste0(number(ratio, accuracy = 0.01), "x")), size = 3, colour = "black") +
-      facet_wrap(~size, nrow = 1, labeller = labeller(size = str_to_title)) +
+    n_rows_facet <- n_distinct(paste(arch_df$benchmark, arch_df$size))
+    plot_width <- max(6, 1.1 * n_devices + 2.5)
+    plot_height <- max(5, 0.3 * n_rows_facet + 2)
+    max_abs_log2 <- max(abs(arch_df$log2_ratio), na.rm = TRUE)
+    heatmap_plot <- ggplot(
+      arch_df,
+      aes(x = device, y = interaction(size, benchmark, sep = " / "), fill = log2_ratio)
+    ) +
+      geom_tile(colour = "white") +
+      geom_text(aes(label = sprintf("%.2fx", ratio)), size = 2.6) +
       scale_fill_gradient2(
-        low = "#1F77B4",
-        mid = "white",
-        high = "#D62728",
-        midpoint = 0,
-        limits = c(-colour_limit, colour_limit),
-        breaks = c(-colour_limit, 0, colour_limit),
-        labels = c(paste0(label_b, " faster"), "no change", paste0(label_b, " slower")),
-        name = NULL
-      ) +
-      theme_bw(base_size = 13) +
-      theme(
-        axis.text.x = element_text(angle = 40, hjust = 1),
-        panel.grid = element_blank(),
-        legend.position = "bottom",
-        legend.key.width = unit(2.2, "cm")
+        low = "#1F77B4", mid = "white", high = "#D62728", midpoint = 0,
+        limits = c(-max_abs_log2, max_abs_log2),
+        name = "log2(candidate / baseline)"
       ) +
       labs(
-        x = NULL,
+        x = "Device",
         y = NULL,
-        title = paste0("SCALE ", label_a, " vs ", label_b, " (", arch_label, "): ", metric_label),
-        subtitle = paste0("Cell = median(SCALE ", label_b, " ", metric_label, ") / median(SCALE ", label_a, " ", metric_label, ")")
-      )
-
-    out_path <- file.path(metric_out_dir, paste0("scale_version_diff_heatmap_", arch, "_", metric, ".pdf"))
-    ggsave(out_path, p, width = max(6, 2.4 * n_devices + 2), height = max(3, 0.55 * n_benchmarks + 2), limitsize = FALSE)
-    log_msg("wrote %s heatmap: %s (%d benchmark(s), %d device(s))", arch_label, out_path, n_benchmarks, n_devices)
+        title = sprintf(
+          "SCALE %s vs %s (%s) -- %s",
+          candidate_version, baseline_version, toupper(arch), metric
+        ),
+        subtitle = "ratio > 1 (red) = candidate slower than baseline; < 1 (blue) = candidate faster"
+      ) +
+      theme_bw(base_size = 11) +
+      theme(axis.text.x = element_text(angle = 30, hjust = 1))
+    pdf_path <- file.path(out_dir, sprintf("scale_version_diff_heatmap_%s.pdf", arch))
+    ggsave(pdf_path, heatmap_plot, width = plot_width, height = plot_height, limitsize = FALSE)
+    log_msg("wrote %s", pdf_path)
   }
+  invisible(NULL)
 }
 
-message("Done. Wrote version-diff outputs under: ", out_dir)
+for (m in requested_metrics) {
+  run_for_metric(m, df, out_root)
+}
+message("Wrote version-diff outputs to: ", out_root)
