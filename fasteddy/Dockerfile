@@ -68,9 +68,7 @@ ENV GPU_ARCH=${GPU_ARCH}
 # plot's MSE against the bundled ref-1/ref-4 reference images via ImageMagick's
 # `compare` and python3, exiting 1 if any comparison exceeds its threshold. None of
 # this is needed by the runtime stage, so it's added here only, same as
-# nvflip/cycles add their own test-only imagemagick/python3. curl is needed by
-# the Forgejo Actions runner itself to report step completion
-# (https://github.com/nektos/act/issues/107), not by the test script.
+# nvflip/cycles add their own test-only imagemagick/python3.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     time \
     imagemagick \
@@ -85,7 +83,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-nbclient \
     python3-nbformat \
     python3-ipykernel \
-    curl \
     && rm -rf /var/lib/apt/lists/*
 ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" fasteddy --match '-(test|benchmark)' --keep"]
 

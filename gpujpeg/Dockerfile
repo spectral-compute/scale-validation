@@ -40,14 +40,11 @@ ENV GPU_ARCH=${GPU_ARCH}
 # 03-test.sh's ctest run includes upstream's own colors/test_common.sh, which
 # needs ffmpeg. 04-test-claims.sh's PSNR check needs python3, and derives
 # interop JPEGs with ImageMagick's `convert` (same packages the parity checks
-# in cycles/nvflip need). curl is needed by the Forgejo Actions runner itself
-# to report step completion (https://github.com/nektos/act/issues/107), not by
-# either test script.
+# in cycles/nvflip need).
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     imagemagick \
     python3 \
-    curl \
     && rm -rf /var/lib/apt/lists/*
 ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" gpujpeg --match '-(test|benchmark)' --keep"]
 

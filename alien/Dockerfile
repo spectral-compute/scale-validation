@@ -7,8 +7,7 @@ SHELL ["/bin/bash", "-c"]
 ARG GPU_ARCH=gfx1100
 
 # curl is needed by vcpkg's own bootstrap script (invoked transitively via
-# alien's CMakeLists.txt during the build step below), not just by the
-# Forgejo Actions runner's step-completion reporting in the test stage.
+# alien's CMakeLists.txt during the build step below).
 RUN apt-get update && apt-get install -y --no-install-recommends \
     cmake \
     curl \
@@ -46,9 +45,6 @@ RUN bash test.sh /build /opt/scale "${GPU_ARCH}" alien --match '-(clone|patch|bu
 FROM build AS test
 ARG GPU_ARCH=gfx1100
 ENV GPU_ARCH=${GPU_ARCH}
-# curl (needed by the Forgejo Actions runner itself to report step completion,
-# https://github.com/nektos/act/issues/107) is already installed in the build
-# stage above for vcpkg's bootstrap script, so nothing to add here.
 ENTRYPOINT ["/bin/bash", "-c", "exec bash /build/test.sh /build /opt/scale \"$GPU_ARCH\" alien --match '-(test|benchmark)' --keep"]
 
 # ── runtime stage ─────────────────────────────────────────────────────────────
