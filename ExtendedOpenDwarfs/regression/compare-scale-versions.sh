@@ -41,6 +41,15 @@ shift 2
 for kv in "$@"; do
 	export "${kv?}"
 done
+# A version-diff only ever compares SCALE's own runtime between the two
+# versions under test (see plot-scale-version-diff.R, which explicitly
+# excludes native toolchains) -- native (nvcc/hipcc) builds are out of
+# scope for both fleet runs this script makes, not just extra work.
+# Forced on by default (rather than a flat, unconditional export) so an
+# explicit NAME=value pair above can still override it back to 0 if a
+# caller genuinely wants native results out of a version-diff run too.
+: "${EOD_REGRESSION_SCALE_ONLY:=1}"
+export EOD_REGRESSION_SCALE_ONLY
 run_fleet() {
 	local version="$1"
 	local role="$2"   # "baseline" (version_a) or "candidate" (version_b)
