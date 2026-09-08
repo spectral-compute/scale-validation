@@ -181,6 +181,20 @@
 #       Override to e.g. SIZE=tiny ITERS=1 for a fast smoke-test run
 #       rather than a full release sweep.
 #
+#   EOD_REGRESSION_SCALE_ONLY
+#       1 to skip every native (nvcc/hipcc) case in
+#       run_scale_eod_regression.sh on every host, running only
+#       scale-nvidia/scale-amd. Default: 0 (run both, for the normal
+#       SCALE-vs-native heatmap via plot_heatmap.R). compare-scale-versions.sh
+#       forces this to 1 for both of its fleet runs -- a version-diff only
+#       ever compares SCALE's own runtime between two versions
+#       (plot-scale-version-diff.R explicitly excludes native toolchains),
+#       so native builds there are pure waste at best, and at worst a
+#       native-only bug (e.g. a broken hipcc build) can abort the whole
+#       per-host script before it ever reaches the scale-nvidia/scale-amd
+#       case that actually matters, since run_scale_eod_regression.sh runs
+#       under `set -e`.
+#
 #   EOD_REGRESSION_SKIP_RUN
 #       1 to skip the clone/sync, SCALE-install-check, and build+run steps
 #       entirely, and just re-collect + re-plot from whatever results/
@@ -219,6 +233,7 @@ read -r -a REMOTE_TARGETS <<< "$EOD_REGRESSION_REMOTE_TARGETS"
 : "${EOD_REGRESSION_SIZE:=all}"
 : "${EOD_REGRESSION_ITERS:=5}"
 : "${EOD_REGRESSION_SKIP_RUN:=0}"
+: "${EOD_REGRESSION_SCALE_ONLY:=0}"
 : "${EOD_REGRESSION_METRIC:=}"
 : "${EOD_REGRESSION_LOCAL_SCALE_BUILD:=}"
 if [[ -n "$EOD_REGRESSION_LOCAL_SCALE_BUILD" ]]; then
@@ -323,7 +338,7 @@ LOCAL_RESULTS_BASE="${RUN_DIR}/results"
 LOG_DIR="${RUN_DIR}/logs"
 PLOTS_DIR="${RUN_DIR}/plots"
 mkdir -p "$LOCAL_RESULTS_BASE" "$LOG_DIR" "$PLOTS_DIR"
-RUN_ENV_PREFIX="APP=${EOD_REGRESSION_APP} SIZE=${EOD_REGRESSION_SIZE} ITERS=${EOD_REGRESSION_ITERS}"
+RUN_ENV_PREFIX="APP=${EOD_REGRESSION_APP} SIZE=${EOD_REGRESSION_SIZE} ITERS=${EOD_REGRESSION_ITERS} SCALE_ONLY=${EOD_REGRESSION_SCALE_ONLY}"
 SV_CHECKOUT_DIR="${EOD_REGRESSION_WORKDIR}/scale-validation"
 # Nested EOD checkout that scale-validation's own 00-clone.sh creates.
 EOD_NESTED_DIR="${SV_CHECKOUT_DIR}/ExtendedOpenDwarfs/ExtendedOpenDwarfs"

@@ -69,10 +69,20 @@ ci:
 		exit 1; \
 	fi
 	@if ! echo "$(VERSION)" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$$' && [ -z "$$EOD_REGRESSION_LOCAL_SCALE_BUILD" ]; then \
-		echo "error: VERSION='$(VERSION)' doesn't look like a published SCALE release (expected e.g. 1.7.2)." >&2; \
-		echo "       ensure-scale.sh can only download real releases -- for a local/dev build, also set" >&2; \
-		echo "       EOD_REGRESSION_LOCAL_SCALE_BUILD=/path/to/that/build (it only ever applies to the" >&2; \
-		echo "       candidate side of a version-diff, never the baseline -- see compare-scale-versions.sh)." >&2; \
+		if echo "$(VERSION)" | grep -q '/'; then \
+			echo "error: VERSION='$(VERSION)' looks like a path, not a version label." >&2; \
+			echo "       VERSION is only ever a NAME -- used to label this run's output directory and plot" >&2; \
+			echo "       titles -- it is never treated as a filesystem path, even if it looks like one." >&2; \
+			echo "       To test a local/compiled build, keep VERSION a short label and separately point" >&2; \
+			echo "       EOD_REGRESSION_LOCAL_SCALE_BUILD at the build directory itself (which must contain" >&2; \
+			echo "       bin/scaleenv, the same layout a downloaded release has):" >&2; \
+			echo "         make ci-release VERSION=1.7.3-rc BASELINE=$(BASELINE) EOD_REGRESSION_LOCAL_SCALE_BUILD=$(VERSION)" >&2; \
+		else \
+			echo "error: VERSION='$(VERSION)' doesn't look like a published SCALE release (expected e.g. 1.7.2)." >&2; \
+			echo "       ensure-scale.sh can only download real releases -- for a local/dev build, also set" >&2; \
+			echo "       EOD_REGRESSION_LOCAL_SCALE_BUILD=/path/to/that/build (it only ever applies to the" >&2; \
+			echo "       candidate side of a version-diff, never the baseline -- see compare-scale-versions.sh)." >&2; \
+		fi; \
 		exit 1; \
 	fi
 	./run-regression-ci.sh $(MODE) $(VERSION) $(BASELINE)
