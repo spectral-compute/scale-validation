@@ -617,19 +617,36 @@ done
 # ---------------------------------------------------------------------------
 # Generate the heatmap. plot_heatmap.R (and its lsb_common.R dependency)
 # only ever runs locally -- keep it alongside this script.
+#
+# Skipped entirely when EOD_REGRESSION_SCALE_ONLY=1: that mode deliberately
+# collects zero native (nvcc/hipcc) rows (see run_scale_eod_regression.sh's
+# run_case), so plot_heatmap.R's native-vs-scale comparison has nothing to
+# compare -- its wide-format pivot never produces a `native_runtime_s`
+# column at all in that case, and the script hard-crashes with "object
+# 'native_runtime_s' not found" rather than silently producing an empty/
+# partial heatmap. Confirmed live on a SCALE_ONLY=1 run via
+# compare-scale-versions.sh (benzar: OK, 7240 rows, 1 implementation only)
+# -- plots/ was left empty because the crash happened before writing
+# anything for either metric. A SCALE-vs-native comparison is meaningless
+# for this mode anyway (see plot-scale-version-diff.R, which is the actual
+# comparison compare-scale-versions.sh cares about for these runs), so skip
+# it rather than patch plot_heatmap.R to tolerate an all-scale dataset.
 # ---------------------------------------------------------------------------
-log "==> Generating heatmap"
-PLOT_ARGS=("$LOCAL_RESULTS_BASE" "$PLOTS_DIR" --force-reparse)
-if [[ -n "$EOD_REGRESSION_METRIC" ]]; then
-	PLOT_ARGS+=("--metric=${EOD_REGRESSION_METRIC}")
-fi
 HEATMAP_OK=1
-if command -v pixi >/dev/null 2>&1; then
+if [[ "$EOD_REGRESSION_SCALE_ONLY" == "1" ]]; then
+	log "==> Skipping heatmap generation (EOD_REGRESSION_SCALE_ONLY=1 -- no native data collected, plot_heatmap.R's native-vs-scale comparison doesn't apply here)"
+elif command -v pixi >/dev/null 2>&1; then
+	log "==> Generating heatmap"
+	PLOT_ARGS=("$LOCAL_RESULTS_BASE" "$PLOTS_DIR" --force-reparse)
+	if [[ -n "$EOD_REGRESSION_METRIC" ]]; then
+		PLOT_ARGS+=("--metric=${EOD_REGRESSION_METRIC}")
+	fi
 	if ! (cd "$EOD_REPO_ROOT" && pixi run Rscript "$EOD_REGRESSION_PLOT_HEATMAP_SCRIPT" "${PLOT_ARGS[@]}") 2>&1 | tee "${LOG_DIR}/plot_heatmap.log"; then
 		log "WARNING: heatmap generation failed or exited non-zero -- see ${LOG_DIR}/plot_heatmap.log"
 		HEATMAP_OK=0
 	fi
 else
+	log "==> Generating heatmap"
 	log "WARNING: pixi unavailable -- skipping heatmap generation (EOD_REGRESSION_SKIP_PLOT=1 was set)"
 	HEATMAP_OK=0
 fi
