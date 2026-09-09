@@ -25,8 +25,27 @@
 # directory, and runs plot_heatmap.R against the combined dataset to
 # produce the SCALE-vs-native heatmap.
 #
-# Hosts are all Spectral Compute machines (trill, benzar, epsilon, beta,
-# andoria, risa) -- ExCL is intentionally excluded. Each host has its own
+# Hosts are all Spectral Compute machines (trill, benzar, risa; andoria
+# temporarily excluded, see below) -- ExCL is intentionally excluded.
+# "Jon's cluster" (alpha, beta, delta, epsilon, gamma, sparta) was
+# permanently decommissioned 2026-09-08 (Jon left the company; confirmed
+# by infrastructure admin) and removed from this fleet entirely -- their
+# case blocks in scripts/run_scale_eod_regression.sh were deleted
+# outright, not left in as unreachable/best-effort. This SUPERSEDES the
+# earlier beta/epsilon-unreachable network investigation in the
+# regression-gaps history: that routing fault was a symptom of these
+# boxes already being gone, not a fixable network bug -- no further infra
+# action needed there.
+#
+# andoria is TEMPORARILY excluded from EOD_REGRESSION_REMOTE_TARGETS as of
+# 2026-09-09: some of Jon's decommissioned GPUs (a gfx900 + a gfx1030)
+# were physically installed into it, and it's now refusing SSH
+# (`Connection refused`, not `timed out` -- the host answers, nothing's
+# listening on 22, most likely still mid-reboot/POST from the hardware
+# change). Re-add it to EOD_REGRESSION_REMOTE_TARGETS once Beau has
+# physically confirmed the machine is back up and its GPU inventory has
+# been reassessed -- do not just re-add it speculatively.
+# Each host has its own
 # independent filesystem (no shared NFS between them), so there is no lock
 # contention or shared-state risk running every host's sweep at the same
 # time; this script launches all of them as background jobs in parallel
@@ -107,7 +126,9 @@
 #       Space-separated list of ssh destinations to farm the sweep out to.
 #       Plain hostnames by default -- no username is prepended, so ssh
 #       resolves it the normal way (current user, or ~/.ssh/config).
-#       Default: "benzar epsilon beta andoria risa"
+#       Default: "benzar andoria" (epsilon/beta removed 2026-09-08 --
+#       decommissioned along with the rest of Jon's cluster, not merely
+#       unreachable; risa still omitted, same hardware as trill)
 #
 #   EOD_REGRESSION_RUN_LOCAL
 #       1 to also run the sweep on the machine invoking this script (e.g.
@@ -221,7 +242,7 @@ SCALE_VALIDATION_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 # ${VAR+x} is true even for an explicitly-empty string, so only a
 # genuinely unset var gets the default here; an explicit "" is honored.
 if [[ -z "${EOD_REGRESSION_REMOTE_TARGETS+x}" ]]; then
-	EOD_REGRESSION_REMOTE_TARGETS="benzar epsilon beta andoria"  # risa omitted: it has the same hardware as trill
+	EOD_REGRESSION_REMOTE_TARGETS="benzar"  # epsilon/beta decommissioned 2026-09-08 (Jon's cluster); risa omitted: same hardware as trill; andoria excluded 2026-09-09 pending physical reassessment (unreachable -- SSH connection refused -- after new GPUs were installed; see run_scale_eod_regression.sh's andoria) case for details)
 fi
 read -r -a REMOTE_TARGETS <<< "$EOD_REGRESSION_REMOTE_TARGETS"
 : "${EOD_REGRESSION_RUN_LOCAL:=1}"
