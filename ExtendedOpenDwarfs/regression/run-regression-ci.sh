@@ -53,6 +53,14 @@
 # TARGETS, etc. -- exactly like compare-scale-versions.sh's own
 # passthrough (which this script defers to for version-diff/both).
 #
+# Plot titles/filenames for mode=version-diff or mode=both use <baseline>
+# and <version> themselves as the display labels by default -- i.e.
+# exactly the two values passed into this command. Override either with
+# EOD_REGRESSION_BASELINE_LABEL / EOD_REGRESSION_CANDIDATE_LABEL (same
+# passthrough mechanism as above) when the version label used for
+# directory lookup isn't the label you want shown -- e.g. a generic
+# "1.7.3-rc" for a specific nightly build's own commit identifier.
+#
 # Examples:
 #   # Nightly: does 1.7.2 still look reasonable against native toolchains?
 #   ./run-regression-ci.sh native 1.7.2
@@ -177,8 +185,19 @@ if [[ "$MODE" == "native" ]]; then
 		exit 1
 	fi
 else
-	echo "=== run-regression-ci.sh: running compare-scale-versions.sh for ${BASELINE} vs ${VERSION} ===" >&2
-	"${SCRIPT_DIR}/compare-scale-versions.sh" "$BASELINE" "$VERSION"
+	# Default the display label to the version string actually passed
+	# into this command -- BASELINE/VERSION are what the caller gave us,
+	# so that's what shows up in plot titles/filenames unless explicitly
+	# overridden below. This is passed through explicitly (rather than
+	# relying on plot-scale-version-diff.R's own fallback-to-parsed-
+	# directory-name default, which happens to produce the same result)
+	# so the same override knob works through this CI entry point too,
+	# not only via compare-scale-versions.sh's own --replot/direct calls.
+	BASELINE_LABEL="${EOD_REGRESSION_BASELINE_LABEL:-$BASELINE}"
+	CANDIDATE_LABEL="${EOD_REGRESSION_CANDIDATE_LABEL:-$VERSION}"
+	echo "=== run-regression-ci.sh: running compare-scale-versions.sh for ${BASELINE} vs ${VERSION} (labels: ${BASELINE_LABEL} vs ${CANDIDATE_LABEL}) ===" >&2
+	"${SCRIPT_DIR}/compare-scale-versions.sh" "$BASELINE" "$VERSION" \
+		"--baseline-label=${BASELINE_LABEL}" "--candidate-label=${CANDIDATE_LABEL}"
 	RUN_DIR_BASELINE="$(find_run_dir "$BASELINE")"
 	RUN_DIR_VERSION="$(find_run_dir "$VERSION")"
 	if [[ -z "$RUN_DIR_BASELINE" || -z "$RUN_DIR_VERSION" ]]; then
@@ -222,19 +241,46 @@ copy_version_diff_heatmap() {
 		return 1
 	fi
 	local found=0
+	# Whole-benchmark heatmap/CSV (one per metric subdirectory, e.g.
+	# kernel/, total/) -- unchanged from before.
 	for metric_dir in "${diff_dir}"/*/; do
 		[[ -d "$metric_dir" ]] || continue
+		[[ "$(basename "$metric_dir")" == "by-region" ]] && continue
 		for f in "${metric_dir}"scale_version_diff_heatmap_*.pdf "${metric_dir}"scale_version_diff_*.csv; do
 			[[ -e "$f" ]] || continue
 			cp "$f" "$dest/"
 			found=1
 		done
 	done
+	# Per-region heatmap/CSV (plot-scale-version-diff-by-region.R) -- has
+	# its own nested per-architecture structure (by-region/<arch>/<bench>_region_diff.pdf),
+	# so copy the whole subtree rather than flattening it like above.
+	if [[ -d "${diff_dir}/by-region" ]]; then
+		cp -r "${diff_dir}/by-region" "${dest}/by-region"
+		found=1
+	fi
 	if [[ "$found" == "0" ]]; then
 		echo "WARNING: no scale_version_diff_* outputs found under ${diff_dir}" >&2
 		return 1
 	fi
 	echo "$diff_dir"
+}
+
+# Archived full box-and-whisker plot set (plot_lsb.R, via
+# compare-scale-versions.sh's archive_full_plots()) lives alongside each
+# raw run directory itself as <run_dir>/plots-full/, not under the
+# version-diff output directory above -- see that script's own header for
+# why. Copy both sides' archives in here too so a CI artifact-upload step
+# doesn't need to separately discover the raw timestamped run
+# directories.
+copy_full_plots() {
+	local run_dir="$1" dest="$2"
+	if [[ ! -d "${run_dir}/plots-full" ]]; then
+		echo "WARNING: no plots-full/ found under ${run_dir} -- was archive_full_plots() run for this side?" >&2
+		return 1
+	fi
+	mkdir -p "$dest"
+	cp -r "${run_dir}/plots-full/." "$dest/"
 }
 
 OVERALL_OK=1
@@ -256,13 +302,18 @@ fi
 if [[ "$MODE" == "version-diff" || "$MODE" == "both" ]]; then
 	echo "--- collating version diff for ${BASELINE} vs ${VERSION} ---" >&2
 	if diff_dir="$(copy_version_diff_heatmap "$BASELINE" "$VERSION" "${CI_OUT_DIR}/version-diff")"; then
+		copy_full_plots "$RUN_DIR_BASELINE" "${CI_OUT_DIR}/version-diff/plots-full/baseline" || true
+		copy_full_plots "$RUN_DIR_VERSION" "${CI_OUT_DIR}/version-diff/plots-full/candidate" || true
 		{
 			echo
 			echo "## Version regression (SCALE ${BASELINE} -> ${VERSION})"
 			echo "- Baseline run: ${RUN_DIR_BASELINE}"
 			echo "- Candidate run: ${RUN_DIR_VERSION}"
 			echo "- Diff run: ${diff_dir}"
-			echo "- Artifacts: version-diff/"
+			echo "- Artifacts: version-diff/ (whole-benchmark + by-region/), version-diff/plots-full/{baseline,candidate}/ (full box-and-whisker archive)"
+			if [[ "$BASELINE_LABEL" != "$BASELINE" || "$CANDIDATE_LABEL" != "$VERSION" ]]; then
+				echo "- Plot labels: ${BASELINE_LABEL} vs ${CANDIDATE_LABEL} (overridden from the raw ${BASELINE}/${VERSION} version strings)"
+			fi
 		} >> "$SUMMARY"
 	else
 		OVERALL_OK=0
