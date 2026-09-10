@@ -13,7 +13,23 @@
 # regression-runs/ directories without re-running the fleet.
 #
 # Usage:
-#   Rscript plot-scale-version-diff.R <baseline_run_dir> <candidate_run_dir> [--metric=total|kernel|runtime|auto]
+#   Rscript plot-scale-version-diff.R <baseline_run_dir> <candidate_run_dir> \
+#       [--metric=total|kernel|runtime|auto] [--out-dir=<path>] \
+#       [--baseline-label=<text>] [--candidate-label=<text>]
+#
+# --out-dir: write output directly here instead of auto-deriving a sibling
+# "version-diff-<a>-vs-<b>-<timestamp>/" directory. compare-scale-versions.sh
+# passes this so the whole-benchmark diff (this script), the per-region
+# diff (plot-scale-version-diff-by-region.R), and the archived full plot
+# set (plot_lsb.R) all land under one shared directory for the comparison.
+#
+# --baseline-label / --candidate-label: text shown in the plot title/
+# filenames instead of the version string parsed from each directory's own
+# "-scale<version>" suffix -- for labelling a run with something more
+# specific (e.g. an exact nightly build identifier like
+# "nightly-b4a9776f9817") without needing that string to itself be a valid
+# directory-naming version token. Directory lookups (find_run_dir et al.)
+# are unaffected -- only display text changes.
 #
 # <baseline_run_dir> / <candidate_run_dir> are two
 # regression-runs/<timestamp>-scale<version>/ directories as produced by
@@ -111,9 +127,15 @@ if (length(bad_metrics) > 0) {
     " (expected one or more of: ", paste(VALID_METRICS, collapse = ", "), ")"
   )
 }
-positional <- args[!str_detect(args, "^--metric=")]
+out_dir_flag <- str_match(args, "^--out-dir=(.+)$")[, 2]
+out_dir_flag <- out_dir_flag[!is.na(out_dir_flag)]
+baseline_label_flag <- str_match(args, "^--baseline-label=(.+)$")[, 2]
+baseline_label_flag <- baseline_label_flag[!is.na(baseline_label_flag)]
+candidate_label_flag <- str_match(args, "^--candidate-label=(.+)$")[, 2]
+candidate_label_flag <- candidate_label_flag[!is.na(candidate_label_flag)]
+positional <- args[!str_detect(args, "^--(metric|out-dir|baseline-label|candidate-label)=")]
 if (length(positional) < 2) {
-  stop("Usage: Rscript plot-scale-version-diff.R <baseline_run_dir> <candidate_run_dir> [--metric=total|kernel|runtime|auto]")
+  stop("Usage: Rscript plot-scale-version-diff.R <baseline_run_dir> <candidate_run_dir> [--metric=total|kernel|runtime|auto] [--out-dir=..] [--baseline-label=..] [--candidate-label=..]")
 }
 baseline_run_dir <- normalizePath(positional[[1]])
 candidate_run_dir <- normalizePath(positional[[2]])
@@ -130,20 +152,31 @@ extract_scale_version <- function(run_dir) {
 }
 baseline_version <- extract_scale_version(baseline_run_dir)
 candidate_version <- extract_scale_version(candidate_run_dir)
+# Display labels default to the parsed version but can be overridden --
+# see --baseline-label/--candidate-label in the header. baseline_version/
+# candidate_version (unchanged) still drive the auto-derived out_root name
+# below and are what a caller like compare-scale-versions.sh's find_run_dir
+# actually looked up to get here in the first place.
+baseline_label <- if (length(baseline_label_flag) > 0) baseline_label_flag[1] else baseline_version
+candidate_label <- if (length(candidate_label_flag) > 0) candidate_label_flag[1] else candidate_version
 log_msg(
   "comparing SCALE %s (baseline: %s) vs SCALE %s (candidate: %s)",
-  baseline_version, baseline_run_dir, candidate_version, candidate_run_dir
+  baseline_label, baseline_run_dir, candidate_label, candidate_run_dir
 )
 
-if (!identical(dirname(baseline_run_dir), dirname(candidate_run_dir))) {
-  log_msg(
-    "WARNING: baseline and candidate run directories are not siblings (%s vs %s) -- output will be written next to the baseline run",
-    dirname(baseline_run_dir), dirname(candidate_run_dir)
-  )
+if (length(out_dir_flag) > 0) {
+  out_root <- out_dir_flag[1]
+} else {
+  if (!identical(dirname(baseline_run_dir), dirname(candidate_run_dir))) {
+    log_msg(
+      "WARNING: baseline and candidate run directories are not siblings (%s vs %s) -- output will be written next to the baseline run",
+      dirname(baseline_run_dir), dirname(candidate_run_dir)
+    )
+  }
+  runs_root <- dirname(baseline_run_dir)
+  timestamp <- format(Sys.time(), "%Y%m%dT%H%M%SZ", tz = "UTC")
+  out_root <- file.path(runs_root, sprintf("version-diff-%s-vs-%s-%s", baseline_version, candidate_version, timestamp))
 }
-runs_root <- dirname(baseline_run_dir)
-timestamp <- format(Sys.time(), "%Y%m%dT%H%M%SZ", tz = "UTC")
-out_root <- file.path(runs_root, sprintf("version-diff-%s-vs-%s-%s", baseline_version, candidate_version, timestamp))
 dir.create(out_root, recursive = TRUE, showWarnings = FALSE)
 log_msg("writing output to %s", out_root)
 
@@ -260,9 +293,18 @@ run_for_metric <- function(metric, df, out_root) {
     log_msg("wrote %s (%d rows)", csv_path, nrow(arch_df))
     n_devices <- n_distinct(arch_df$device)
     n_rows_facet <- n_distinct(paste(arch_df$benchmark, arch_df$size))
-    plot_width <- max(6, 1.1 * n_devices + 2.5)
+    plot_width <- max(7, 1.1 * n_devices + 2.5)
     plot_height <- max(5, 0.3 * n_rows_facet + 2)
     max_abs_log2 <- max(abs(arch_df$log2_ratio), na.rm = TRUE)
+    # str_wrap() the subtitle to the plot's own width (in characters,
+    # roughly 9 per inch at this base_size) -- ggplot does not auto-wrap
+    # titles/subtitles, so a plot narrow enough to have few devices (as
+    # low as the width=7 floor above) previously had this subtitle
+    # silently clipped by the PDF page edge rather than wrapped.
+    subtitle_text <- str_wrap(
+      "ratio > 1 (red) = candidate slower than baseline; < 1 (blue) = candidate faster",
+      width = max(30, round(plot_width * 9))
+    )
     heatmap_plot <- ggplot(
       arch_df,
       aes(x = device, y = interaction(size, benchmark, sep = " / "), fill = log2_ratio)
@@ -279,9 +321,9 @@ run_for_metric <- function(metric, df, out_root) {
         y = NULL,
         title = sprintf(
           "SCALE %s vs %s (%s) -- %s",
-          candidate_version, baseline_version, toupper(arch), metric
+          candidate_label, baseline_label, toupper(arch), metric
         ),
-        subtitle = "ratio > 1 (red) = candidate slower than baseline; < 1 (blue) = candidate faster"
+        subtitle = subtitle_text
       ) +
       theme_bw(base_size = 11) +
       theme(axis.text.x = element_text(angle = 30, hjust = 1))

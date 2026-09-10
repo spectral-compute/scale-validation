@@ -40,16 +40,39 @@
 #           # EOD_REGRESSION_LOCAL_SCALE_BUILD's requirement enforced -- no
 #           # BASELINE needed, this isn't a version-diff.
 #
+#   make archive-comparison BASELINE=1.7.2 VERSION=1.7.3-rc
+#           # bundles both builds' already-archived full plot_lsb.R
+#           # box-and-whisker plot sets, plus the most recent whole-benchmark
+#           # + per-region diff heatmaps/CSVs for this pair, into one
+#           # tarball -- for handing off to compiler devs doing a point-wise
+#           # comparison. Doesn't run or re-plot anything -- see
+#           # compare-scale-versions.sh's own --archive header for what it
+#           # requires to already exist.
+#
+#   make regression-report BASELINE=1.7.2 VERSION=1.7.3-rc \
+#           CANDIDATE_LABEL=nightly-b4a9776f9817
+#           # the one-shot version of the above: --replot (regenerates the
+#           # whole-benchmark + per-region diffs and re-archives plots-full/
+#           # for both sides) immediately followed by --archive, in a single
+#           # command. BASELINE/VERSION must already have completed runs
+#           # under regression-runs/ -- run `make ci`/`ci-release` first if
+#           # either side hasn't been run yet. BASELINE_LABEL/
+#           # CANDIDATE_LABEL are optional and only change display
+#           # text/filenames, not which runs get looked up.
+#
 # See run-regression-ci.sh's own header for exactly what each MODE
 # produces and where (regression-runs/ci-latest/, overwritten each run --
 # stable path for a CI artifact-upload step, plus SUMMARY.md).
 #
 SHELL := /usr/bin/env bash
-.PHONY: run kill clean ci ci-smoke ci-release ci-local help
+.PHONY: run kill clean ci ci-smoke ci-release ci-local archive-comparison regression-report help
 
 MODE ?= native
 VERSION ?=
 BASELINE ?=
+BASELINE_LABEL ?=
+CANDIDATE_LABEL ?=
+ARCHIVE_OUT ?=
 
 run:
 	./run-regression-fleet.sh
@@ -118,6 +141,36 @@ ci-local:
 	fi
 	$(MAKE) ci MODE=native VERSION=$(VERSION)
 
+# Bundles both builds' already-archived full plot_lsb.R box-and-whisker
+# plot sets (plots-full/, produced automatically alongside any normal or
+# --replot compare-scale-versions.sh call) plus the most recent
+# whole-benchmark + per-region diff heatmaps/CSVs for this exact pair
+# into one tarball -- for handing off to compiler devs doing a point-wise
+# comparison. Does not run or re-plot anything itself; BASELINE and
+# VERSION must already have completed runs (and ideally a diff between
+# them) under regression-runs/.
+archive-comparison:
+	@if [ -z "$(BASELINE)" ] || [ -z "$(VERSION)" ]; then \
+		echo "error: archive-comparison needs both BASELINE and VERSION, e.g. make archive-comparison BASELINE=1.7.2 VERSION=1.7.3-rc" >&2; \
+		exit 1; \
+	fi
+	./compare-scale-versions.sh --archive $(BASELINE) $(VERSION) $(if $(ARCHIVE_OUT),--out=$(ARCHIVE_OUT))
+
+# One-shot version of --replot followed by --archive: regenerates the
+# whole-benchmark + per-region diffs (re-archiving plots-full/ for both
+# sides as a side effect of --replot) and immediately bundles the lot
+# into one tarball. Same prerequisite as --replot itself: BASELINE and
+# VERSION must already have completed runs under regression-runs/.
+regression-report:
+	@if [ -z "$(BASELINE)" ] || [ -z "$(VERSION)" ]; then \
+		echo "error: regression-report needs both BASELINE and VERSION, e.g. make regression-report BASELINE=1.7.2 VERSION=1.7.3-rc" >&2; \
+		exit 1; \
+	fi
+	./compare-scale-versions.sh --replot $(BASELINE) $(VERSION) \
+		$(if $(BASELINE_LABEL),--baseline-label=$(BASELINE_LABEL)) \
+		$(if $(CANDIDATE_LABEL),--candidate-label=$(CANDIDATE_LABEL))
+	./compare-scale-versions.sh --archive $(BASELINE) $(VERSION) $(if $(ARCHIVE_OUT),--out=$(ARCHIVE_OUT))
+
 help:
 	@echo "make run                    -- one fleet sweep, default env (see run-regression-fleet.sh header)"
 	@echo "make kill                   -- kill in-flight/orphaned fleet processes"
@@ -127,6 +180,10 @@ help:
 	@echo "make ci-release VERSION=.. BASELINE=.."
 	@echo "make ci-local VERSION=.. EOD_REGRESSION_LOCAL_SCALE_BUILD=/path/to/build"
 	@echo "                            -- conventional SCALE-vs-native heatmap, against a custom/local build"
+	@echo "make archive-comparison BASELINE=.. VERSION=.."
+	@echo "                            -- tar up both builds' full plot archives + diff heatmaps for handoff"
+	@echo "make regression-report BASELINE=.. VERSION=.. [CANDIDATE_LABEL=..] [BASELINE_LABEL=..]"
+	@echo "                            -- one-shot: replot both diffs, then tar up the lot for handoff"
 	@echo "Any EOD_REGRESSION_* env var can be added to any of the above, e.g.:"
 	@echo "    make ci MODE=version-diff VERSION=scale-master BASELINE=1.7.2 EOD_REGRESSION_SIZE=tiny"
 	@echo "To run a regression check:"
