@@ -26,5 +26,5 @@ do_clone_hash() {
 
 # Extract version from scale-validation's version.txt
 get_version() {
-    cat "$SCALE_VALIDATION/versions.txt" | grep "$1 " | sed "s/$1 //g"
+    cat "$SCALE_VALIDATION/versions.txt" | grep "^$1 " | sed "s/$1 //g"
 }
