@@ -1,5 +1,5 @@
---- include/cub/util_debug.cuh
-+++ include/cub/util_debug.cuh
+--- dependencies/cub/cub/util_debug.cuh
++++ dependencies/cub/cub/util_debug.cuh
 @@ -300,12 +300,9 @@
  #endif
  }
