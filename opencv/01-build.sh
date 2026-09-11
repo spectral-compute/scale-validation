@@ -3,7 +3,7 @@
 
 args=(
     -DCMAKE_BUILD_TYPE=Release
-    -DCUDA_ARCH_BIN="${GPU_ARCH}"
+    -DCUDA_ARCH_BIN="${CUDAARCHS}"
     -DCUDA_ARCH_PTX=""
     -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}"
     -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/opencv/install"
