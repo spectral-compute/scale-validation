@@ -4,7 +4,7 @@
 args=(
     -DCMAKE_BUILD_TYPE=Release
     -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}"
-    -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/cuda-samples/install"
+    -DCMAKE_INSTALL_PREFIX="$(pwd)/install"
 )
 
 cmake \
