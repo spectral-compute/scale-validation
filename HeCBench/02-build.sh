@@ -9,7 +9,7 @@ CUDA_ARCH_NUM="${CUDAARCHS#sm_}"
 
 export CUDAFLAGS="-Wno-cuda-implicit-real-arch -Wno-unused-command-line-argument -Wno-write-strings"
 
-python3 "$SRC_DIR/tools/hecbench "--verbose build --preset "scale-cuda-sm${CUDA_ARCH_NUM}"
+python3 "$SRC_DIR/tools/hecbench" --verbose build --preset "scale-cuda-sm${CUDA_ARCH_NUM}"
 build_status=$?
 
 if [ "$build_status" -ne 0 ]; then
