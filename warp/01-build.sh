@@ -2,6 +2,12 @@
 
 set -ETeuo pipefail
 
+# packman (warp's own package fetcher, used here to grab a prebuilt LLVM/clang for its
+# CPU-backend kernel codegen) defaults its cache to $HOME/.cache/packman, which fails in
+# environments where $HOME isn't writable by the current user (e.g. a minimal container
+# with a root-owned home directory). Point it at a location under our own workdir instead.
+export PM_PACKAGES_ROOT="$(pwd)/.packman-cache"
+
 cd warp
 
 # build_lib.py imports warp.build_dll / warp.context, which import numpy at
