@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <509d7dd3>.**
+**This shows the test status for SCALE: master <cb241657>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -22,9 +22,9 @@ Contributions welcome!
 | cuda-samples          | v12.9       | ❌|❌|❌|❌|❌|❌|
 | CUDALibrarySamples          | 5ac0f9a8032a10...       | ❌|❓|✅|✅|❓|❌|
 | cuml          | b17f2db       | ✅|✅|✅|✅|✅|✅|
-| cuSZ          | v0.16.2       | ❌|❌|❌|❌|❌|❌|
-| cutlass          | v4.1.0       | ❌|❓|❌|❌|❓|❌|
-| CV-CUDA          | f769fe4       | ❌|❌|❌|❌|❌|❌|
+| cuSZ          | v0.16.2       | ✅|✅|✅|✅|✅|✅|
+| cutlass          | v4.1.0       | ❌|❓|❌|✅|❓|❌|
+| CV-CUDA          | f769fe4       | ✅|✅|✅|✅|✅|✅|
 | cycles          | v4.4.0       | ❌|❓|✅|✅|❓|✅|
 | faiss          | v1.9.0       | ❌|❓|✅|✅|❓|✅|
 | FastEddy          | v2.0.0       | ❌|❓|✅|✅|❓|✅|
@@ -33,21 +33,21 @@ Contributions welcome!
 | ggml          | d3a58b0       | ❌|❓|✅|✅|❓|✅|
 | gomc          | 4c12477       | ✅|❓|✅|✅|❓|✅|
 | gpu_jpeg2k          | ee715e9       | ✅|❓|✅|✅|❓|❌|
-| GPUJPEG          | 3e045d1       | ❌|❓|❌|❌|❓|❌|
+| GPUJPEG          | 3e045d1       | ✅|❓|✅|✅|❓|✅|
 | gromacs          | v2026.3       | ❌|❓|❌|✅|❓|✅|
-| hashcat          | 6716447dfce969...       | ❌|❓|✅|✅|❓|✅|
+| hashcat          | 6716447dfce969...       | ✅|❓|✅|✅|❓|✅|
 | hashinator          | 34cf188       | ✅|❓|✅|✅|❓|❌|
 | HeCBench          | 42e8f09f3f7fa9...       | ✅|❓|✅|✅|❓|✅|
-| hypre          | v2.33.0       | ❌|❌|❌|❌|❌|✅|
+| hypre          | v2.33.0       | ✅|✅|✅|✅|✅|❌|
 | jitify          | master       | ✅|❓|✅|✅|❓|✅|
 | kokkos          | 60d8384266eba9...       | ✅|❓|✅|✅|❓|✅|
-| llama.cpp          | b9522       | ❌|❓|❌|✅|❓|❌|
+| llama.cpp          | b9522       | ❌|❓|❌|✅|❓|✅|
 | llm.c          | 7ecd8906afe6ed...       | ❌|❓|✅|✅|❓|✅|
 | nixl          | e128059af332df...       | ✅|✅|✅|✅|✅|✅|
-| nvflip          | 1eb247c       | ✅|❓|✅|✅|❓|❌|
+| nvflip          | 1eb247c       | ✅|❓|✅|✅|❓|✅|
 | opencv          | 725e440       | ✅|✅|✅|✅|✅|✅|
 | PhysX          | 1e44a0e       | ✅|✅|✅|✅|✅|✅|
-| pytorch          | v2.9.0       | ❌|❓|❌|❌|❓|❌|
+| pytorch          | v2.9.0       | ❌|❓|✅|❌|❓|❌|
 | quda          | 07822b61c6ab5f...       | ❌|❓|❌|❌|❓|❌|
 | RabbitCT          | main       | ✅|❓|✅|✅|❓|✅|
 | risc0          | v1.2.2       | ✅|✅|✅|✅|✅|✅|
@@ -57,10 +57,10 @@ Contributions welcome!
 | thrust          | 756c5af       | ❌|❌|❌|❌|❌|❌|
 | timemachine          | 01f14f8       | ✅|✅|✅|✅|✅|❌|
 | UppASD          | gpu_new       | ✅|❓|✅|✅|❓|✅|
-| vllm          | v0.6.3       | ❌|❌|❌|❌|❌|❌|
-| warp          | v1.14.0       | ❌|❌|❌|❌|❌|❌|
-| whispercpp          | v1.7.1       | ❌|❓|❌|✅|❓|✅|
-| xgboost          | v2.1.0       | ✅|❓|✅|✅|❓|❌|
+| vllm          | v0.6.3       | ✅|✅|✅|✅|✅|✅|
+| warp          | v1.14.0       | ✅|✅|✅|✅|✅|✅|
+| whispercpp          | v1.7.1       | ❌|❓|✅|✅|❓|✅|
+| xgboost          | v2.1.0       | ✅|❓|❌|✅|❓|❌|
 
 *Key:*
 * ✅ Validated succesfully
@@ -68,7 +68,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 27351.
+Pipeline ID: 27680.
 
 ## Running Tests
 
