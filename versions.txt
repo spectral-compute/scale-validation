@@ -62,7 +62,7 @@ xgboost v2.1.0
 House-Prices-Advanced-Regression f3a41e6
 datasets 5e987d5
 gromacs v2026.3
-HeCBench 42e8f09f3f7fa922f7b7099347e70884ebe27006
+HeCBench 47f8668f2e933c92273297b56acb7ea0f518d83a
 cudahandbook 5bd3f275ca5ec109b78c7612432e7f1dd04b72f7
 warp v1.14.0
 colmap 4.0.4
