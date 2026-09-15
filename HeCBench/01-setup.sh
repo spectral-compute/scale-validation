@@ -83,30 +83,29 @@ EOF
 
     # SCALE
     # (These will steadily be addressed.)
-    # - gfx1201
-    sed -i /prefetch/d src/CMakeLists.txt
-    sed -i /blas-fp8gemm/d src/CMakeLists.txt
-    # - sm_120
-    sed -i /qkv/d src/CMakeLists.txt
-    sed -i /d3q19-bgk/d src/CMakeLists.txt
-    sed -i /permute/d src/CMakeLists.txt
-    sed -i /quant3MatMul/d src/CMakeLists.txt
-    sed -i /sobol/d src/CMakeLists.txt
+    # - All
+    sed -i -E 's/^([[:space:]]*)(prefetch)[[:space:]]*$/\1#\2  # SCALE: known failure/' src/CMakeLists.txt
 
-    # We have also encountered the following compilation failures
-    # with the following compilers
-    # 
-    # NVCC
-    # - dp4a
-    # - cm
-    # - divergence
-    # - ising
-    # - mdh
-    # - laplace
-    # - logic-rewrite
-    # 
-    # HIP
-    # - cm
-    # - opticalFlow
-    # - halo-finder
+    # - gfx1201
+	if [[ "$TEST_GPU_ARCH" == "gfx1201" ]]; then
+		sed -i /blas-fp8gemm/d src/CMakeLists.txt
+	fi
+
+    # - sm_120
+	if [[ "$TEST_GPU_ARCH" == "sm_120" ]]; then
+		sed -i /qkv/d src/CMakeLists.txt
+		sed -i /d3q19-bgk/d src/CMakeLists.txt
+		sed -i /quant3MatMul/d src/CMakeLists.txt
+		sed -i /sobol/d src/CMakeLists.txt
+	fi
+
+    # - gfx90a
+	if [[ "$TEST_GPU_ARCH" == "gfx90a" ]]; then
+		sed -i -E 's/^([[:space:]]*)mlp[[:space:]]*$/d' src/CMakeLists.txt
+	fi
+
+    # - gfx942
+	if [[ "$TEST_GPU_ARCH" == "gfx942" ]]; then
+		sed -i -E 's/^([[:space:]]*)mlp[[:space:]]*$/d' src/CMakeLists.txt
+	fi
 )
