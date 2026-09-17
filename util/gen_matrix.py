@@ -51,8 +51,20 @@ for subdir in REPO_BASE.iterdir():
         xfail_run.add(name)
 
     for isa in ISAS:
+        if isa.startswith("gfx") and (subdir / f".build-fails-on-amd").is_file():
+            xfail_build.add((name, isa))
+
+        if isa.startswith("sm") and (subdir / f".build-fails-on-nv").is_file():
+            xfail_build.add((name, isa))
+
         if (subdir / f".build-fails-on-{isa}").is_file():
             xfail_build.add((name, isa))
+
+        if isa.startswith("gfx") and (subdir / f".run-fails-on-amd").is_file():
+            xfail_run.add((name, isa))
+
+        if isa.startswith("sm") and (subdir / f".run-fails-on-nv").is_file():
+            xfail_run.add((name, isa))
 
         if (subdir / f".run-fails-on-{isa}").is_file():
             xfail_run.add((name, isa))
