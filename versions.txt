@@ -4,6 +4,7 @@ arrayfire v3.9.0
 bitnet 404980eecae38affa4871c3e419eae3f44536a95
 Bonsai 581fa8e70501ce85660c7eac0d61c0e5c5bece4a
 caffe 9b891540183ddc834a02b2bd81b31afae71b2153
+code_saturne v9.2.0
 ctranslate2 v4.5.0
 cuda-samples v12.9
 cudf v25.04.00
@@ -37,7 +38,7 @@ MAGMA v2.9.0
 nerf-cuda main
 nixl e128059af332df6e05de218d24b04c66a64b030a
 nvflip 1eb247c
-openmpi v4.1
+openmpi v5.0
 opencv 725e440
 opencv_contrib e247b68
 opencv_extra 5abbd7e

@@ -16,3 +16,6 @@ tar -xf "${FILE}"
 # Use a directory without a version in its name
 rm -rf "source"
 mv "${DIR}" "source"
+
+# clone the mpi-test-suite
+do_clone mpi-test-suite https://github.com/open-mpi/mpi-test-suite.git main

@@ -21,8 +21,19 @@ Version: 12.5
 Libs: -L\${libdir} -lcuda
 Cflags: -I\${includedir}" > "${OUT_DIR}/openmpi/lib/pkgconfig/cuda.pc"
 
+# --with-pmix/--with-prrte: without these, configure picks up the system PMIx
+# (/usr/lib/x86_64-linux-gnu/pmix2) and the prte it launches with then exports
+# OMPI_MCA_mca_base_component_path pointing into *that* tree to every rank. That
+# overrides Open MPI's own component directory, so no DSO component loads inside
+# an MPI process -- including accelerator_cuda. The accelerator framework then
+# falls back to "null", every buffer is treated as host memory, and the first
+# device pointer handed to MPI_Isend is memcpy'd on the host: SIGSEGV with
+# "Invalid permissions" at the device address. Bundling both keeps the component
+# path pointing at this install.
 ../source/configure \
   --prefix "${OUT_DIR}/openmpi/install" \
+  --with-pmix=internal \
+  --with-prrte=internal \
   --enable-mca-dso=accelerator_cuda,btl_smcuda \
   --with-cuda="${CUDA_PATH}" \
   --with-cuda-libdir="${OUT_DIR}/openmpi/lib"
