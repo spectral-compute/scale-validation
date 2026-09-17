@@ -1,0 +1,15 @@
+--- a/src/base/cs_algorithm.cpp
++++ b/src/base/cs_algorithm.cpp
+@@ -355,9 +355,9 @@
+ #endif
+ 
+ #if defined(HAVE_HIP)
+-  if (ctx.use_gpu()) {
+-    // TODO: call GPU code for this and return;
+-    // Currently defaults to OpenMP (requiring UVM).
++  if (ctx.use_gpu() && n > 0) {
++    _count_to_index_inplace_rocm(ctx.stream(), n, a);
++    return;
+   }
+ #endif
+ 

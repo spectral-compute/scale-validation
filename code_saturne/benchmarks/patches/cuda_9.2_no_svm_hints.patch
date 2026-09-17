@@ -1,0 +1,120 @@
+--- a/src/base/cs_mem_cuda_priv.cu	2026-10-15 08:31:05.487213753 +0800
++++ b/src/base/cs_mem_cuda_priv.cu	2026-10-15 08:31:05.507595785 +0800
+@@ -387,18 +387,10 @@
+ cs_mem_cuda_prefetch_h2d(const void  *dst,
+                          size_t       size)
+ {
+- if (_cs_glob_cuda_device_id < 0)
+-   cudaGetDevice(&_cs_glob_cuda_device_id);
+-
+-#if CUDART_VERSION >= 13'00'0
+-  CS_CUDA_CHECK(cudaMemPrefetchAsync(dst, size,
+-                                     {.type = cudaMemLocationTypeDevice,
+-                                      .id = _cs_glob_cuda_device_id}, 0,
+-                                     _cs_glob_stream_pf));
+-#else
+-  CS_CUDA_CHECK(cudaMemPrefetchAsync(dst, size, _cs_glob_cuda_device_id,
+-                                     _cs_glob_stream_pf));
+-#endif
++  /* Managed-memory migration hints go through the KFD SVM ioctl; with XNACK on
++     amdgpu 7.1.9 (31.60) prefetch corrupts data, and multi-rank prefetch
++     oopses older drivers. Leave managed memory to migrate on fault. */
++  CS_UNUSED(dst); CS_UNUSED(size);
+ }
+ 
+ /*----------------------------------------------------------------------------*/
+@@ -420,17 +412,10 @@
+ cs_mem_cuda_prefetch_d2h(const void  *dst,
+                          size_t       size)
+ {
+-#if CUDART_VERSION >= 13'00'0
+-  // TODO: try to check for host NUMA node id in calling code
+-  // when threads are pinned, and pass correct id instead of 0.
+-  CS_CUDA_CHECK(cudaMemPrefetchAsync(dst, size,
+-                                     {.type = cudaMemLocationTypeHostNuma,
+-                                      .id = 0}, 0,
+-                                     _cs_glob_stream_pf));
+-#else
+-  CS_CUDA_CHECK(cudaMemPrefetchAsync(dst, size, cudaCpuDeviceId,
+-                                     _cs_glob_stream_pf));
+-#endif
++  /* Managed-memory migration hints go through the KFD SVM ioctl; with XNACK on
++     amdgpu 7.1.9 (31.60) prefetch corrupts data, and multi-rank prefetch
++     oopses older drivers. Leave managed memory to migrate on fault. */
++  CS_UNUSED(dst); CS_UNUSED(size);
+ }
+ 
+ /*----------------------------------------------------------------------------*/
+@@ -468,21 +453,10 @@
+ cs_mem_cuda_set_advise_read_mostly(const void  *ptr,
+                                    size_t       size)
+ {
+- if (_cs_glob_cuda_device_id < 0)
+-   cudaGetDevice(&_cs_glob_cuda_device_id);
+-
+-#if CUDART_VERSION >= 13'00'0
+-  CS_CUDA_CHECK(cudaMemAdvise(ptr,
+-                              size,
+-                              cudaMemAdviseSetReadMostly,
+-                              {.type = cudaMemLocationTypeDevice,
+-                               .id = _cs_glob_cuda_device_id}));
+-#else
+-  CS_CUDA_CHECK(cudaMemAdvise(ptr,
+-                              size,
+-                              cudaMemAdviseSetReadMostly,
+-                              _cs_glob_cuda_device_id));
+-#endif
++  /* Managed-memory migration hints go through the KFD SVM ioctl; with XNACK on
++     amdgpu 7.1.9 (31.60) prefetch corrupts data, and multi-rank prefetch
++     oopses older drivers. Leave managed memory to migrate on fault. */
++  CS_UNUSED(ptr); CS_UNUSED(size);
+ }
+ 
+ /*----------------------------------------------------------------------------*/
+@@ -498,21 +472,10 @@
+ cs_mem_cuda_unset_advise_read_mostly(const void  *ptr,
+                                      size_t       size)
+ {
+- if (_cs_glob_cuda_device_id < 0)
+-   cudaGetDevice(&_cs_glob_cuda_device_id);
+-
+-#if CUDART_VERSION >= 13'00'0
+-  CS_CUDA_CHECK(cudaMemAdvise(ptr,
+-                              size,
+-                              cudaMemAdviseUnsetReadMostly,
+-                              {.type = cudaMemLocationTypeDevice,
+-                               .id = _cs_glob_cuda_device_id}));
+-#else
+-  CS_CUDA_CHECK(cudaMemAdvise(ptr,
+-                              size,
+-                              cudaMemAdviseUnsetReadMostly,
+-                              _cs_glob_cuda_device_id));
+-#endif
++  /* Managed-memory migration hints go through the KFD SVM ioctl; with XNACK on
++     amdgpu 7.1.9 (31.60) prefetch corrupts data, and multi-rank prefetch
++     oopses older drivers. Leave managed memory to migrate on fault. */
++  CS_UNUSED(ptr); CS_UNUSED(size);
+ }
+ 
+ /*----------------------------------------------------------------------------*/
+--- a/src/alge/cs_sles_it_cuda.cu	2026-10-15 08:31:05.489849091 +0800
++++ b/src/alge/cs_sles_it_cuda.cu	2026-10-15 08:31:05.508085708 +0800
+@@ -957,14 +957,10 @@
+               int           device_id,
+               cudaStream_t  stream)
+ {
+-#if CUDART_VERSION >= 13'00'0
+-  CS_CUDA_CHECK(cudaMemPrefetchAsync(dst, size,
+-                                     {.type = cudaMemLocationTypeDevice,
+-                                      .id = device_id}, 0,
+-                                     stream));
+-#else
+-  CS_CUDA_CHECK(cudaMemPrefetchAsync(dst, size, device_id, stream));
+-#endif
++  /* Managed-memory migration hints go through the KFD SVM ioctl; with XNACK on
++     amdgpu 7.1.9 (31.60) prefetch corrupts data, and multi-rank prefetch
++     oopses older drivers. Leave managed memory to migrate on fault. */
++  CS_UNUSED(dst); CS_UNUSED(size); CS_UNUSED(device_id); CS_UNUSED(stream);
+ }
+ 
+ /*----------------------------------------------------------------------------

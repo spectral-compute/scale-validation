@@ -1,0 +1,19 @@
+diff --git a/src/cdo/cs_scheme_geometry.cpp b/src/cdo/cs_scheme_geometry.cpp
+index 95e1a8ac9..fa1f1fd42 100644
+--- a/src/cdo/cs_scheme_geometry.cpp
++++ b/src/cdo/cs_scheme_geometry.cpp
+@@ -84,10 +84,12 @@ _add_tria_to_covariance(const cs_real_t     x1[3],
+                         cs_real_t           tensor[3])
+ {
+   cs_real_3_t gpts[3], r;
+-  cs_real_t   gw;
++  cs_real_t   _gw[3];
+ 
+   cs_quadrature_tria_3pts(x1, x2, x3, area,  /* 2nd-order exact */
+-                          gpts, &gw);
++                          gpts, _gw);
++
++  const cs_real_t gw = _gw[0];  /* same weight for all Gauss points */
+ 
+   for (short int gp = 0; gp < 3; gp++) {
+ 

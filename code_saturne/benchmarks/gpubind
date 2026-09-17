@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# MPI launch wrapper, passed to "code_saturne run --tool-args": gives each rank
+# on a node a GPU of its own, round-robin over the visible GPUs, then execs the
+# solver.
+#
+# code_saturne already spreads ranks over devices, but each rank still opens
+# the others: without this, every rank creates queues on device 0 as well, and
+# each stream synchronize costs ~3.5 ms on MI250X.
+#
+# Not a .sh, so benchmark.py doesn't run it as a step.
+. "$(dirname "$0")"/../common.bash
+
+mapfile -t gpus < <(visible_gpus)
+gpu="${gpus[${OMPI_COMM_WORLD_LOCAL_RANK:-0} % ${#gpus[@]}]}"
+
+if [[ -d /sys/class/kfd ]]; then
+    # On AMD, hide the other GPUs from ROCr itself, which both SCALE and HIP sit
+    # on: CUDA_/HIP_VISIBLE_DEVICES only hide them a layer above, after ROCr has
+    # already opened them.
+    unset CUDA_VISIBLE_DEVICES HIP_VISIBLE_DEVICES
+    export ROCR_VISIBLE_DEVICES="${gpu}"
+else
+    export CUDA_VISIBLE_DEVICES="${gpu}"
+fi
+
+exec "$@"

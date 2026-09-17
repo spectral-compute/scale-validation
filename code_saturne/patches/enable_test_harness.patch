@@ -1,0 +1,17 @@
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index 2be13ee56..e16108920 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -295,7 +295,11 @@ cs_tree_test_LDFLAGS  = $(LDFLAGS_CS_TESTS)
+ cs_tree_test_LDADD    = $(LDADD_CS_TESTS)
+ 
+ # Uncomment for tests execution at "make check"
+-#TESTS=$(check_PROGRAMS)
++TESTS = $(check_PROGRAMS)
++
++# bft_error_test deliberately terminates via the default bft_error handler,
++# which assert(0)s and exits EXIT_FAILURE.
++XFAIL_TESTS = bft_error_test
+ 
+ # Distribution
+ # Files not built through classical Automake rules need to be explicitely

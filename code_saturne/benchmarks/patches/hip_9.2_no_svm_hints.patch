@@ -1,0 +1,79 @@
+--- a/src/base/cs_mem_hip_priv.cpp	2026-10-15 02:47:50.983422927 +0800
++++ b/src/base/cs_mem_hip_priv.cpp	2026-10-15 02:47:51.003868027 +0800
+@@ -387,11 +387,10 @@
+ cs_mem_hip_prefetch_h2d(const void  *dst,
+                         size_t       size)
+ {
+- if (_cs_glob_hip_device_id < 0)
+-   CS_HIP_CHECK(hipGetDevice(&_cs_glob_hip_device_id));
+-
+-  CS_HIP_CHECK(hipMemPrefetchAsync(dst, size, _cs_glob_hip_device_id,
+-                                     _cs_glob_stream_pf));
++  /* Managed-memory migration hints go through the KFD SVM ioctl, which
++     oopses in svm_range_vram_node_new on this kernel/ROCm (gfx90a, no
++     XNACK); leave managed memory where it is. */
++  CS_UNUSED(dst); CS_UNUSED(size);
+ }
+ 
+ /*----------------------------------------------------------------------------*/
+@@ -413,8 +412,10 @@
+ cs_mem_hip_prefetch_d2h(const void  *dst,
+                         size_t       size)
+ {
+-  CS_HIP_CHECK(hipMemPrefetchAsync(dst, size, hipCpuDeviceId,
+-                                     _cs_glob_stream_pf));
++  /* Managed-memory migration hints go through the KFD SVM ioctl, which
++     oopses in svm_range_vram_node_new on this kernel/ROCm (gfx90a, no
++     XNACK); leave managed memory where it is. */
++  CS_UNUSED(dst); CS_UNUSED(size);
+ }
+ 
+ /*----------------------------------------------------------------------------*/
+@@ -452,13 +453,10 @@
+ cs_mem_hip_set_advise_read_mostly(const void  *ptr,
+                                   size_t       size)
+ {
+- if (_cs_glob_hip_device_id < 0)
+-   CS_HIP_CHECK(hipGetDevice(&_cs_glob_hip_device_id));
+-
+-  CS_HIP_CHECK(hipMemAdvise(ptr,
+-                              size,
+-                              hipMemAdviseSetReadMostly,
+-                              _cs_glob_hip_device_id));
++  /* Managed-memory migration hints go through the KFD SVM ioctl, which
++     oopses in svm_range_vram_node_new on this kernel/ROCm (gfx90a, no
++     XNACK); leave managed memory where it is. */
++  CS_UNUSED(ptr); CS_UNUSED(size);
+ }
+ 
+ /*----------------------------------------------------------------------------*/
+@@ -474,13 +472,10 @@
+ cs_mem_hip_unset_advise_read_mostly(const void  *ptr,
+                                     size_t       size)
+ {
+- if (_cs_glob_hip_device_id < 0)
+-   CS_HIP_CHECK(hipGetDevice(&_cs_glob_hip_device_id));
+-
+-  CS_HIP_CHECK(hipMemAdvise(ptr,
+-                              size,
+-                              hipMemAdviseUnsetReadMostly,
+-                              _cs_glob_hip_device_id));
++  /* Managed-memory migration hints go through the KFD SVM ioctl, which
++     oopses in svm_range_vram_node_new on this kernel/ROCm (gfx90a, no
++     XNACK); leave managed memory where it is. */
++  CS_UNUSED(ptr); CS_UNUSED(size);
+ }
+ 
+ /*----------------------------------------------------------------------------*/
+--- a/src/alge/cs_sles_it_hip.cpp	2026-10-15 02:47:50.986293751 +0800
++++ b/src/alge/cs_sles_it_hip.cpp	2026-10-15 02:47:51.004519535 +0800
+@@ -951,7 +951,8 @@
+               int           device_id,
+               hipStream_t  stream)
+ {
+-  CS_HIP_CHECK(hipMemPrefetchAsync(dst, size, device_id, stream));
++  /* No managed-memory prefetch: see cs_mem_hip_prefetch_h2d. */
++  CS_UNUSED(dst); CS_UNUSED(size); CS_UNUSED(device_id); CS_UNUSED(stream);
+ }
+ 
+ /*----------------------------------------------------------------------------

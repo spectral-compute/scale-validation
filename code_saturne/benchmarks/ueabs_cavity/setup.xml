@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  UEABS lid-driven cavity: the PRACE UEABS 2.2 code_saturne benchmark
+  (code_saturne 7.0.0), with its Fortran user files ported to setup.xml.
+
+  Laminar flow in a box of tetrahedra. The top (+z) moves at u = 1, set up as
+  an inlet with a purely tangential velocity as the original does; the bottom
+  and the x ends are walls, and the y sides are symmetry planes.
+
+  08-benchmark.sh fills in the mesh path, and sets the time step and step
+  count per case: 0.01 for 13M cells, and 0.01/3 for the refined 111M.
+-->
+<Code_Saturne_GUI case="CAVITY" solver_version="" study="UEABS_CAVITY" version="2.0">
+  <solution_domain>
+    <mesh_origin choice="mesh_input"/>
+    <mesh_input path="mesh_input.csm"/>
+  </solution_domain>
+  <thermophysical_models>
+    <turbulence model="off"/>
+    <velocity_pressure>
+      <variable dimension="3" label="Velocity" name="velocity">
+        <blending_factor>0.9</blending_factor>
+      </variable>
+    </velocity_pressure>
+  </thermophysical_models>
+  <physical_properties>
+    <fluid_properties>
+      <property choice="constant" label="Density" name="density">
+        <initial_value>1</initial_value>
+      </property>
+      <property choice="constant" label="LamVisc" name="molecular_viscosity">
+        <initial_value>0.01</initial_value>
+      </property>
+    </fluid_properties>
+  </physical_properties>
+  <numerical_parameters>
+    <!-- imrgra = 2: least squares over the complete extended neighbourhood -->
+    <gradient_reconstruction choice="lsq"/>
+    <extended_neighborhood choice="complete"/>
+    <!-- ivisse = 0 -->
+    <gradient_transposed status="off"/>
+  </numerical_parameters>
+  <analysis_control>
+    <time_parameters>
+      <time_passing>0</time_passing>
+      <time_step_ref>0.01</time_step_ref>
+      <iterations>100</iterations>
+    </time_parameters>
+    <output>
+      <listing_printing_frequency>25</listing_printing_frequency>
+      <!-- The benchmark only times the solver: no results output. -->
+      <writer id="-1" label="results">
+        <directory name="postprocessing"/>
+        <format name="ensight" options=""/>
+        <frequency period="none"/>
+        <output_at_end status="off"/>
+        <time_dependency choice="fixed_mesh"/>
+      </writer>
+    </output>
+  </analysis_control>
+  <calculation_management>
+    <start_restart>
+      <!-- No checkpoints -->
+      <restart_rescue>-2</restart_rescue>
+    </start_restart>
+  </calculation_management>
+  <boundary_conditions>
+    <boundary label="lid" name="1" nature="inlet">normal[0, 0, 1, 0.1]</boundary>
+    <boundary label="walls" name="2" nature="wall">normal[0, 0, -1, 0.1] or normal[1, 0, 0, 0.1] or normal[-1, 0, 0, 0.1]</boundary>
+    <boundary label="symmetry" name="3" nature="symmetry">normal[0, 1, 0, 0.1] or normal[0, -1, 0, 0.1]</boundary>
+    <inlet field_id="none" label="lid">
+      <velocity_pressure choice="norm" direction="coordinates">
+        <norm>1</norm>
+        <direction_x>1</direction_x>
+        <direction_y>0</direction_y>
+        <direction_z>0</direction_z>
+      </velocity_pressure>
+    </inlet>
+  </boundary_conditions>
+</Code_Saturne_GUI>

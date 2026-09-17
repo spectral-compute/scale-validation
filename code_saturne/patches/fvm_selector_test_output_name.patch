@@ -1,0 +1,13 @@
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index 2be13ee56..6d6f243af 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -275,7 +275,7 @@ fvm_selector_test_SOURCES = fvm_selector_test.cpp
+ fvm_selector_test$(EXEEXT):
+ 	PYTHONPATH=$(top_srcdir)/python/code_saturne/base \
+ 	$(PYTHON) -B $(top_srcdir)/build-aux/cs_compile_build.py \
+-	-o fvm_selector_postfix_test \
++	-o fvm_selector_test \
+ 	$(top_srcdir)/tests/fvm_selector_test.cpp
+ 
+ fvm_selector_postfix_test_SOURCES = fvm_selector_postfix_test.cpp
