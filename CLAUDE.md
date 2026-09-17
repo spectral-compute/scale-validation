@@ -21,19 +21,48 @@ upstream via `git ls-remote`, and reports the release gap.
 ## Running a test
 
 ```bash
-./test.sh <workdir> <path_to_scale> <gpu_arch> <test_name>
+./test.sh <workdir> <path_to_toolkit> <gpu_arch> <test_name>
 # e.g. ./test.sh ~/cuda_tests /opt/scale gfx1100 hashcat
 ```
 
-`test.sh` is the driver. It wipes `<workdir>/<test_name>`, sources SCALE's environment
-(`<scale>/bin/scaleenv <gpu_arch>`), then runs every `*.sh` in the test directory **in
-lexicographical order** with `set -o errexit` — the first failing script fails the test.
+`test.sh` is the driver. It wipes `<workdir>/<test_name>`, sets up the toolchain
+environment for the selected mode (for SCALE, by sourcing `<toolkit>/bin/scaleenv
+<gpu_arch>`), then runs every `*.sh` in the test directory **in lexicographical order**
+with `set -o errexit` — the first failing script fails the test.
 
-- `<path_to_scale>` may point at a real SCALE install **or** at an NVIDIA CUDA install.
-  If `bin/scaleenv` exists it's treated as SCALE; otherwise `test.sh`/`args.sh`
-  replicate the CUDA environment variables `scaleenv` would set so the same scripts run
-  unmodified against stock `nvcc`. This dual-mode behavior is intentional.
-- GPU arch is AMD-style (`gfx1100`, `gfx90a`) for SCALE or `sm_120` for NVIDIA.
+### Mode selection
+
+The two arguments are orthogonal: **the toolkit path decides the compiler, the GPU arch
+decides the target vendor.** Four combinations are supported:
+
+| `<path_to_toolkit>` | `<gpu_arch>` | `TEST_MODE` |
+| --- | --- | --- |
+| SCALE install | `gfx1100` | `scale-amd` |
+| SCALE install | `sm_120` | `scale-nvidia` |
+| NVIDIA CUDA install | `sm_120` | `nvcc-nvidia` |
+| ROCm install | `gfx1100` | `hip-amd` |
+
+The toolchain is identified from the install layout, probed **in this order**:
+`bin/scaleenv` → SCALE, then `bin/hipconfig`/`bin/hipcc` → ROCm/HIP, then `bin/nvcc` →
+NVIDIA CUDA. The order matters — a SCALE install also ships a `bin/nvcc`, so probing for
+nvcc first would misidentify every SCALE run.
+
+The vendor is a purely syntactic classification of the arch string: `gfx*` (including
+feature suffixes like `gfx90a:xnack+`) is AMD, `sm_*`/`compute_*`/bare digits is NVIDIA.
+
+**Nothing inspects the machine's hardware** — no `nvidia-smi`, no `rocm-smi`, no device
+node checks. That's deliberate: validation machines may have both AMD and NVIDIA
+hardware and both drivers installed, so probing would pick the wrong answer. The two
+arguments are the only signal. The remaining two pairings are rejected with an explicit
+error: `nvcc` can't emit AMD code, and hipcc-over-CUDA (`hip-nvidia`) is out of scope.
+
+`test.sh` exports `TEST_MODE` (the combined `<toolchain>-<vendor>` string) plus
+`TEST_TOOLCHAIN` (`scale`/`nvcc`/`hip`) and `TEST_VENDOR` (`amd`/`nvidia`) for
+per-project scripts to branch on.
+
+> **Note:** `util/args.sh` still carries the older two-way SCALE-vs-CUDA detection and
+> has *not* been updated for the four-mode scheme. Tests that source it directly won't
+> see `hip-amd`; bring it in line when HIP support reaches those tests.
 
 Two optional flags, appended after `<test_name>`, support running against an
 already-built project (used by the container test stage below) without changing

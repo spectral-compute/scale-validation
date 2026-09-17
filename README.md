@@ -85,10 +85,11 @@ The test driver script `test.sh` may be used to conveniently execute an
 entire test:
 
 ```bash
-./test.sh <workdir> <path_to_scale> gfx1234 <name_of_test>
+./test.sh <workdir> <path_to_tooklit> gfx1234 <name_of_test>
 ```
 
-For example: `./test.sh ~/cuda_tests /opt/scale gfx1100 hashcat`.
+For example: `./test.sh ~/cuda_tests /opt/scale gfx1100 hashcat` for compiling with
+SCALE for AMD gfx1100 devices.
 
 See the `test.sh` usage message for more detailed information and other
 options for adjusting how tests are run.
