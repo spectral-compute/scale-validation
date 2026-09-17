@@ -1,0 +1,1 @@
+gpu_jpeg2k fails to build on sm_120: https://code.spectralcompute.com/spectral-compute/scale/issues/1255
