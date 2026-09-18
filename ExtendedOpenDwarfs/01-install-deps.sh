@@ -15,40 +15,40 @@ export LANG=C
 # exact autoreconf/libtoolize failure this exists to prevent.
 PIXI_BIN=""
 if command -v pixi >/dev/null 2>&1; then
-	PIXI_BIN="pixi"
+    PIXI_BIN="pixi"
 elif [[ -x "${HOME}/.pixi/bin/pixi" ]]; then
-	PIXI_BIN="${HOME}/.pixi/bin/pixi"
+    PIXI_BIN="${HOME}/.pixi/bin/pixi"
 else
-	echo "pixi not found on this host -- installing locally into ~/.pixi (no root required)"
-	curl -fsSL https://pixi.sh/install.sh | sh
-	if [[ -x "${HOME}/.pixi/bin/pixi" ]]; then
-		PIXI_BIN="${HOME}/.pixi/bin/pixi"
-	else
-		echo "warning: pixi install did not produce ${HOME}/.pixi/bin/pixi -- continuing without it" >&2
-	fi
+    echo "pixi not found on this host -- installing locally into ~/.pixi (no root required)"
+    curl -fsSL https://pixi.sh/install.sh | sh
+    if [[ -x "${HOME}/.pixi/bin/pixi" ]]; then
+        PIXI_BIN="${HOME}/.pixi/bin/pixi"
+    else
+        echo "warning: pixi install did not produce ${HOME}/.pixi/bin/pixi -- continuing without it" >&2
+    fi
 fi
 
 if [[ -n "$PIXI_BIN" && -f "$(pwd)/pixi.toml" ]]; then
-	eval "$("$PIXI_BIN" shell-hook --manifest-path "$(pwd)/pixi.toml")"
+    eval "$("$PIXI_BIN" shell-hook --manifest-path "$(pwd)/pixi.toml")"
 
-	# aclocal/autoreconf stay the SYSTEM binaries even when libtool itself
-	# only comes from pixi (some hosts have libtool solely via pixi, but
-	# automake/aclocal system-wide) -- point aclocal at pixi's libtool.m4
-	# and friends explicitly, or autoreconf fails with "Libtool library
-	# used but 'LIBTOOL' is undefined" even though libtoolize itself
-	# resolves fine on PATH.
-	PIXI_ACLOCAL_DIR="$(pwd)/.pixi/envs/default/share/aclocal"
-	if [[ -d "$PIXI_ACLOCAL_DIR" ]]; then
-		export ACLOCAL_PATH="${PIXI_ACLOCAL_DIR}${ACLOCAL_PATH:+:$ACLOCAL_PATH}"
-	fi
+    # aclocal/autoreconf stay the SYSTEM binaries even when libtool itself
+    # only comes from pixi (some hosts have libtool solely via pixi, but
+    # automake/aclocal system-wide) -- point aclocal at pixi's libtool.m4
+    # and friends explicitly, or autoreconf fails with "Libtool library
+    # used but 'LIBTOOL' is undefined" even though libtoolize itself
+    # resolves fine on PATH.
+    PIXI_ACLOCAL_DIR="$(pwd)/.pixi/envs/default/share/aclocal"
+    if [[ -d "$PIXI_ACLOCAL_DIR" ]]; then
+        export ACLOCAL_PATH="${PIXI_ACLOCAL_DIR}${ACLOCAL_PATH:+:$ACLOCAL_PATH}"
+    fi
 fi
-
 
 # pixi's shell-hook above exports its own HOST (a conda build triplet,
 # e.g. x86_64-conda-linux-gnu) -- this must be set unconditionally
 # (not ${HOST:-...}) to override that, since HOST is already non-empty
 # by this point and the :- fallback would never trigger otherwise.
-export HOST="$(hostname -s)"
+HOST="$(hostname -s)"
+export HOST
 export LSB_SRC_DIR="${LSB_SRC_DIR:-$(pwd)/external/liblsb-src}"
 export LSB_INSTALL_ROOT="${LSB_INSTALL_ROOT:-$(pwd)/external/liblsb-install/${HOST}}"
 export LSB_GIT_URL="${LSB_GIT_URL:-https://github.com/spcl/liblsb.git}"
