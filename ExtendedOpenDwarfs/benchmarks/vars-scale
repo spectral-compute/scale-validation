@@ -1,0 +1,9 @@
+export BACKEND="cuda"
+if [[ "${SCALE_ENV}" == *gfx* ]]; then
+    export COMPILER="scale-amd"
+    export CUDA_DEV_TARGET="${CUDAARCHS}"
+    export HIP_DEV_TARGET="${SCALE_ENV}" # TODO: this smells
+else
+    export COMPILER="scale-nvidia"
+fi
+export SCALE_ROOT="${CUDA_PATH}/../../"
