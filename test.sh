@@ -149,7 +149,7 @@ TEST_MODE="${TEST_TOOLCHAIN}-${TEST_VENDOR}"
 case "${TEST_MODE}" in
     scale-amd|scale-nvidia)
         echo "Using SCALE at ${TOOLKIT_DIR}, targeting ${INPUT_GPU_ARCH}"
-        source "${TOOLKIT_DIR}/bin/scaleenv" $INPUT_GPU_ARCH
+        source "${TOOLKIT_DIR}/bin/scaleenv" "$INPUT_GPU_ARCH"
 
         # This also serves to conveniently explode if we accidentially end up using nvidia nvcc.
         export NVCC_PREPEND_FLAGS="-fdiagnostics-color=always"
@@ -178,7 +178,8 @@ case "${TEST_MODE}" in
         export CUCC="${TOOLKIT_DIR}/bin/nvcc"
         export CUDA_INC_DIR="${TOOLKIT_DIR}/include"
         export PATH="${TOOLKIT_DIR}/bin:${PATH-}"
-        export CUDAARCHS="$(echo $INPUT_GPU_ARCH | sed -Ee 's|sm_||g')"
+        CUDAARCHS="$(echo "$INPUT_GPU_ARCH" | sed -Ee 's|sm_||g')"
+    	export CUDAARCHS
         export LD_LIBRARY_PATH="${TOOLKIT_DIR}/lib64:${LD_LIBRARY_PATH-}"
         export LIBRARY_PATH="${TOOLKIT_DIR}/lib64:${LIBRARY_PATH-}"
         export CPATH="${TOOLKIT_DIR}/include:${CPATH-}"
