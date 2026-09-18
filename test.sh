@@ -209,6 +209,9 @@ case "${TEST_MODE}" in
         export CPATH="${TOOLKIT_DIR}/include:${CPATH-}"
         export CMAKE_PREFIX_PATH="${TOOLKIT_DIR}:${CMAKE_PREFIX_PATH-}"
 
+		export HIPFLAGS="-isystem ${TOOLKIT_DIR}/include ${HIPFLAGS-}"
+		export LDFLAGS="-L${TOOLKIT_DIR}/lib ${LDFLAGS-}"
+
         # The HIP-side spellings of CUDAARCHS. GPU_TARGETS is what modern
         # ROCm/CMake reads; AMDGPU_TARGETS is the older name still honoured by
         # several of the projects under test.
@@ -226,6 +229,8 @@ case "${TEST_MODE}" in
         exit 1
         ;;
 esac
+
+export TOOLKIT_DIR
 
 # Exported so the per-project scripts can branch on the mode. TEST_MODE is the
 # combined "<toolchain>-<vendor>" string; the two halves are exported
