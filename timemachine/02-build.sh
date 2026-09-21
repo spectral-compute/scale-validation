@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
 
-# args.sh sets colour-diagnostics in CXXFLAGS, but timemachine uses
+# test.sh sets colour-diagnostics in CXXFLAGS, but timemachine uses
 # string concatenation to add `-Wall` with no leading space, and cmake
 # provides no way to preserve a trailing space, sooo:
 unset CXXFLAGS
