@@ -60,10 +60,6 @@ error: `nvcc` can't emit AMD code, and hipcc-over-CUDA (`hip-nvidia`) is out of 
 `TEST_TOOLCHAIN` (`scale`/`nvcc`/`hip`) and `TEST_VENDOR` (`amd`/`nvidia`) for
 per-project scripts to branch on.
 
-> **Note:** `util/args.sh` still carries the older two-way SCALE-vs-CUDA detection and
-> has *not* been updated for the four-mode scheme. Tests that source it directly won't
-> see `hip-amd`; bring it in line when HIP support reaches those tests.
-
 Two optional flags, appended after `<test_name>`, support running against an
 already-built project (used by the container test stage below) without changing
 default native behavior:
@@ -147,12 +143,6 @@ defines a `log()` helper (echoes to stderr), and sources `util/git.sh` for you. 
   `GPUJPEG/04-test-claims.sh`, rather than shared from `util/` — kept in the file so it
   stays self-contained, matching the MSE-via-ImageMagick-`compare` pattern already
   duplicated inline in `cycles/03-test-examples.sh` and `nvflip/02-test.sh`.
-
-`util/args.sh` is a richer alternative arg-parser (supports `SKIP_N`/`STOP_AFTER_N` phase
-selection, `-check` to validate ordering, and `PARTIAL_PARSE`) for standalone scripts that
-need to parse `WORKDIR PATH_TO_SCALE GPU_ARCHITECTURE` themselves outside of the `test.sh`
-driver. No test currently sources it directly, and it no longer duplicates the
-`do_clone*`/`get_version` helpers (those live only in `git.sh` now).
 
 The `00-clone`/`01-patch`/`0N-build` vs. `0N+1-test*`/`0N+2-benchmark*` naming convention
 above isn't just cosmetic — it's what the container test stage (below) matches on to
