@@ -4,6 +4,12 @@
 LD_LIBRARY_PATH="$(realpath install/lib):${LD_LIBRARY_PATH:-}"
 export LD_LIBRARY_PATH
 
+# Without a GPU, ggml registers only the CPU backend, which test-backend-ops skips while still
+# reporting success, so a runner that has lost its GPU would pass the suite having tested nothing.
+devices="$(./install/bin/llama-bench --list-devices)"
+echo "${devices}"
+echo "${devices}" | grep -q 'CUDA'
+
 # -L main mirrors upstream CI: it keeps the GPU tests (test-backend-ops, test-llama-archs, ...) and
 # drops only the live-HuggingFace fixture tests ("model"/"python" labels), which diff frozen
 # snapshots against moving third-party uploads.
