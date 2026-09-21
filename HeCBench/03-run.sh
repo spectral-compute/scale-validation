@@ -22,46 +22,35 @@ fi
 
 TEST_DT=$(date '+%Y%m%d-%H%M%S')
 
-
 case "${TEST_MODE}" in
     scale-amd|scale-nvidia)
 		CUDA_ARCH_NUM="${CUDAARCHS#sm_}"
-		DATA_FILE="hecbench.scale.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.$TEST_DT.csv"
 
-		python3 "$OUT_DIR/tools/hecbench" run \
-			--model cuda \
-			--preset "scale-cuda-sm$CUDA_ARCH_NUM" \
-			--store "hecbench-results.scale.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.db" \
-			--format csv \
-			--output "$RESULTS_DIR/$DATA_FILE"
+		model="cuda"
+		preset="scale-cuda-sm$CUDA_ARCH_NUM"
+		store="hecbench-results.scale.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.db"
+		data_file="hecbench.scale.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.$TEST_DT.csv"
 		;;
 
 	hip-amd)
-		if [[ -z "$HIP_VISIBLE_DEVICES" ]]; then
+		if [[ -z "${HIP_VISIBLE_DEVICES:-}" ]]; then
 			echo "HIP_VISIBLE_DEVICES required to be set" 1>&2
 			exit 1
 		fi
-		
-		DATA_FILE="hecbench.hip.$TEST_GPU_ARCH.hip-$TEST_GPU_ARCH.$TEST_DT.csv"
 
-		python3 "$OUT_DIR/tools/hecbench" run \
-			--model hip \
-			--preset "hip-$TEST_GPU_ARCH" \
-			--store "hecbench-results.hip.$TEST_GPU_ARCH.hip-$TEST_GPU_ARCH.db" \
-			--format csv \
-			--output "$RESULTS_DIR/$DATA_FILE"
+		model="hip"
+		preset="hip-$TEST_GPU_ARCH"
+		store="hecbench-results.hip.$TEST_GPU_ARCH.hip-$TEST_GPU_ARCH.db"
+		data_file="hecbench.hip.$TEST_GPU_ARCH.hip-$TEST_GPU_ARCH.$TEST_DT.csv"
 		;;
 
 	nvcc-nvidia)
 		CUDA_ARCH_NUM="${CUDAARCHS#sm_}"
-		DATA_FILE="hecbench.nvcc.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.$TEST_DT.csv"
 
-		python3 "$OUT_DIR/tools/hecbench" run \
-			--model cuda \
-			--preset "cuda-sm$CUDA_ARCH_NUM" \
-			--store "hecbench-results.nvcc.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.db" \
-			--format csv \
-			--output "$RESULTS_DIR/$DATA_FILE"
+		model="cuda"
+		preset="cuda-sm$CUDA_ARCH_NUM"
+		store="hecbench-results.nvcc.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.db"
+		data_file="hecbench.nvcc.$TEST_GPU_ARCH.cuda-sm$CUDA_ARCH_NUM.$TEST_DT.csv"
 		;;
 
 	*)
@@ -70,7 +59,16 @@ case "${TEST_MODE}" in
 		;;
 esac
 
-if [ "$(wc -l < "$RESULTS_DIR/$DATA_FILE")" -le 1 ]; then
+data_file_path="$RESULTS_DIR/$data_file"
+
+python3 "$OUT_DIR/tools/hecbench" run \
+	--model "$model" \
+	--preset "$preset" \
+	--store "$store" \
+	--format csv \
+	--output "$data_file_path"
+
+if [ "$(wc -l < "$data_file_path")" -le 1 ]; then
     echo "hecbench produced no results (every benchmark skipped)" >&2
     exit 1
 fi
