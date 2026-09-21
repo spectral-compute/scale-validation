@@ -106,27 +106,45 @@ cat "$USER_PRESET_PATH"
 		# - All
 		sed -i -E 's/^([[:space:]]*)(prefetch)[[:space:]]*$/\1#\2  # SCALE: known failure/' src/CMakeLists.txt
 
-		# - gfx1201
-		if [[ "$TEST_GPU_ARCH" == "gfx1201" ]]; then
-			sed -i /blas-fp8gemm/d src/CMakeLists.txt
+		# - On AMD
+		if [[ "$TEST_MODE" == "scale-amd" ]]; then
+			# > gfx1201
+			if [[ "$TEST_GPU_ARCH" == "gfx1201" ]]; then
+				sed -i /blas-fp8gemm/d src/CMakeLists.txt
+			fi
+
+			# > gfx90a
+			if [[ "$TEST_GPU_ARCH" == "gfx90a" ]]; then
+				sed -i -E '/^[[:space:]]*mlp[[:space:]]*$/d' src/CMakeLists.txt
+			fi
+
+			# > gfx942
+			if [[ "$TEST_GPU_ARCH" == "gfx942" ]]; then
+				sed -i -E '/^[[:space:]]*mlp[[:space:]]*$/d' src/CMakeLists.txt
+			fi
 		fi
 
-		# - sm_120
-		if [[ "$TEST_GPU_ARCH" == "sm_120" ]]; then
-			sed -i -E '/^[[:space:]]*qkv[[:space:]]*$/d' src/CMakeLists.txt
-			sed -i /d3q19-bgk/d src/CMakeLists.txt
-			sed -i /quant3MatMul/d src/CMakeLists.txt
-			sed -i /sobol/d src/CMakeLists.txt
-		fi
+		# - On NVIDIA
+		if [[ "$TEST_MODE" == "scale-nvidia" ]]; then
+			# > sm_120
+			if [[ "$TEST_GPU_ARCH" == "sm_120" ]]; then
+				sed -i -E '/^[[:space:]]*qkv[[:space:]]*$/d' src/CMakeLists.txt
+				sed -i /d3q19-bgk/d src/CMakeLists.txt
+				sed -i /quant3MatMul/d src/CMakeLists.txt
+				sed -i /sobol/d src/CMakeLists.txt
 
-		# - gfx90a
-		if [[ "$TEST_GPU_ARCH" == "gfx90a" ]]; then
-			sed -i -E '/^[[:space:]]*mlp[[:space:]]*$/d' src/CMakeLists.txt
-		fi
+				# "error: use of undeclared identifier '__NV_ATOMIC_RELAXED'"
+				sed -i -E '/^[[:space:]]*michalewicz[[:space:]]*$/d' src/CMakeLists.txt
+				sed -i -E '/^[[:space:]]*graphB\+[[:space:]]*$/d' src/CMakeLists.txt
+				sed -i -E '/^[[:space:]]*scatter[[:space:]]*$/d' src/CMakeLists.txt
+				sed -i -E '/^[[:space:]]*hausdorff[[:space:]]*$/d' src/CMakeLists.txt
+				sed -i -E '/^[[:space:]]*lebesgue[[:space:]]*$/d' src/CMakeLists.txt
+				sed -i -E '/^[[:space:]]*atomicCAS[[:space:]]*$/d' src/CMakeLists.txt
 
-		# - gfx942
-		if [[ "$TEST_GPU_ARCH" == "gfx942" ]]; then
-			sed -i -E '/^[[:space:]]*mlp[[:space:]]*$/d' src/CMakeLists.txt
+				# Link error on isfinite
+				sed -i -E '/^[[:space:]]*permute[[:space:]]*$/d' src/CMakeLists.txt
+
+			fi
 		fi
 	fi
 
