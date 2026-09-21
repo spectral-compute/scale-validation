@@ -65,6 +65,7 @@ gromacs v2026.3
 HeCBench 47f8668f2e933c92273297b56acb7ea0f518d83a
 cudahandbook 5bd3f275ca5ec109b78c7612432e7f1dd04b72f7
 warp v1.14.0
+code_saturne v9.1.0
 colmap 4.0.4
 gpusnek 5aede38a1e94c10f6ca6f3b9161a0ba687b1091d
 ExtendedOpenDwarfs ec33be1e7252449e84b3647ad76504ee30d83059
