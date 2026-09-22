@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 REF="$(pwd)/nvflip/images/reference.png"
 TEST="$(pwd)/nvflip/images/test.png"
