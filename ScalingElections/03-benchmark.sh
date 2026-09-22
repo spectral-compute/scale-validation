@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 APP_ROOT="$(pwd)/scaling-elections"
 APP_DIR="${APP_ROOT}/ScalingElections"
