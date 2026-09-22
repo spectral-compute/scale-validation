@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 # Disable nccl. The makefile uses dpkg and grep to see if it's installed, which makes
 # it false-positive on any package with the substring "nccl" in its name (such as
