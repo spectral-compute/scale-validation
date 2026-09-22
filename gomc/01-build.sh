@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 # Compile for the architectures we want.
 for F in GOMC/CMake/GOMCCUDASetup.cmake GOMC/test/BuildGPUTests.cmake; do
