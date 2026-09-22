@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 # We don't support the warpgroup stuff yet.
 export SCALE_CUDA_VERSION="11.8"
