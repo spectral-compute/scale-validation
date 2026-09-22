@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 # This script tests PyTorch datatypes by training two small models on MNIST data with
 # three different precisions. We check the training curve follows "roughly  the right
