@@ -234,7 +234,7 @@ if ! command -v pixi >/dev/null 2>&1; then
     fi
 fi
 
-for required_path in "ExtendedOpenDwarfs/00-clone.sh" "ExtendedOpenDwarfs/ensure-scale.sh"; do
+for required_path in "ExtendedOpenDwarfs/00-clone.sh" "ExtendedOpenDwarfs/tools/ensure-scale.sh"; do
     if ! git -C "$SCALE_VALIDATION_ROOT" cat-file -e "${EOD_REGRESSION_REF}:${required_path}" 2>/dev/null; then
         echo "error: ${required_path} does not exist at ${EOD_REGRESSION_REF} in ${EOD_REGRESSION_REPO_URL}." >&2
         echo "       Every host clones from EOD_REGRESSION_REPO_URL and checks out EOD_REGRESSION_REF -- if" >&2
@@ -274,7 +274,7 @@ build_host_command() {
         # local heredoc right now.
         ensure_scale_block=$(
             cat <<EOS
-SCALE_VERSION="${EOD_REGRESSION_SCALE_VERSION}" ./ensure-scale.sh
+SCALE_VERSION="${EOD_REGRESSION_SCALE_VERSION}" SCALE_INSTALL_DIR="\$PWD" ./tools/ensure-scale.sh
 export SCALE_ROOT="\$(cat .ensure_scale_last_root)"
 echo "Using SCALE_ROOT=\${SCALE_ROOT}"
 EOS
