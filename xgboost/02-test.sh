@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 # The Allocator.OOM test segfaults even with an nvcc/nvidia build.
 # The *Death tests are testing for correct operation in the presence of process crashes,

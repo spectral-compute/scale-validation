@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 do_clone xgboost https://github.com/dmlc/xgboost.git "$(get_version xgboost)"
 do_clone House-Prices-Advanced-Regression https://github.com/ankita1112/House-Prices-Advanced-Regression.git "$(get_version House-Prices-Advanced-Regression)"
