@@ -5,6 +5,13 @@ OUT_DIR="$(realpath .)"
 SRC_DIR="${SRC_DIR:-${OUT_DIR}/HeCBench}"
 
 USER_PRESET_PATH="$SRC_DIR/CMakeUserPresets.json"
+TEST_GPU_ARCH="${SCALE_ENV:-${CUDAARCHS}}"
+
+if [[ -z "${TEST_MODE:-}" ]] && [[ "${SCALE_ENV:-}" == *gfx* ]]; then
+    export TEST_MODE="scale-amd"
+elif [[ -z "${TEST_MODE:-}" ]]; then
+    export TEST_MODE="scale-nvidia"
+fi
 
 # If jq fails, the tmp files we use might stick around. Clean them up
 trap 'rm -f "${tmp-}"' EXIT
