@@ -28,7 +28,7 @@ patch -p0 <"${SCRIPT_DIR}/aws-checksum.patch"
 patch -p0 <"${SCRIPT_DIR}/python-bfloat16.patch"
 
 # Configure.
-source "${SCRIPT_DIR}"/config.sh
+source "${SCRIPT_DIR}"/tools/config.sh
 
 ## Run the configure script.
 ./configure
