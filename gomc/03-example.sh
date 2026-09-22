@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 OUT_DIR=$(realpath .)
 cd "GOMC_Examples/NVT_GEMC/pure_fluid/octane_T_360_00_K"
