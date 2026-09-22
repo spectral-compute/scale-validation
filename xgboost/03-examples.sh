@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 # Look for the Python package. These end up in different places on Arch and Ubuntu.
 
