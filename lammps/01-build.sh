@@ -1,6 +1,5 @@
-#!/bin/bash
-
-set -e
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 MPI_DIR="$(realpath ../)/openmpi/install"
 if [ ! -e "${MPI_DIR}" ] ; then
