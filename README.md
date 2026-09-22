@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <0f1ce871>.**
+**This shows the test status for SCALE: master <fc2f36f4>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -34,27 +34,27 @@ Contributions welcome!
 | gpu_jpeg2k          | ee715e99b6a57a...       | ❓|✅|✅|❓|✅|
 | GPUJPEG          | 3e045d1df72735...       | ❓|✅|✅|❓|✅|
 | gromacs          | v2026.3       | ❓|❌|❌|❓|❌|
-| hashcat          | 6716447dfce969...       | ❓|✅|✅|❓|✅|
+| hashcat          | 6716447dfce969...       | ❓|✅|❌|❓|✅|
 | hashinator          | 34cf1886ab5f0a...       | ❓|✅|✅|❓|✅|
 | HeCBench          | 47f8668f2e933c...       | ❌|❌|❌|❓|❌|
 | hypre          | v2.33.0       | ❓|✅|✅|❓|✅|
 | jitify          | master       | ❓|✅|❌|❓|✅|
 | kokkos          | 60d8384266eba9...       | ❓|✅|✅|❓|✅|
 | lammps          |        | ❌|❌|❌|❓|❌|
-| llama.cpp          | 3ecfb150a4bd2d...       | ❓|❌|✅|❓|✅|
+| llama.cpp          | 3ecfb150a4bd2d...       | ❓|❌|❌|❓|❌|
 | llm.c          | 7ecd8906afe6ed...       | ❓|✅|✅|❓|✅|
 | nixl          | e128059af332df...       | ✅|✅|✅|❓|❌|
 | nvflip          | 1eb247cabcf286...       | ❓|✅|❌|❓|✅|
 | opencv          | 725e440d278aca...       | ✅|✅|✅|❓|✅|
 | PhysX          | 1e44a0e2998f06...       | ✅|✅|✅|❓|✅|
-| pytorch          | v2.9.0       | ❓|✅|❌|❓|✅|
+| pytorch          | v2.9.0       | ❓|✅|✅|❓|✅|
 | quda          | 07822b61c6ab5f...       | ❌|✅|✅|❓|✅|
 | RabbitCT          | main       | ❓|✅|❌|❓|✅|
 | risc0          | v1.2.2       | ✅|✅|✅|❓|✅|
-| rodinia_suite          | spectral       | ❓|❌|❌|❓|✅|
+| rodinia_suite          | spectral       | ❓|❌|✅|❓|✅|
 | stdgpu          | 563dc59d6d08df...       | ❓|❌|✅|❓|✅|
 | TCLB          | v6.7       | ❓|✅|❌|❓|✅|
-| thrust          | 756c5afc0750f1...       | ❓|❌|✅|❓|✅|
+| thrust          | 756c5afc0750f1...       | ❓|❌|❌|❓|✅|
 | timemachine          | 01f14f8dd49fbd...       | ✅|✅|✅|❓|❌|
 | toolchain          |        | ❓|❓|❓|✅|❓|
 | UppASD          | gpu_new       | ❓|✅|✅|❓|❌|
@@ -69,7 +69,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 29435.
+Pipeline ID: 29677.
 
 ## Running Tests
 
@@ -84,11 +84,10 @@ The test driver script `test.sh` may be used to conveniently execute an
 entire test:
 
 ```bash
-./test.sh <workdir> <path_to_tooklit> gfx1234 <name_of_test>
+./test.sh <workdir> <path_to_scale> gfx1234 <name_of_test>
 ```
 
-For example: `./test.sh ~/cuda_tests /opt/scale gfx1100 hashcat` for compiling with
-SCALE for AMD gfx1100 devices.
+For example: `./test.sh ~/cuda_tests /opt/scale gfx1100 hashcat`.
 
 See the `test.sh` usage message for more detailed information and other
 options for adjusting how tests are run.
