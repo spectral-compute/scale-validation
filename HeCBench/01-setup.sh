@@ -118,6 +118,7 @@ cat "$USER_PRESET_PATH"
 			# > gfx1201
 			if [[ "$TEST_GPU_ARCH" == "gfx1201" ]]; then
 				sed -i /blas-fp8gemm/d src/CMakeLists.txt
+				sed -i -E '/^[[:space:]]*attentionMultiHeadKVCache[[:space:]]*$/d' src/CMakeLists.txt
 			fi
 
 			# > gfx90a
