@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 # Clear the bazel cache so we always get a clean build.
 rm -rf ~/.cache/bazel
