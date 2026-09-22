@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 # Download the benchmark data if it doesn't already exist.
 OUT_DIR=$(realpath .)
