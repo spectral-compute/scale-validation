@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 FAILURES=()
 for EXAMPLE in cube_surface cube_volume monkey sphere_bump; do
