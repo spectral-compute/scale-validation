@@ -1,5 +1,5 @@
-#!/bin/bash
-set -ETeuo pipefail
+#!/usr/bin/env bash
+. "$(dirname "$0")"/../util/prelude.sh
 
 OUT_DIR="$(realpath .)"
 SRC_DIR="${SRC_DIR:-${OUT_DIR}/HeCBench}"
