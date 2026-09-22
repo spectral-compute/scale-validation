@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
+raise_error_if_using_rocm
 
 # Just running ./src/amgx_tests_launcher generates a lot of failures even on Nvidia. So only run the tests that pass
 # there.
