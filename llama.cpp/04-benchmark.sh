@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
 
-LD_LIBRARY_PATH="$(realpath install/lib):${LD_LIBRARY_PATH:-}"
+LD_LIBRARY_PATH="$(realpath build/bin):${LD_LIBRARY_PATH:-}"
 export LD_LIBRARY_PATH
 
 # GGML_CUDA_DISABLE_GRAPHS=1: as in 03-test.sh, works around a known issue (tracked internally).

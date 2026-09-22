@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
 
-LD_LIBRARY_PATH="$(realpath install/lib):${LD_LIBRARY_PATH:-}"
+LD_LIBRARY_PATH="$(realpath build/bin):${LD_LIBRARY_PATH:-}"
 export LD_LIBRARY_PATH
 
 # Without a GPU, ggml registers only the CPU backend, which test-backend-ops skips while still
