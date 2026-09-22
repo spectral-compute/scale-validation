@@ -48,32 +48,32 @@ for ZIP in "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks/"*.zip; do
     cd "${RESULT_DIR}/${NAME}"
 
     # Some tests want special treatment.
-    EXTRA_ARGS=""
+    EXTRA_ARGS=()
     case "${NAME}" in
     benchBFI)
         # The default is too slow for this benchmark.
-        EXTRA_ARGS="-nsteps 2500"
+        EXTRA_ARGS=(-nsteps 2500)
         ;;
     benchPEP)
         # The default is too slow for this benchmark. So much so that this probably actually has a significant
         # amount of overhead (10 steps are not 10 times faster than 100).
-        EXTRA_ARGS="-nsteps 100"
+        EXTRA_ARGS=(-nsteps 100)
         ;;
     benchRIB)
         # The default is too slow for this benchmark.
-        EXTRA_ARGS="-nsteps 500"
+        EXTRA_ARGS=(-nsteps 500)
         ;;
     benchSFC)
         # The default is a little fast for this benchmark.
-        EXTRA_ARGS="-nsteps 20000"
+        EXTRA_ARGS=(-nsteps 20000)
         ;;
     benchSNC)
         # The default is a little fast for this benchmark.
-        EXTRA_ARGS="-nsteps 100000"
+        EXTRA_ARGS=(-nsteps 100000)
         ;;
     benchSNI)
         # The default is a little fast for this benchmark.
-        EXTRA_ARGS="-nsteps 100000"
+        EXTRA_ARGS=(-nsteps 100000)
         ;;
     esac
 
@@ -81,7 +81,7 @@ for ZIP in "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks/"*.zip; do
     unzip "${ZIP}"
 
     # See comment in bench-short on comparison to HIP
-    log "Running ${NAME}.tpr with extra args: ${EXTRA_ARGS}"
+    log "Running ${NAME}.tpr with extra args: ${EXTRA_ARGS[*]}"
 
     set +e
     if ! gmx mdrun -s "${NAME}.tpr" "${EXTRA_ARGS[@]}" -ntmpi 1 -nb gpu; then
