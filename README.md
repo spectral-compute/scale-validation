@@ -5,63 +5,63 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <fc2f36f4>.**
+**This shows the test status for SCALE: master <ae6d065f>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
 Contributions welcome!
 
-| Project        | Version                    | gfx90a|gfx1201|gfx1100|1|sm_120|
+| Project        | Version                    | gfx90a|gfx1201|gfx1100|sm_120|1|
 |----------------|----------------------------| -|-|-|-|-|
-| alien          | v4.12.3       | ❓|✅|✅|❓|✅|
-| AMGX          | v2.4.0       | ❓|✅|✅|❓|✅|
-| arrayfire          | v3.9.0       | ✅|✅|✅|❓|✅|
-| bitnet          | 404980eecae38a...       | ✅|✅|✅|❓|✅|
-| caffe          | 9b891540183ddc...       | ❓|✅|✅|❓|✅|
-| ctranslate2          | v4.5.0       | ✅|✅|✅|❓|✅|
-| CUDALibrarySamples          | 5ac0f9a8032a10...       | ❓|✅|✅|❓|✅|
-| cuml          | b17f2dbbea05ae...       | ✅|✅|✅|❓|✅|
-| cuSZ          | v0.16.2       | ✅|✅|✅|❓|✅|
-| cutlass          | v4.1.0       | ❓|❌|❌|❓|✅|
-| CV-CUDA          | f769fe4bf336ab...       | ✅|✅|✅|❓|✅|
-| cycles          | v4.4.0       | ❓|✅|✅|❓|✅|
-| faiss          | v1.9.0       | ❓|✅|✅|❓|✅|
-| FastEddy          | v2.0.0       | ❓|✅|❌|❓|✅|
-| ffmpeg          | n7.1.3       | ❓|✅|✅|❓|✅|
-| FLAMEGPU2          | v2.0.0-rc.2       | ✅|✅|✅|❓|✅|
-| ggml          | d3a58b079f50b4...       | ❓|✅|✅|❓|✅|
-| gomc          | 4c12477f79dd63...       | ❓|✅|✅|❓|✅|
-| gpu_jpeg2k          | ee715e99b6a57a...       | ❓|✅|✅|❓|✅|
-| GPUJPEG          | 3e045d1df72735...       | ❓|✅|✅|❓|✅|
-| gromacs          | v2026.3       | ❓|❌|❌|❓|❌|
-| hashcat          | 6716447dfce969...       | ❓|✅|❌|❓|✅|
-| hashinator          | 34cf1886ab5f0a...       | ❓|✅|✅|❓|✅|
-| HeCBench          | 47f8668f2e933c...       | ❌|❌|❌|❓|❌|
-| hypre          | v2.33.0       | ❓|✅|✅|❓|✅|
-| jitify          | master       | ❓|✅|❌|❓|✅|
-| kokkos          | 60d8384266eba9...       | ❓|✅|✅|❓|✅|
-| lammps          |        | ❌|❌|❌|❓|❌|
-| llama.cpp          | 3ecfb150a4bd2d...       | ❓|❌|❌|❓|❌|
-| llm.c          | 7ecd8906afe6ed...       | ❓|✅|✅|❓|✅|
-| nixl          | e128059af332df...       | ✅|✅|✅|❓|❌|
-| nvflip          | 1eb247cabcf286...       | ❓|✅|❌|❓|✅|
-| opencv          | 725e440d278aca...       | ✅|✅|✅|❓|✅|
-| PhysX          | 1e44a0e2998f06...       | ✅|✅|✅|❓|✅|
-| pytorch          | v2.9.0       | ❓|✅|✅|❓|✅|
-| quda          | 07822b61c6ab5f...       | ❌|✅|✅|❓|✅|
-| RabbitCT          | main       | ❓|✅|❌|❓|✅|
-| risc0          | v1.2.2       | ✅|✅|✅|❓|✅|
-| rodinia_suite          | spectral       | ❓|❌|✅|❓|✅|
-| stdgpu          | 563dc59d6d08df...       | ❓|❌|✅|❓|✅|
-| TCLB          | v6.7       | ❓|✅|❌|❓|✅|
-| thrust          | 756c5afc0750f1...       | ❓|❌|❌|❓|✅|
-| timemachine          | 01f14f8dd49fbd...       | ✅|✅|✅|❓|❌|
-| toolchain          |        | ❓|❓|❓|✅|❓|
-| UppASD          | gpu_new       | ❓|✅|✅|❓|❌|
-| vllm          | v0.6.3       | ✅|✅|✅|❓|✅|
-| warp          | v1.14.0       | ✅|✅|✅|❓|✅|
-| whispercpp          | v1.7.1       | ❓|✅|✅|❓|✅|
-| xgboost          | v2.1.0       | ❓|✅|✅|❓|✅|
+| alien          | v4.12.3       | ✅|✅|✅|✅|❓|
+| AMGX          | v2.4.0       | ✅|✅|✅|✅|❓|
+| arrayfire          | v3.9.0       | ✅|✅|✅|✅|❓|
+| bitnet          | 404980eecae38a...       | ✅|✅|✅|✅|❓|
+| caffe          | 9b891540183ddc...       | ✅|✅|❌|✅|❓|
+| ctranslate2          | v4.5.0       | ✅|✅|✅|✅|❓|
+| CUDALibrarySamples          | 5ac0f9a8032a10...       | ✅|✅|✅|✅|❓|
+| cuml          | b17f2dbbea05ae...       | ✅|✅|✅|✅|❓|
+| cuSZ          | v0.16.2       | ✅|✅|✅|✅|❓|
+| cutlass          | v4.1.0       | ❌|❌|❌|✅|❓|
+| CV-CUDA          | f769fe4bf336ab...       | ✅|✅|✅|✅|❓|
+| cycles          | v4.4.0       | ❌|✅|✅|✅|❓|
+| faiss          | v1.9.0       | ✅|✅|✅|✅|❓|
+| FastEddy          | v2.0.0       | ❌|✅|❌|✅|❓|
+| ffmpeg          | n7.1.3       | ✅|✅|✅|✅|❓|
+| FLAMEGPU2          | v2.0.0-rc.2       | ✅|✅|✅|✅|❓|
+| ggml          | d3a58b079f50b4...       | ✅|✅|✅|✅|❓|
+| gomc          | 4c12477f79dd63...       | ✅|✅|✅|✅|❓|
+| gpu_jpeg2k          | ee715e99b6a57a...       | ✅|✅|✅|✅|❓|
+| GPUJPEG          | 3e045d1df72735...       | ✅|✅|✅|✅|❓|
+| gromacs          | v2026.3       | ❌|❌|❌|❌|❓|
+| hashcat          | 6716447dfce969...       | ✅|✅|✅|✅|❓|
+| hashinator          | 34cf1886ab5f0a...       | ✅|✅|✅|✅|❓|
+| HeCBench          | 47f8668f2e933c...       | ❌|❌|❌|❌|❓|
+| hypre          | v2.33.0       | ✅|✅|✅|✅|❓|
+| jitify          | master       | ✅|✅|✅|✅|❓|
+| kokkos          | 60d8384266eba9...       | ✅|✅|✅|✅|❓|
+| lammps          |        | ❌|❌|❌|❌|❓|
+| llama.cpp          | 3ecfb150a4bd2d...       | ❌|❌|❌|✅|❓|
+| llm.c          | 7ecd8906afe6ed...       | ✅|✅|✅|✅|❓|
+| nixl          | e128059af332df...       | ✅|✅|✅|❌|❓|
+| nvflip          | 1eb247cabcf286...       | ✅|✅|✅|✅|❓|
+| opencv          | 725e440d278aca...       | ✅|✅|✅|✅|❓|
+| PhysX          | 1e44a0e2998f06...       | ✅|✅|✅|✅|❓|
+| pytorch          | v2.9.0       | ❌|✅|✅|✅|❓|
+| quda          | 07822b61c6ab5f...       | ❌|✅|✅|✅|❓|
+| RabbitCT          | main       | ✅|✅|❌|✅|❓|
+| risc0          | v1.2.2       | ✅|✅|✅|✅|❓|
+| rodinia_suite          | spectral       | ✅|✅|❌|✅|❓|
+| stdgpu          | 563dc59d6d08df...       | ❓|❌|✅|✅|❓|
+| TCLB          | v6.7       | ✅|✅|❌|✅|❓|
+| thrust          | 756c5afc0750f1...       | ❓|❌|❌|✅|❓|
+| timemachine          | 01f14f8dd49fbd...       | ✅|✅|✅|❌|❓|
+| toolchain          |        | ❓|❓|❓|❓|✅|
+| UppASD          | gpu_new       | ✅|✅|✅|❌|❓|
+| vllm          | v0.6.3       | ✅|✅|✅|✅|❓|
+| warp          | v1.14.0       | ✅|✅|✅|✅|❓|
+| whispercpp          | v1.7.1       | ❌|✅|✅|✅|❓|
+| xgboost          | v2.1.0       | ❓|❌|✅|✅|❓|
 
 *Key:*
 * ✅ Validated succesfully
@@ -69,7 +69,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 29677.
+Pipeline ID: 29941.
 
 ## Running Tests
 
