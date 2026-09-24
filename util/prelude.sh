@@ -19,16 +19,6 @@ function log() {
     >&2 echo -e "$@"
 }
 
-# Make sure we correctly set up our test(s) by requiring it to be
-# run through the test harness.
-function ensure_test_harness() {
-	if [[ -z "${TEST_MODE:-}" ]]; then
-		log "TEST_MODE is not set: run this via test.sh, not directly."
-		log "Try again with: ./test.sh <workdir> <path_to_toolkit> <gpu_arch> $(basename "$SCRIPT_DIR")"
-		exit 1
-	fi
-}
-
 # A recent change to `test.sh` allowed passing the ROCm install
 # path as an argument. As this requires a different compiler chain
 # and set of build flags and environment variables, we define this
@@ -42,8 +32,3 @@ function raise_error_if_using_rocm() {
 		exit 1
 	fi
 }
-
-
-
-# Keep this function at the bottom of this file
-ensure_test_harness
