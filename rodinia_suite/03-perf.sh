@@ -13,7 +13,7 @@ usage() {
 Run Rodinia performance evaluation for SCALE.
 
 Usage:
-  RUN_PERF_EVAL=1 ./test.sh WORKDIR SCALE_DIR GPU_ARCH rodinia_suite
+  RUN_PERF_EVAL=1 ./test.sh WORKDIR TOOLKIT_DIR GPU_ARCH rodinia_suite
 
 Environment variables:
   RUNS=<N>             Number of iterations (default: 2)
