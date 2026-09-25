@@ -9,5 +9,7 @@ raise_error_if_using_rocm
 # the caffe source dir), not via `make runtest`, so timeout supervises the real test
 # binary instead of relying on `make` to forward the kill signal. Keep in sync with that
 # CMakeLists.txt if the caffe version pin changes.
-export GTEST_FILTER='-BenchmarkTest*'
+
+# BiasLayerTest hangs tracked here: https://code.spectralcompute.com/spectral-compute/scale/issues/1073#issuecomment-14136
+export GTEST_FILTER='-BenchmarkTest*:BiasLayerTest*'
 (cd caffe && timeout --kill-after=30s 2h ../build/test/test.testbin --gtest_shuffle)
