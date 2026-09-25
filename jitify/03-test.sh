@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 # TODO: https://code.spectralcompute.com/spectral-compute/scale/issues/1116
 if [[ ! $SCALE_ENV == gfx* ]]; then

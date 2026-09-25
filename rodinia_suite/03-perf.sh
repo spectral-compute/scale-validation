@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 # Skip by default when test.sh runs all *.sh
 if [[ "${RUN_PERF_EVAL:-0}" != "1" ]]; then

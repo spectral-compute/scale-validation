@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 if ! [ -f HIGGS_prepared.tar.xz ]; then
     wget -nv -nc https://data.spectralcompute.co.uk/lightgbm/HIGGS_prepared.tar.xz

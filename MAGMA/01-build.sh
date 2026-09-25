@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 # This is incredibly cursed, but it's the official instructions!
 # This generates part of the cmake build system using make.

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 # Our patches don't apply to non clang-y nvcc
 if ! "${CUDA_PATH}/bin/nvcc" --version | grep clang; then

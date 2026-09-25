@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 PYTHONPATH="$(echo "${OUT_DIR}"/tensorflow/install/usr/lib/python*/site-packages):${OUT_DIR}/tensorflow/models"
 export PYTHONPATH

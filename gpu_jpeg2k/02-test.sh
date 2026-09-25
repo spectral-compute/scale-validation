@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 if ! [ -f BSDS300-images.tgz ]; then
     # Some images, and the result of running them through this on nvidia.

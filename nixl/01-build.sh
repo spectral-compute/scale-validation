@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 # Build UCX from source. NIXL requires UCX with --enable-mt (multi-thread
 # support). Ubuntu's packaged UCX is too old (1.16) and lacks the API NIXL

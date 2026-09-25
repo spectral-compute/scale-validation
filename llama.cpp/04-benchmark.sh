@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 LD_LIBRARY_PATH="$(realpath build/bin):${LD_LIBRARY_PATH:-}"
 export LD_LIBRARY_PATH

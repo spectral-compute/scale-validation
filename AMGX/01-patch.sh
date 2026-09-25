@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 # Patch an integer overflow in the Memory_Use_* tests
 patch -p0 -d "AMGX" <"${SCRIPT_DIR}/memory_use_int_overflow.patch"

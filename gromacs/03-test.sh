@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 # GMXRC doesn't like the strict error flags we use in our scripts
 set +ETeuo pipefail

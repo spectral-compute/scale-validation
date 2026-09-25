@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 export PATH="${CUDA_PATH}/bin:${PATH}"
 export NVCC="${CUDA_PATH}/bin/nvcc"

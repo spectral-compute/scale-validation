@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 # Run NIXL's bundled C++ example end-to-end and confirm it reports a
 # completed transfer.

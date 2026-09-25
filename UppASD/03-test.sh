@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 cd "UppASD/benchmarks/bccFe"
 # The full set is 10 20 30 40 50 60, but we don't want to run a full benchmark

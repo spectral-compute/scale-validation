@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 # The BenchmarkTest* tests are overly fragile. This is a defect in those tests, not SCALE.
 # GPU gradient-check kernels have hung indefinitely under SCALE before; timeout bounds

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 compare_files() {
     local f1="$1" f2="$2" log="${3:-diff_log.txt}"

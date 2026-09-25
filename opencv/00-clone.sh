@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 do_clone opencv https://github.com/opencv/opencv.git "$(get_version opencv)"
 do_clone opencv_contrib https://github.com/opencv/opencv_contrib.git "$(get_version opencv_contrib)"

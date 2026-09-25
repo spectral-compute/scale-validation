@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
-raise_error_if_using_rocm
 
 # test.sh sets colour-diagnostics in CXXFLAGS, but timemachine uses
 # string concatenation to add `-Wall` with no leading space, and cmake
