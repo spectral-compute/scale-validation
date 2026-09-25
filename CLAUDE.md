@@ -26,39 +26,29 @@ upstream via `git ls-remote`, and reports the release gap.
 ```
 
 `test.sh` is the driver. It wipes `<workdir>/<test_name>`, sets up the toolchain
-environment for the selected mode (for SCALE, by sourcing `<toolkit>/bin/scaleenv
-<gpu_arch>`), then runs every `*.sh` in the test directory **in lexicographical order**
+environment, then runs every `*.sh` in the test directory **in lexicographical order**
 with `set -o errexit` — the first failing script fails the test.
 
-### Mode selection
+### Toolchain selection
 
-The two arguments are orthogonal: **the toolkit path decides the compiler, the GPU arch
-decides the target vendor.** Four combinations are supported:
+`<path_to_toolkit>` is either a SCALE install or an NVIDIA CUDA install, identified from
+its layout:
 
-| `<path_to_toolkit>` | `<gpu_arch>` | `TEST_MODE` |
-| --- | --- | --- |
-| SCALE install | `gfx1100` | `scale-amd` |
-| SCALE install | `sm_120` | `scale-nvidia` |
-| NVIDIA CUDA install | `sm_120` | `nvcc-nvidia` |
-| ROCm install | `gfx1100` | `hip-amd` |
+- `bin/scaleenv` present → **SCALE**. `test.sh` sources `<toolkit>/bin/scaleenv
+  <gpu_arch>`, which sets up the CUDA environment (`CUDAARCHS`, `PATH`, `SCALE_ENV`, ...)
+  for the target, AMD (`gfx*`) or NVIDIA (`sm_*`). It also exports colour-diagnostic
+  flags and a long `NVCC_APPEND_FLAGS` list of `-Wno-*` warning suppressions.
+- otherwise `bin/nvcc` present → **NVIDIA CUDA**. `test.sh` exports the variables
+  `scaleenv` would have set (`CUDA_PATH`, `CUDACXX`, `CUDAARCHS` with the `sm_` prefix
+  stripped, `PATH`, `LD_LIBRARY_PATH`, ...).
+- neither → error.
 
-The toolchain is identified from the install layout, probed **in this order**:
-`bin/scaleenv` → SCALE, then `bin/hipconfig`/`bin/hipcc` → ROCm/HIP, then `bin/nvcc` →
-NVIDIA CUDA. The order matters — a SCALE install also ships a `bin/nvcc`, so probing for
-nvcc first would misidentify every SCALE run.
+The order matters: a SCALE install also ships a `bin/nvcc`.
 
-The vendor is a purely syntactic classification of the arch string: `gfx*` (including
-feature suffixes like `gfx90a:xnack+`) is AMD, `sm_*`/`compute_*`/bare digits is NVIDIA.
-
-**Nothing inspects the machine's hardware** — no `nvidia-smi`, no `rocm-smi`, no device
-node checks. That's deliberate: validation machines may have both AMD and NVIDIA
-hardware and both drivers installed, so probing would pick the wrong answer. The two
-arguments are the only signal. The remaining two pairings are rejected with an explicit
-error: `nvcc` can't emit AMD code, and hipcc-over-CUDA (`hip-nvidia`) is out of scope.
-
-`test.sh` exports `TEST_MODE` (the combined `<toolchain>-<vendor>` string) plus
-`TEST_TOOLCHAIN` (`scale`/`nvcc`/`hip`) and `TEST_VENDOR` (`amd`/`nvidia`) for
-per-project scripts to branch on.
+`test.sh` exports `TEST_GPU_ARCH` (the raw `<gpu_arch>` argument) for per-project
+scripts. It records the mode (`scale` or `nvidia-cuda`) in the log header, but
+**doesn't export it**. A script that needs to know whether it's running under SCALE
+checks `[[ -n "${SCALE_ENV:-}" ]]` (see `HeCBench/01-build.sh`).
 
 Two optional flags, appended after `<test_name>`, support running against an
 already-built project (used by the container test stage below) without changing
