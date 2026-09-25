@@ -13,7 +13,7 @@ ucx_install_dir="$(realpath ucx-install)"
         --prefix="${ucx_install_dir}" \
         --with-cuda="${CUDA_DIR}" \
         --enable-mt
-    make -j"$(nproc)"
+    make -O -j"$(nproc)"
     make install
 )
 
