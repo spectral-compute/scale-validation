@@ -27,10 +27,6 @@ args=(
     -DCMAKE_CUDA_COMPILER="nvcc"
     -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}"
 
-    # SCALE 1.7.3 doesn't ship a bin2c anywhere, unlike NVIDIA, but lammps wants it
-    # Patch shim script reimplements bin2c's byte-to-C-array output
-    -DBIN2C="$(realpath "$(dirname "$0")")/bin2c-shim.py"
-
     -DCUDA_BUILD_MULTIARCH=OFF
 
     # The packages holding most of the GPU package's accelerated pair and kspace styles.
