@@ -30,28 +30,3 @@ assert n == 1, f"expected exactly one match for the int2 block, found {n}"
 with open(path, "w") as f:
     f.write(content.replace(old, new))
 PYEOF
-
-# nvd_device.h queries every device attr at startup and aborts if not succeeding.
-# but SCALE 1.7.3 doesn't implement CU_DEVICE_ATTRIBUTE_MAX_PITCH
-# But it's safe to  just patch default memPitch to 0 here: max_pitch() is only used for an info dump
-# and LAMMPS's OpenCL backend already hardcodes it to 0
-python3 - <<'PYEOF'
-path = "lammps/lib/gpu/geryon/nvd_device.h"
-with open(path) as f:
-    content = f.read()
-old = "    CU_SAFE_CALL_NS(cuDeviceGetAttribute(&prop.memPitch, CU_DEVICE_ATTRIBUTE_MAX_PITCH, dev));"
-new = """    {
-      CUresult pitch_err = cuDeviceGetAttribute(&prop.memPitch, CU_DEVICE_ATTRIBUTE_MAX_PITCH, dev);
-      if (pitch_err == CUDA_ERROR_NOT_SUPPORTED) {
-        prop.memPitch = 0;
-      } else if (pitch_err != CUDA_SUCCESS) {
-        fprintf(stderr, "Cuda driver error %d in call at file '%s' in line %i.\\n",
-                pitch_err, __FILE__, __LINE__);
-        NVD_GERYON_EXIT;
-      }
-    }"""
-n = content.count(old)
-assert n == 1, f"expected exactly one match for the memPitch query, found {n}"
-with open(path, "w") as f:
-    f.write(content.replace(old, new))
-PYEOF
