@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <19908a3f>.**
+**This shows the test status for SCALE: master <5eee7203>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -13,11 +13,11 @@ Contributions welcome!
 
 | Project        | Version                    | gfx90a|gfx1201|gfx1100|1|sm_120|
 |----------------|----------------------------| -|-|-|-|-|
-| alien          | v4.12.3       | ✅|❌|✅|❓|✅|
+| alien          | v4.12.3       | ✅|✅|✅|❓|✅|
 | AMGX          | v2.4.0       | ✅|✅|✅|❓|✅|
 | arrayfire          | v3.9.0       | ✅|✅|✅|❓|✅|
 | bitnet          | 404980eecae38a...       | ✅|✅|✅|❓|✅|
-| caffe          | 9b891540183ddc...       | ❌|✅|✅|❓|✅|
+| caffe          | 9b891540183ddc...       | ✅|❌|✅|❓|✅|
 | ctranslate2          | v4.5.0       | ✅|✅|✅|❓|✅|
 | CUDALibrarySamples          | 5ac0f9a8032a10...       | ✅|✅|✅|❓|✅|
 | cuml          | b17f2dbbea05ae...       | ✅|✅|✅|❓|✅|
@@ -33,7 +33,7 @@ Contributions welcome!
 | gomc          | 4c12477f79dd63...       | ✅|✅|✅|❓|✅|
 | gpu_jpeg2k          | ee715e99b6a57a...       | ✅|✅|✅|❓|✅|
 | GPUJPEG          | 3e045d1df72735...       | ✅|✅|✅|❓|✅|
-| gromacs          | v2026.3       | ❌|✅|✅|❓|❌|
+| gromacs          | v2026.3       | ❌|✅|✅|❓|✅|
 | hashcat          | 6716447dfce969...       | ✅|✅|✅|❓|✅|
 | hashinator          | 34cf1886ab5f0a...       | ✅|✅|✅|❓|✅|
 | HeCBench          | 47f8668f2e933c...       | ✅|✅|❌|❓|❌|
@@ -47,7 +47,7 @@ Contributions welcome!
 | nvflip          | 1eb247cabcf286...       | ✅|✅|✅|❓|✅|
 | opencv          | 725e440d278aca...       | ✅|✅|✅|❓|✅|
 | PhysX          | 1e44a0e2998f06...       | ✅|✅|✅|❓|✅|
-| pytorch          | v2.9.0       | ❌|❌|✅|❓|✅|
+| pytorch          | v2.9.0       | ❌|✅|❌|❓|✅|
 | quda          | 07822b61c6ab5f...       | ❌|❌|✅|❓|✅|
 | RabbitCT          | main       | ✅|✅|✅|❓|✅|
 | risc0          | v1.2.2       | ✅|✅|✅|❓|✅|
@@ -69,7 +69,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 31192.
+Pipeline ID: 31427.
 
 ## Running Tests
 
