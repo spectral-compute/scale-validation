@@ -1,0 +1,82 @@
+# LAMMPS input for the combined SCALE text + logo animation.
+#
+# This script is intended to be launched by run_animation.sh, which passes
+# the required variables on the LAMMPS command line with -var.
+#
+# Required variables:
+#   data_file      - path to data.combined
+#   frame_dir      - directory where PNG frames will be written
+#   nsteps         - number of MD steps to run
+#   dump_every     - output every N steps
+#   timestep       - integration timestep
+#   temp           - initial velocity temperature
+#   velocity_seed  - RNG seed for initial velocities
+#   img_width      - output image width in pixels
+#   img_height     - output image height in pixels
+#   zoom           - dump image zoom factor
+#   gb_cutoff      - global Gay-Berne cutoff
+#   sigma11        - LJ/Gay-Berne sigma for white-white interactions
+#   sigma22        - LJ/Gay-Berne sigma for purple-purple interactions
+#   sigma12        - LJ/Gay-Berne sigma for white-purple interactions
+#   cut11          - pair cutoff for white-white interactions
+#   cut22          - pair cutoff for purple-purple interactions
+#   cut12          - pair cutoff for white-purple interactions
+#   eps11          - interaction epsilon for white-white interactions
+#   eps22          - interaction epsilon for purple-purple interactions
+#   eps12          - interaction epsilon for white-purple interactions
+
+units           lj
+dimension       2
+boundary        f f p
+newton          on
+atom_style      ellipsoid
+
+read_data       ${data_file}
+
+neighbor        0.6 bin
+neigh_modify    delay 0 every 1 check yes
+comm_modify     vel yes
+
+pair_style      gayberne 1.0 1.0 1.0 ${gb_cutoff}
+pair_coeff      1 1 ${eps11} ${sigma11} 1.0 1.0 1.0 1.0 1.0 1.0 ${cut11}
+pair_coeff      2 2 ${eps22} ${sigma22} 1.0 1.0 1.0 1.0 1.0 1.0 ${cut22}
+pair_coeff      1 2 ${eps12} ${sigma12} 0.0 0.0 0.0 0.0 0.0 0.0 ${cut12}
+
+fix             planar all enforce2d
+fix             walls all wall/reflect xlo EDGE xhi EDGE ylo EDGE yhi EDGE
+fix             integrator all nve/asphere
+
+velocity        all create ${temp} ${velocity_seed} mom yes rot yes dist gaussian
+velocity        all zero linear
+
+# A small timestep is safer for the fairly large ellipsoids.
+timestep        ${timestep}
+
+thermo          ${dump_every}
+thermo_style    custom step atoms temp pe ke etotal
+thermo_modify   norm no flush yes
+
+# dump image has no ellipsoid-rendering keyword at all in this LAMMPS version
+# so both particle types just render as spheres, sized/coloured by type.
+dump            img all image ${dump_every} ${frame_dir}/frame.*.png type type &
+                size ${img_width} ${img_height} &
+                view 0 0 center s 0.5 0.5 0.5 up 0 1 0 zoom ${zoom} &
+                box yes 0.003 axes no 0.0 0.0 shiny 0.0 fsaa yes
+
+dump_modify     img pad 6
+# Zero-padded so filenames sort lexicographically
+
+# Custom colours
+dump_modify     img color scale_purple 0.3059 0.1765 0.4510
+dump_modify     img color boxgray 0.2 0.2 0.2
+# Type 1 = white text/logo dots, type 2 = purple background ellipses.
+dump_modify     img acolor 1 white acolor 2 scale_purple backcolor black boxcolor boxgray
+
+# "diam type" on the dump command above doesn't actually pick up the real
+# per-type sizes from pair_coeff -- without this override type 2 renders
+# far too small. Match SIGMA11/SIGMA22 from pair_params.env.
+dump_modify     img adiam 1 0.6 adiam 2 4.2
+
+# Emit timestep 0 so the initial legible state is preserved.
+run             0
+run             ${nsteps}
