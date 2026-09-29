@@ -41,6 +41,7 @@ args=(
     # Build the KOKKOS package against its CUDA backend, and not the GPU package
     -DPKG_KOKKOS=yes
     -DPKG_GPU=no
+
     -DKokkos_ENABLE_CUDA=ON
     -DKokkos_ARCH_${KOKKOS_ARCH}=ON
 
@@ -54,6 +55,9 @@ args=(
     -DPKG_KSPACE=yes
     -DPKG_RIGID=yes
     -DPKG_MANYBODY=yes
+
+    # dump image/movie, for animation
+    -DPKG_GRAPHICS=yes
 
     -DENABLE_TESTING=on
 

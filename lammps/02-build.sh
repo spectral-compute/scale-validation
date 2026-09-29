@@ -17,8 +17,23 @@ fi
 # default 86, as master hardcoded; scaleenv normally sets it
 CUDAARCHS="${CUDAARCHS:-86}"
 
+# needed for dump image for scale animation
+# LAMMPS's own cmake only turns PNG support on if libpng's dev headers are already there when it configures
+# but our Docker image ships the runtime lib but not the headers.
+ensure_libpng() {
+    [ -f /usr/include/png.h ] && return 0
+    echo "libpng dev headers not found; installing..."
+    [ "$(id -u)" = "0" ] || { echo "not root and libpng-dev is missing -- can't apt-get install" >&2; return 1; }
+    command -v apt-get > /dev/null 2>&1 || { echo "no apt-get available to install libpng-dev" >&2; return 1; }
+    apt-get update -qq && apt-get install -y --no-install-recommends libpng-dev
+}
+ensure_libpng
+
 args=(
     # Build the GPU package against its CUDA artisanal hand-written CUDA in lib/gpu backend
+    # PKG_GPU defaults OFF in LAMMPS's cmake; without it GPU_API/GPU_ARCH/GPU_PREC
+    # are no-ops and we get "package gpu" errors at runtime
+    -DPKG_GPU=yes
     -DGPU_API=cuda
 
     -DGPU_ARCH=sm_${CUDAARCHS}
@@ -36,6 +51,15 @@ args=(
     -DPKG_KSPACE=yes
     -DPKG_RIGID=yes
     -DPKG_MANYBODY=yes
+
+    # dump image/movie, for animation
+    -DPKG_GRAPHICS=yes
+
+    # for 07-animated-scale.sh
+    -DPKG_ASPHERE=yes
+
+    # needed for dump image for scale animation
+    -DWITH_PNG=yes
 
     # and the upstream GoogleTest unit test suite that 03-test.sh runs
     -DENABLE_TESTING=on
