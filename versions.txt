@@ -14,6 +14,7 @@ cutlass v4.1.0
 CUDALibrarySamples 5ac0f9a8032a1031ff4b99ff6112d528ade2995b
 CV-CUDA f769fe4bf336abeb0d542092a36b2645947f7f09
 cycles v4.4.0
+deepspeed v0.19.7
 ds4 main
 faiss v1.9.0
 FastEddy v2.0.0
