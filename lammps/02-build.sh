@@ -42,6 +42,10 @@ args=(
     -DCMAKE_CUDA_COMPILER="nvcc"
     -DCMAKE_CUDA_ARCHITECTURES="${CUDAARCHS}"
 
+    # SCALE master added its own bin2c, but we still need this shim: no -fatbin
+    # support yet, and that's maybe what our compiled device code actually needs bin2c-ing from
+    -DBIN2C="$(realpath "$(dirname "$0")")/bin2c-shim.py"
+
     -DCUDA_BUILD_MULTIARCH=OFF
 
     # The packages holding most of the GPU package's accelerated pair and kspace styles.
