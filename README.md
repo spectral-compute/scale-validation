@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <5eee7203>.**
+**This shows the test status for SCALE: master <3a50fd43>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -29,16 +29,16 @@ Contributions welcome!
 | FastEddy          | v2.0.0       | ✅|✅|✅|❓|✅|
 | ffmpeg          | n7.1.3       | ✅|✅|✅|❓|✅|
 | FLAMEGPU2          | v2.0.0-rc.2       | ✅|✅|✅|❓|✅|
-| ggml          | d3a58b079f50b4...       | ✅|✅|✅|❓|✅|
+| ggml          | d3a58b079f50b4...       | ❌|✅|✅|❓|✅|
 | gomc          | 4c12477f79dd63...       | ✅|✅|✅|❓|✅|
 | gpu_jpeg2k          | ee715e99b6a57a...       | ✅|✅|✅|❓|✅|
 | GPUJPEG          | 3e045d1df72735...       | ✅|✅|✅|❓|✅|
-| gromacs          | v2026.3       | ❌|✅|✅|❓|✅|
+| gromacs          | v2026.3       | ❌|❌|✅|❓|✅|
 | hashcat          | 6716447dfce969...       | ✅|✅|✅|❓|✅|
 | hashinator          | 34cf1886ab5f0a...       | ✅|✅|✅|❓|✅|
 | HeCBench          | 47f8668f2e933c...       | ✅|✅|❌|❓|❌|
 | hypre          | v2.33.0       | ✅|✅|✅|❓|✅|
-| jitify          | master       | ✅|✅|✅|❓|❌|
+| jitify          | master       | ✅|✅|✅|❓|✅|
 | kokkos          | 60d8384266eba9...       | ✅|✅|✅|❓|✅|
 | lammps          | stable_22Jul20...       | ❌|✅|✅|❓|✅|
 | llama.cpp          | 3ecfb150a4bd2d...       | ✅|❌|✅|❓|✅|
@@ -47,7 +47,7 @@ Contributions welcome!
 | nvflip          | 1eb247cabcf286...       | ✅|✅|✅|❓|✅|
 | opencv          | 725e440d278aca...       | ✅|✅|✅|❓|✅|
 | PhysX          | 1e44a0e2998f06...       | ✅|✅|✅|❓|✅|
-| pytorch          | v2.9.0       | ❌|✅|❌|❓|✅|
+| pytorch          | v2.9.0       | ❌|✅|✅|❓|✅|
 | quda          | 07822b61c6ab5f...       | ❌|❌|✅|❓|✅|
 | RabbitCT          | main       | ✅|✅|✅|❓|✅|
 | risc0          | v1.2.2       | ✅|✅|✅|❓|✅|
@@ -69,7 +69,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 31427.
+Pipeline ID: 31665.
 
 ## Running Tests
 
