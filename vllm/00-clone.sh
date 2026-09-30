@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ETeuo pipefail
 
 source "$(dirname "$0")"/../util/git.sh
 
