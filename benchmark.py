@@ -12,6 +12,7 @@ test.sh does.
 
 import argparse
 import datetime
+import logging
 import os
 import re
 import shutil
@@ -19,40 +20,47 @@ import subprocess
 import sys
 import time
 from dataclasses import dataclass
+from enum import StrEnum
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent
 BENCHMARKS_SUBDIR = "benchmarks"
 NON_PROJECT_DIRS = {"util"}
 
-# Suffixes each compiler accepts, most specific first. An unsuffixed script
-# ranks below all of them and runs for every compiler.
-COMPILER_SUFFIXES = {
-    "scale": ["scale", "cuda"],
-    "nvcc": ["nvcc", "cuda"],
-    "hip": ["hip"],
-}
-ALL_SUFFIXES = sorted({s for v in COMPILER_SUFFIXES.values() for s in v})
+logger = logging.getLogger("benchmark")
+
+
+class Compiler(StrEnum):
+    SCALE = "scale"
+    NVCC = "nvcc"
+    HIP = "hip"
+
+    @property
+    def suffixes(self):
+        """Script suffixes this compiler accepts, most specific first. An
+        unsuffixed script ranks below all of them and runs for every compiler."""
+        return {
+            Compiler.SCALE: ["scale", "cuda"],
+            Compiler.NVCC: ["nvcc", "cuda"],
+            Compiler.HIP: ["hip"],
+        }[self]
+
+    @classmethod
+    def detect(cls, toolkit):
+        """Identify the toolchain from the toolkit layout, or None if unknown."""
+        bin_dir = toolkit / "bin"
+        # Order matters: a SCALE install also ships bin/nvcc.
+        if (bin_dir / "scaleenv").exists():
+            return cls.SCALE
+        if (bin_dir / "nvcc").exists():
+            return cls.NVCC
+        if (bin_dir / "hipcc").exists() or (bin_dir / "hipconfig").exists():
+            return cls.HIP
+        return None
+
+
+ALL_SUFFIXES = sorted({s for c in Compiler for s in c.suffixes})
 SCRIPT_RE = re.compile(rf"^(?P<key>.+?)(?:-(?P<suffix>{'|'.join(ALL_SUFFIXES)}))?\.sh$")
-
-# Mirrors test.sh: avoids warning spam that overflows CI output limits.
-SCALE_NVCC_APPEND_FLAGS = " ".join(
-    "-Wno-" + w
-    for w in [
-        "deprecated-literal-operator", "format", "unknown-warning-option",
-        "ignored-qualifiers", "cuda-wrong-side", "unused-function",
-        "unused-local-typedef", "unused-parameter", "int-conversion",
-        "sign-conversion", "shorten-64-to-32", "template-id-cdtor", "switch",
-        "vla-cxx-extension", "missing-template-arg-list-after-template-kw",
-        "deprecated-declarations", "c++11-narrowing-const-reference",
-        "typename-missing", "unknown-pragmas", "inconsistent-missing-override",
-        "unused-private-field", "sign-compare", "pessimizing-move",
-        "unused-result", "invalid-constexpr", "unused-but-set-variable",
-        "unused-variable", "unused-value", "implicit-const-int-float-conversion",
-        "pass-failed",
-    ]
-)
-
 
 @dataclass
 class Script:
@@ -77,20 +85,9 @@ def benchmark_projects():
     )
 
 
-def detect_compiler(toolkit):
-    # Order matters: a SCALE install also ships bin/nvcc.
-    if (toolkit / "bin" / "scaleenv").exists():
-        return "scale"
-    if (toolkit / "bin" / "nvcc").exists():
-        return "nvcc"
-    if (toolkit / "bin" / "hipcc").exists() or (toolkit / "bin" / "hipconfig").exists():
-        return "hip"
-    return None
-
-
 def pick_variants(directory, compiler):
     """Map key -> best script in `directory` for `compiler`."""
-    accepted = COMPILER_SUFFIXES[compiler]
+    accepted = compiler.suffixes
     best = {}  # key -> (rank, path); lower rank is better
     if not directory.is_dir():
         return {}
@@ -132,17 +129,14 @@ def prepend(env, var, value):
 
 def build_env(compiler, toolkit, arch, args):
     env = dict(os.environ)
+    # prelude.sh keys its SCALE-only compiler flags on SCALE_ENV, so don't inherit it
+    # from a shell that has sourced scaleenv.
+    env.pop("SCALE_ENV", None)
 
-    if compiler == "scale":
+    if compiler == Compiler.SCALE:
+        # The compiler flags that go with it are set by util/prelude.sh.
         env = source_env(toolkit / "bin" / "scaleenv", arch)
-        env.update(
-            NVCC_PREPEND_FLAGS="-fdiagnostics-color=always",
-            CXXFLAGS="-fdiagnostics-color=always",
-            CFLAGS="-fdiagnostics-color=always",
-            CMAKE_COLOR_DIAGNOSTICS="ON",
-            NVCC_APPEND_FLAGS=SCALE_NVCC_APPEND_FLAGS,
-        )
-    elif compiler == "nvcc":
+    elif compiler == Compiler.NVCC:
         # What scaleenv would otherwise set; see test.sh.
         nvcc = str(toolkit / "bin" / "nvcc")
         for var in ("CUDA_DIR", "CUDA_HOME", "CUDA_PATH", "CUDA_ROOT"):
@@ -157,7 +151,7 @@ def build_env(compiler, toolkit, arch, args):
         prepend(env, "LD_LIBRARY_PATH", str(toolkit / "lib64"))
         prepend(env, "LIBRARY_PATH", str(toolkit / "lib64"))
         prepend(env, "CPATH", str(toolkit / "include"))
-    elif compiler == "hip":
+    elif compiler == Compiler.HIP:
         for var in ("ROCM_PATH", "ROCM_HOME", "HIP_PATH"):
             env[var] = str(toolkit)
         env["HIPARCHS"] = arch
@@ -170,7 +164,7 @@ def build_env(compiler, toolkit, arch, args):
 
     if args.devices:
         devices = ",".join(args.devices)
-        if compiler == "hip":
+        if compiler == Compiler.HIP:
             env["HIP_VISIBLE_DEVICES"] = devices
         else:
             env["CUDA_VISIBLE_DEVICES"] = devices
@@ -203,7 +197,7 @@ def create_parser():
         help=f"Project to benchmark (one with a {BENCHMARKS_SUBDIR}/ subdir): {', '.join(projects)}",
     )
     parser.add_argument(
-        "-c", "--compiler", choices=sorted(COMPILER_SUFFIXES),
+        "-c", "--compiler", choices=list(Compiler),
         help="Toolchain type. Auto-detected from the toolkit layout if omitted.",
     )
     parser.add_argument(
@@ -244,7 +238,7 @@ def main():
     args.devices = [d for spec in args.devices for d in spec.split(",") if d]
 
     toolkit = args.toolkit.resolve()
-    compiler = args.compiler or detect_compiler(toolkit)
+    compiler = Compiler(args.compiler) if args.compiler else Compiler.detect(toolkit)
     if compiler is None:
         parser.error(f"{toolkit} is not a SCALE, NVIDIA CUDA or HIP installation (pass --compiler)")
 
@@ -253,14 +247,17 @@ def main():
         if (args.include_tests or s.is_benchmark or not s.is_test)
     ]
     if not scripts:
-        sys.exit(f"No scripts to run for {args.project} with compiler {compiler}")
+        logger.error("No scripts to run for %s with compiler %s", args.project, compiler)
+        sys.exit(1)
 
-    print(f"project:  {args.project}\ncompiler: {compiler} ({toolkit})\narch:     {args.arch}")
+    logger.info("project:  %s", args.project)
+    logger.info("compiler: %s (%s)", compiler, toolkit)
+    logger.info("arch:     %s", args.arch)
     if args.devices:
-        print(f"devices:  {','.join(args.devices)}")
+        logger.info("devices:  %s", ",".join(args.devices))
     for s in scripts:
         runs = f" x{args.repeats}" if s.is_benchmark else ""
-        print(f"  {s.path.relative_to(REPO_ROOT)}{runs}")
+        logger.info("  %s%s", s.path.relative_to(REPO_ROOT), runs)
     if args.dry_run:
         return
 
@@ -279,48 +276,62 @@ def main():
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d%H%M%SZ")
     log_path = log_dir / f"{args.project}-benchmark-{stamp}.log"
 
+    # From here on, everything logged also goes to the durable log file.
+    file_handler = logging.FileHandler(log_path, mode="w")
+    file_handler.setFormatter(logging.Formatter("%(message)s"))
+    logger.addHandler(file_handler)
+
+    logger.info("project: %s", args.project)
+    logger.info("compiler: %s", compiler)
+    logger.info("toolkit: %s", toolkit)
+    logger.info("arch: %s", args.arch)
+    logger.info("devices: %s", ",".join(args.devices) or "all")
+    logger.info("repeats: %s", args.repeats)
+    logger.info("started: %s\n", stamp)
+
     rows = []
-    with open(log_path, "w") as log:
-        def emit(line):
-            sys.stdout.write(line)
-            sys.stdout.flush()
-            log.write(line)
-
-        emit(f"project: {args.project}\ncompiler: {compiler}\ntoolkit: {toolkit}\n"
-             f"arch: {args.arch}\ndevices: {','.join(args.devices) or 'all'}\n"
-             f"repeats: {args.repeats}\nstarted: {stamp}\n\n")
-
-        failed = None
-        for s in scripts:
-            for i in range(1, (args.repeats if s.is_benchmark else 1) + 1):
-                label = s.path.name + (f" [{i}/{args.repeats}]" if s.is_benchmark else "")
-                emit(f"--------------- Executing {s.path} {label} ---------------\n")
-                env["BENCHMARK_REPEAT"] = str(i)
-                start = time.monotonic()
-                # Run via bash so scripts needn't be executable.
-                proc = subprocess.Popen(
-                    ["bash", str(s.path)], cwd=run_dir, env=env,
-                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                )
-                for raw in proc.stdout:
-                    emit(raw.decode(errors="replace"))
-                rc = proc.wait()
-                rows.append((label, rc, time.monotonic() - start))
-                if rc != 0:
-                    failed = (label, rc)
-                    break
-            if failed:
+    failed = None
+    for s in scripts:
+        for i in range(1, (args.repeats if s.is_benchmark else 1) + 1):
+            label = s.path.name + (f" [{i}/{args.repeats}]" if s.is_benchmark else "")
+            logger.info("--------------- Executing %s %s ---------------", s.path, label)
+            env["BENCHMARK_REPEAT"] = str(i)
+            start = time.monotonic()
+            # Run via bash so scripts needn't be executable.
+            proc = subprocess.Popen(
+                ["bash", str(s.path)], cwd=run_dir, env=env,
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            )
+            for raw in proc.stdout:
+                logger.info("%s", raw.decode(errors="replace").rstrip("\n"))
+            rc = proc.wait()
+            rows.append((label, rc, time.monotonic() - start))
+            if rc != 0:
+                failed = (label, rc)
                 break
-
-        emit("\n=== RESULTS ===\n")
-        emit(f"{'SCRIPT':<42}  {'STATUS':<6}  DETAIL\n")
-        for label, rc, dur in rows:
-            emit(f"{label:<42}  {'PASS' if rc == 0 else 'FAIL':<6}  exit={rc} duration={dur:.2f}s\n")
         if failed:
-            emit(f"FAILED: {failed[0]} (exit {failed[1]}) -- log: {log_path}\n")
-            sys.exit(failed[1])
-        emit(f"ALL SCRIPTS PASSED -- log: {log_path}\n")
+            break
+
+    logger.info("\n=== RESULTS ===")
+    logger.info("%-42s  %-6s  DETAIL", "SCRIPT", "STATUS")
+    for label, rc, dur in rows:
+        status = "PASS" if rc == 0 else "FAIL"
+        logger.info("%-42s  %-6s  exit=%d duration=%.2fs", label, status, rc, dur)
+    if failed:
+        logger.error("FAILED: %s (exit %d) -- log: %s", failed[0], failed[1], log_path)
+        sys.exit(failed[1])
+    logger.info("ALL SCRIPTS PASSED -- log: %s", log_path)
+
+
+def setup_logging():
+    # Plain messages: the console and log file carry raw script output, as test.sh's do.
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(logging.Formatter("%(message)s"))
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
 
 
 if __name__ == "__main__":
+    setup_logging()
     main()
