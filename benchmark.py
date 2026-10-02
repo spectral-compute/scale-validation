@@ -207,7 +207,9 @@ def create_parser():
     )
     parser.add_argument(
         "-n", "--repeats", type=int, default=1,
-        help="Number of times to run each benchmark script (setup runs once).",
+        help="Number of times to run each script with 'benchmark' in its filename. "
+        "Everything else (clone, build and other setup) runs once, including setup "
+        f"scripts in {BENCHMARKS_SUBDIR}/.",
     )
     parser.add_argument(
         "--results-dir", type=Path,
