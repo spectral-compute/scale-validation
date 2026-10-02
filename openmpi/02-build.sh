@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
-set -e
+. "$(dirname "$0")"/../util/prelude.sh
 
 make -O -C build -sk -j"$(nproc)" install

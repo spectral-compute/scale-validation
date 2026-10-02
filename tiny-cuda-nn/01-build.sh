@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-
-set -ETeuo pipefail
+. "$(dirname "$0")"/../util/prelude.sh
 
 export SCALE_CUDA_VERSION="11.4"
 
