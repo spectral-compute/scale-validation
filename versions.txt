@@ -82,4 +82,3 @@ tensorflow-addons v0.10.0
 tensorflow-metadata v0.22.2
 tensorflow-datasets v3.1.0
 tensorflow-models v2.2.0
-lammps stable_22Jul2025_update6
