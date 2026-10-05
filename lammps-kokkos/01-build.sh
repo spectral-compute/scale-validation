@@ -6,11 +6,8 @@ MPI_DIR="$(realpath ../)/openmpi/install"
 if [ -e "${MPI_DIR}" ] ; then
     echo "Found OpenMPI project at ${MPI_DIR}; building with MPI"
     MPI_ARGS=(-DBUILD_MPI=yes -DMPI_HOME="${MPI_DIR}")
-elif command -v mpicxx > /dev/null 2>&1 ; then
-    echo "No OpenMPI project at ${MPI_DIR}; using mpicxx from $(command -v mpicxx)"
-    MPI_ARGS=(-DBUILD_MPI=yes)
 else
-    echo "No OpenMPI project or mpicxx on PATH; building serial"
+    echo "No OpenMPI project at ${MPI_DIR}; building serial"
     MPI_ARGS=(-DBUILD_MPI=no)
 fi
 
@@ -19,7 +16,7 @@ CUDAARCHS="${CUDAARCHS:-86}"
 
 # Kokkos wants a named architecture symbol rather than a compute capability number, so
 # ${CUDAARCHS} can't be passed through the way the GPU package build does it
-# Mapping our targets; anything unrecognised falls back to AMPERE86, which is what kokkos/01-build.sh hardcodes.
+# Mapping our targets; anything unrecognised is an error rather than a silent guess.
 # Only matters for testing on nvidia GPUs really, we are always 86
 case "${CUDAARCHS}" in
     70)  KOKKOS_ARCH=VOLTA70 ;;
@@ -31,8 +28,8 @@ case "${CUDAARCHS}" in
     100) KOKKOS_ARCH=BLACKWELL100 ;;
     120) KOKKOS_ARCH=BLACKWELL120 ;;
     *)
-        KOKKOS_ARCH=AMPERE86
-        echo "Unrecognised CUDAARCHS=${CUDAARCHS}; falling back to Kokkos_ARCH_${KOKKOS_ARCH}" 1>&2
+        echo "Unrecognised CUDAARCHS=${CUDAARCHS}; add it to the Kokkos_ARCH mapping in $0" 1>&2
+        exit 1
     ;;
 esac
 echo "Building for Kokkos_ARCH_${KOKKOS_ARCH} (CUDAARCHS=${CUDAARCHS})"
@@ -50,6 +47,9 @@ args=(
     -DCMAKE_CUDA_FLAGS="-DSCALE_WARP_SIZE=32"
     -DCMAKE_CXX_FLAGS="-DSCALE_WARP_SIZE=32"
     -DCMAKE_C_FLAGS="-DSCALE_WARP_SIZE=32"
+
+    # No CPU threading used here. On NVIDIA the libomp that SCALE's clang links isn't on the runtime path
+    -DBUILD_OMP=no
 
     -DPKG_MOLECULE=yes
     -DPKG_KSPACE=yes
