@@ -36,8 +36,10 @@ its layout:
 
 - `bin/scaleenv` present → **SCALE**. `test.sh` sources `<toolkit>/bin/scaleenv
   <gpu_arch>`, which sets up the CUDA environment (`CUDAARCHS`, `PATH`, `SCALE_ENV`, ...)
-  for the target, AMD (`gfx*`) or NVIDIA (`sm_*`). It also exports colour-diagnostic
-  flags and a long `NVCC_APPEND_FLAGS` list of `-Wno-*` warning suppressions.
+  for the target, AMD (`gfx*`) or NVIDIA (`sm_*`). The colour-diagnostic flags and the
+  long `NVCC_APPEND_FLAGS` list of `-Wno-*` warning suppressions that go with it are
+  exported by `util/prelude.sh`, only when `SCALE_ENV` is set, so they never reach
+  NVIDIA's `nvcc` (`test.sh` and `benchmark.py` unset `SCALE_ENV` on non-SCALE paths).
 - otherwise `bin/nvcc` present → **NVIDIA CUDA**. `test.sh` exports the variables
   `scaleenv` would have set (`CUDA_PATH`, `CUDACXX`, `CUDAARCHS` with the `sm_` prefix
   stripped, `PATH`, `LD_LIBRARY_PATH`, ...).
@@ -94,6 +96,102 @@ useful debugging context is always there even when a run aborts partway through.
 
 To hand a run's results to someone else for debugging without them needing to re-run
 anything: just point them at (or attach) that one `.log` file.
+
+## Running a benchmark
+
+```bash
+./benchmark.py <workdir> <path_to_toolkit> <gpu_arch> <project> [options]
+# e.g. ./benchmark.py ~/cuda_tests /opt/scale gfx1100 HeCBench -n 5 -d 0
+#      ./benchmark.py ~/cuda_tests /opt/rocm  gfx1100 HeCBench --dry-run
+```
+
+`benchmark.py` is the benchmarking counterpart to `test.sh`, for comparing performance
+of the same project across toolchains: SCALE, NVIDIA CUDA, and native ROCm/HIP. It only
+works with projects that have a `benchmarks/` subdirectory. Neither `test.sh` nor CI looks inside `benchmarks/`.
+
+### Toolchain selection
+
+The toolchain is a `Compiler` enum (`scale`, `nvcc`, `hip`). It's detected from the
+toolkit layout the same way `test.sh` does it, plus HIP: `bin/scaleenv` → `scale`, else
+`bin/nvcc` → `nvcc`, else `bin/hipcc`/`bin/hipconfig` → `hip`. `-c/--compiler` overrides
+detection. Environment set up for each:
+
+- `scale`: sources `scaleenv <gpu_arch>`. The colour and `-Wno-*` flags come from
+  `util/prelude.sh` as usual (see "Toolchain selection" above).
+- `nvcc`: the same `CUDA_*`/`PATH`/`LD_LIBRARY_PATH`/`CUDAARCHS` variables as
+  `test.sh`'s NVIDIA branch, with `SCALE_ENV` dropped.
+- `hip`: `ROCM_PATH`/`ROCM_HOME`/`HIP_PATH`, `HIPARCHS=<gpu_arch>`, `HIPCXX` (the
+  toolkit's `llvm/bin/clang++` if present), plus `PATH`, `LD_LIBRARY_PATH` (`lib`) and
+  `CMAKE_PREFIX_PATH`. `CUDAARCHS` is **not** set, so HIP scripts use `$TEST_GPU_ARCH`.
+
+Every script also gets `MAKEFLAGS="-O -k"`, `TEST_GPU_ARCH`, and:
+
+- `BENCHMARK_COMPILER`: `scale`, `nvcc` or `hip`.
+- `BENCHMARK_REPEATS` / `BENCHMARK_REPEAT`: total runs (`-n`), and the 1-based index of
+  the current run.
+- `RESULTS_DIR`: where scripts should write result files (`--results-dir`, default
+  `<workdir>/results`, created for you). It sits beside the per-project workdir, so it
+  survives the wipe.
+- `CUDA_VISIBLE_DEVICES` (or `HIP_VISIBLE_DEVICES` for `hip`), only if `-d/--device` is
+  given. It's repeatable or comma-separated. Optional but recommended as if
+  there's an issue running scripts it's usually because you need to be explicit about the devices to run on (particularly on heterogeneous systems).
+
+### Script selection
+
+Scripts are gathered from both `<project>/` and `<project>/benchmarks/`. Each is keyed
+on its filename with any trailing toolchain suffix stripped: `-scale`, `-nvcc`, `-cuda`
+or `-hip` (so `02-benchmark-cuda.sh` and `02-benchmark-hip.sh` both have key
+`02-benchmark`). For each key, one script runs:
+
+1. A script in `benchmarks/` beats one in the project's base folder.
+2. Within a folder, the most specific suffix the toolchain accepts wins:
+   `scale` → `-scale`, then `-cuda`; `nvcc` → `-nvcc`, then `-cuda`; `hip` → `-hip`.
+   An unsuffixed script ranks last and runs for every toolchain. A script suffixed for
+   a different toolchain is ignored.
+
+The winners run in lexicographic order of key, stopping at the first failure. By
+default, scripts with `test` in their name are skipped unless they also contain
+`benchmark` (`--include-tests` runs them too). Scripts with `benchmark` in their name run
+`-n` times; everything else (clone, build) runs once. `--dry-run` prints the resolved
+list. For example, HeCBench under `scale`/`nvcc` runs `00-clone.sh`, `01-build.sh` and
+`benchmarks/02-benchmark-cuda.sh`; under `hip` it swaps in `benchmarks/01-build-hip.sh`
+and `benchmarks/02-benchmark-hip.sh`.
+
+### Adding benchmarks to a project
+
+- Put benchmark-only and toolchain-specific scripts in `<project>/benchmarks/`. **Never
+  put suffixed variants (`-hip.sh` etc.) in the project base folder.** `test.sh` runs
+  every `*.sh` there regardless of suffix, so a HIP script would run under SCALE/CUDA
+  test runs and in CI.
+- Reuse the base folder's clone/build scripts wherever they already work for the
+  toolchain. Only override a key in `benchmarks/` when a toolchain needs something
+  different, e.g. `HeCBench/benchmarks/01-build-hip.sh`.
+- Match keys across the base folder and `benchmarks/` exactly (same number and stem),
+  or the override won't replace the base script and both will run.
+- Scripts in `benchmarks/` are one directory deeper. Source the prelude as
+  `. "$(dirname "$0")"/../../util/prelude.sh`, with a `# shellcheck
+  source-path=SCRIPTDIR` line above it (copy the header from an existing one).
+- Write results under `$RESULTS_DIR`, with toolchain and arch in the filename (e.g.
+  HeCBench's `hecbench.<mode>.<arch>.<timestamp>.csv`). Keep the names unique per
+  repeat, so `-n` runs don't overwrite each other. Fall back to a default
+  (`${RESULTS_DIR:-...}`) if the same script is also run by `test.sh`.
+- A benchmark script should still exit non-zero when it produces nothing usable (e.g.
+  HeCBench fails if the CSV has only a header). Otherwise a broken build shows up as a
+  "passing" benchmark.
+
+### Logs
+
+Each run writes `<workdir>/logs/<project>-benchmark-<YYYYMMDDHHMMSSZ>.log`, alongside
+`test.sh`'s logs: a header (project, compiler, toolkit, arch, devices, repeats), every
+script's output with `--- Executing ... ---` banners (repeats labelled `[i/n]`), then
+an `=== RESULTS ===` table with `SCRIPT`/`STATUS`/`DETAIL` columns and a final
+`ALL SCRIPTS PASSED` / `FAILED:` line. Unlike `test.sh`'s table, there's no `KIND`
+column and `util/checks.sh` `CHECK` rows aren't collected. Exit status is the failing
+script's exit code, or 0.[^benchmark-collation]
+
+[^benchmark-collation]: This log and per-run `$RESULTS_DIR` layout is temporary. Each
+    run's results currently stand alone. Collating data from across runs and analysing it
+    is a planned future step, so don't build tooling that depends on the current layout.
 
 ## Authoring / editing a test
 
