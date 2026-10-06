@@ -33,11 +33,11 @@ disable() {
 
 # test.sh doesn't export its mode; SCALE_ENV is set by scaleenv.
 if [[ -n "${SCALE_ENV:-}" ]]; then
-    disable prefetch
+    # mlp: SCALE's cublasLt.h only forward-declares the cublasLt*Opaque_t structs.
+    disable prefetch mlp
 
     case "$TEST_GPU_ARCH" in
-    gfx1201) disable blas-fp8gemm attentionMultiHeadKVCache mlp ;;
-    gfx90a | gfx942) disable mlp ;;
+    gfx1201) disable blas-fp8gemm attentionMultiHeadKVCache ;;
     sm_120)
         disable qkv d3q19-bgk quant3MatMul sobol
         # "error: use of undeclared identifier '__NV_ATOMIC_RELAXED'"
