@@ -1,0 +1,3 @@
+ubuntu24.04:apt:libopenmpi-dev
+ubuntu24.04:apt:r-base
+ubuntu24.04:apt:r-base-dev

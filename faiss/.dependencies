@@ -1,0 +1,7 @@
+ubuntu24.04:apt:libopenblas-dev
+ubuntu24.04:apt:python3-build
+ubuntu24.04:apt:python3-installer
+ubuntu24.04:apt:python3-numpy
+ubuntu24.04:apt:python3-setuptools
+ubuntu24.04:apt:python3-wheel
+ubuntu24.04:apt:swig

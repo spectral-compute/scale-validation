@@ -1,0 +1,8 @@
+ubuntu24.04:apt:python3-build
+ubuntu24.04:apt:python3-hatchling
+ubuntu24.04:apt:python3-installer
+ubuntu24.04:apt:python3-numpy
+ubuntu24.04:apt:python3-pandas
+ubuntu24.04:apt:python3-scipy
+ubuntu24.04:apt:python3-sklearn
+ubuntu24.04:apt:python3-wheel

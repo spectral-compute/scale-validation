@@ -1,0 +1,12 @@
+ubuntu24.04:apt:libboost-filesystem-dev
+ubuntu24.04:apt:libboost-system-dev
+ubuntu24.04:apt:libboost-thread-dev
+ubuntu24.04:apt:libgflags-dev
+ubuntu24.04:apt:libgoogle-glog-dev
+ubuntu24.04:apt:libhdf5-dev
+ubuntu24.04:apt:libleveldb-dev
+ubuntu24.04:apt:liblmdb-dev
+ubuntu24.04:apt:libopenblas-dev
+ubuntu24.04:apt:libprotobuf-dev
+ubuntu24.04:apt:libsnappy-dev
+ubuntu24.04:apt:protobuf-compiler

@@ -1,0 +1,7 @@
+ubuntu24.04:apt:libgl-dev
+ubuntu24.04:apt:libglu1-mesa-dev
+ubuntu24.04:apt:libxcursor-dev
+ubuntu24.04:apt:libxi-dev
+ubuntu24.04:apt:libxinerama-dev
+ubuntu24.04:apt:unzip
+ubuntu24.04:apt:xorg-dev
