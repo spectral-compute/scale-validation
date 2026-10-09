@@ -1,0 +1,9 @@
+ubuntu24.04:apt:imagemagick
+ubuntu24.04:apt:jupyter-notebook
+ubuntu24.04:apt:lbzip2
+ubuntu24.04:apt:libnetcdf-dev
+ubuntu24.04:apt:python3-xarray
+ubuntu24.04:apt:time
+rocky9:ext:dependencies-not-yet-found
+rocky8:ext:dependencies-not-yet-found
+ubuntu22.04:ext:dependencies-not-yet-found
