@@ -1,0 +1,4 @@
+ubuntu24.04:ext:rust=stable
+rocky9:ext:dependencies-not-yet-found
+rocky8:ext:dependencies-not-yet-found
+ubuntu22.04:ext:dependencies-not-yet-found
