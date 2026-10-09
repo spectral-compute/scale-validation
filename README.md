@@ -86,9 +86,12 @@ only what is needed beyond the `scale-test-<distro>` CI image. Each line has the
 `<distro>:<source>:<package>`:
 
 - `<distro>` is one of `ubuntu24.04`, `ubuntu22.04`, `rocky8`, or `rocky9`.
-- `<source>` is `apt`, `dnf`, or `ext`.
+- `<source>` is `apt`, `dnf`, `pip`, `pipx`, or `ext`.
 - For `apt` and `dnf`, `<package>` is a package specifier in the syntax that package
   manager accepts (e.g. `libfoo-dev`, `libfoo-dev=1.2-3`, `foo-devel`).
+- For `pip` and `pipx`, `<package>` is a requirement specifier that `pip3 install` or
+  `pipx install` accepts (e.g. `numpy==2.1.0`, `dvc[s3]==3.67.1`). A `pipx` package
+  needs `pipx` itself listed as an `apt` or `dnf` package.
 - For `ext`, `<package>` is `<name>=<version>` (e.g. `cmake=4.0.3`), naming something
   installed outside the distro package manager.
 

@@ -21,3 +21,42 @@ repos:
         entry: 'shfmt -w'
         language: unsupported
         files: '^.*\.sh'
+
+      # Python formatting & type checking
+      - id: ruff-check
+        name: ruff check
+        description: "Run 'ruff check' for extremely fast Python linting"
+        entry: uv --project util/ run ruff check --force-exclude --fix
+        language: python
+        types_or: [python, pyi, jupyter]
+        require_serial: true
+        files: 'util/.*\.py'
+
+      - id: ruff-format
+        name: ruff format
+        description: "Run 'ruff format' for extremely fast Python formatting"
+        entry: uv --project util/ run ruff format --force-exclude
+        language: python
+        types_or: [python, pyi, jupyter]
+        require_serial: true
+        files: 'util/.*\.py'
+
+      - id: pyright
+        name: pyright
+        description: "Run pyright for typechecking"
+        entry: uv --directory util/ run pyright
+        language: python
+        types_or: [python, pyi, jupyter]
+        require_serial: true
+        pass_filenames: false
+        files: 'util/.*\.py'
+
+      - id: pytest
+        name: pytest
+        description: "Run pytest for testing"
+        entry: uv --directory util/ run pytest
+        language: python
+        types_or: [python, pyi, jupyter]
+        require_serial: true
+        pass_filenames: false
+        files: 'util/.*\.py'
