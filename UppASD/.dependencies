@@ -1,0 +1,3 @@
+ubuntu24.04:apt:gfortran
+ubuntu24.04:apt:libopenblas-dev
+ubuntu24.04:ext:cmake=4.0

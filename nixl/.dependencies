@@ -1,0 +1,6 @@
+ubuntu24.04:apt:autoconf
+ubuntu24.04:apt:automake
+ubuntu24.04:apt:libtool
+ubuntu24.04:apt:meson
+ubuntu24.04:apt:ninja-build
+ubuntu24.04:apt:pybind11-dev

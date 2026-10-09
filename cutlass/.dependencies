@@ -1,0 +1,3 @@
+ubuntu24.04:apt:bc
+ubuntu24.04:apt:pciutils
+ubuntu24.04:ext:cmake=4.0
