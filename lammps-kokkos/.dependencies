@@ -1,0 +1,3 @@
+ubuntu24.04:apt:ffmpeg
+ubuntu24.04:apt:libpng-dev
+ubuntu24.04:ext:cmake=4.0

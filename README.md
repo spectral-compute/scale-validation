@@ -81,6 +81,19 @@ the normal CUDA build instructions for the corresponding project.
 Note that you may need to install the system dependencies described on the project
 website before this will succeed.
 
+Some projects list their system dependencies in a `.dependencies` file. This lists
+only what is needed beyond the `scale-test-<distro>` CI image. Each line has the form
+`<distro>:<source>:<package>`:
+
+- `<distro>` is one of `ubuntu24.04`, `ubuntu22.04`, `rocky8`, or `rocky9`.
+- `<source>` is `apt`, `dnf`, or `ext`.
+- For `apt` and `dnf`, `<package>` is a package specifier in the syntax that package
+  manager accepts (e.g. `libfoo-dev`, `libfoo-dev=1.2-3`, `foo-devel`).
+- For `ext`, `<package>` is `<name>=<version>` (e.g. `cmake=4.0.3`), naming something
+  installed outside the distro package manager.
+
+An empty file means the project needs nothing beyond the CI image.
+
 The test driver script `test.sh` may be used to conveniently execute an
 entire test:
 
