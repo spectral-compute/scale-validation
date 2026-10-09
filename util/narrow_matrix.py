@@ -13,7 +13,7 @@ STAMPS_DIR = Path(
     os.environ["STAMPS_DIR"]
 )  # directory containing all of our success stamps
 
-reduced_matrix = list(
+reduced_matrix = (
     x
     for x in ORIGINAL_MATRIX
     if (STAMPS_DIR / f"{x['target']}__{x['isa']}.ok").is_file() and x["should_run"]
