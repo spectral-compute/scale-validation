@@ -31,8 +31,15 @@ disable() {
     done
 }
 
+CUDAFLAGS="-Wno-cuda-implicit-real-arch -Wno-unused-command-line-argument -Wno-write-strings"
+
 # test.sh doesn't export its mode; SCALE_ENV is set by scaleenv.
 if [[ -n "${SCALE_ENV:-}" ]]; then
+    # Workaround for a SCALE bug when targeting NVIDIA GPUs.
+    if [[ "$TEST_GPU_ARCH" == sm_* ]]; then
+        CUDAFLAGS+=" -fno-static-global-template-stub"
+    fi
+
     # mlp: SCALE's cublasLt.h only forward-declares the cublasLt*Opaque_t structs.
     disable prefetch mlp
 
@@ -48,5 +55,5 @@ if [[ -n "${SCALE_ENV:-}" ]]; then
     esac
 fi
 
-export CUDAFLAGS="-Wno-cuda-implicit-real-arch -Wno-unused-command-line-argument -Wno-write-strings"
+export CUDAFLAGS
 python3 tools/hecbench --verbose build --preset "$PRESET"
