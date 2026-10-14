@@ -6,3 +6,6 @@ ubuntu24.04:apt:libxinerama-dev
 ubuntu24.04:apt:unzip
 ubuntu24.04:apt:xorg-dev
 ubuntu24.04:ext:cmake=4.0
+rocky9:ext:dependencies-not-yet-found
+rocky8:ext:dependencies-not-yet-found
+ubuntu22.04:ext:dependencies-not-yet-found
