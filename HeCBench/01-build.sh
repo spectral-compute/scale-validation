@@ -31,10 +31,20 @@ disable() {
     done
 }
 
+# tgvnn: upstream tgvnn-cuda/CMakeLists.txt lists a nonexistent src/tgv.cu,
+# which fails configuration for any CUDA toolchain.
+disable tgvnn
+
 # test.sh doesn't export its mode; SCALE_ENV is set by scaleenv.
 if [[ -n "${SCALE_ENV:-}" ]]; then
     # mlp: SCALE's cublasLt.h only forward-declares the cublasLt*Opaque_t structs.
     disable prefetch mlp
+    # f16sp: SCALE lacks cublasDotEx_64. trimul: SCALE lacks the
+    # __pipeline_* primitives (cuda_pipeline_primitives.h).
+    disable f16sp trimul
+    # blas-groupgemm, megablocks: SCALE lacks cublasGemmGroupedBatchedEx.
+    # swiglu-oai: SCALE has no host definition of __nv_cvt_float2_to_fp4x2.
+    disable blas-groupgemm megablocks swiglu-oai
 
     case "$TEST_GPU_ARCH" in
     gfx1201) disable blas-fp8gemm attentionMultiHeadKVCache ;;
