@@ -1,0 +1,3 @@
+export BACKEND="hip"
+export COMPILER="hipcc"
+export HIP_DEV_TARGET="${HIPARCHS}"

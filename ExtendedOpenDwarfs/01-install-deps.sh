@@ -3,16 +3,8 @@
 
 cd ExtendedOpenDwarfs
 
-# Hacks around upstream strangeness.
-sed -i"" -Ee 's|export SCALE_ROOT|#export SCALE_ROOT|' setup-backends.sh
-
-# It appears only once, in the inescapeable erorr case for anyone who
-# dares to run on a machine not in the list, so let's just be lunatics.
-sed -i"" -Ee 's|exit 1|#exit 1|' setup-backends.sh
-
-export HOST="${HOST:-$(hostname -s)}"
 export LSB_SRC_DIR="${LSB_SRC_DIR:-$(pwd)/external/liblsb-src}"
-export LSB_INSTALL_ROOT="${LSB_INSTALL_ROOT:-$(pwd)/external/liblsb-install/${HOST}}"
+export LSB_INSTALL_ROOT="${LSB_INSTALL_ROOT:-$(pwd)/external/liblsb-install}"
 export LSB_GIT_URL="${LSB_GIT_URL:-https://github.com/spcl/liblsb.git}"
 
 echo "Installing ExtendedOpenDwarfs dependencies"
@@ -26,10 +18,6 @@ if [[ ! -d "${LSB_SRC_DIR}/.git" ]]; then
 fi
 
 cd "${LSB_SRC_DIR}"
-
-export LC_ALL=C
-export LANG=C
-
 
 make distclean >/dev/null 2>&1 || true
 rm -rf .deps .libs tests/.deps tests/.libs
