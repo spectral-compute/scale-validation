@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <90331773>.**
+**This shows the test status for SCALE: master <19876b46>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -22,7 +22,7 @@ Contributions welcome!
 | CUDALibrarySamples          | 5ac0f9a8032a10...       | ✅|✅|✅|❓|✅|
 | cuml          | b17f2dbbea05ae...       | ✅|✅|✅|❓|✅|
 | cuSZ          | v0.16.2       | ✅|✅|✅|❓|✅|
-| cutlass          | v4.1.0       | ❌|✅|❌|❓|✅|
+| cutlass          | v4.1.0       | ❌|❌|❌|❓|✅|
 | CV-CUDA          | f769fe4bf336ab...       | ✅|✅|✅|❓|✅|
 | cycles          | v4.4.0       | ✅|✅|✅|❓|✅|
 | faiss          | v1.9.0       | ❌|✅|✅|❓|✅|
@@ -36,13 +36,13 @@ Contributions welcome!
 | gromacs          | v2026.3       | ❌|✅|✅|❓|✅|
 | hashcat          | 6716447dfce969...       | ✅|✅|✅|❓|✅|
 | hashinator          | 34cf1886ab5f0a...       | ✅|✅|✅|❓|✅|
-| HeCBench          | 47f8668f2e933c...       | ✅|❌|✅|❓|❌|
+| HeCBench          | 47f8668f2e933c...       | ✅|✅|✅|❓|❌|
 | hypre          | v2.33.0       | ✅|✅|✅|❓|❌|
-| jitify          | master       | ✅|✅|✅|❓|✅|
+| jitify          | master       | ❌|✅|✅|❓|✅|
 | kokkos          | 60d8384266eba9...       | ✅|✅|✅|❓|✅|
-| lammps          | stable_22Jul20...       | ❌|✅|✅|❓|✅|
+| lammps          | stable_22Jul20...       | ✅|✅|✅|❓|✅|
 | lammps-kokkos          |        | ✅|✅|✅|❓|✅|
-| llama.cpp          | 3ecfb150a4bd2d...       | ❌|❌|✅|❓|✅|
+| llama.cpp          | 3ecfb150a4bd2d...       | ❌|❌|❌|❓|✅|
 | llm.c          | 7ecd8906afe6ed...       | ✅|✅|✅|❓|✅|
 | nixl          | e128059af332df...       | ✅|✅|✅|❓|✅|
 | nvflip          | 1eb247cabcf286...       | ✅|✅|✅|❓|✅|
@@ -62,7 +62,7 @@ Contributions welcome!
 | vllm          | v0.13.0       | ✅|✅|✅|❓|✅|
 | warp          | v1.14.0       | ✅|✅|✅|❓|✅|
 | whispercpp          | v1.7.1       | ✅|✅|✅|❓|✅|
-| xgboost          | v2.1.0       | ❌|✅|❌|❓|✅|
+| xgboost          | v2.1.0       | ✅|✅|✅|❓|✅|
 
 *Key:*
 * ✅ Validated succesfully
@@ -70,7 +70,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 35573.
+Pipeline ID: 35810.
 
 ## Running Tests
 
