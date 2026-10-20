@@ -1,0 +1,7 @@
+ubuntu24.04:apt:libboost-regex-dev
+ubuntu24.04:apt:pipx
+ubuntu24.04:ext:cmake=4.0
+ubuntu24.04:pipx:dvc[s3]==3.67.1
+rocky9:ext:dependencies-not-yet-found
+rocky8:ext:dependencies-not-yet-found
+ubuntu22.04:ext:dependencies-not-yet-found

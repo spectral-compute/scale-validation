@@ -11,7 +11,7 @@ import re
 from pathlib import Path
 
 REPO_BASE = Path.cwd()
-IGNORE_LIST = [".jj", ".forgejo", ".git", "util", ".claude"]
+IGNORE_LIST = [".jj", ".forgejo", ".git", "util", ".claude", "images"]
 
 TARGETS_REGEX = re.compile(os.environ.get("TARGETS_REGEX", ".*"))
 ISAS = json.loads(os.environ["ISAS"])
@@ -51,19 +51,19 @@ for subdir in REPO_BASE.iterdir():
         xfail_run.add(name)
 
     for isa in ISAS:
-        if isa.startswith("gfx") and (subdir / f".build-fails-on-amd").is_file():
+        if isa.startswith("gfx") and (subdir / ".build-fails-on-amd").is_file():
             xfail_build.add((name, isa))
 
-        if isa.startswith("sm") and (subdir / f".build-fails-on-nv").is_file():
+        if isa.startswith("sm") and (subdir / ".build-fails-on-nv").is_file():
             xfail_build.add((name, isa))
 
         if (subdir / f".build-fails-on-{isa}").is_file():
             xfail_build.add((name, isa))
 
-        if isa.startswith("gfx") and (subdir / f".run-fails-on-amd").is_file():
+        if isa.startswith("gfx") and (subdir / ".run-fails-on-amd").is_file():
             xfail_run.add((name, isa))
 
-        if isa.startswith("sm") and (subdir / f".run-fails-on-nv").is_file():
+        if isa.startswith("sm") and (subdir / ".run-fails-on-nv").is_file():
             xfail_run.add((name, isa))
 
         if (subdir / f".run-fails-on-{isa}").is_file():
@@ -75,28 +75,26 @@ for subdir in REPO_BASE.iterdir():
     else:
         print(f"norun: {name} - .build-only file exists")
 
-matrix = list(
-    [
-        {
-            "target": target,
-            # Note: If building is expected to fail but succeeds, we won't
-            # actually end up running things anyway because of forgejo lacking proper
-            # understanding of xfails
-            # So we just don't bother creating the run step, to avoid confusion
-            "should_run": target in should_run and target not in xfail_build,
-            "xfail_build": target in xfail_build or (target, isa) in xfail_build,
-            "xfail_run": (
-                target in xfail_build
-                or target in xfail_run
-                or (target, isa) in xfail_build
-                or (target, isa) in xfail_run
-            ),
-            "isa": isa,
-        }
-        for target in should_build
-        for isa in ISAS
-    ]
-)
+matrix = [
+    {
+        "target": target,
+        # Note: If building is expected to fail but succeeds, we won't
+        # actually end up running things anyway because of forgejo lacking proper
+        # understanding of xfails
+        # So we just don't bother creating the run step, to avoid confusion
+        "should_run": target in should_run and target not in xfail_build,
+        "xfail_build": target in xfail_build or (target, isa) in xfail_build,
+        "xfail_run": (
+            target in xfail_build
+            or target in xfail_run
+            or (target, isa) in xfail_build
+            or (target, isa) in xfail_run
+        ),
+        "isa": isa,
+    }
+    for target in should_build
+    for isa in ISAS
+]
 
 
 print("---")
