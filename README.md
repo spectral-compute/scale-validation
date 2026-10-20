@@ -39,11 +39,11 @@ Contributions welcome!
 | hashinator          | 34cf1886ab5f0a...       | ✅|✅|✅|❓|✅|
 | HeCBench          | 47f8668f2e933c...       | ✅|✅|✅|❓|✅|
 | hypre          | v2.33.0       | ✅|✅|✅|❓|✅|
-| jitify          | master       | ✅|✅|✅|❓|✅|
+| jitify          | master       | ❌|✅|✅|❓|✅|
 | kokkos          | 60d8384266eba9...       | ✅|✅|✅|❓|✅|
 | lammps          | stable_22Jul20...       | ✅|✅|✅|❓|✅|
 | lammps-kokkos          |        | ✅|✅|✅|❓|✅|
-| llama.cpp          | 3ecfb150a4bd2d...       | ❌|❌|✅|❓|✅|
+| llama.cpp          | 3ecfb150a4bd2d...       | ❌|❌|❌|❓|✅|
 | llm.c          | 7ecd8906afe6ed...       | ✅|✅|✅|❓|✅|
 | nixl          | e128059af332df...       | ✅|✅|✅|❓|✅|
 | nvflip          | 1eb247cabcf286...       | ✅|✅|✅|❓|✅|
@@ -64,7 +64,7 @@ Contributions welcome!
 | vllm          | v0.13.0       | ✅|✅|✅|❓|✅|
 | warp          | v1.14.0       | ✅|✅|✅|❓|✅|
 | whispercpp          | v1.7.1       | ✅|✅|✅|❓|✅|
-| xgboost          | v2.1.0       | ✅|✅|❌|❓|✅|
+| xgboost          | v2.1.0       | ❌|✅|❌|❓|✅|
 
 *Key:*
 * ✅ Validated succesfully
@@ -72,7 +72,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 36287.
+Pipeline ID: 36498.
 
 ## Running Tests
 
