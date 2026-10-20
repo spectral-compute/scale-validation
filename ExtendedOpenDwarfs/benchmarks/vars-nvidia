@@ -1,0 +1,2 @@
+export BACKEND="cuda"
+export COMPILER="nvcc"
