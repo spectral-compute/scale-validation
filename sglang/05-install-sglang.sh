@@ -8,9 +8,10 @@ echo "torch==$(python -c 'import torch; print(torch.__version__)')" >constraints
 # Not a dependency of a source-built torch, but SGLang imports it everywhere.
 python -m pip install -c constraints.txt "triton==$(cat pytorch/.ci/docker/triton_version.txt)"
 
-# SGLang's own dependency list, minus what this test builds itself and the
-# wheels of prebuilt NVIDIA device code, which can't run under SCALE. Tests
-# that need the latter fail, and show what's missing.
+# SGLang's own dependency list (with the diffusion extra, which its kernel tests
+# import), minus what this test builds itself and the wheels of prebuilt NVIDIA
+# device code, which can't run under SCALE. Tests that need the latter fail, and
+# show what's missing.
 python - sglang/python/pyproject.toml >requirements.txt <<'EOF'
 import re
 import sys
@@ -23,10 +24,12 @@ SKIP = {
     "cuda-tile", "flash-attn-4", "humming-kernels", "nvidia-cutlass-dsl",
     "nvidia-mathdx", "nvshmem4py-cu13", "quack-kernels", "sgl-deep-ep",
     "sgl-deep-gemm", "tilelang", "tokenspeed-mla", "torch-memory-saver",
+    "nvidia-modelopt", "st-attn", "vsa",
 }
 
 with open(sys.argv[1], "rb") as f:
-    deps = tomllib.load(f)["project"]["dependencies"]
+    project = tomllib.load(f)["project"]
+deps = project["dependencies"] + project["optional-dependencies"]["diffusion"]
 for dep in deps:
     name = re.match(r"[A-Za-z0-9._-]+", dep).group(0)
     if re.sub(r"[-_.]+", "-", name).lower() not in SKIP:
