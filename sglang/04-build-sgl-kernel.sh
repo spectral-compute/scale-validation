@@ -11,4 +11,6 @@ export CMAKE_ARGS="${CMAKE_ARGS} -DSGL_KERNEL_ENABLE_FA3=OFF -DSGL_KERNEL_COMPIL
 export CMAKE_BUILD_PARALLEL_LEVEL="${MAX_JOBS}"
 
 python -m pip install "scikit-build-core>=0.10" "cmake>=3.26" ninja wheel
-python -m pip install --no-build-isolation --no-deps -v ./sglang/python/sglang/kernels/aot
+# Keep going past failures, for more signal on what's unsupported.
+python -m pip install --no-build-isolation --no-deps -v -C build.tool-args=-k0 \
+    ./sglang/python/sglang/kernels/aot

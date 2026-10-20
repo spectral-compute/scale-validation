@@ -24,4 +24,6 @@ python -m pip install --upgrade pip
 python -m pip install -r pytorch/requirements-build.txt
 
 # torch 2.14 builds with scikit-build-core; `setup.py build` no longer exists.
-python -m pip install --no-build-isolation -v ./pytorch
+# Keep going past failures (like the pytorch test's ninja patch), for more
+# signal on what's unsupported.
+python -m pip install --no-build-isolation -v -C build.tool-args=-k0 ./pytorch
