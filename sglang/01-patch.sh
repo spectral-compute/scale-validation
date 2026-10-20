@@ -8,6 +8,9 @@ patch_pytorch_cutlass pytorch/third_party/cutlass
 for patch in "${SCRIPT_DIR}"/patches/torch/*.patch; do
     git -C pytorch apply "${patch}"
 done
+for patch in "${SCRIPT_DIR}"/patches/sglang/*.patch; do
+    git -C sglang apply "${patch}"
+done
 
 cd sglang/python/sglang/kernels/aot
 
