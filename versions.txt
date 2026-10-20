@@ -52,6 +52,7 @@ RabbitCT main
 risc0 v1.2.2
 rodinia_suite spectral
 sglang v0.5.22
+sglang-aiter e7d2453f25e5aaeea72a3a40b284ba453e026624
 sglang-pytorch v2.14.1
 sglang-torchvision v0.29.1
 stdgpu 563dc59d6d08dfaa0adbbcbd8dc079c1a78a2a79
