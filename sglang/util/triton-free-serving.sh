@@ -17,11 +17,14 @@ export TORCH_DISABLE_NATIVE_JIT=1
 export TORCHDYNAMO_DISABLE=1
 
 # torch_native attention avoids the Triton KV-index, req_to_token and position
-# kernels that the other backends use (and turns CUDA graphs off). Sampling and
-# grammar backends kept to ones that don't use Triton.
+# kernels that the other backends use (and turns CUDA graphs off). It gathers
+# each request's KV into new tensors, outside the KV cache's memory, so leave
+# more of the GPU for those. Sampling and grammar backends kept to ones that
+# don't use Triton.
 # shellcheck disable=SC2034 # used by the scripts that source this
 triton_free_server_args=(
     --attention-backend torch_native
+    --mem-fraction-static 0.7
     --sampling-backend pytorch
     --grammar-backend none
 )

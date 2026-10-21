@@ -31,7 +31,7 @@ server = popen_launch_server(
     model,
     DEFAULT_URL_FOR_TEST,
     timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
-    other_args=["--mem-fraction-static", "0.7", *server_args],
+    other_args=server_args,
 )
 try:
     result = run_eval(
