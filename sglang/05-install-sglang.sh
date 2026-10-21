@@ -42,4 +42,12 @@ python -m pip install -c constraints.txt -r requirements.txt pytest tabulate
 python -m pip install "setuptools>=61" "setuptools-scm>=8" wheel
 SGLANG_BUILD_RUST_EXTS=none python -m pip install --no-build-isolation --no-deps -v ./sglang/python
 
+# FlashInfer's runtime-compiled kernels put its own CCCL (3.x) ahead of the
+# toolkit's, and it needs driver APIs SCALE doesn't have yet. Move it aside, so
+# they build against SCALE's.
+if [[ -n "${SCALE_ENV:-}" ]]; then
+    flashinfer_data="$(python -c 'import flashinfer, os; print(os.path.dirname(flashinfer.__file__))')/data"
+    mv "${flashinfer_data}/cccl" "${flashinfer_data}/cccl.vendored"
+fi
+
 python -c 'import sglang; print(sglang.__version__)'
