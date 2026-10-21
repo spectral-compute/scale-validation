@@ -47,5 +47,5 @@ finally:
     kill_process_tree(server.pid)
 
 print(f"{model}: GSM8K accuracy {result['accuracy']:.3f}, need {threshold}")
-sys.exit(result["accuracy"] < threshold)
+sys.exit(int(result["accuracy"] < threshold))
 EOF
