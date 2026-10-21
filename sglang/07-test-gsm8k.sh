@@ -5,6 +5,7 @@
 # greedy, 200 questions), with SGLang's own evaluator. A broken kernel shows up
 # as garbage answers. The threshold is a floor, below the model's expected score.
 source .venv/bin/activate
+source "${SCRIPT_DIR}/util/kernel-cache.sh"
 
 SGLANG_TEST_MODEL="${SGLANG_TEST_MODEL:-Qwen/Qwen2.5-1.5B-Instruct}"
 SGLANG_TEST_GSM8K_THRESHOLD="${SGLANG_TEST_GSM8K_THRESHOLD:-0.55}"
