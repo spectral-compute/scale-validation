@@ -6,11 +6,13 @@
 # as garbage answers. The threshold is a floor, below the model's expected score.
 source .venv/bin/activate
 source "${SCRIPT_DIR}/util/kernel-cache.sh"
+source "${SCRIPT_DIR}/util/triton-free-serving.sh"
 
 SGLANG_TEST_MODEL="${SGLANG_TEST_MODEL:-Qwen/Qwen2.5-1.5B-Instruct}"
 SGLANG_TEST_GSM8K_THRESHOLD="${SGLANG_TEST_GSM8K_THRESHOLD:-0.55}"
 
-python - "${SGLANG_TEST_MODEL}" "${SGLANG_TEST_GSM8K_THRESHOLD}" <<'EOF'
+python - "${SGLANG_TEST_MODEL}" "${SGLANG_TEST_GSM8K_THRESHOLD}" \
+    "${triton_free_server_args[@]}" <<'EOF'
 import sys
 from types import SimpleNamespace
 from urllib.parse import urlparse
@@ -23,13 +25,13 @@ from sglang.test.test_utils import (
     popen_launch_server,
 )
 
-model, threshold = sys.argv[1], float(sys.argv[2])
+model, threshold, server_args = sys.argv[1], float(sys.argv[2]), sys.argv[3:]
 url = urlparse(DEFAULT_URL_FOR_TEST)
 server = popen_launch_server(
     model,
     DEFAULT_URL_FOR_TEST,
     timeout=DEFAULT_TIMEOUT_FOR_SERVER_LAUNCH,
-    other_args=["--mem-fraction-static", "0.7"],
+    other_args=["--mem-fraction-static", "0.7", *server_args],
 )
 try:
     result = run_eval(
