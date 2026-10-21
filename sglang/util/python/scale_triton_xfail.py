@@ -37,13 +37,61 @@ def is_triton_failure(exc_type, exc, tb):
     return any(t in f.filename for f in frames for t in _TRITON_FRAMES)
 
 
+# The last Triton load failure during the current test, even if the code under
+# test caught it (e.g. to fall back from a fused path, which the test then
+# finds wasn't taken).
+_caught = None
+
+
+def _watch_triton():
+    """Record Triton's binary-load failures, which callers may swallow."""
+    try:
+        # Import it now: tests often first import Triton during the test.
+        import triton.compiler.compiler as compiler
+    except ImportError:
+        return
+    original = compiler.CompiledKernel._init_handles
+    if getattr(original, "_scale_watched", False):
+        return
+
+    def init_handles(self, *args, **kwargs):
+        global _caught
+        try:
+            return original(self, *args, **kwargs)
+        except Exception as e:
+            if any(m in str(e) for m in _MESSAGES):
+                _caught = str(e)
+            raise
+
+    init_handles._scale_watched = True
+    compiler.CompiledKernel._init_handles = init_handles
+
+
+def _start_test():
+    global _caught
+    _caught = None
+    _watch_triton()
+
+
+def _expected(err):
+    """Whether a failure is Triton's: its own error, or any failure after a
+    Triton kernel failed to load during the test."""
+    return is_triton_failure(*err) or _caught is not None
+
+
 def _log(test_id, exc):
     path = os.environ.get("SCALE_TRITON_XFAIL_LOG")
     if not path:
         return
-    message = str(exc).strip().splitlines()[0] if str(exc).strip() else ""
+    triton = is_triton_failure(type(exc), exc, exc.__traceback__)
+    message = str(exc if triton or _caught is None else _caught).strip()
+    entry = {
+        "test": test_id,
+        "kind": "raised" if triton else "caught",
+        "error": message.splitlines()[0][:200] if message else "",
+    }
     with open(path, "a") as f:
-        f.write(json.dumps({"test": test_id, "error": message[:200]}) + "\n")
+        f.write(json.dumps(entry) + "\n")
 
 
 def patch_unittest():
@@ -55,7 +103,7 @@ def patch_unittest():
         original = getattr(result, name)
 
         def handler(self, test, err):
-            if is_triton_failure(*err):
+            if _expected(err):
                 _log(test.id(), err[1])
                 self.addExpectedFailure(test, err)
             else:
@@ -66,10 +114,18 @@ def patch_unittest():
     wrap("addError")
     wrap("addFailure")
 
+    original_start = result.startTest
+
+    def start_test(self, test):
+        _start_test()
+        original_start(self, test)
+
+    result.startTest = start_test
+
     original_subtest = result.addSubTest
 
     def add_subtest(self, test, subtest, err):
-        if err is not None and is_triton_failure(*err):
+        if err is not None and _expected(err):
             _log(subtest.id(), err[1])
             self.addExpectedFailure(subtest, err)
         else:
@@ -87,13 +143,17 @@ except ImportError:
 
 if pytest is not None:
 
+    @pytest.hookimpl(tryfirst=True)
+    def pytest_runtest_setup(item):
+        _start_test()
+
     @pytest.hookimpl(hookwrapper=True)
     def pytest_runtest_makereport(item, call):
         outcome = yield
         report = outcome.get_result()
         if report.failed and call.excinfo is not None:
             e = call.excinfo
-            if is_triton_failure(e.type, e.value, e.tb):
+            if _expected((e.type, e.value, e.tb)):
                 _log(item.nodeid, e.value)
                 report.outcome = "skipped"
                 report.wasxfail = REASON
