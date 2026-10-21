@@ -1,6 +1,7 @@
 # Shared setup for the SGLang benchmarks. Source from the test workdir.
 
 source .venv/bin/activate
+source "${SCRIPT_DIR}/../util/kernel-cache.sh"
 
 RESULTS_DIR="${RESULTS_DIR:-/tmp/ci_benchmarks}"
 mkdir -p "${RESULTS_DIR}"

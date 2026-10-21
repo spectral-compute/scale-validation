@@ -8,6 +8,7 @@ source "$SCALE_VALIDATION/util/checks.sh"
 # single-GPU suites from its CI; "large" means an H100-sized GPU, and most tests
 # for features an architecture lacks skip themselves.
 source .venv/bin/activate
+source "${SCRIPT_DIR}/util/kernel-cache.sh"
 cd sglang/test
 
 check_small() {
