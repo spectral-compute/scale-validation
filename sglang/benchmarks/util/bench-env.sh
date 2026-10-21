@@ -11,18 +11,16 @@ mkdir -p "${RESULTS_DIR}"
 SGLANG_BENCH_MODEL="${SGLANG_BENCH_MODEL:-Qwen/Qwen2.5-1.5B-Instruct}"
 bench_args=(--model-path "${SGLANG_BENCH_MODEL}" --load-format dummy)
 
-if [[ "${BENCHMARK_COMPILER:-}" == "hip" ]]; then
-    # aiter's kernels are CDNA-only, and SGLang defaults to them on ROCm (as
-    # upstream's RDNA image notes).
-    if [[ "${TEST_GPU_ARCH}" == gfx1* ]]; then
-        export SGLANG_USE_AITER=0
-        bench_args+=(--attention-backend triton)
-    fi
-else
-    # The same attention kernels for SCALE and nvcc. SGLang defaults to FA3 on
-    # Hopper and TRT-LLM's prebuilt kernels on Blackwell, which the SCALE build
-    # lacks; elsewhere FlashInfer is its default anyway.
-    bench_args+=(--attention-backend flashinfer)
+# The same SGLang configuration on every toolchain, so they run the same code:
+# the one that avoids Triton and CuTe DSL kernels, which SCALE can't run.
+source "${SCRIPT_DIR}/../util/triton-free-serving.sh"
+# shellcheck disable=SC2154 # set by triton-free-serving.sh
+bench_args+=("${triton_free_server_args[@]}")
+
+# aiter's kernels are CDNA-only, and SGLang uses them by default on ROCm (as
+# upstream's RDNA image notes).
+if [[ "${BENCHMARK_COMPILER:-}" == "hip" && "${TEST_GPU_ARCH}" == gfx1* ]]; then
+    export SGLANG_USE_AITER=0
 fi
 
 # Extra server arguments, e.g. SGLANG_BENCH_ARGS="--attention-backend flashinfer".
