@@ -9,6 +9,15 @@ source "$SCALE_VALIDATION/util/checks.sh"
 # for features an architecture lacks skip themselves.
 source .venv/bin/activate
 source "${SCRIPT_DIR}/util/kernel-cache.sh"
+
+# Triton kernels can't run under SCALE (Triton emits NVIDIA binaries): count the
+# test cases that fail only for that as expected failures, and list them.
+xfail_log="$(realpath .)/triton-expected-failures.jsonl"
+rm -f "${xfail_log}"
+export PYTHONPATH="${SCRIPT_DIR}/util/python${PYTHONPATH:+:${PYTHONPATH}}"
+export PYTEST_PLUGINS=scale_triton_xfail
+export SCALE_TRITON_XFAIL_LOG="${xfail_log}"
+
 cd sglang/test
 
 check_small() {
@@ -21,4 +30,8 @@ check_large() {
 
 check "kernel unit tests (1-gpu-small)" check_small
 check "kernel unit tests (1-gpu-large)" check_large
+
+if [[ -s "${xfail_log}" ]]; then
+    log "$(wc -l <"${xfail_log}") test cases failed only in Triton, as expected (${xfail_log})"
+fi
 check_exit
