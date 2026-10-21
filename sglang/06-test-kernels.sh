@@ -18,6 +18,13 @@ export PYTHONPATH="${SCRIPT_DIR}/util/python${PYTHONPATH:+:${PYTHONPATH}}"
 export PYTEST_PLUGINS=scale_triton_xfail
 export SCALE_TRITON_XFAIL_LOG="${xfail_log}"
 
+# FlashInfer's CUDA norms rather than its CuTe DSL ones, which emit NVIDIA binaries.
+export FLASHINFER_USE_CUDA_NORM=1
+
+# torch's own Triton (and CuTe DSL) implementations of some ops, which the
+# tests' torch reference computations would otherwise use.
+export TORCH_DISABLE_NATIVE_JIT=1
+
 cd sglang/test
 
 check_small() {
