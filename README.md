@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <18d7c463>.**
+**This shows the test status for SCALE: master <8ab04500>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -17,7 +17,7 @@ Contributions welcome!
 | AMGX          | v2.4.0       | ✅|✅|✅|❓|❓|
 | arrayfire          | v3.9.0       | ✅|✅|✅|❓|✅|
 | bitnet          | 404980eecae38a...       | ✅|✅|✅|❓|✅|
-| caffe          | 9b891540183ddc...       | ✅|✅|❌|❓|❓|
+| caffe          | 9b891540183ddc...       | ✅|✅|✅|❓|❓|
 | ctranslate2          | v4.5.0       | ✅|✅|✅|❓|✅|
 | CUDALibrarySamples          | 5ac0f9a8032a10...       | ✅|✅|✅|❓|✅|
 | cuml          | b17f2dbbea05ae...       | ✅|✅|✅|❓|✅|
@@ -64,7 +64,7 @@ Contributions welcome!
 | vllm          | v0.13.0       | ✅|✅|✅|❓|✅|
 | warp          | v1.14.0       | ✅|✅|✅|❓|✅|
 | whispercpp          | v1.7.1       | ✅|✅|✅|❓|❓|
-| xgboost          | v2.1.0       | ✅|✅|✅|❓|✅|
+| xgboost          | v2.1.0       | ✅|✅|❌|❓|✅|
 
 *Key:*
 * ✅ Validated succesfully
@@ -72,7 +72,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 36731.
+Pipeline ID: 36960.
 
 ## Running Tests
 
