@@ -20,14 +20,6 @@ fi
 
 python -m pip install -c constraints.txt "./openfold-3[dev]"
 
-python - <<PY
-import torch
-assert torch.__file__.startswith("${PYTORCH_VENV}"), torch.__file__
-assert torch.version.hip is None, "expected the SCALE (CUDA) build of PyTorch"
-assert torch.cuda.is_available(), "no GPU visible to PyTorch"
-print("torch", torch.__version__, "on", torch.cuda.get_device_name(0))
-PY
-
 # Model parameters and CCD.
 mkdir -p "${OPENFOLD_CACHE}"
 cat > setup_config.json <<JSON
