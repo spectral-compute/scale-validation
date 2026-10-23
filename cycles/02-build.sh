@@ -31,10 +31,16 @@ if [[ "${CYCLES_DEVICE:-CUDA}" == "HIP" ]]; then
         -DWITH_CYCLES_HIP_BINARIES=ON
         -DCYCLES_HIP_BINARIES_ARCH="${TEST_GPU_ARCH}"
         -DWITH_CYCLES_DEVICE_HIPRT=OFF
-        # ROCm's clang searches its own headers last (-idirafter), so a stray
-        # distro HIP in /usr/include (e.g. Ubuntu's libamdhip64-dev) wins.
-        -DHIP_HIPCC_FLAGS="-isystem${ROCM_PATH:-/opt/rocm}/include"
     )
+
+    # ROCm's clang searches its own headers last (-idirafter), so a stray
+    # distro HIP in /usr/include (e.g. Ubuntu's libamdhip64-dev) wins. Only
+    # then, put the toolkit's headers first (never -isystem /usr/include).
+    ROCM_INCLUDE="$(realpath "${ROCM_PATH:-/opt/rocm}/include")"
+    if [[ -d /usr/include/hip && "${ROCM_INCLUDE}" != "/usr/include" ]]; then
+        log "Preferring ${ROCM_INCLUDE} over /usr/include/hip"
+        args+=(-DHIP_HIPCC_FLAGS="-isystem${ROCM_INCLUDE}")
+    fi
 else
     args+=(
         -DWITH_CYCLES_DEVICE_CUDA=ON

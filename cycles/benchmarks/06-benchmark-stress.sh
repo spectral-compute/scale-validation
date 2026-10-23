@@ -4,6 +4,14 @@
 
 source "$SCALE_VALIDATION/util/checks.sh"
 
+# Comparing renders needs ImageMagick's compare, plus python3.
+for TOOL in compare python3; do
+    if ! command -v "${TOOL}" >/dev/null; then
+        log "${TOOL} not found (install imagemagick/python3)"
+        exit 1
+    fi
+done
+
 # Stress GPU rendering: many back-to-back renders of one scene, each of which
 # must match the first (catches hangs, crashes and corruption that only show
 # up under sustained load), then one large, long-running render.

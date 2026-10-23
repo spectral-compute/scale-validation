@@ -4,7 +4,9 @@
 
 "$SCRIPT_DIR/../01-patch.sh"
 
-# hipew.patch: Cycles loads the HIP runtime itself and tries libamdhip64.so.5
-# first, so with ROCm 6+ it can pick up a stray distro ROCm 5 runtime (e.g.
-# Ubuntu's libamdhip64-5) and crash in hipInit. Prefer newer runtimes.
+# hipew.patch: Cycles loads the HIP runtime itself, trying libamdhip64.so.5
+# first, so it can pick up a stray distro ROCm 5 runtime (e.g. Ubuntu's
+# libamdhip64-5) that doesn't match the toolkit, and crash in hipInit. When
+# $ROCM_PATH is set (benchmark.py sets it), load that install's runtime first;
+# otherwise the upstream search is unchanged.
 patch -p0 -d "cycles" <"${SCRIPT_DIR}/hipew.patch"
