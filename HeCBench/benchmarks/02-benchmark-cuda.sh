@@ -28,10 +28,11 @@ fi
 stem="$mode.$TEST_GPU_ARCH"
 data_file="$RESULTS_DIR/hecbench.$stem.$(date '+%Y%m%d-%H%M%S').csv"
 
+# No --store: the DB would land in the per-project workdir, which is wiped each
+# run. The CSV in $RESULTS_DIR is the record for now.
 python3 tools/hecbench run \
     --model cuda \
     --preset "$PRESET" \
-    --store "hecbench-results.$stem.db" \
     --format csv \
     --output "$data_file"
 
