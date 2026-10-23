@@ -4,6 +4,14 @@
 
 source "$SCALE_VALIDATION/util/checks.sh"
 
+# CPU-vs-GPU comparison needs ImageMagick's compare, plus python3.
+for TOOL in compare python3; do
+    if ! command -v "${TOOL}" >/dev/null; then
+        log "${TOOL} not found (install imagemagick/python3)"
+        exit 1
+    fi
+done
+
 # Render a bundled example on CPU and CUDA, and check the CUDA render matches
 # the CPU reference. Timing lives in benchmarks/, not here.
 render_matches_cpu() {
