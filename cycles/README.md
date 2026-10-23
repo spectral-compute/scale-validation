@@ -85,4 +85,11 @@ standalone: it runs the numbered build scripts alongside it and depends on `util
   no glog dependency.
 - The CI correctness test renders four example scenes on both CPU and CUDA and verifies that the
   per-pixel mean squared error is below 0.01.
+- Performance and stress tests live in `benchmarks/` and are run by `benchmark.py`, not CI:
+  `05-benchmark-render.sh` times each example scene at a fixed workload, and
+  `06-benchmark-stress.sh` does many back-to-back renders (each must match the first) plus
+  one large 4K render. Both write CSVs to `$RESULTS_DIR`, and take `CYCLES_BENCH_*` /
+  `CYCLES_STRESS_*` environment overrides for the workload size.
+- The benchmarks run under SCALE (AMD or NVIDIA) and NVIDIA `nvcc` via Cycles's CUDA backend, and
+  under native ROCm via Cycles's own HIP backend (`benchmarks/02-build-hip.sh`), for comparison.
 - Scene files (`scene_*.xml`) are bundled in the image at `/build/cycles/cycles/examples/`.

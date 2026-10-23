@@ -1,0 +1,15 @@
+--- third_party/hipew/src/hipew.c
++++ third_party/hipew/src/hipew.c
+@@ -241,7 +241,11 @@
+ #else
+   /* ROCm 6 changes paths from /opt/rocm/hip/lib to /opt/rocm/lib, so
+    * search for libraries there. It still includes .so.5. */
+-  const char *hip_paths[] = {"libamdhip64.so.5",
++  const char *hip_paths[] = {"libamdhip64.so.7",
++                             "/opt/rocm/lib/libamdhip64.so.7",
++                             "libamdhip64.so.6",
++                             "/opt/rocm/lib/libamdhip64.so.6",
++                             "libamdhip64.so.5",
+                              "/opt/rocm/lib/libamdhip64.so.5",
+                              "/opt/rocm/hip/lib/libamdhip64.so.5",
+                              "libamdhip64.so",

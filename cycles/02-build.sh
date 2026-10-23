@@ -6,16 +6,6 @@ args=(
     -DCMAKE_INSTALL_PREFIX="install"
     -DWITH_STRICT_BUILD_OPTIONS=ON
 
-    -DWITH_CYCLES_DEVICE_CUDA=ON
-    -DWITH_CYCLES_CUDA_BINARIES=ON
-    -DCYCLES_CUDA_BINARIES_ARCH="sm_${CUDAARCHS}"
-    # On NVIDIA targets, ${CUDA_PATH} (scaleenv's "Using cuda install at ..." pick) might be a runtime-only install.
-    # In this case, `find_package(CUDA)` can't see a full toolkit (missing CUDA_INCLUDE_DIRS/CUDA_CUDART_LIBRARY)
-    # This is only a problem because cycles calls that explicitly, rather than inferring the cuda toolkit based off of where nvcc is.
-    -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}"
-
-    -DWITH_CYCLES_DEVICE_HIP=OFF
-    -DWITH_CYCLES_HIP_BINARIES=OFF
     -DWITH_CYCLES_DEVICE_OPTIX=OFF
 
     -DGLOG_INCLUDE_DIR=/usr/include
@@ -29,6 +19,36 @@ args=(
     -DWITH_CYCLES_USD=OFF
     -DWITH_CYCLES_OSL=OFF
 )
+
+# GPU backend: CUDA by default. benchmarks/02-build-hip.sh sets
+# CYCLES_DEVICE=HIP for a native ROCm build to compare against.
+if [[ "${CYCLES_DEVICE:-CUDA}" == "HIP" ]]; then
+    args+=(
+        -DWITH_CYCLES_DEVICE_CUDA=OFF
+        -DWITH_CYCLES_CUDA_BINARIES=OFF
+
+        -DWITH_CYCLES_DEVICE_HIP=ON
+        -DWITH_CYCLES_HIP_BINARIES=ON
+        -DCYCLES_HIP_BINARIES_ARCH="${TEST_GPU_ARCH}"
+        -DWITH_CYCLES_DEVICE_HIPRT=OFF
+        # ROCm's clang searches its own headers last (-idirafter), so a stray
+        # distro HIP in /usr/include (e.g. Ubuntu's libamdhip64-dev) wins.
+        -DHIP_HIPCC_FLAGS="-isystem${ROCM_PATH:-/opt/rocm}/include"
+    )
+else
+    args+=(
+        -DWITH_CYCLES_DEVICE_CUDA=ON
+        -DWITH_CYCLES_CUDA_BINARIES=ON
+        -DCYCLES_CUDA_BINARIES_ARCH="sm_${CUDAARCHS}"
+        # On NVIDIA targets, ${CUDA_PATH} (scaleenv's "Using cuda install at ..." pick) might be a runtime-only install.
+        # In this case, `find_package(CUDA)` can't see a full toolkit (missing CUDA_INCLUDE_DIRS/CUDA_CUDART_LIBRARY)
+        # This is only a problem because cycles calls that explicitly, rather than inferring the cuda toolkit based off of where nvcc is.
+        -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}"
+
+        -DWITH_CYCLES_DEVICE_HIP=OFF
+        -DWITH_CYCLES_HIP_BINARIES=OFF
+    )
+fi
 
 # Cycles's finder script for Glog can't cope with either Arch or Ubuntu.
 # TODO: Sketchy. Internal issue #1200
