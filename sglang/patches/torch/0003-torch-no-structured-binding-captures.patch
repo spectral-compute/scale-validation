@@ -1,0 +1,26 @@
+Avoid lambda captures of structured bindings, which trip an assertion in SCALE's clang.
+
+diff --git a/aten/src/ATen/native/sparse/cuda/SparseCsrTensorMath.cu b/aten/src/ATen/native/sparse/cuda/SparseCsrTensorMath.cu
+index 4573a7a..d9d2c20 100644
+--- a/aten/src/ATen/native/sparse/cuda/SparseCsrTensorMath.cu
++++ b/aten/src/ATen/native/sparse/cuda/SparseCsrTensorMath.cu
+@@ -488,7 +488,8 @@ Tensor reduce_sparse_csr_dim0_cuda_template(const Tensor& sparse, ReductionOp ro
+   // of float should be float in current scenario. In CUDA, float is the accumulate type
+   // of float, while in CPU, double is the accumulate type of float.
+   using acc_t = at::acc_type<scalar_t, true>;
+-  auto [new_values, new_values_acc] =
++  Tensor new_values, new_values_acc;
++  std::tie(new_values, new_values_acc) =
+       at::sparse_csr::create_acc_buffer<acc_t, scalar_t>(
+           values.options(), values.scalar_type(), new_nnz);
+   scalar_t* values_ptr = values.data_ptr<scalar_t>();
+@@ -578,7 +579,8 @@ Tensor reduce_sparse_csr_dim1_cuda_template(const Tensor& sparse, ReductionOp ro
+   // of float should be float in current scenario. In CUDA, float is the accumulate type
+   // of float, while in CPU, double is the accumulate type of float.
+   using acc_t = at::acc_type<scalar_t, true>;
+-  auto [new_values, new_values_acc] =
++  Tensor new_values, new_values_acc;
++  std::tie(new_values, new_values_acc) =
+       at::sparse_csr::create_acc_buffer<acc_t, scalar_t>(
+           values.options(), values.scalar_type());
+ 

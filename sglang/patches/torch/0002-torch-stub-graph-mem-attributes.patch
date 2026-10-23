@@ -1,0 +1,29 @@
+Stub the graph-memory attribute API, which SCALE doesn't provide yet.
+
+diff --git a/c10/cuda/CUDAMallocAsyncAllocator.cpp b/c10/cuda/CUDAMallocAsyncAllocator.cpp
+index 6438bd7..85490cc 100644
+--- a/c10/cuda/CUDAMallocAsyncAllocator.cpp
++++ b/c10/cuda/CUDAMallocAsyncAllocator.cpp
+@@ -9,6 +9,22 @@
+ #include <unordered_set>
+ #include <vector>
+ 
++// Not yet in SCALE: report it as unsupported, which this file handles.
++enum cudaGraphMemAttributeType {
++  cudaGraphMemAttrUsedMemCurrent,
++  cudaGraphMemAttrUsedMemHigh,
++  cudaGraphMemAttrReservedMemCurrent,
++  cudaGraphMemAttrReservedMemHigh,
++};
++static cudaError_t cudaDeviceGetGraphMemAttribute(
++    int, cudaGraphMemAttributeType, void*) {
++  return cudaErrorNotSupported;
++}
++static cudaError_t cudaDeviceSetGraphMemAttribute(
++    int, cudaGraphMemAttributeType, void*) {
++  return cudaErrorNotSupported;
++}
++
+ namespace c10::cuda::CUDACachingAllocator::CudaMallocAsync {
+ 
+ using namespace c10::CachingAllocator;

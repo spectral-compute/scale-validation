@@ -1,0 +1,15 @@
+Fix the fallback for builds without CUTLASS's SM90 TMA support, which uses undeclared names.
+
+diff --git a/python/sglang/kernels/aot/csrc/expert_specialization/es_fp8_blockwise.cu b/python/sglang/kernels/aot/csrc/expert_specialization/es_fp8_blockwise.cu
+index f985226d..33459b40 100644
+--- a/python/sglang/kernels/aot/csrc/expert_specialization/es_fp8_blockwise.cu
++++ b/python/sglang/kernels/aot/csrc/expert_specialization/es_fp8_blockwise.cu
+@@ -187,7 +187,6 @@ void es_fp8_blockwise_scaled_grouped_mm(
+   end_event_0.block(stream);
+   end_event_1.block(stream);
+ #else
+-  TORCH_CHECK_NOT_IMPLEMENTED(
+-      can_implement, "No implemented fp8_blockwise_scaled_grouped_mm for current compute capability: ", sm_version);
++  TORCH_CHECK_NOT_IMPLEMENTED(false, "No implemented fp8_blockwise_scaled_grouped_mm for current compute capability");
+ #endif
+ }
