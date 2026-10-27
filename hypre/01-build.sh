@@ -32,6 +32,9 @@ args=(
     --with-MPI-libs="mpi"
     --with-MPI-lib-dirs="${MPI_DIR}/lib"
 )
+# For experiments, e.g. HYPRE_EXTRA_CONFIGURE_ARGS="--disable-cusparse".
+# shellcheck disable=2206
+args+=(${HYPRE_EXTRA_CONFIGURE_ARGS:-})
 
 (
     cd "build/src"
