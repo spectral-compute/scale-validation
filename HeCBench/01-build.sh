@@ -4,6 +4,8 @@
 cd HeCBench
 
 # Our own preset name, so it can't collide with the upstream cuda-sm<N> presets.
+# Like HeCBench's Makefiles, build with -O3 but keep asserts: some benchmarks
+# verify their results with them. Upstream's presets build unoptimised.
 PRESET="scale-cuda-sm${CUDAARCHS#sm_}"
 
 cat >CMakeUserPresets.json <<JSON
@@ -13,6 +15,10 @@ cat >CMakeUserPresets.json <<JSON
         "name": "${PRESET}",
         "inherits": "default",
         "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Release",
+            "CMAKE_C_FLAGS_RELEASE": "-O3",
+            "CMAKE_CXX_FLAGS_RELEASE": "-O3",
+            "CMAKE_CUDA_FLAGS_RELEASE": "-O3",
             "CMAKE_CUDA_COMPILER": "nvcc",
             "HECBENCH_ENABLE_CUDA": "ON",
             "HECBENCH_ENABLE_HIP": "OFF",

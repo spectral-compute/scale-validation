@@ -4,19 +4,21 @@
 
 cd HeCBench
 
-PRESET="hip-$TEST_GPU_ARCH"
+# Our own preset name, so it can't collide with the upstream hip-* presets (which
+# only exist for a few archs, and build unoptimised). Built like 01-build.sh.
+PRESET="scale-hip-$TEST_GPU_ARCH"
 
-# Upstream only ships hip-* presets for a handful of archs; add a user preset
-# mirroring theirs for any other.
-if ! cmake --list-presets=configure | grep -qF "\"${PRESET}\""; then
-    log "No upstream preset ${PRESET}, creating one in CMakeUserPresets.json"
-    cat >CMakeUserPresets.json <<JSON
+cat >CMakeUserPresets.json <<JSON
 {
     "version": 3,
     "configurePresets": [{
         "name": "${PRESET}",
         "inherits": "default",
         "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Release",
+            "CMAKE_C_FLAGS_RELEASE": "-O3",
+            "CMAKE_CXX_FLAGS_RELEASE": "-O3",
+            "CMAKE_HIP_FLAGS_RELEASE": "-O3",
             "HECBENCH_ENABLE_CUDA": "OFF",
             "HECBENCH_ENABLE_HIP": "ON",
             "HECBENCH_ENABLE_SYCL": "OFF",
@@ -27,6 +29,5 @@ if ! cmake --list-presets=configure | grep -qF "\"${PRESET}\""; then
     }]
 }
 JSON
-fi
 
 python3 tools/hecbench --verbose build --preset "$PRESET"
