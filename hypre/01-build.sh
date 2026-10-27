@@ -7,7 +7,17 @@ if [ ! -e "${MPI_DIR}" ]; then
     exit 1
 fi
 
-cp -r "hypre" "build"
+# hypre's configure only looks for MPI compiler wrappers (mpicc, ...) and
+# doesn't fall back to cc, so use the ones from our OpenMPI.
+export PATH="${MPI_DIR}/bin:${PATH}"
+export LD_LIBRARY_PATH="${MPI_DIR}/lib:${LD_LIBRARY_PATH:-}"
+
+# In-tree build, because the CMake build system builds fewer of the test drivers.
+# The build only needs src/, so leave .git out of the copy. Start from a fresh
+# copy each time, since `cp -r` into an existing directory would nest it.
+rm -rf build
+mkdir build
+cp -r hypre/src build/src
 
 args=(
     --with-cuda
