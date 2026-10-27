@@ -19,11 +19,33 @@ rm -rf build
 mkdir build
 cp -r hypre/src build/src
 
-args=(
-    --with-cuda
-    --with-gpu-arch="${CUDAARCHS}"
+# benchmark.py builds with native HIP too (see benchmarks/).
+if [[ "${BENCHMARK_COMPILER:-}" == "hip" ]]; then
+    args=(--with-hip --with-gpu-arch="${TEST_GPU_ARCH}")
 
-    --enable-unified-memory
+    # hypre compiles HIP with -std=c++14, but ROCm 7's rocPRIM needs C++17.
+    # Flags in HIPCXXFLAGS come after hypre's own, so this one wins.
+    export HIPCXXFLAGS="${HIPCXXFLAGS:-} -std=c++17"
+
+    # ROCm's clang searches its own headers last (-idirafter), so a stray
+    # distro HIP in /usr/include (e.g. Ubuntu's libamdhip64-dev) wins. Only
+    # then, put the toolkit's headers first (never -isystem /usr/include).
+    rocm_include="$(realpath "${ROCM_PATH:-/opt/rocm}/include")"
+    if [[ -d /usr/include/hip && "${rocm_include}" != "/usr/include" ]]; then
+        log "Preferring ${rocm_include} over /usr/include/hip"
+        export HIPCXXFLAGS="-isystem${rocm_include} ${HIPCXXFLAGS:-}"
+    fi
+else
+    args=(--with-cuda --with-gpu-arch="${CUDAARCHS}")
+fi
+
+# The tests use unified memory, like upstream's CUDA CI. Upstream benchmarks
+# without it, so benchmarks/01-build.sh turns it off.
+if [[ "${HYPRE_UNIFIED_MEMORY:-1}" == "1" ]]; then
+    args+=(--enable-unified-memory)
+fi
+
+args+=(
     --disable-onemklsparse
     --disable-onemklblas
     --disable-onemklrand
