@@ -4,7 +4,7 @@
 
 cd HeCBench
 
-PRESET="hip-$TEST_GPU_ARCH"
+PRESET="scale-hip-$TEST_GPU_ARCH"
 RESULTS_DIR="${RESULTS_DIR:-/tmp/ci_benchmarks}"
 mkdir -p "$RESULTS_DIR"
 
