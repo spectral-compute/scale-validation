@@ -79,21 +79,19 @@ scale_image() {
 install_entries() {
     local c="$1" entry source package
     shift
-    local apt=() pip=() pipx=()
+    local apt=() pip=() pipx=() ext=()
     for entry in "$@"; do
         source="${entry%%:*}"
         package="${entry#*:}"
         case "${source}" in
-            apt) apt+=("${package}") ;;
-            pip) pip+=("${package}") ;;
-            pipx) pipx+=("${package}") ;;
-            ext)
-                docker exec "${c}" sudo /src/test/thirdparty/images/install-ext.sh "${package}"
-                ;;
-            *)
-                echo "Unsupported source for ${DISTRO}: ${entry}" >&2
-                exit 1
-                ;;
+        apt) apt+=("${package}") ;;
+        pip) pip+=("${package}") ;;
+        pipx) pipx+=("${package}") ;;
+        ext) ext+=("${package}") ;;
+        *)
+            echo "Unsupported source for ${DISTRO}: ${entry}" >&2
+            exit 1
+            ;;
         esac
     done
     if [[ ${#apt[@]} -gt 0 ]]; then
@@ -106,6 +104,9 @@ install_entries() {
     if [[ ${#pipx[@]} -gt 0 ]]; then
         docker exec "${c}" sudo PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install "${pipx[@]}"
     fi
+    for package in "${ext[@]}"; do
+        docker exec "${c}" sudo /src/test/thirdparty/images/install-ext.sh "${package}"
+    done
 }
 
 errors() {
@@ -182,7 +183,7 @@ whichpkg)
     if ! docker image inspect "${APTFILE_IMAGE}" >/dev/null 2>&1; then
         docker rm -f "${APTFILE_IMAGE}" >/dev/null 2>&1 || true
         docker run --name "${APTFILE_IMAGE}" "ubuntu:${DISTRO#ubuntu}" bash -c \
-            'apt-get update -qq && apt-get install -y -qq apt-file && apt-file update' >/dev/null 2>&1
+            'apt-get update -qq && apt-get install -y -qq apt-file && apt-file update' >/dev/null
         docker commit "${APTFILE_IMAGE}" "${APTFILE_IMAGE}" >/dev/null
         docker rm "${APTFILE_IMAGE}" >/dev/null
     fi

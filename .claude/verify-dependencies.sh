@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
-# Run the verify-dependencies skill for one project in a fresh Docker sandbox.
+# Run the verify-dependencies skill for one project in a Docker sandbox.
 # Run this on the host, not inside a sandbox. Needs the `sbx` CLI.
 #
 # Usage: verify-dependencies.sh <project> <scale-sha> [distro]
 #
-# Creates a sandbox for the SCALE checkout that contains this test/thirdparty directory,
-# gives it the network access the builds need, runs Claude non-interactively with the
-# skill, and removes the sandbox afterwards. The skill edits <project>/.dependencies in
-# place, so the result appears in your checkout.
+# Creates a sandbox named verify-deps for the SCALE checkout that contains this
+# test/thirdparty directory, or reuses it if it exists, so the Claude login and the
+# downloaded images are kept between runs. Gives it the network access the builds need,
+# then starts Claude with the skill in the background and returns. The skill edits
+# <project>/.dependencies in place, so the result appears in your checkout.
+#
+# The sandbox keeps the scale-test image it first pulled, and one image with SCALE
+# installed per SCALE commit. Delete the verify-deps sandbox to start afresh.
 #
 # Environment:
-#   KEEP=1          Keep the sandbox afterwards, to inspect it with `sbx exec -it <name> bash`.
 #   SBX_CPUS, SBX_MEMORY
 #                   Passed to `sbx create --cpus` and `--memory`.
 #   SBX_DOCKER_SIZE Size of the sandbox's docker storage (/var/lib/docker). Default 60g.
