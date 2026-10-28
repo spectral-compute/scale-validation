@@ -30,4 +30,19 @@ cat >CMakeUserPresets.json <<JSON
 }
 JSON
 
+# Comment out benchmarks known to fail to compile.
+disable() {
+    for b in "$@"; do
+        sed -i -E "s/^([[:space:]]*)(${b})[[:space:]]*\$/\1#\2  # HIP: known failure/" src/CMakeLists.txt
+    done
+}
+
+# The gfx major version is everything but the last two (hex) digits, e.g. 9
+# for gfx90a, 11 for gfx1100.
+if [[ "$TEST_GPU_ARCH" =~ ^gfx([0-9]+)[0-9a-f]{2}$ && ${BASH_REMATCH[1]} -ge 10 ]]; then
+    # awbarrier: its inline asm uses buffer_load ... lds, which gfx10 and
+    # newer (RDNA) dropped.
+    disable awbarrier
+fi
+
 python3 tools/hecbench --verbose build --preset "$PRESET"
