@@ -1,3 +1,4 @@
+ubuntu24.04:apt:imagemagick
 ubuntu24.04:ext:cmake=4.0
 rocky9:ext:dependencies-not-yet-found
 rocky8:ext:dependencies-not-yet-found

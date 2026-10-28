@@ -1,4 +1,5 @@
 ubuntu24.04:apt:ffmpeg
+ubuntu24.04:apt:lbzip2
 ubuntu24.04:apt:libpng-dev
 ubuntu24.04:ext:cmake=4.0
 rocky9:ext:dependencies-not-yet-found
