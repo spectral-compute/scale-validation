@@ -25,6 +25,12 @@ from pathlib import Path
 REPO_BASE = Path.cwd()
 
 
+def project_image(name: str, distro: str) -> str:
+    """The docker image name for a project's builder image, without the registry or tag."""
+    # Docker image names must be lowercase.
+    return f"thirdparty-{name.lower()}-{distro}"
+
+
 # Data structures for our graph
 class Node(ABC):
     @property
@@ -124,8 +130,7 @@ class ProjectImage(Node):
 
     @property
     def image(self) -> str:
-        # Docker image names must be lowercase.
-        return f"thirdparty-{self.name.lower()}-{self.distro}"
+        return project_image(self.name, self.distro)
 
     def dockerfile(self) -> str | None:
         lines = [
