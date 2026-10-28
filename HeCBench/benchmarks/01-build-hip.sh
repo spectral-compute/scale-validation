@@ -30,12 +30,15 @@ cat >CMakeUserPresets.json <<JSON
 }
 JSON
 
-# Comment out benchmarks known to fail to compile.
+# Comment out benchmarks known to fail to compile or run.
 disable() {
     for b in "$@"; do
         sed -i -E "s/^([[:space:]]*)(${b})[[:space:]]*\$/\1#\2  # HIP: known failure/" src/CMakeLists.txt
     done
 }
+
+# tridiagonal: the HIP port segfaults (the CUDA one runs fine under SCALE).
+disable tridiagonal
 
 # The gfx major version is everything but the last two (hex) digits, e.g. 9
 # for gfx90a, 11 for gfx1100.
