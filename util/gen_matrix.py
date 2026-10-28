@@ -2,6 +2,7 @@
 #   - what to run
 #   - what we expect to fail
 #   - what stage we expect it to fail at (build or run)
+#   - what docker image to build and run it in
 # It's probably not useful to you if you don't work at spectral
 # See also: README_INTERNAL.md
 
@@ -10,11 +11,19 @@ import os
 import re
 from pathlib import Path
 
+from image_graph import PRIMARY_DISTRO, project_image
+
 REPO_BASE = Path.cwd()
 IGNORE_LIST = [".jj", ".forgejo", ".git", "util", ".claude", "images"]
 
 TARGETS_REGEX = re.compile(os.environ.get("TARGETS_REGEX", ".*"))
 ISAS = json.loads(os.environ["ISAS"])
+
+
+def image(target: str, isa: str) -> str:
+    """The image to build and run `target` for `isa` in, without the registry or tag."""
+    return project_image(target, PRIMARY_DISTRO, nv=isa.startswith("sm"))
+
 
 should_build = set()
 should_run = set()
@@ -91,6 +100,7 @@ matrix = [
             or (target, isa) in xfail_run
         ),
         "isa": isa,
+        "image": image(target, isa),
     }
     for target in should_build
     for isa in ISAS
