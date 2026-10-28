@@ -39,10 +39,10 @@ disable() {
 
 # test.sh doesn't export its mode; SCALE_ENV is set by scaleenv.
 if [[ -n "${SCALE_ENV:-}" && "$TEST_GPU_ARCH" == sm_120 ]]; then
-    # qkv: link error on isfinite. d3q19-bgk: nvlink can't resolve a static
-    # __constant__ variable. sobol: ptxas exceeds the constant data limit.
-    # quant3MatMul: ambiguous half2 operator=.
-    disable qkv d3q19-bgk sobol quant3MatMul
+    # qkv, permute: link error on isfinite. d3q19-bgk: nvlink can't resolve a
+    # static __constant__ variable. sobol: ptxas exceeds the constant data
+    # limit. quant3MatMul: ambiguous half2 operator=.
+    disable qkv permute d3q19-bgk sobol quant3MatMul
 fi
 if [[ -n "${SCALE_ENV:-}" && "$TEST_GPU_ARCH" == gfx11* ]]; then
     # assert: on gfx11, LLVM's trap raises a queue exception, which aborts the
