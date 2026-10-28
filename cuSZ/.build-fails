@@ -1,1 +1,0 @@
-cusz fails to build (cannot throw from __host__ __device__ function): https://code.spectralcompute.com/spectral-compute/scale/issues/1239
