@@ -2,7 +2,6 @@
 name = "scale-validation-util"
 version = "0.1.0"
 description = "Utilities for working with scale-validation"
-readme = "README.md"
 authors = [
     { name = "Aria Shrimpton", email = "aria@spectralcompute.co.uk" }
 ]
@@ -19,3 +18,5 @@ dev = [
 [tool.pyright]
 venvPath = "."
 venv = ".venv"
+# CI runs these scripts with ubuntu24.04's python3.
+pythonVersion = "3.12"
