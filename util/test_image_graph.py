@@ -27,6 +27,7 @@ from image_graph import (
 def repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     """An empty repo for `build_graph` to read projects from."""
     monkeypatch.setattr(image_graph, "REPO_BASE", tmp_path)
+    monkeypatch.delenv("DISTROS", raising=False)
     return tmp_path
 
 
@@ -445,6 +446,25 @@ def test_main_builds_the_primary_distro_first(
         "thirdparty-a-nv-ubuntu24.04.dockerfile",
         "thirdparty-a-rocky8.dockerfile",
         "thirdparty-a-nv-rocky8.dockerfile",
+    ]
+
+
+def test_main_writes_only_the_distros_in_env(
+    repo: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(repo)
+    monkeypatch.setenv("DISTROS", '["ubuntu24.04", "rocky9"]')
+    add_project(repo, "a", "rocky8:ext:dependencies-not-yet-found", "ubuntu24.04:apt:x")
+    # An empty file means every distro, including ones no file names.
+    add_project(repo, "b")
+    image_graph.main()
+    assert sorted(f.name for f in (repo / "images").glob("*.dockerfile")) == [
+        "thirdparty-a-nv-ubuntu24.04.dockerfile",
+        "thirdparty-a-ubuntu24.04.dockerfile",
+        "thirdparty-b-nv-rocky9.dockerfile",
+        "thirdparty-b-nv-ubuntu24.04.dockerfile",
+        "thirdparty-b-rocky9.dockerfile",
+        "thirdparty-b-ubuntu24.04.dockerfile",
     ]
 
 

@@ -17,11 +17,17 @@
 # directory, replacing any dockerfiles already there, and images/build.sh, which builds
 # them in order. `ext` packages are installed by images/install-ext.sh. Run from the root
 # of test/thirdparty.
+#
+# If the DISTROS environment variable is set, it is a JSON list of the distros to write
+# images for. Otherwise, images are written for every distro a `.dependencies` file names.
 
+import json
+import os
 import random
 import shlex
 from abc import ABC, abstractmethod
 from collections import Counter
+from collections.abc import Collection
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -230,22 +236,28 @@ def read_dependencies(path: Path) -> dict[str, frozenset[str]]:
     return {distro: frozenset(packages) for distro, packages in by_distro.items()}
 
 
-def build_graph() -> tuple[dict[str, BaseImage], list[ProjectImage]]:
-    """Make one node per project and distro, each based on scale-test-$distro."""
+def build_graph(
+    distros: Collection[str] | None = None,
+) -> tuple[dict[str, BaseImage], list[ProjectImage]]:
+    """Make one node per project and distro, each based on scale-test-$distro.
+
+    Only `distros` get nodes, or every distro a `.dependencies` file names if it is None.
+    """
     deps = {
         path.parent.name: read_dependencies(path)
         for path in sorted(REPO_BASE.glob("*/.dependencies"))
     }
-    roots = {
-        distro: BaseImage(distro) for by_distro in deps.values() for distro in by_distro
-    }
+    if distros is None:
+        distros = {distro for by_distro in deps.values() for distro in by_distro}
+    roots = {distro: BaseImage(distro) for distro in distros}
     projects: list[ProjectImage] = []
     for project, by_distro in deps.items():
         # An empty file means the project needs only scale-test, on every distro.
         if not by_distro:
             by_distro = {distro: frozenset() for distro in roots}
         for distro, packages in by_distro.items():
-            projects.append(ProjectImage(project, distro, packages, roots[distro]))
+            if distro in roots:
+                projects.append(ProjectImage(project, distro, packages, roots[distro]))
     return roots, projects
 
 
@@ -405,10 +417,13 @@ def check_exact(projects: list[ProjectImage]) -> None:
 
 # Driving code
 def plan(
-    rng: random.Random,
+    rng: random.Random, distros: Collection[str] | None = None
 ) -> tuple[dict[str, BaseImage], list[ProjectImage], list[ProjectImage]]:
-    """Run every pass. Returns the roots, the project images and all the images."""
-    roots, projects = build_graph()
+    """Run every pass, for `distros` (see `build_graph`).
+
+    Returns the roots, the project images and all the images.
+    """
+    roots, projects = build_graph(distros)
     nodes = split(projects, rng)
     optimise(roots, nodes)
     nodes = merge_single_children(remove_unused(remove_empty(nodes)))
@@ -427,7 +442,8 @@ def print_tree(node: Node, projects: list[ProjectImage], depth: int = 0) -> None
 
 
 def main(seed: int | None = None) -> None:
-    roots, _, nodes = plan(random.Random(seed))
+    distros = json.loads(os.environ["DISTROS"]) if "DISTROS" in os.environ else None
+    roots, _, nodes = plan(random.Random(seed), distros)
     out_dir = Path.cwd() / "images"
     out_dir.mkdir(exist_ok=True)
     # Layer images change between runs, so remove old dockerfiles.
