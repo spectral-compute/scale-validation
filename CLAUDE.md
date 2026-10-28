@@ -274,9 +274,10 @@ what to expect — presence is all that matters, contents are ignored:
   but scoped to one specific GPU arch.
 
 `.dependencies` is different: its contents matter. It lists the system packages a
-project needs beyond the `scale-test-<distro>` image. These files are the start of a
-move from the shared `scale-ci-*` images to one image per project. See `README.md` for
-the line format.
+project needs beyond the `scale-test-<distro>` image. CI builds and tests each project
+in its own image, generated from this file by `util/image_graph.py` (with a `-nv`
+variant based on `scale-test-nv-<distro>` for NVIDIA targets), so every project CI runs
+needs one. See `README.md` for the line format.
 
 ## README status table
 

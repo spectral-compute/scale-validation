@@ -14,6 +14,9 @@ CI decides what to run by calling `util/gen_matrix.py`. The logic of that is:
 
 When you create one of these marker files, please populate it with a reference to an issue you've filed internally to track removing it.
 
+Each matrix entry also names the docker image to build and run in, which is generated per-project from the `.dependencies` file by `util/image_graph.py`.
+NVIDIA ISAs use the `-nv` variant, which is based on `scale-test-nv-ubuntu24.04` instead of `scale-test-ubuntu24.04`.
+
 You can debug this with the following one-liner:
 
 ```
