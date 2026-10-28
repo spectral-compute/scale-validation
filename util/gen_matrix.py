@@ -25,10 +25,7 @@ DISTRO = "ubuntu24.04"
 
 def image(target: str, isa: str) -> str:
     """The image to build and run `target` for `isa` in, without the registry or tag."""
-    # Project images don't have CUDA, which NVIDIA targets need.
-    if isa.startswith("sm"):
-        return f"scale-ci-nv-{DISTRO}"
-    return project_image(target, DISTRO)
+    return project_image(target, DISTRO, nv=isa.startswith("sm"))
 
 
 should_build = set()
