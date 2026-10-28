@@ -27,6 +27,16 @@ from pathlib import Path
 
 REPO_BASE = Path.cwd()
 
+# The distro CI runs thirdparty tests on. Its images are built first.
+PRIMARY_DISTRO = "ubuntu24.04"
+
+# Where `ext:rust=` entries install rustup, as stressedtuna. See images/install-ext.sh.
+RUST_HOME = "/home/stressedtuna"
+
+# The order that sources install in. Later sources may need packages from earlier ones,
+# e.g. `pipx:` needs `apt:pipx`.
+SOURCE_ORDER = {"apt": 0, "dnf": 0, "pip": 1, "pipx": 1, "ext": 2}
+
 
 def project_image(name: str, distro: str, nv: bool = False) -> str:
     """The docker image name for a project's builder image, without the registry or tag.
@@ -174,11 +184,11 @@ def install_commands(packages: frozenset[str]) -> list[str]:
         by_source.setdefault(source, []).append(package)
 
     commands: list[str] = []
-    # Distro packages go first, because pip and pipx may come from them.
+    # Distro packages go first, because pip and pipx may come from them. The apt lists are
+    # kept, because CI installs the SCALE package with apt-get without updating them.
     if apt := by_source.pop("apt", None):
         commands.append(
-            f"RUN apt-get update && apt-get install -y {shlex.join(apt)}"
-            " && rm -rf /var/lib/apt/lists/*"
+            f"RUN apt-get update && apt-get install -y {shlex.join(apt)} && rm -rf /var/lib/apt/lists/"
         )
     if dnf := by_source.pop("dnf", None):
         commands.append(f"RUN dnf install -y {shlex.join(dnf)} && dnf clean all")
@@ -198,6 +208,12 @@ def install_commands(packages: frozenset[str]) -> list[str]:
             "RUN --mount=type=bind,source=install-ext.sh,target=/install-ext.sh"
             f" /install-ext.sh {shlex.quote(package)}"
         )
+        if package.startswith("rust="):
+            # rustup only adds itself to PATH in shell startup files, which CI never reads.
+            commands.append(
+                f"ENV CARGO_HOME={RUST_HOME}/.cargo RUSTUP_HOME={RUST_HOME}/.rustup"
+                f" PATH={RUST_HOME}/.cargo/bin:$PATH"
+            )
     if by_source:
         raise ValueError(f"Unknown package sources: {sorted(by_source)}")
     return commands
@@ -237,9 +253,10 @@ def build_graph() -> tuple[dict[str, BaseImage], list[ProjectImage]]:
 def split(projects: list[ProjectImage], rng: random.Random) -> list[ProjectImage]:
     """Split each project into a chain of images that each install one package.
 
-    Packages that more projects on the same distro need are installed first. Ties are
-    broken by a random order, which is the same for every project. Returns the projects
-    and the new layer images.
+    Packages install in `SOURCE_ORDER`, so e.g. `apt:pipx` comes before any `pipx:`
+    package. Within a source, packages that more projects on the same distro need are
+    installed first. Ties are broken by a random order, which is the same for every
+    project. Returns the projects and the new layer images.
     """
     users = Counter((p.distro, package) for p in projects for package in p.installed)
     # Sort first, so the order depends only on `rng`.
@@ -251,7 +268,11 @@ def split(projects: list[ProjectImage], rng: random.Random) -> list[ProjectImage
     for p in projects:
         packages = sorted(
             p.installed,
-            key=lambda package: (-users[p.distro, package], rank[p.distro, package]),
+            key=lambda package: (
+                SOURCE_ORDER.get(package.split(":", 1)[0], 0),
+                -users[p.distro, package],
+                rank[p.distro, package],
+            ),
         )
         base = p._base
         # The project image itself installs the last package.
@@ -413,7 +434,7 @@ def main(seed: int | None = None) -> None:
     for old in out_dir.glob("*.dockerfile"):
         old.unlink()
     images: list[str] = []
-    for distro in sorted(roots):
+    for distro in sorted(roots, key=lambda d: (d != PRIMARY_DISTRO, d)):
         print_tree(roots[distro], nodes)
         for nv in (False, True):
             images += write_dockerfiles(roots[distro], nodes, out_dir, nv)

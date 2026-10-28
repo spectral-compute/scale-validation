@@ -42,19 +42,20 @@ install_cmake() {
     cmake --version | head -n1
 }
 
-# Install rustup, and set its default toolchain.
-# This requires .cargo/bin being added to the PATH variable outside of this script.
+# Install rustup as stressedtuna, and set its default toolchain. image_graph.py adds
+# ~stressedtuna/.cargo/bin to the image's PATH.
 install_rust() {
     local channel="$1" rustup_version="1.29.1"
     case "${rustup_version}-${ARCH}" in
     1.29.1-x86_64) sha256=dda7234360b7f578ca8b0ddcb80145646fa61a67c1720a5abc7051b35c9fcb71 ;;
     *)
-        echo "No pinned hash for rustup ${version} on ${ARCH}" >&2
+        echo "No pinned hash for rustup ${rustup_version} on ${ARCH}" >&2
         exit 1
         ;;
     esac
 
     fetch "https://static.rust-lang.org/rustup/archive/$rustup_version/$ARCH-unknown-linux-gnu/rustup-init"
+    echo "${sha256}  rustup-init" | sha256sum -c --quiet -
     chmod o=rx . -R
     sudo -u stressedtuna ./rustup-init --default-toolchain "$channel" -y
 }

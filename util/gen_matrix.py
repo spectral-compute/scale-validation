@@ -11,7 +11,7 @@ import os
 import re
 from pathlib import Path
 
-from image_graph import project_image
+from image_graph import PRIMARY_DISTRO, project_image
 
 REPO_BASE = Path.cwd()
 IGNORE_LIST = [".jj", ".forgejo", ".git", "util", ".claude", "images"]
@@ -19,13 +19,10 @@ IGNORE_LIST = [".jj", ".forgejo", ".git", "util", ".claude", "images"]
 TARGETS_REGEX = re.compile(os.environ.get("TARGETS_REGEX", ".*"))
 ISAS = json.loads(os.environ["ISAS"])
 
-# The distro CI runs these tests on.
-DISTRO = "ubuntu24.04"
-
 
 def image(target: str, isa: str) -> str:
     """The image to build and run `target` for `isa` in, without the registry or tag."""
-    return project_image(target, DISTRO, nv=isa.startswith("sm"))
+    return project_image(target, PRIMARY_DISTRO, nv=isa.startswith("sm"))
 
 
 should_build = set()
