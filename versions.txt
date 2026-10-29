@@ -84,5 +84,5 @@ tensorflow-addons v0.10.0
 tensorflow-metadata v0.22.2
 tensorflow-datasets v3.1.0
 tensorflow-models v2.2.0
-hoomd-blue 32a82e1b523e5ca2b9adc2a551cddc19c8270ade
+hoomd-blue 5c949015f3fc1a39adf00732e47e5d3c1bb12506
 cereal v1.3.2
