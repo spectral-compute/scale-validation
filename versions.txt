@@ -98,3 +98,9 @@ DEM-Engine c375eae467894abda535bc64c628a4d3781aa5fa
 DEM-Engine-v2 v2.4.2
 ppisp v1.3.0
 ginkgo v1.11.0
+HARD 489e162f435b8e8553f75b86ed34933347fc4b95
+HARD-flecsi 1ce3933784e1337a44cb54b4065115a804a42856
+HARD-flecsolve v1.0.1
+HARD-singularity-eos release-1.12.1
+HARD-boost 1.89.0
+HARD-exactpack dc331d9ac450c0ebc94ada908a275ff26949e0e5

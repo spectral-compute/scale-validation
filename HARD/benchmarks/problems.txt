@@ -1,0 +1,3 @@
+sedov-3d hydro 3 sedov.py 7,7,7
+kh-2d hydro 2 kh.py 11,11,1
+rt-mm-2d mmhydro 2 rt_mm.py 9,10,1
