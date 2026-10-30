@@ -1,0 +1,5 @@
+HydroBlast3D HydroBlast3D
+MHDBlast MHDBlast
+SphericalCollapse SphericalCollapse
+DustAdvection3D DustAdvection3D
+DTypeFront DTypeFrontRadPres
