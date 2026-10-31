@@ -97,3 +97,4 @@ tsne-cuda-faiss v1.15.1
 DEM-Engine c375eae467894abda535bc64c628a4d3781aa5fa
 DEM-Engine-v2 v2.4.2
 ppisp v1.3.0
+ginkgo v1.11.0
