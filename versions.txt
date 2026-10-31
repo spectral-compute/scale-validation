@@ -104,3 +104,13 @@ HARD-flecsolve v1.0.1
 HARD-singularity-eos release-1.12.1
 HARD-boost 1.89.0
 HARD-exactpack dc331d9ac450c0ebc94ada908a275ff26949e0e5
+cuPHY 26.1.1
+cuPHY-libyaml 0.2.5
+cuPHY-yaml-cpp 0.8.0
+cuPHY-fmt 10.2.1
+cuPHY-fmtlog acd521b1a64480354136a745c511358da1ec7dc5
+cuPHY-CLI11 v2.5.0
+cuPHY-gsl-lite v1.0.1
+cuPHY-wise_enum 3.1.0
+cuPHY-mathdx 25.06.0
+cuPHY-hdf5 hdf5_1.14.6

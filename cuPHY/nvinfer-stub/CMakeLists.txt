@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.18)
+project(nvinfer-stub CXX)
+find_package(CUDAToolkit REQUIRED)
+add_library(nvinfer SHARED nvinfer.cpp)
+target_include_directories(nvinfer PRIVATE ${CUDAToolkit_INCLUDE_DIRS})
+install(TARGETS nvinfer)
+install(FILES NvInfer.h TYPE INCLUDE)
