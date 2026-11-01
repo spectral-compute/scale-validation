@@ -88,3 +88,6 @@ tensorflow-datasets v3.1.0
 tensorflow-models v2.2.0
 hoomd-blue 5c949015f3fc1a39adf00732e47e5d3c1bb12506
 cereal v1.3.2
+neko v1.1.2
+neko-json-fortran 1b879a06ac543849bb68f0a7630004e61043c0ef
+neko-pFUnit v4.15.0
