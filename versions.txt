@@ -93,3 +93,5 @@ neko-json-fortran 1b879a06ac543849bb68f0a7630004e61043c0ef
 neko-pFUnit v4.15.0
 tsne-cuda 4.0.1
 tsne-cuda-faiss v1.15.1
+DEM-Engine c375eae467894abda535bc64c628a4d3781aa5fa
+DEM-Engine-v2 v2.4.2
