@@ -4,6 +4,7 @@ arrayfire v3.9.0
 bitnet 404980eecae38affa4871c3e419eae3f44536a95
 Bonsai 581fa8e70501ce85660c7eac0d61c0e5c5bece4a
 caffe 9b891540183ddc834a02b2bd81b31afae71b2153
+ChOp 58f730850eccc2da14fd63ec55d2c5d74f12bf68
 ctranslate2 v4.5.0
 cuda-samples v12.9
 cudf v25.04.00
