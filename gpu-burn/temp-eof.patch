@@ -1,0 +1,59 @@
+diff --git a/gpu_burn-drv.cpp b/gpu_burn-drv.cpp
+index a6f9be2..e81816a 100644
+--- a/gpu_burn-drv.cpp
++++ b/gpu_burn-drv.cpp
+@@ -415,15 +415,18 @@ int pollTemp(pid_t *p) {
+     return tempPipe[0];
+ }
+ 
+-void updateTemps(int handle, std::vector<int> *temps) {
++// Returns false once the temperature source has closed its output (e.g. nvidia-smi
++// is missing or failed).
++bool updateTemps(int handle, std::vector<int> *temps) {
+     const int readSize = 10240;
+     static int gpuIter = 0;
+     char data[readSize + 1];
+ 
+     int curPos = 0;
+     do {
+-        read(handle, data + curPos, sizeof(char));
+-    } while (data[curPos++] != '\n');
++        if (read(handle, data + curPos, sizeof(char)) != 1)
++            return false;
++    } while (data[curPos++] != '\n' && curPos < readSize);
+ 
+     data[curPos - 1] = 0;
+ 
+@@ -452,6 +455,7 @@ void updateTemps(int handle, std::vector<int> *temps) {
+             (gpuIter + 1) %
+             (temps->size()); // We rotate the iterator for N/A values as well
+ #endif
++    return true;
+ }
+ 
+ void listenClients(std::vector<int> clientFd, std::vector<pid_t> clientPid,
+@@ -461,6 +465,7 @@ void listenClients(std::vector<int> clientFd, std::vector<pid_t> clientPid,
+     pid_t tempPid;
+     int tempHandle = pollTemp(&tempPid);
+     int maxHandle = tempHandle;
++    bool tempsAlive = true;
+ 
+     FD_ZERO(&waitHandles);
+     FD_SET(tempHandle, &waitHandles);
+@@ -536,12 +541,13 @@ void listenClients(std::vector<int> clientFd, std::vector<pid_t> clientPid,
+                 childReport = true;
+             }
+ 
+-        if (FD_ISSET(tempHandle, &waitHandles))
+-            updateTemps(tempHandle, &clientTemp);
++        if (tempsAlive && FD_ISSET(tempHandle, &waitHandles))
++            tempsAlive = updateTemps(tempHandle, &clientTemp);
+ 
+         // Resetting the listeners
+         FD_ZERO(&waitHandles);
+-        FD_SET(tempHandle, &waitHandles);
++        if (tempsAlive)
++            FD_SET(tempHandle, &waitHandles);
+         for (size_t i = 0; i < clientFd.size(); ++i)
+             FD_SET(clientFd.at(i), &waitHandles);
+ 

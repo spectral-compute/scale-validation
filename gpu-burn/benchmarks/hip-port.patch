@@ -1,0 +1,38 @@
+diff --git a/gpu_burn-drv.cpp b/gpu_burn-drv.cpp
+index a6f9be2..0e6dfd7 100644
+--- a/gpu_burn-drv.cpp
++++ b/gpu_burn-drv.cpp
+@@ -246,29 +246,14 @@ template <class T> class GPU_Test {
+                                        d_doubles ? "compareD" : "compare"),
+                    "get func");
+ 
+-        checkError(cuFuncSetCacheConfig(d_function, CU_FUNC_CACHE_PREFER_L1),
+-                   "L1 config");
+-        checkError(cuParamSetSize(d_function, __alignof(T *) +
+-                                                  __alignof(int *) +
+-                                                  __alignof(size_t)),
+-                   "set param size");
+-        checkError(cuParamSetv(d_function, 0, &d_Cdata, sizeof(T *)),
+-                   "set param");
+-        checkError(cuParamSetv(d_function, __alignof(T *), &d_faultyElemData,
+-                               sizeof(T *)),
+-                   "set param");
+-        checkError(cuParamSetv(d_function, __alignof(T *) + __alignof(int *),
+-                               &d_iters, sizeof(size_t)),
+-                   "set param");
+-
+-        checkError(cuFuncSetBlockShape(d_function, g_blockSize, g_blockSize, 1),
+-                   "set block size");
+     }
+ 
+     void compare() {
+         checkError(cuMemsetD32Async(d_faultyElemData, 0, 1, 0), "memset");
+-        checkError(cuLaunchGridAsync(d_function, SIZE / g_blockSize,
+-                                     SIZE / g_blockSize, 0),
++        void *args[] = {&d_Cdata, &d_faultyElemData, &d_iters};
++        checkError(cuLaunchKernel(d_function, SIZE / g_blockSize,
++                                  SIZE / g_blockSize, 1, g_blockSize,
++                                  g_blockSize, 1, 0, 0, args, nullptr),
+                    "Launch grid");
+         checkError(cuMemcpyDtoHAsync(d_faultyElemsHost, d_faultyElemData,
+                                      sizeof(int), 0),
