@@ -136,6 +136,15 @@ Every script also gets `MAKEFLAGS="-O -k"`, `TEST_GPU_ARCH`, and:
   given. It's repeatable or comma-separated. Optional but recommended as if
   there's an issue running scripts it's usually because you need to be explicit about the devices to run on (particularly on heterogeneous systems).
 
+### Running in parallel
+
+Each run takes an exclusive lock on `<workdir>` (`<workdir>/.benchmark.lock`) and refuses to start if another run holds it, since a second run would wipe the first's clone and build. To run several at once (e.g. `scale` and `hip` on different GPUs), give each its own workdir. `--numa-node N` pins every script (clone, build and benchmark) to node `N`'s CPUs via CPU affinity; `nproc` follows it, so builds size their `-j` to the node, and the kernel's default local allocation keeps memory on that node too. Pair it with `-d` for a GPU attached to the same node (`/sys/bus/pci/devices/<bdf>/numa_node`):
+
+```bash
+./benchmark.py ~/bench-scale /opt/scale gfx942 HeCBench -d 0 --numa-node 0 &
+./benchmark.py ~/bench-hip   /opt/rocm  gfx942 HeCBench -d 4 --numa-node 1 &
+```
+
 ### Script selection
 
 Scripts are gathered from both `<project>/` and `<project>/benchmarks/`. Each is keyed

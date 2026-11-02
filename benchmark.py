@@ -12,6 +12,7 @@ test.sh does.
 
 import argparse
 import datetime
+import fcntl
 import logging
 import os
 import re
@@ -179,6 +180,28 @@ def build_env(compiler, toolkit, arch, args):
     return env
 
 
+def numa_node_cpus(node):
+    """The CPUs of NUMA node `node`, from sysfs."""
+    path = Path(f"/sys/devices/system/node/node{node}/cpulist")
+    cpus = set()
+    for part in path.read_text().strip().split(","):
+        lo, _, hi = part.partition("-")
+        cpus.update(range(int(lo), int(hi or lo) + 1))
+    return cpus
+
+
+def lock_workdir(workdir):
+    """Hold an exclusive lock on `workdir` for the life of the process, so a
+    second run can't wipe the clone/build out from under the first."""
+    lock = open(workdir / ".benchmark.lock", "w")
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        sys.exit(f"{workdir} is in use by another benchmark.py; give each parallel "
+                 "run its own workdir")
+    return lock
+
+
 def create_parser():
     projects = benchmark_projects()
     parser = argparse.ArgumentParser(
@@ -215,6 +238,12 @@ def create_parser():
         "--results-dir", type=Path,
         help="Exported as RESULTS_DIR for scripts to write into (default: WORKDIR/results).",
     )
+    parser.add_argument(
+        "--numa-node", type=int,
+        help="Pin every script to this NUMA node's CPUs. With the kernel's default "
+        "local allocation policy, memory then comes from that node too. Pick the "
+        "node the selected GPU is attached to.",
+    )
     parser.add_argument("--keep", action="store_true", help="Don't wipe WORKDIR/PROJECT first.")
     parser.add_argument(
         "--include-tests", action="store_true",
@@ -238,6 +267,11 @@ def main():
     if args.repeats < 1:
         parser.error("--repeats must be at least 1")
     args.devices = [d for spec in args.devices for d in spec.split(",") if d]
+    if args.numa_node is not None:
+        try:
+            cpus = numa_node_cpus(args.numa_node)
+        except OSError:
+            parser.error(f"no such NUMA node: {args.numa_node}")
 
     toolkit = args.toolkit.resolve()
     compiler = Compiler(args.compiler) if args.compiler else Compiler.detect(toolkit)
@@ -257,13 +291,21 @@ def main():
     logger.info("arch:     %s", args.arch)
     if args.devices:
         logger.info("devices:  %s", ",".join(args.devices))
+    if args.numa_node is not None:
+        logger.info("numa:     node %d", args.numa_node)
     for s in scripts:
         runs = f" x{args.repeats}" if s.is_benchmark else ""
         logger.info("  %s%s", s.path.relative_to(REPO_ROOT), runs)
     if args.dry_run:
         return
 
+    if args.numa_node is not None:
+        # Inherited by every script, and respected by nproc for build parallelism.
+        os.sched_setaffinity(0, cpus)
+
     workdir = args.workdir.resolve()
+    workdir.mkdir(parents=True, exist_ok=True)
+    _lock = lock_workdir(workdir)  # Held until exit.
     run_dir = workdir / args.project
     if not args.keep:
         shutil.rmtree(run_dir, ignore_errors=True)
@@ -288,6 +330,9 @@ def main():
     logger.info("toolkit: %s", toolkit)
     logger.info("arch: %s", args.arch)
     logger.info("devices: %s", ",".join(args.devices) or "all")
+    if args.numa_node is not None:
+        logger.info("numa node: %d (cpus %s)", args.numa_node,
+                    ",".join(map(str, sorted(os.sched_getaffinity(0)))))
     logger.info("repeats: %s", args.repeats)
     logger.info("started: %s\n", stamp)
 
