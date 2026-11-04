@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <54e563da>.**
+**This shows the test status for SCALE: master <f64a3ba4>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -13,69 +13,69 @@ Contributions welcome!
 
 | Project        | Version                    | gfx90a|gfx1201|gfx1100|1|
 |----------------|----------------------------| -|-|-|-|
-| alien          | v4.12.3       | ❌|❌|❌|❓|
-| AMGX          | v2.4.0       | ❌|❌|❌|❓|
-| arrayfire          | v3.9.0       | ❌|❌|❌|❓|
-| bitnet          | 404980eecae38a...       | ❌|❌|❌|❓|
-| caffe          | 9b891540183ddc...       | ❌|❌|❌|❓|
-| ChOp          | 58f730850eccc2...       | ❌|❌|❌|❓|
-| ctranslate2          | v4.5.0       | ❌|❌|❌|❓|
-| CUDALibrarySamples          | 5ac0f9a8032a10...       | ❌|❌|❌|❓|
-| cuml          | b17f2dbbea05ae...       | ❌|❌|❌|❓|
+| alien          | v4.12.3       | ✅|✅|❌|❓|
+| AMGX          | v2.4.0       | ✅|✅|✅|❓|
+| arrayfire          | v3.9.0       | ✅|✅|✅|❓|
+| bitnet          | 404980eecae38a...       | ✅|✅|✅|❓|
+| caffe          | 9b891540183ddc...       | ✅|✅|✅|❓|
+| ChOp          | 58f730850eccc2...       | ❌|✅|✅|❓|
+| ctranslate2          | v4.5.0       | ✅|✅|✅|❓|
+| CUDALibrarySamples          | 5ac0f9a8032a10...       | ✅|✅|✅|❓|
+| cuml          | b17f2dbbea05ae...       | ✅|✅|✅|❓|
 | cuPHY          | 26.1.1       | ❌|❌|❌|❓|
-| cuSZ          | v0.16.2       | ❌|❌|❌|❓|
-| cutlass          | v4.1.0       | ❌|❌|❌|❓|
-| CV-CUDA          | f769fe4bf336ab...       | ❌|❌|❌|❓|
-| cycles          | v4.4.0       | ❌|❌|❌|❓|
+| cuSZ          | v0.16.2       | ✅|✅|✅|❓|
+| cutlass          | v4.1.0       | ❌|✅|❌|❓|
+| CV-CUDA          | f769fe4bf336ab...       | ✅|✅|✅|❓|
+| cycles          | v4.4.0       | ❌|✅|✅|❓|
 | deepspeed          | v0.19.7       | ❌|❌|❌|❓|
-| DEM-Engine          | c375eae467894a...       | ❌|❌|❌|❓|
-| faiss          | v1.9.0       | ❌|❌|❌|❓|
-| FastEddy          | v2.0.0       | ❌|❌|❌|❓|
-| ffmpeg          | n7.1.3       | ❌|❌|❌|❓|
-| FLAMEGPU2          | v2.0.0-rc.2       | ❌|❌|❌|❓|
-| ggml          | d3a58b079f50b4...       | ❌|❌|❌|❓|
+| DEM-Engine          | c375eae467894a...       | ✅|✅|✅|❓|
+| faiss          | v1.9.0       | ✅|✅|✅|❓|
+| FastEddy          | v2.0.0       | ✅|✅|✅|❓|
+| ffmpeg          | n7.1.3       | ✅|✅|✅|❓|
+| FLAMEGPU2          | v2.0.0-rc.2       | ✅|✅|✅|❓|
+| ggml          | d3a58b079f50b4...       | ✅|✅|✅|❓|
 | ginkgo          | v1.11.0       | ❌|❌|❌|❓|
-| gomc          | 4c12477f79dd63...       | ❌|❌|❌|❓|
-| gpu_jpeg2k          | ee715e99b6a57a...       | ❌|❌|❌|❓|
-| GPUJPEG          | 3e045d1df72735...       | ❌|❌|❌|❓|
-| gromacs          | v2026.3       | ❌|❌|❌|❓|
-| HARD          | 489e162f435b8e...       | ❌|❌|❌|❓|
-| hashcat          | 6716447dfce969...       | ❌|❌|❌|❓|
-| hashinator          | 34cf1886ab5f0a...       | ❌|❌|❌|❓|
-| HeCBench          | 47f8668f2e933c...       | ❌|❌|❌|❓|
+| gomc          | 4c12477f79dd63...       | ✅|✅|✅|❓|
+| gpu_jpeg2k          | ee715e99b6a57a...       | ✅|✅|✅|❓|
+| GPUJPEG          | 3e045d1df72735...       | ✅|✅|✅|❓|
+| gromacs          | v2026.3       | ✅|❌|✅|❓|
+| HARD          | 489e162f435b8e...       | ✅|✅|✅|❓|
+| hashcat          | 6716447dfce969...       | ✅|✅|✅|❓|
+| hashinator          | 34cf1886ab5f0a...       | ✅|✅|✅|❓|
+| HeCBench          | 47f8668f2e933c...       | ✅|✅|✅|❓|
 | HiGHS          | v1.15.1       | ❌|❌|❌|❓|
-| hoomd-blue          | 5c949015f3fc1a...       | ❌|❌|❌|❓|
+| hoomd-blue          | 5c949015f3fc1a...       | ✅|✅|✅|❓|
 | hypre          | v2.33.0       | ❌|❌|❌|❓|
-| jitify          | master       | ❌|❌|❌|❓|
-| kokkos          | 60d8384266eba9...       | ❌|❌|❌|❓|
-| lammps          | stable_22Jul20...       | ❌|❌|❌|❓|
-| lammps-kokkos          |        | ❌|❌|❌|❓|
-| llama.cpp          | 3ecfb150a4bd2d...       | ❌|❌|❌|❓|
-| llm.c          | 7ecd8906afe6ed...       | ❌|❌|❌|❓|
+| jitify          | master       | ✅|✅|✅|❓|
+| kokkos          | 60d8384266eba9...       | ✅|✅|✅|❓|
+| lammps          | stable_22Jul20...       | ✅|✅|✅|❓|
+| lammps-kokkos          |        | ✅|✅|✅|❓|
+| llama.cpp          | 3ecfb150a4bd2d...       | ✅|✅|✅|❓|
+| llm.c          | 7ecd8906afe6ed...       | ✅|✅|✅|❓|
 | neko          | v1.1.2       | ❌|❌|❌|❓|
-| nixl          | e128059af332df...       | ❌|❌|❌|❓|
-| nvflip          | 1eb247cabcf286...       | ❌|❌|❌|❓|
-| opencv          | 725e440d278aca...       | ❌|❌|❌|❓|
+| nixl          | e128059af332df...       | ✅|✅|✅|❓|
+| nvflip          | 1eb247cabcf286...       | ✅|✅|✅|❓|
+| opencv          | 725e440d278aca...       | ✅|✅|✅|❓|
 | openfold3          | v0.5.0       | ❌|❌|❌|❓|
-| PhysX          | 1e44a0e2998f06...       | ❌|❌|❌|❓|
+| PhysX          | 1e44a0e2998f06...       | ✅|✅|✅|❓|
 | ppisp          | v1.3.0       | ❌|❌|❌|❓|
-| pytorch          | v2.9.0       | ❌|❌|❌|❓|
-| quda          | 07822b61c6ab5f...       | ❌|❌|❌|❓|
-| quokka          | 26.07       | ❌|❌|❌|❓|
-| RabbitCT          | main       | ❌|❌|❌|❓|
-| risc0          | v1.2.2       | ❌|❌|❌|❓|
-| rodinia_suite          | spectral       | ❌|❌|❌|❓|
-| stdgpu          | 563dc59d6d08df...       | ❌|❌|❌|❓|
-| TCLB          | v6.7       | ❌|❌|❌|❓|
-| thrust          | 756c5afc0750f1...       | ❌|❌|❌|❓|
-| timemachine          | 01f14f8dd49fbd...       | ❌|❌|❌|❓|
-| toolchain          |        | ❓|❓|❓|❌|
-| tsne-cuda          | 4.0.1       | ❌|❌|❌|❓|
-| UppASD          | gpu_new       | ❌|❌|❌|❓|
-| vllm          | v0.13.0       | ❌|❌|❌|❓|
-| warp          | v1.14.0       | ❌|❌|❌|❓|
-| whispercpp          | v1.7.1       | ❌|❌|❌|❓|
-| xgboost          | v2.1.0       | ❌|❌|❌|❓|
+| pytorch          | v2.9.0       | ✅|✅|✅|❓|
+| quda          | 07822b61c6ab5f...       | ✅|✅|✅|❓|
+| quokka          | 26.07       | ✅|✅|✅|❓|
+| RabbitCT          | main       | ✅|✅|✅|❓|
+| risc0          | v1.2.2       | ✅|✅|✅|❓|
+| rodinia_suite          | spectral       | ❌|✅|✅|❓|
+| stdgpu          | 563dc59d6d08df...       | ✅|❌|✅|❓|
+| TCLB          | v6.7       | ✅|✅|✅|❓|
+| thrust          | 756c5afc0750f1...       | ✅|✅|✅|❓|
+| timemachine          | 01f14f8dd49fbd...       | ✅|✅|✅|❓|
+| toolchain          |        | ❓|❓|❓|✅|
+| tsne-cuda          | 4.0.1       | ✅|✅|✅|❓|
+| UppASD          | gpu_new       | ✅|✅|✅|❓|
+| vllm          | v0.13.0       | ✅|✅|✅|❓|
+| warp          | v1.14.0       | ✅|✅|✅|❓|
+| whispercpp          | v1.7.1       | ✅|✅|✅|❓|
+| xgboost          | v2.1.0       | ✅|✅|✅|❓|
 
 *Key:*
 * ✅ Validated succesfully
@@ -83,7 +83,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * 🛠️️ Tested, but not expected to pass
 
-Pipeline ID: 40465.
+Pipeline ID: 40474.
 
 ## Running Tests
 
@@ -93,21 +93,6 @@ the normal CUDA build instructions for the corresponding project.
 
 Note that you may need to install the system dependencies described on the project
 website before this will succeed.
-
-Some projects list their system dependencies in a `.dependencies` file. Each line has the form
- `<distro>:<source>:<package>`:
-
-- `<distro>` is one of `ubuntu24.04`, `ubuntu22.04`, `rocky8`, or `rocky9`.
-- `<source>` is `apt`, `dnf`, `pip`, `pipx`, or `ext`.
-- For `apt` and `dnf`, `<package>` is a package specifier in the syntax that package
-  manager accepts (e.g. `libfoo-dev`, `libfoo-dev=1.2-3`, `foo-devel`).
-- For `pip` and `pipx`, `<package>` is a requirement specifier that `pip3 install` or
-  `pipx install` accepts (e.g. `numpy==2.1.0`, `dvc[s3]==3.67.1`). A `pip` package
-  needs `python3-pip`, and a `pipx` package needs `pipx`, listed as an `apt` or `dnf`
-  package.
-- For `ext`, `<package>` is `<name>=<version>` (e.g. `cmake=4.0`), naming something
-  installed outside the distro package manager by `images/install-ext.sh`. Only the
-  specs that script handles are valid.
 
 The test driver script `test.sh` may be used to conveniently execute an
 entire test:
