@@ -91,7 +91,7 @@ standalone: it runs the numbered build scripts alongside it and depends on `util
 
 ## Notes
 
-- Validated against commit `1eb247c` (see `versions.txt`). No patches are applied.
+- Validated against commit `d3ab02a` (see `versions.txt`). No patches are applied.
 - The build produces two binaries: `flip` (CPU) and `flip-cuda` (GPU). The container's default
   entrypoint runs `flip-cuda`; the CPU binary is reachable via `--entrypoint flip`.
 - Input format determines the mode: `.png` selects LDR-FLIP, `.exr` selects HDR-FLIP.
