@@ -34,7 +34,8 @@ heraclespp a925d6ac86ffcdb170284bef9bf1e91c33d32b74
 HiGHS v1.15.1
 hypre v2.33.0
 jitify master
-lammps stable_22Jul2025_update6
+lammps stable_30Sep2026_update1
+lammps-kokkos stable_22Jul2025_update6
 llama.cpp 3ecfb150a4bd2d92b2a7974bb1af954c8a5e2985
 llm.c 7ecd8906afe6ed7a2b2cdb731c042f26d525b820
 MAGMA v2.9.0
