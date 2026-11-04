@@ -23,8 +23,8 @@ FLAMEGPU2 v2.0.0-rc.2
 ffmpeg n7.1.3
 flashinfer v0.2.8
 ggml d3a58b079f50b43e3fed852ccffa6b3fb6baac78
-gomc 4c12477f79dd63568fedd5a50f1dc859501cffc5
-GOMC_Examples cec1be7d8a8c3e1fc04b8c9b4e43d19d94a3ff09
+gomc v2.80
+GOMC_Examples 8d941a3cc946d60c9c43f8666e6b6f758c073b97
 GooFit v2.3.0
 GPUJPEG 3e045d1df727356e4def62f1a6c617a6cce26fe0
 gpu_jpeg2k ee715e99b6a57af86d2175714b1110c10018d130

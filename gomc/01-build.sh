@@ -2,21 +2,13 @@
 . "$(dirname "$0")"/../util/prelude.sh
 
 # Compile for the architectures we want.
-for F in GOMC/CMake/GOMCCUDASetup.cmake GOMC/test/BuildGPUTests.cmake; do
-    sed -E "s/(\s+CUDA_ARCHITECTURES ).*/\1${CUDAARCHS}/" -i "${F}"
-done
-
-# CMake detects that we're Clang, and GOMC enables libc++ for that in a way that seems to be broken.
-for F in GOMC/CMakeLists.txt GOMC/lib/cereal-1.3.0/CMakeLists.txt; do
-    sed -E 's/-stdlib=libc[+][+]//' -i "${F}"
-done
+sed -E "s/set\(CMAKE_CUDA_ARCHITECTURES [^)]*\)/set(CMAKE_CUDA_ARCHITECTURES ${CUDAARCHS})/" \
+    -i GOMC/CMake/GOMCCUDASetup.cmake
+sed -E "s/(\s+CUDA_ARCHITECTURES ).*/\1${CUDAARCHS}/" -i GOMC/test/BuildGPUTests.cmake
 
 # GOMC's OpenMP support tests __GNUC__'s value. Even if I set this to a larger value that causes use of the newer OpenMP
 # syntax Clang expects (by default, at least), it still results in error messages.
 sed -E 's/find_package\(OpenMP\)//' -i "GOMC/CMakeLists.txt"
-
-# Fix the call to Difference to be non-ambiguous (needed on Nvidia too).
-sed -E 's/ Difference/ ::Difference/g' -i "GOMC/src/GPU/CalculateForceCUDAKernel.cu"
 
 args=(
     -DCMAKE_BUILD_TYPE=Release
