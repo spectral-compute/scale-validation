@@ -53,7 +53,7 @@ BODIES = {
         "envcheck": ENVCHECK,
         "argv0": ARGV0,
         "expectedfail": ASSERTLIKE,
-        "diagok": 'echo "Average kernel execution time: 1 (us)"; echo "Validation: PASS (5 checkpoints, max_abs=243915.5)"',
+        "diagok": 'echo "Average kernel execution time: 1 (us)"; echo "Validation: PASS (5 checkpoints, max_abs=243915.5)"; echo "Relative L2 norm: 8.4e-08"; echo "FILTER TOOK 0.24 (s)"; echo "0.2376 s"',
         "diagbad": 'echo "Average kernel execution time: 1 (us)"; echo "max error 1e-07"; echo PASS',
     },
     "test": {
@@ -68,7 +68,7 @@ BODIES = {
         "envcheck": ENVCHECK,
         "argv0": ARGV0,
         "expectedfail": ASSERTLIKE,
-        "diagok": 'echo "Average kernel execution time: 1 (us)"; echo "Validation: PASS (5 checkpoints, max_abs=65983.13)"',
+        "diagok": 'echo "Average kernel execution time: 1 (us)"; echo "Validation: PASS (5 checkpoints, max_abs=65983.13)"; echo "Relative L2 norm: 8.7e-08"; echo "FILTER TOOK 0.27 (s)"; echo "0.1658 s"',
         "diagbad": 'echo "Average kernel execution time: 1 (us)"; echo "max error 0.5"; echo PASS',
     },
 }

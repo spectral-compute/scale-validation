@@ -57,6 +57,7 @@ SUBSET_REL = Path("src/scripts/benchmarks/subset.json")
 TIMING_WORDS = re.compile(
     r"(time|elapsed|duration|throughput|bandwidth|speed|perf|"
     r"\b(ms|us|usec|msec|sec|secs|seconds|ns)\b|/s\b|gb/s|gflop|gops|per second|"
+    r"\btook\b|\(s\)|\d\s*s\s*$|"
     r"\bdevice\b.*:|gpu name|compute capability)",
     re.I,
 )
@@ -68,7 +69,8 @@ EXPECTED_RE = re.compile(r"as expected", re.I)  # e.g. assert: "failed as expect
 # Lines whose numbers measure distance from a reference rather than being results.
 DIAG_WORDS = re.compile(
     r"\b(pass(ed)?|fail(ed|ure)?|errors?|err|diff(erence)?|max_?abs|max_?rel|abs_?err|"
-    r"rel_?err|rmse|mse|tolerance|tol|mismatch(es)?|eps(ilon)?|residual|accuracy)\b", re.I)
+    r"rel_?err|rmse|rsme|rms|mse|norm|reference|tolerance|tol|mismatch(es)?|"
+    r"eps(ilon)?|residual|accuracy)\b", re.I)
 
 
 def fail_lines(text):
