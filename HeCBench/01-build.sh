@@ -33,9 +33,14 @@ JSON
 # Comment out benchmarks known to fail to compile. These will steadily be addressed.
 disable() {
     for b in "$@"; do
-        sed -i -E "s/^([[:space:]]*)(${b})[[:space:]]*\$/\1#\2  # SCALE: known failure/" src/CMakeLists.txt
+        sed -i -E "s/^([[:space:]]*)(${b})[[:space:]]*\$/\1#\2  # ${DISABLE_TAG:-SCALE: known failure}/" src/CMakeLists.txt
     done
 }
+
+# twell: links CUDA::cuda, which CUDAToolkit doesn't define (the driver is
+# CUDA::cuda_driver), so it breaks configuring for every compiler. Its kernels
+# are sm_90a-only anyway, and it isn't in subset.json.
+DISABLE_TAG="upstream bug" disable twell
 
 # test.sh doesn't export its mode; SCALE_ENV is set by scaleenv.
 if [[ -n "${SCALE_ENV:-}" && "$TEST_GPU_ARCH" == sm_120 ]]; then
