@@ -198,6 +198,12 @@ class PairedRunTest(unittest.TestCase):
         self.assertEqual(rows["bandwidth"]["higher_is_better"], "True")
         self.assertEqual(rows["good"]["output_verdict"], "identical")
 
+    def test_meta_records_real_toolkit_paths(self):
+        meta = json.loads((self.out / "meta.json").read_text())
+        for c in meta["compilers"].values():
+            self.assertEqual(c["toolkit_realpath"], os.path.realpath(c["toolkit"]))
+            self.assertIn("cuda_path_realpath", c)
+
     def test_failures_report(self):
         text = (self.out / "failures.md").read_text()
         self.assertIn("## crash [test]: signal x4", text)

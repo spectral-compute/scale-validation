@@ -288,6 +288,10 @@ class Runner:
                         env={k: v for k, v in c["env"].items()
                              if re.match(r"(CUDA|SCALE|LD_|PATH$|OMP|NV)", k)},
                         binaries={})
+            # Symlinks like /usr/local/cuda hide which toolkit was really used.
+            info["toolkit_realpath"] = os.path.realpath(c["toolkit"])
+            info["cuda_path_realpath"] = (os.path.realpath(c["env"]["CUDA_PATH"])
+                                          if c["env"].get("CUDA_PATH") else None)
             nvcc = Path(c["toolkit"]) / "bin" / "nvcc"
             info["nvcc_version"] = sh([str(nvcc), "--version"])[1]
             for b in benches:
