@@ -1,0 +1,2 @@
+ubuntu24.04:apt:libpython3.12-dev
+ubuntu24.04:apt:python3-numpy

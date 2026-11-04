@@ -6,6 +6,10 @@ args=(
     -DCMAKE_CUDA_COMPILER="nvcc"
     -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}"
 
+    # We already downloaded the full tarball rather than the git repo
+    -DBUILD_OFFLINE=ON
+    -DFETCHCONTENT_FULLY_DISCONNECTED=ON
+
     -DAF_BUILD_OPENCL=OFF
     -DAF_BUILD_CUDA=ON
     -DAF_BUILD_DOCS=OFF

@@ -1,0 +1,3 @@
+ubuntu24.04:apt:libfftw3-dev
+ubuntu24.04:apt:liblapacke-dev
+ubuntu24.04:apt:libopenblas-dev
