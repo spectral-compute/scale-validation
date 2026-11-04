@@ -18,10 +18,9 @@ wget -nc -nv -O samples/hp0.wav https://data.spectralcompute.co.uk/whispercpp/hp
 wget -nc -nv -O samples/mm1.wav https://data.spectralcompute.co.uk/whispercpp/mm0.wav
 
 # Like the `make base.en target`, except run the sample on the GPU build
-# That is ./main is cpu-only, ./build/bin/main is the gpu build
 for f in samples/*.wav; do
     echo "Processing $f..."
-    ../build/bin/main -m ./models/ggml-base.en.bin -f "$f" &>"$f.out"
+    ../build/bin/whisper-cli -m ./models/ggml-base.en.bin -f "$f" &>"$f.out"
 done
 
 cat samples/jfk.wav.out | grep "And so my fellow Americans, ask not what your country can do for you, ask what you can do for your country."

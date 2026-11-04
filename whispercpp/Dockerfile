@@ -50,7 +50,6 @@ ENV LD_LIBRARY_PATH="/opt/scale/targets/${GPU_ARCH}/lib:/opt/scale/lib64:/build/
 WORKDIR /work
 
 # `docker run <img> -m /models/ggml-base.en.bin -f audio.wav` mirrors native use.
-# At pinned ref v1.7.1 the CLI binary is named `main` (whisper-cli was introduced later).
 # Source scaleenv so CUDA_PATH, CUDAARCHS, and LD_LIBRARY_PATH match CI exactly (Cycles NVRTC → nvcc).
-ENTRYPOINT ["/bin/bash","-c","source /opt/scale/bin/scaleenv \"$GPU_ARCH\" >/dev/null 2>&1 && exec main \"$@\"","--"]
+ENTRYPOINT ["/bin/bash","-c","source /opt/scale/bin/scaleenv \"$GPU_ARCH\" >/dev/null 2>&1 && exec whisper-cli \"$@\"","--"]
 CMD ["--help"]
