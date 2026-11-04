@@ -52,7 +52,8 @@ sed -E "s/FE_timestep = \['630000']/FE_timestep = ['${TIME}']/" -i MAKE_FE_TUTOR
 sed -E "s/FE_timestep_avg = \['540000','555000','570000','585000','600000','615000','630000']/FE_timestep_avg = [str(${TIME} - ${BATCH} * i) for i in range(6, -1, -1)]/" \
     -i MAKE_FE_TUTORIAL_PLOTS.ipynb
 
-jupyter execute MAKE_FE_TUTORIAL_PLOTS.ipynb
+# The notebook asks for NCAR's own kernel.
+jupyter execute --kernel_name=python3 MAKE_FE_TUTORIAL_PLOTS.ipynb
 
 # Compare these graphs against a reference.
 function cmp {

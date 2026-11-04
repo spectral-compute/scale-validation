@@ -18,7 +18,7 @@ cycles v4.4.0
 deepspeed v0.19.7
 ds4 main
 faiss v1.9.0
-FastEddy v2.0.0
+FastEddy v5.0.1
 FLAMEGPU2 v2.0.0-rc.2
 ffmpeg n8.0.3
 flashinfer v0.2.8
