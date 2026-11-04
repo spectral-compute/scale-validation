@@ -177,6 +177,27 @@ class PairedRunTest(unittest.TestCase):
         self.assertRegex(ref, r"path=\[/x(:|\])")
         self.assertIn("path=[]", test)
 
+    def test_report_works_without_trees(self):
+        # The report must not need the HeCBench trees (e.g. results copied home).
+        import shutil
+        moved = Path(self.tmp.name) / "elsewhere"
+        shutil.copytree(self.out, moved)
+        env = dict(os.environ, PATH="/usr/bin:/bin")
+        for c in ("ref", "test"):
+            os.rename(Path(self.tmp.name) / c, Path(self.tmp.name) / f"{c}-gone")
+        try:
+            res = subprocess.run([sys.executable, str(DRIVER), "report", str(moved), "--min-pairs", "2"],
+                                 capture_output=True, text=True, env=env)
+        finally:
+            for c in ("ref", "test"):
+                os.rename(Path(self.tmp.name) / f"{c}-gone", Path(self.tmp.name) / c)
+        self.assertEqual(res.returncode, 0, res.stderr)
+        import csv
+        with open(moved / "report.csv") as f:
+            rows = {r["benchmark"]: r for r in csv.DictReader(f)}
+        self.assertEqual(rows["bandwidth"]["higher_is_better"], "True")
+        self.assertEqual(rows["good"]["output_verdict"], "identical")
+
     def test_failures_report(self):
         text = (self.out / "failures.md").read_text()
         self.assertIn("## crash [test]: signal x4", text)

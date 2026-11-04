@@ -194,7 +194,11 @@ def compute_apps():
 # Benchmark discovery (mirrors tools/hecbench:run_benchmark)
 # ----------------------------------------------------------------------------
 def load_subset(tree):
-    data = json.loads((Path(tree) / SUBSET_REL).read_text())
+    return load_subset_file(Path(tree) / SUBSET_REL)
+
+
+def load_subset_file(path):
+    data = json.loads(Path(path).read_text())
     out = {}
     for name, v in data.items():
         if isinstance(v, list) and v:
@@ -260,6 +264,9 @@ class Runner:
     def write_meta(self, benches):
         meta_dir = self.out / "meta"
         meta_dir.mkdir(exist_ok=True)
+        # So `report` works away from the machine the trees live on.
+        first = next(iter(self.compilers.values()))
+        shutil.copyfile(first["tree"] / SUBSET_REL, meta_dir / "subset.json")
         for fname, cmd in {
             "nvidia-smi-q.txt": ["nvidia-smi", "-q"],
             "nvidia-smi-topo.txt": ["nvidia-smi", "topo", "-m"],
@@ -718,7 +725,13 @@ def report(args):
             r["fail_lines"] = n
             r["status"] = "self-fail" if n else "ok"
     tree = meta["compilers"][ref]["tree"]
-    subset = load_subset(tree) if Path(tree).exists() else {}
+    if (out / "meta" / "subset.json").exists():
+        subset = load_subset_file(out / "meta" / "subset.json")
+    elif Path(tree).exists():
+        subset = load_subset(tree)
+    else:
+        sys.exit(f"no meta/subset.json in {out} and {tree} doesn't exist; "
+                 "can't recover the benchmark regexes")
     benches = sorted({b for _, b, _ in recs})
 
     def text(r):
