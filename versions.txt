@@ -59,7 +59,7 @@ stdgpu 503c63af2dcdfac4dfeb36c261a5dd37466a5f55
 StringZilla v4.2.1
 TCLB v6.7
 thrust 756c5afc0750f1413da05bd2b6505180e84c53d4
-timemachine 01f14f8dd49fbd072a02d73bf6e1e2f8382edf0b
+timemachine 2f6fe1fdb9e667349a5f52b6bedf497f21da85d8
 tiny-cuda-nn v2.0
 UppASD gpu_new
 ucx c982cef7cdfc80008c838741ff4cc38a4ce54c89
