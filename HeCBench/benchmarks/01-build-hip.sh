@@ -4,19 +4,21 @@
 
 cd HeCBench
 
-PRESET="hip-$TEST_GPU_ARCH"
+# Our own preset name, so it can't collide with the upstream hip-* presets (which
+# only exist for a few archs, and build unoptimised). Built like 01-build.sh.
+PRESET="scale-hip-$TEST_GPU_ARCH"
 
-# Upstream only ships hip-* presets for a handful of archs; add a user preset
-# mirroring theirs for any other.
-if ! cmake --list-presets=configure | grep -qF "\"${PRESET}\""; then
-    log "No upstream preset ${PRESET}, creating one in CMakeUserPresets.json"
-    cat >CMakeUserPresets.json <<JSON
+cat >CMakeUserPresets.json <<JSON
 {
     "version": 3,
     "configurePresets": [{
         "name": "${PRESET}",
         "inherits": "default",
         "cacheVariables": {
+            "CMAKE_BUILD_TYPE": "Release",
+            "CMAKE_C_FLAGS_RELEASE": "-O3",
+            "CMAKE_CXX_FLAGS_RELEASE": "-O3",
+            "CMAKE_HIP_FLAGS_RELEASE": "-O3",
             "HECBENCH_ENABLE_CUDA": "OFF",
             "HECBENCH_ENABLE_HIP": "ON",
             "HECBENCH_ENABLE_SYCL": "OFF",
@@ -27,6 +29,23 @@ if ! cmake --list-presets=configure | grep -qF "\"${PRESET}\""; then
     }]
 }
 JSON
+
+# Comment out benchmarks known to fail to compile or run.
+disable() {
+    for b in "$@"; do
+        sed -i -E "s/^([[:space:]]*)(${b})[[:space:]]*\$/\1#\2  # HIP: known failure/" src/CMakeLists.txt
+    done
+}
+
+# tridiagonal: the HIP port segfaults (the CUDA one runs fine under SCALE).
+disable tridiagonal
+
+# The gfx major version is everything but the last two (hex) digits, e.g. 9
+# for gfx90a, 11 for gfx1100.
+if [[ "$TEST_GPU_ARCH" =~ ^gfx([0-9]+)[0-9a-f]{2}$ && ${BASH_REMATCH[1]} -ge 10 ]]; then
+    # awbarrier: its inline asm uses buffer_load ... lds, which gfx10 and
+    # newer (RDNA) dropped.
+    disable awbarrier
 fi
 
 # Only what tools/hecbench run can time (subset.json); see build_subset.py.
