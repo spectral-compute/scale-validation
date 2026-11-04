@@ -29,4 +29,5 @@ if ! cmake --list-presets=configure | grep -qF "\"${PRESET}\""; then
 JSON
 fi
 
-python3 tools/hecbench --verbose build --preset "$PRESET"
+# Only what tools/hecbench run can time (subset.json); see build_subset.py.
+python3 "$SCRIPT_DIR/build_subset.py" "$PRESET" hip

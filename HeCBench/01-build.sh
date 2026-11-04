@@ -49,4 +49,10 @@ if [[ -n "${SCALE_ENV:-}" ]]; then
 fi
 
 export CUDAFLAGS="-Wno-cuda-implicit-real-arch -Wno-unused-command-line-argument -Wno-write-strings"
-python3 tools/hecbench --verbose build --preset "$PRESET"
+# benchmarks/01-build-cuda.sh sets HECBENCH_SUBSET_ONLY to build only what
+# tools/hecbench run can time (subset.json); tests build everything.
+if [[ -n "${HECBENCH_SUBSET_ONLY:-}" ]]; then
+    python3 "$SCRIPT_DIR/benchmarks/build_subset.py" "$PRESET" cuda
+else
+    python3 tools/hecbench --verbose build --preset "$PRESET"
+fi
