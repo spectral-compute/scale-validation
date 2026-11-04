@@ -1,3 +1,4 @@
+ubuntu24.04:apt:gfortran
 ubuntu24.04:apt:imagemagick
 ubuntu24.04:apt:jupyter-notebook
 ubuntu24.04:apt:lbzip2
