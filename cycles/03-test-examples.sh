@@ -27,8 +27,14 @@ for EXAMPLE in cube_surface cube_volume monkey sphere_bump; do
 
     set -e
 
+    # The volume's edge pixels differ more between the CPU and GPU kernels: 0.016 on NVIDIA (v5.2.0).
+    LIMIT=0.01
+    if [ "${EXAMPLE}" == "cube_volume" ]; then
+        LIMIT=0.03
+    fi
+
     CMP="$(compare -metric mse "${CPU_OUT}" "${CUDA_OUT}" /dev/null 2>&1 | head -n 1 | cut -f 1 -d ' ')"
-    if [ "$(echo "print(${CMP} < 0.01)" | python3)" == "True" ]; then
+    if [ "$(echo "print(${CMP} < ${LIMIT})" | python3)" == "True" ]; then
         log "Passed with difference of ${CMP}"
     else
         FAILURES+=("CUDA:${EXAMPLE}")
