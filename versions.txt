@@ -68,7 +68,7 @@ whispercpp v1.7.1
 xgboost v2.1.0
 House-Prices-Advanced-Regression f3a41e60128a3e17c57d04d70de0a04366d7baab
 datasets 5e987d53418f8fb2d93ab01e04423f5e2c31a65f
-gromacs v2026.3
+gromacs v2026.4
 HeCBench 47f8668f2e933c92273297b56acb7ea0f518d83a
 cudahandbook 5bd3f275ca5ec109b78c7612432e7f1dd04b72f7
 warp v1.14.0
