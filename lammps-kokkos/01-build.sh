@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
 
+# Upstream works around an nvcc crash by passing nvcc_wrapper's --host-only for one file whenever Kokkos
+# uses CUDA, even when the compiler is clang++ (as here), which rejects it.
+GRAPHICS_CMAKE=lammps-kokkos/cmake/Modules/Packages/GRAPHICS.cmake
+grep -q 'COMPILE_OPTIONS "--host-only"' "${GRAPHICS_CMAKE}"
+sed -i 's/COMPILE_OPTIONS "--host-only"/COMPILE_OPTIONS ""/' "${GRAPHICS_CMAKE}"
+
 # MPI not strictly needed here, currently single-GPU
 MPI_DIR="$(realpath ../)/openmpi/install"
 if [ -e "${MPI_DIR}" ] ; then
@@ -53,6 +59,9 @@ args=(
 
     -DPKG_MOLECULE=yes
     -DPKG_KSPACE=yes
+    # Upstream's recommendation for the CUDA backend. The FFT unit tests also need it: they link
+    # CUDA::cudart, which only FFT_KOKKOS=CUFFT finds.
+    -DFFT_KOKKOS=CUFFT
     -DPKG_RIGID=yes
     -DPKG_MANYBODY=yes
 
@@ -60,6 +69,9 @@ args=(
     -DPKG_GRAPHICS=yes
 
     -DENABLE_TESTING=on
+    # With testing on, LAMMPS links with lld when it finds it, but passes the generic `lld` (which
+    # refuses to run under that name) as --ld-path whenever that's first on PATH, as SCALE's is.
+    -DLAMMPS_CUSTOM_LINKER=default
 
     -DCMAKE_BUILD_TYPE=Release
 )

@@ -3,9 +3,9 @@
 
 set -eo pipefail
 
-# every Kokkos sub-test self-skips in a CUDA build. What still runs is
-# the "plain" fixture, which checks that a Kokkos-enabled build computes correct forces at all
-# but the actual validation lives in 03-test-examples.sh
+# Each style's kokkos_gpu sub-test checks its Kokkos version against the reference forces on the GPU
+# (styles without one self-skip), and the "plain" fixture checks that a Kokkos-enabled build computes
+# correct forces at all. The rest of the validation lives in 03-test-examples.sh
 
 # Runs serially, deliberately: every test here shares one GPU
 ctest --test-dir build --verbose --output-on-failure \
