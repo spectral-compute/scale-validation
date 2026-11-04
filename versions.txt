@@ -22,7 +22,7 @@ FastEddy v2.0.0
 FLAMEGPU2 v2.0.0-rc.2
 ffmpeg n8.0.3
 flashinfer v0.2.8
-ggml d3a58b079f50b43e3fed852ccffa6b3fb6baac78
+ggml v0.29.0
 gomc v2.80
 GOMC_Examples 8d941a3cc946d60c9c43f8666e6b6f758c073b97
 GooFit v2.3.0
