@@ -28,11 +28,14 @@ SUBSET = {
     "expectedfail": ["(?:Kernel time : )([0-9.+-e]+)", []],
     "diagok": ["(?:Average kernel execution time: )([0-9.+-e]+)(?: \\(us\\))", []],
     "diagbad": ["(?:Average kernel execution time: )([0-9.+-e]+)(?: \\(us\\))", []],
+    "argv0": ["(?:Average kernel execution time: )([0-9.+-e]+)(?: \\(us\\))", []],
     "envcheck": ["(?:Average kernel execution time: )([0-9.+-e]+)(?: \\(us\\))", []],
 }
 # Like HeCBench's assert: expected failures on stdout, assertion spew on stderr.
 ASSERTLIKE = ('echo "Kernel time : 0.1"; echo "Device assert failed as expected"; '
               'echo "main.cu:21: Assertion failed." >&2')
+# Prints its own path, like cuda-samples' concurrentKernels; trees differ per compiler.
+ARGV0 = 'echo "[$0] - Starting..."; echo "Average kernel execution time: 1 (us)"; echo "sum 3"'
 ENVCHECK = 'echo "Average kernel execution time: 1 (us)"; echo "only=[$ONLY_TEST] path=[$MY_PATH]"'
 
 
@@ -48,6 +51,7 @@ BODIES = {
         "nomatch": 'echo "Average kernel execution time: 5 (us)"; echo PASS',
         "bandwidth": 'echo "Bandwidth: 100 GB/s"; echo PASS',
         "envcheck": ENVCHECK,
+        "argv0": ARGV0,
         "expectedfail": ASSERTLIKE,
         "diagok": 'echo "Average kernel execution time: 1 (us)"; echo "Validation: PASS (5 checkpoints, max_abs=243915.5)"',
         "diagbad": 'echo "Average kernel execution time: 1 (us)"; echo "max error 1e-07"; echo PASS',
@@ -62,6 +66,7 @@ BODIES = {
         "nomatch": 'echo "oops"; echo PASS',
         "bandwidth": 'echo "Bandwidth: 50 GB/s"; echo PASS',
         "envcheck": ENVCHECK,
+        "argv0": ARGV0,
         "expectedfail": ASSERTLIKE,
         "diagok": 'echo "Average kernel execution time: 1 (us)"; echo "Validation: PASS (5 checkpoints, max_abs=65983.13)"',
         "diagbad": 'echo "Average kernel execution time: 1 (us)"; echo "max error 0.5"; echo PASS',
@@ -147,6 +152,7 @@ class PairedRunTest(unittest.TestCase):
         self.assertEqual(r["wrong"]["output_verdict"], "differs")
         self.assertEqual(r["wrong"]["correct"], "False")
         self.assertEqual(r["expectedfail"]["correct"], "True")
+        self.assertEqual(r["argv0"]["output_verdict"], "identical")
         self.assertEqual(r["diagok"]["correct"], "True")
         self.assertEqual(r["diagbad"]["output_verdict"], "diag-worse")
         self.assertEqual(r["diagbad"]["correct"], "False")

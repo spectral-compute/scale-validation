@@ -63,6 +63,7 @@ TIMING_WORDS = re.compile(
 NUM = re.compile(r"[-+]?(?:\d+\.\d*|\.\d+|\d+)(?:[eE][-+]?\d+)?|[-+]?(?:nan|inf)\b", re.I)
 PASS_RE = re.compile(r"\bPASS(?:ED)?\b", re.I)
 FAIL_RE = re.compile(r"\bFAIL(?:ED|URE|S)?\b", re.I)
+PATH_RE = re.compile(r"(?<![\w.])/(?:[^\s/\]\[()'\"]+/)+[^\s/\]\[()'\"]*")
 EXPECTED_RE = re.compile(r"as expected", re.I)  # e.g. assert: "failed as expected"
 # Lines whose numbers measure distance from a reference rather than being results.
 DIAG_WORDS = re.compile(
@@ -600,6 +601,8 @@ def line_sig(text, regex):
         s = line.strip()
         if not s or TIMING_WORDS.search(s) or (regex and re.search(regex, s)):
             continue
+        # Binaries that print their own path (argv[0]) differ only by build tree.
+        s = PATH_RE.sub("<path>", s)
         nums = NUM.findall(s)
         tmpl = NUM.sub("#", s)
         out.append((tmpl, [float(x) for x in nums]))
