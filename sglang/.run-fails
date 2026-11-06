@@ -1,0 +1,1 @@
+Kernels built from prebuilt NVIDIA device code (CuTe DSL, DeepGEMM, ...) or Triton are expected to fail under SCALE.

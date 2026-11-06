@@ -1,0 +1,16 @@
+Fall back to gloo when torch is built without NCCL, as it is for SCALE.
+
+diff --git a/python/sglang/srt/platforms/cuda.py b/python/sglang/srt/platforms/cuda.py
+index cb62bf78..067b619b 100644
+--- a/python/sglang/srt/platforms/cuda.py
++++ b/python/sglang/srt/platforms/cuda.py
+@@ -91,7 +91,8 @@ class CudaDeviceMixin(DeviceMixin):
+             del os.environ["CUDA_VISIBLE_DEVICES"]
+ 
+     def get_torch_distributed_backend_str(self) -> str:
+-        return "nccl"
++        # torch built without NCCL (as for SCALE) can still run one GPU.
++        return "nccl" if torch.distributed.is_nccl_available() else "gloo"
+ 
+     @classmethod
+     def seed_everything(cls, seed: int | None = None) -> None:
