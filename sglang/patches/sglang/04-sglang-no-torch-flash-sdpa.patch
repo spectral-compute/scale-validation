@@ -1,0 +1,17 @@
+Don't use torch's FlashAttention SDPA, which asks for more shared memory than SCALE's targets may have.
+
+diff --git a/python/sglang/srt/layers/attention/torch_native_backend.py b/python/sglang/srt/layers/attention/torch_native_backend.py
+index 89e1d851..94a5281e 100644
+--- a/python/sglang/srt/layers/attention/torch_native_backend.py
++++ b/python/sglang/srt/layers/attention/torch_native_backend.py
+@@ -19,6 +19,10 @@ if TYPE_CHECKING:
+ class TorchNativeAttnBackend(AttentionBackend):
+     def __init__(self, model_runner: ModelRunner):
+         super().__init__()
++        # SCALE reports compute capability 8.9, so torch's FlashAttention
++        # sizes its kernels for sm_89's shared memory, more than e.g.
++        # gfx1201 has. Its other SDPA backends size theirs correctly.
++        torch.backends.cuda.enable_flash_sdp(False)
+         self.forward_metadata = None
+         self.device = model_runner.device
+         # Pool refs — captured at construction so they survive deletion of the

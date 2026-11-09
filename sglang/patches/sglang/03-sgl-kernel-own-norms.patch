@@ -1,0 +1,22 @@
+Use sgl-kernel's own norm kernels: FlashInfer's can't be built with SCALE yet.
+
+diff --git a/python/sglang/kernels/aot/python/sgl_kernel/elementwise.py b/python/sglang/kernels/aot/python/sgl_kernel/elementwise.py
+index d2315761..37a26a39 100644
+--- a/python/sglang/kernels/aot/python/sgl_kernel/elementwise.py
++++ b/python/sglang/kernels/aot/python/sgl_kernel/elementwise.py
+@@ -3,12 +3,9 @@ from typing import Optional
+ import torch
+ from sgl_kernel.utils import is_arch_support_pdl
+ 
+-try:
+-    import flashinfer.norm as _flashinfer_norm
+-
+-    _has_flashinfer = True
+-except ImportError:
+-    _has_flashinfer = False
++# FlashInfer's norms can't be built with SCALE (its CuTe DSL ones emit NVIDIA
++# binaries; its CUDA ones hit compiler and driver API gaps): use sgl-kernel's.
++_has_flashinfer = False
+ 
+ _FLASHINFER_NORM_SUPPORTED_DTYPES = {torch.float16, torch.bfloat16}
+ 
