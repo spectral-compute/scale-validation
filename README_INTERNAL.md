@@ -30,9 +30,9 @@ This is needed due to limitations in forgejo - see #1182 internally.
 
 You can use `util/report_failures.sh` to get a summary of what is xfail'd, along with the contents of the marker files (which should include the reasons).
 
-## What the benchmarks workflow runs
+## What the benchmarks CI runs
 
-SCALE's benchmarks workflow (`.forgejo/workflows/benchmarks.yml` in the SCALE repo) runs `benchmark.py` for projects with a `benchmarks/` subdir, across the `scale-amd`, `scale-nvidia`, `nvcc-nvidia` and `hip-amd` toolchains. It builds its job matrix with `util/gen_benchmark_matrix.py`, which also checks the workflow's inputs. The script's docstring lists the environment variables it reads. To see what a set of inputs would run:
+Benchmarking CI runs `benchmark.py` for projects with a `benchmarks/` subdir, across SCALE, NVIDIA's `nvcc` and AMD's HIP. It decides what to run by calling `util/gen_benchmark_matrix.py`, which also checks its inputs. The script's docstring lists the environment variables it reads. To see what a set of inputs would run:
 
 ```
 BENCH_ISAS='gfx1100 sm_89' BENCH_PROJECTS=HeCBench python3 util/gen_benchmark_matrix.py
