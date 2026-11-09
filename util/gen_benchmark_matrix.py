@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the job matrix for SCALE's benchmarks workflow.
+"""Build the job matrix for benchmarking CI.
 
 Like gen_matrix.py, this is for our internal CI, and probably not useful to you if
 you don't work at Spectral.
@@ -12,6 +12,10 @@ Inputs, from the environment. Lists are whitespace- or comma-separated:
   BENCH_ISAS        GPU ISAs, e.g. "gfx1100 sm_89", or a JSON array. A toolchain
                     only pairs with ISAs from its own vendor. Required.
   BENCH_REPEATS     Checked to be a whole number of at least 1, if set.
+  BENCH_TOOLCHAIN_FIELDS
+                    Optional JSON object of extra fields to add to each job, by
+                    toolchain, e.g. {"hip-amd": {"toolkit": "/opt/rocm"}, ...}.
+                    If it's set, every selected toolchain needs an entry.
 
 Strictness, each on (1) by default:
 
@@ -20,10 +24,11 @@ Strictness, each on (1) by default:
   BENCH_PROJECTS_STRICT  Fail if a project has no benchmark scripts for a
                          selected toolchain, rather than skipping that pair.
 
-The workflow turns these off when it's using a default list (the repo's ISAs, or
-every project) rather than one that was typed in.
+CI turns these off when it's using a default list (all ISAs, or every project)
+rather than one that was typed in.
 
-Writes matrix=<json> and needs_scale=<bool> to $FORGEJO_OUTPUT, or prints them
+Each job has project, toolchain, compiler (benchmark.py's --compiler), isa and
+needs_scale, plus its toolchain's BENCH_TOOLCHAIN_FIELDS. Writes matrix=<json> and needs_scale=<bool> to $FORGEJO_OUTPUT, or prints them
 if that's unset, and prints a summary of what will run to stderr.
 
 Locally:
@@ -48,30 +53,18 @@ ISA_RE = re.compile(r"gfx[0-9a-f]+|sm_[0-9]+[a-z]?")
 class Toolchain:
     compiler: str  # benchmark.py's --compiler
     isa_prefix: str
-    image: str
-    toolkit: str
-    needs_scale: bool
 
 
 TOOLCHAINS = {
-    "scale-amd": Toolchain("scale", "gfx", "scale-ci-ubuntu24.04", "/opt/scale", True),
-    "scale-nvidia": Toolchain("scale", "sm_", "scale-ci-nv-ubuntu24.04", "/opt/scale", True),
-    "nvcc-nvidia": Toolchain(
-        "nvcc", "sm_", "scale-ci-nv-ubuntu24.04", "/usr/local/cuda", False
-    ),
-    # Stock ROCm lives in its own image, apart from SCALE's ROCm (/opt/rocm-scale).
-    "hip-amd": Toolchain(
-        "hip",
-        "gfx",
-        os.environ.get("BENCH_HIP_IMAGE") or "scale-ci-rocm-ubuntu24.04",
-        os.environ.get("BENCH_ROCM_PATH") or "/opt/rocm-stock",
-        False,
-    ),
+    "scale-amd": Toolchain("scale", "gfx"),
+    "scale-nvidia": Toolchain("scale", "sm_"),
+    "nvcc-nvidia": Toolchain("nvcc", "sm_"),
+    "hip-amd": Toolchain("hip", "gfx"),
 }
 
 
 def parse_list(var):
-    """A JSON array (as the SCALE_GPUS_* vars are) or a space/comma separated list."""
+    """A JSON array or a space/comma separated list."""
     value = os.environ.get(var, "").strip()
     if value.startswith("["):
         return json.loads(value)
@@ -89,6 +82,20 @@ def select(requested, available, what):
     if unknown:
         sys.exit(f"Unknown {what}: {', '.join(unknown)}. Available: {', '.join(available)}")
     return list(dict.fromkeys(requested))
+
+
+def toolchain_fields(toolchains):
+    value = os.environ.get("BENCH_TOOLCHAIN_FIELDS", "").strip()
+    if not value:
+        return {name: {} for name in toolchains}
+    try:
+        fields = json.loads(value)
+    except json.JSONDecodeError as e:
+        sys.exit(f"BENCH_TOOLCHAIN_FIELDS isn't valid JSON: {e}")
+    missing = [name for name in toolchains if not isinstance(fields.get(name), dict)]
+    if missing:
+        sys.exit(f"BENCH_TOOLCHAIN_FIELDS has no fields for: {', '.join(missing)}")
+    return fields
 
 
 def check_repeats():
@@ -124,6 +131,7 @@ def main():
         sys.exit("No toolchains selected")
     toolchains = select(parse_list("BENCH_TOOLCHAINS"), list(TOOLCHAINS), "toolchains")
     projects = select(parse_list("BENCH_PROJECTS"), benchmark.benchmark_projects(), "benchmarks")
+    fields = toolchain_fields(toolchains)
 
     isas = list(dict.fromkeys(parse_list("BENCH_ISAS")))
     if not isas:
@@ -159,13 +167,12 @@ def main():
             for isa in isas:
                 if usable(isa, name):
                     matrix.append({
+                        **fields[name],
                         "project": project,
                         "toolchain": name,
                         "compiler": tc.compiler,
                         "isa": isa,
-                        "image": tc.image,
-                        "toolkit": tc.toolkit,
-                        "needs_scale": tc.needs_scale,
+                        "needs_scale": tc.compiler == "scale",
                     })
 
     if missing and strict("BENCH_PROJECTS_STRICT"):
