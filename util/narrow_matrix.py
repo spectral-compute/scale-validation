@@ -13,10 +13,18 @@ STAMPS_DIR = Path(
     os.environ["STAMPS_DIR"]
 )  # directory containing all of our success stamps
 
+def has_stamp(target: str, isa: str) -> bool:
+    vendor = "nv" if isa.startswith("sm") else "amd"
+    return (STAMPS_DIR / f"{target}__{vendor}.ok").is_file()
+
 reduced_matrix = [
-    x
+    {**x, "builds": [], "runs": valid_runs}
     for x in ORIGINAL_MATRIX
-    if (STAMPS_DIR / f"{x['target']}__{x['isa']}.ok").is_file() and x["should_run"]
+    if (
+        valid_runs := [
+            r for r in x["runs"] if has_stamp(x["target"], r["isa"]) and r["should_run"]
+        ]
+    )
 ]
 
 with open(os.environ["FORGEJO_OUTPUT"], "a") as out:

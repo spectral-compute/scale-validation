@@ -84,6 +84,9 @@ for subdir in REPO_BASE.iterdir():
     else:
         print(f"norun: {name} - .build-only file exists")
 
+nv_isas = [isa for isa in ISAS if isa.startswith("sm")]
+amd_isas = [isa for isa in ISAS if isa.startswith("gfx")]
+
 matrix = [
     {
         "target": target,
@@ -91,19 +94,48 @@ matrix = [
         # actually end up running things anyway because of forgejo lacking proper
         # understanding of xfails
         # So we just don't bother creating the run step, to avoid confusion
-        "should_run": target in should_run and target not in xfail_build,
-        "xfail_build": target in xfail_build or (target, isa) in xfail_build,
-        "xfail_run": (
-            target in xfail_build
-            or target in xfail_run
-            or (target, isa) in xfail_build
-            or (target, isa) in xfail_run
-        ),
-        "isa": isa,
-        "image": image(target, isa),
+        "builds": [
+            *(
+                [
+                    {
+                        "vendor": "nv",
+                        "image": image(target, isa),
+                        "xfail_build": target in xfail_build
+                        or any((target, i) in xfail_build for i in nv_isas),
+                    }
+                ]
+                if nv_isas
+                else []
+            ),
+            *(
+                [
+                    {
+                        "vendor": "amd",
+                        "image": image(target, isa),
+                        "xfail_build": target in xfail_build
+                        or any((target, i) in xfail_build for i in amd_isas),
+                    }
+                ]
+                if amd_isas
+                else []
+            ),
+        ],
+        "runs": [
+            {
+                "isa": isa,
+                "image": image(target, isa),
+                "should_run": target in should_run
+                and target not in xfail_build
+                and (target, isa) not in xfail_build,
+                "xfail_run": target in xfail_build
+                or target in xfail_run
+                or (target, isa) in xfail_build
+                or (target, isa) in xfail_run,
+            }
+            for isa in ISAS
+        ],
     }
     for target in should_build
-    for isa in ISAS
 ]
 
 
