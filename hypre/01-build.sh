@@ -9,6 +9,9 @@ fi
 
 cp -r "hypre" "build"
 
+CC="$(which gcc)"
+export CC
+
 args=(
     --with-cuda
     --with-gpu-arch="${CUDAARCHS}"
