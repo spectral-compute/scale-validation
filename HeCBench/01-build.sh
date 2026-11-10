@@ -34,7 +34,11 @@ disable() {
 # test.sh doesn't export its mode; SCALE_ENV is set by scaleenv.
 if [[ -n "${SCALE_ENV:-}" ]]; then
     # mlp: SCALE's cublasLt.h only forward-declares the cublasLt*Opaque_t structs.
-    disable prefetch mlp
+    # f16sp, tgvnn: SCALE lacks cuBLAS's 64-bit-integer (_64) API.
+    # ssm2: no wmma::load_matrix_sync from float for tf32 fragments.
+    # trimul: SCALE's cuda_pipeline.h lacks the __pipeline_* primitives.
+    # twell: thread block clusters, wgmma and TMA (sm_90).
+    disable prefetch mlp f16sp tgvnn ssm2 trimul twell
 
     case "$TEST_GPU_ARCH" in
     gfx1201) disable blas-fp8gemm attentionMultiHeadKVCache ;;
