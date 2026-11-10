@@ -1,1 +1,4 @@
+49/59 pass on gfx90a (2026-11-10). Failing: cuda.team_vector, cuda.debug_pin_um_to_host,
+defaultdevicetype.shared_space, cuda.SortUnsignedValueType; Kokkos_ContainersUnitTest_Cuda and
+Kokkos_UnitTest_Sort abort; Cuda1, Cuda2, InitializeFinalize, StdSet_Team_Q and SIMD time out (1500 s).
 Third party project: kokkos: https://code.spectralcompute.com/spectral-compute/scale/issues/748

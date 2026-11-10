@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
 
-ctest --test-dir build/ -parallel 8 --verbose
+ctest --test-dir build/ --parallel 8 --verbose
