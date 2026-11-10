@@ -6,6 +6,7 @@ ubuntu24.04:apt:python3-pandas
 ubuntu24.04:apt:python3-scipy
 ubuntu24.04:apt:python3-sklearn
 ubuntu24.04:apt:python3-wheel
+ubuntu24.04:apt:libgmock-dev
 ubuntu24.04:apt:libgtest-dev
 ubuntu24.04:ext:cmake=4.0
 rocky9:ext:dependencies-not-yet-found
