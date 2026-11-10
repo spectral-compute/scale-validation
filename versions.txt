@@ -49,6 +49,7 @@ opencv_extra 5abbd7e0546bbb34ae7487170383d3e571fb1dd1
 PhysX 1e44a0e2998f06b6746362dbbb3e202b56215904
 pytorch v2.9.0
 pytorch-1.8.1 v1.8.1
+pytorch-2.13 v2.13.0
 quda 07822b61c6ab5fa9586233b03ac794bf33ab647e
 quokka 26.07
 RabbitCT main
