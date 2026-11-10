@@ -1,1 +1,3 @@
+PxCudaTypes.h declares CUstream only #ifndef CUDA_VERSION, assuming that means cuda.h was included.
+SCALE defines CUDA_VERSION in more headers than cuda.h (redscale_impl/version.h, via cuda_fp16.h etc.).
 Implement the PTX bar and barrier instructions: https://code.spectralcompute.com/spectral-compute/scale/issues/563
