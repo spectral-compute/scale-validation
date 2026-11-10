@@ -1,1 +1,3 @@
+The test needs risc0's own RISC-V toolchain ("The 'risc0' toolchain could not be found. To install
+the risc0 toolchain, use rzup."), which `cargo risczero install` doesn't provide here.
 missing dependencies for risc0: https://code.spectralcompute.com/spectral-compute/scale/issues/1210
