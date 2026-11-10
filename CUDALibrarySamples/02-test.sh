@@ -23,6 +23,12 @@ fi
 
 python3 "${SCRIPT_DIR}/generate_filecheck.py" "$SRC_DIR" "$CHECK_DIR" "$TESTS"
 
+# Some READMEs show output from older versions of their samples (different inputs). For those, use
+# the output of the sample built with NVIDIA's nvcc 13.1 and run on an RTX 4070 Ti.
+for EXPECTED in "${SCRIPT_DIR}"/expected/*.txt; do
+    sed 's/^/CHECK: /' "${EXPECTED}" >"${CHECK_DIR}/$(basename "${EXPECTED}")"
+done
+
 if [ ! -d "$CHECK_DIR" ]; then
     log "Error: Failed to generate FileCheck assertions."
 fi
@@ -50,7 +56,8 @@ for test in "$CHECK_DIR"/*.txt; do
         continue
     fi
 
-    if fc_output=$("$bin_path" 2>&1 | "$FC_CMD" "$test" 2>&1); then
+    # Hermitian updates leave the diagonal's imaginary part +0 on NVIDIA and -0 on SCALE.
+    if fc_output=$("$bin_path" 2>&1 | sed -E 's/-(0\.0+j)/\1/g' | "$FC_CMD" "$test" 2>&1); then
         log "[PASS] $exec_name"
         PASSED=$((PASSED + 1))
     else
