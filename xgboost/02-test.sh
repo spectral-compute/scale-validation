@@ -7,6 +7,11 @@
 
 FILTER="-Allocator.OOM:*Death*:LambdaRank.GPUMakePair:AllgatherTest.Basic:Objective.GPUAFTObjGPairLeftCensoredLabels:Objective.GPUAFTObjGPairRightCensoredLabels:Objective.GPUAFTObjGPairIntervalCensoredLabels"
 
+# SketchBatchNumElements expects an element count that xgboost clamps to INT32_MAX once more than
+# ~50 GB is free (as on an MI210), whatever the platform.
+# AllreduceTest.Restricted is a host-only socket test that fails in our containers.
+FILTER="${FILTER}:HistUtil.SketchBatchNumElements:AllreduceTest.Restricted"
+
 if [[ "${SCALE_ENV:-}" == "gfx1201" ]]; then
     # EllpackPage fails on gfx1201, tracked here: https://code.spectralcompute.com/spectral-compute/scale/issues/722#issuecomment-14135
     FILTER="${FILTER}:EllpackPage.*"
