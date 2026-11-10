@@ -1,1 +1,4 @@
+The tests make ~10^5 single-element thrust::device_vector writes; each is a small pageable copy,
+~19 us on SCALE (MI210) vs ~5.6 us on NVIDIA (RTX 4070 Ti), so tests run in parallel by meson
+exceed its 30 s timeout.
 hashinator segfaults/timeouts: https://code.spectralcompute.com/spectral-compute/scale/issues/1218
