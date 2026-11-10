@@ -38,6 +38,8 @@ lammps stable_22Jul2025_update6
 llama.cpp 3ecfb150a4bd2d92b2a7974bb1af954c8a5e2985
 llm.c 7ecd8906afe6ed7a2b2cdb731c042f26d525b820
 MAGMA v2.9.0
+nccl v2.29.7-1
+nccl-tests v2.17.6
 nerf-cuda main
 nixl e128059af332df6e05de218d24b04c66a64b030a
 nvflip 1eb247cabcf2862c2c8207ab15314304394132b9
@@ -63,7 +65,7 @@ timemachine 01f14f8dd49fbd072a02d73bf6e1e2f8382edf0b
 tiny-cuda-nn v2.0
 UppASD gpu_new
 ucx c982cef7cdfc80008c838741ff4cc38a4ce54c89
-vllm v0.13.0
+vllm v0.32.0
 whispercpp v1.7.1
 xgboost v2.1.0
 House-Prices-Advanced-Regression f3a41e60128a3e17c57d04d70de0a04366d7baab

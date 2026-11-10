@@ -36,7 +36,21 @@ export USE_CUDNN=OFF
 export USE_CUFILE=OFF
 export CAFFE2_USE_CUDNN=OFF
 export USE_CUSPARSELT=OFF
-export USE_NCCL=OFF
+# Use NCCL if the nccl project was built in the same workdir (this is sourced from WORKDIR/<project>/pytorch).
+NCCL_BUILD="$(realpath ../..)/nccl/nccl/build"
+if [[ -e "${NCCL_BUILD}/lib/libnccl.so" ]]; then
+    export USE_NCCL=ON
+    export USE_SYSTEM_NCCL=ON
+    export NCCL_ROOT="${NCCL_BUILD}"
+    export NCCL_INCLUDE_DIR="${NCCL_BUILD}/include"
+    export NCCL_LIB_DIR="${NCCL_BUILD}/lib"
+else
+    export USE_NCCL=OFF
+fi
+# A kept build only reruns CMake when asked, so it would keep its first choice.
+if [[ -f build/CMakeCache.txt ]] && ! grep -q "^USE_NCCL:BOOL=${USE_NCCL}$" build/CMakeCache.txt; then
+    export CMAKE_FRESH=1
+fi
 export USE_DISTRIBUTED=ON
 export USE_FAKELOWP=OFF
 export USE_FBGEMM=OFF
@@ -57,7 +71,7 @@ export BUILD_BINARY=OFF
 export BUILD_TEST=OFF
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 export FORCE_CUDA=1
-MAX_JOBS="$(nproc)"
+MAX_JOBS="${MAX_JOBS:-$(nproc)}"
 export MAX_JOBS
 
 # PyTorch has its own env var to set the CUDA compiler

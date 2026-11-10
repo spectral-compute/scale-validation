@@ -1,6 +1,7 @@
-# Reuse the pytorch test's venv (like openmpi). Run the pytorch test first, same workdir.
+# Reuse the pytorch test's venv (like openmpi). Run the pytorch test first, same workdir. PYTORCH_PROJECT picks
+# another PyTorch project (e.g. pytorch-2.13).
 
-PYTORCH_DIR="$(realpath ../)/pytorch/pytorch"
+PYTORCH_DIR="$(realpath ../)/${PYTORCH_PROJECT:-pytorch}/pytorch"
 PYTORCH_VENV="${PYTORCH_DIR}/.venv"
 
 if [ ! -e "${PYTORCH_VENV}" ] ; then
