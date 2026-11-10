@@ -1,1 +1,3 @@
+SCALE targeting NVIDIA: host code in survival_metric.cu links against an undefined isinf(double)
+(probability_distribution.h, survival_util.h).
 Fix XGBoost: https://code.spectralcompute.com/spectral-compute/scale/issues/722
