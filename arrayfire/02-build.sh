@@ -6,9 +6,9 @@ args=(
     -DCMAKE_CUDA_COMPILER="nvcc"
     -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}"
 
-    # We already downloaded the full tarball rather than the git repo
-    -DBUILD_OFFLINE=ON
-    -DFETCHCONTENT_FULLY_DISCONNECTED=ON
+    # The tests download sparse matrices from sparse.tamu.edu at configure time, which refuses
+    # them (403). This test is build-only anyway.
+    -DBUILD_TESTING=OFF
 
     -DAF_BUILD_OPENCL=OFF
     -DAF_BUILD_CUDA=ON

@@ -1,3 +1,7 @@
+ubuntu24.04:apt:bzip2
+ubuntu24.04:apt:libboost-dev
 ubuntu24.04:apt:libfftw3-dev
 ubuntu24.04:apt:liblapacke-dev
 ubuntu24.04:apt:libopenblas-dev
+ubuntu24.04:apt:ocl-icd-opencl-dev
+ubuntu24.04:apt:opencl-headers
