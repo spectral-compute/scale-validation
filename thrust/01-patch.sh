@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
 
-# Our patches don't apply to non clang-y nvcc
-if ! "${CUDA_PATH}/bin/nvcc" --version | grep clang; then
+# Our patches don't apply to non clang-y nvcc. When targeting NVIDIA, CUDA_PATH is NVIDIA's toolkit,
+# but the nvcc in PATH (which the build uses) is SCALE's.
+if ! nvcc --version | grep clang; then
     exit 0
 fi
 
