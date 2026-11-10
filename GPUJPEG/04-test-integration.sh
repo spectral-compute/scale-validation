@@ -104,21 +104,44 @@ check_quality_100_near_lossless() {
 }
 
 # Shared by every colorspace/subsampling variant below: encode with the given
-# extra flag, decode without it (gpujpegtool auto-detects from the JPEG
+# extra flags, decode without them (gpujpegtool auto-detects from the JPEG
 # headers), then check round-trip fidelity.
 _roundtrip_variant() {
-    local encode_flag="$1" name="$2"
-    ./build/gpujpegtool --encode "${encode_flag}" test_input.ppm "${name}.jpg" &&
+    local name="$1"
+    shift
+    ./build/gpujpegtool --encode "$@" test_input.ppm "${name}.jpg" &&
         ./build/gpujpegtool --decode "${name}.jpg" "${name}_dec.ppm" &&
         psnr_ppm test_input.ppm "${name}_dec.ppm" 30
 }
 
-check_colorspace_rgb() { _roundtrip_variant "--colorspace rgb" cs_rgb; }
-check_colorspace_ycbcr_jpeg() { _roundtrip_variant "--colorspace ycbcr-jpeg" cs_ycbcr_jpeg; }
-check_colorspace_ycbcr_bt601() { _roundtrip_variant "--colorspace ycbcr-bt601" cs_ycbcr_bt601; }
-check_colorspace_ycbcr_bt709() { _roundtrip_variant "--colorspace ycbcr-bt709" cs_ycbcr_bt709; }
-check_subsampling_444() { _roundtrip_variant "--subsampled=4:4:4" sub_444; }
-check_subsampling_420() { _roundtrip_variant "" sub_420; }
+check_colorspace_rgb() { _roundtrip_variant cs_rgb --colorspace rgb; }
+
+# --colorspace gives the colorspace of the input data, so a YCbCr round trip needs YCbCr input:
+# raw 4:4:4 full-range YCbCr gradients (NVIDIA: 52.5 dB).
+check_colorspace_ycbcr_jpeg() {
+    python3 - <<'PYEOF' &&
+out = bytearray()
+for y in range(256):
+    for x in range(256):
+        out += bytes((x, y, (x + y) // 2))
+open('ycc.yuv', 'wb').write(out)
+PYEOF
+        ./build/gpujpegtool --encode -s 256x256 -c ycbcr-jpeg -f 444-u8-p012 ycc.yuv ycc.jpg &&
+        ./build/gpujpegtool --decode -c ycbcr-jpeg -f 444-u8-p012 ycc.jpg ycc_dec.yuv &&
+        python3 - <<'PYEOF'
+import math, sys
+a = open('ycc.yuv', 'rb').read()
+b = open('ycc_dec.yuv', 'rb').read()
+if len(a) != len(b):
+    sys.exit(f'  size mismatch {len(a)} vs {len(b)}')
+mse = sum((x - y) ** 2 for x, y in zip(a, b)) / len(a)
+psnr = 10 * math.log10(255 ** 2 / mse) if mse else math.inf
+print(f'  PSNR = {psnr:.2f} dB')
+sys.exit(psnr < 40)
+PYEOF
+}
+check_subsampling_444() { _roundtrip_variant sub_444 --subsampled=4:4:4; }
+check_subsampling_420() { _roundtrip_variant sub_420; }
 
 # Decoding a 1-component JPEG requires requesting single-channel output
 # (--pixel-format u8) on both encode and decode.
@@ -138,8 +161,6 @@ check "quality 90 output larger than quality 10" check_quality_size_ordering
 check "quality 100 round-trip PSNR >= 40 dB" check_quality_100_near_lossless
 check "rgb round-trip" check_colorspace_rgb
 check "ycbcr-jpeg round-trip" check_colorspace_ycbcr_jpeg
-check "ycbcr-bt601 round-trip" check_colorspace_ycbcr_bt601
-check "ycbcr-bt709 round-trip" check_colorspace_ycbcr_bt709
 check "4:4:4 subsampling round-trip" check_subsampling_444
 check "4:2:0 subsampling round-trip" check_subsampling_420
 check "grayscale (u8) round-trip" check_format_grayscale

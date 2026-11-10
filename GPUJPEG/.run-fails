@@ -1,1 +1,3 @@
+GPUJPEG's GPU Huffman encoder computes `0x80000000 >> 32` in lane 0 and relies on PTX's clamped
+shift (0); AMD shifts mod 32. Passes with llvm-project 7ebd6c98c7e7 (cuphy-fixes, not merged).
 GPUJPEG doesn't work: https://code.spectralcompute.com/spectral-compute/scale/issues/122
