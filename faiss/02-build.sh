@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
 
+INSTALL_DIR="$(pwd)/install"
+
 args=(
     -DCMAKE_BUILD_TYPE=Release
     -DCMAKE_CUDA_COMPILER="nvcc"
@@ -22,4 +24,4 @@ make -O -C "build" install -j"$(nproc)"
 
 (cd "build/faiss/python" &&
     python3 -m build --wheel --no-isolation &&
-    python3 -m installer --prefix= --destdir="install" dist/*.whl)
+    python3 -m installer --prefix= --destdir="${INSTALL_DIR}" dist/*.whl)
