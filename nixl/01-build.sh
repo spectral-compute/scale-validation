@@ -21,6 +21,12 @@ ucx_install_dir="$(realpath ucx-install)"
 export PKG_CONFIG_PATH="${ucx_install_dir}/lib/pkgconfig:${PKG_CONFIG_PATH-}"
 export LD_LIBRARY_PATH="${ucx_install_dir}/lib:${LD_LIBRARY_PATH-}"
 
+# The GDS plugin needs NVIDIA's cuFile, which only NVIDIA's toolkit provides.
+args=(-Dbuild_tests=false)
+if [ ! -e /usr/local/cuda/include/cufile.h ]; then
+    args+=(-Dgds_path=)
+fi
+
 # Configure NIXL. Meson will discover  UCX from PKG_CONFIG_PATH above. build_tests is disabled
 # explicitly: NIXL's gtest suite did not build cleanly with the default and
 # 02-example.sh only runs the bundled example.
@@ -28,6 +34,6 @@ export LD_LIBRARY_PATH="${ucx_install_dir}/lib:${LD_LIBRARY_PATH-}"
 (
     cd nixl
     rm -rf build
-    meson setup build -Dbuild_tests=false
+    meson setup build "${args[@]}"
     ninja -C build
 )
