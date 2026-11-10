@@ -1,3 +1,7 @@
 .dir-locals.el
 images/*.dockerfile
 images/build.sh
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
