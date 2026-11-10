@@ -1,1 +1,3 @@
+opencv_contrib's cudev uses PTX SIMD video instructions in inline asm (vmin4, vmax4, vabsdiff4,
+vset4 in util/simd_functions.hpp), which SCALE's PTX support rejects ("unknown opcode").
 opencv build failures: https://code.spectralcompute.com/spectral-compute/scale/issues/1219

@@ -6,7 +6,7 @@ args=(
     -DCUDA_ARCH_BIN="${CUDAARCHS}"
     -DCUDA_ARCH_PTX=""
     -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}"
-    -DCMAKE_INSTALL_PREFIX="${OUT_DIR}/opencv/install"
+    -DCMAKE_INSTALL_PREFIX="$(pwd)/install"
 
     -DBUILD_EXAMPLES=On
     -DBUILD_TESTS=On
@@ -23,7 +23,7 @@ args=(
     -DWITH_NVCUVENC=Off
 
     -DBUILD_opencv_cudalegacy=Off
-    -DOPENCV_EXTRA_MODULES_PATH="${OUT_DIR}/opencv/opencv_contrib/modules"
+    -DOPENCV_EXTRA_MODULES_PATH="$(pwd)/opencv_contrib/modules"
 )
 cmake \
     "${args[@]}" \

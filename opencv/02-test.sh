@@ -7,7 +7,7 @@ for T in "$(pwd)"/install/bin/opencv_test_cuda*; do
     log "$(basename "$T")"
 
     set +e
-    (cd "opencv/opencv_extra/testdata/gpu" && "$T")
+    (cd "opencv_extra/testdata/gpu" && "$T")
     R=$?
     set -e
 
