@@ -1,37 +1,12 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
 
-(cd llm.c && ./train_gpt2fp32cu | tee output.log)
+cd llm.c
 
-# Check the output matches that obtained on the nvidia device.
-cat <<EOF >expected.log
-generating:
----
+# Upstream's test: compares logits, loss and gradients with PyTorch's reference state.
+./test_gpt2fp32cu | tee test.log
+grep -q "^overall okay: 1$" test.log
 
-I am pale and ill-smyth'd:
-Quoth the poor rascal, 'twas now on
-What should have been my way?'
-I mean,
-I must head home to New Hamporn as well as my own.
-
-<|endoftext|>SAMUSIO:
-If my luck outweighs
----
-generating:
----
-EditBOOK IX:
-Under the boasted sute of Georges:
-So lordly is the prize had sin is high;
-Hell is the way to God: frankish friends from blessed daughters
-To Bermuda have heard the saying,
-Then how to place the artscape.
-Strong should a bellow
----
-EOF
-
-cat output.log | sed -n '/generating:/,/step/p' | grep -v "step 40" | grep -v "step 20" >test.log
-
-if ! diff test.log expected.log; then
-    log "actual output differed from expected!"
-    exit 1
-fi
+# The sampled text after training depends on rounding (it differs between NVIDIA GPUs), so
+# training is only run to completion.
+./train_gpt2fp32cu
