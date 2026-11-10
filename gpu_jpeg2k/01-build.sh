@@ -13,6 +13,9 @@ args=(
     "-DCMAKE_CXX_COMPILER=$(which clang++)"
     -DCUDA_TOOLKIT_ROOT_DIR="${CUDA_PATH}"
     "-DCUDA_NVCC_EXECUTABLE=$(which nvcc)"
+    # The bundled FindCUDA forgets CUDA_NVCC_EXECUTABLE (and finds NVIDIA's nvcc, when targeting
+    # NVIDIA) whenever the toolkit root differs from the one it last saw.
+    -DCUDA_TOOLKIT_ROOT_DIR_INTERNAL="${CUDA_PATH}"
 
     -DCMAKE_C_FLAGS="-Wno-error=implicit-function-declaration -Wno-error=implicit-int -Wno-deprecated-declarations"
     -DCMAKE_CXX_FLAGS="-Wno-unused-result -Wno-stringop-overread -Wno-switch -Wno-deprecated-declaration"

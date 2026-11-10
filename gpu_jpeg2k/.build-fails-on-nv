@@ -1,1 +1,3 @@
+gpu_jpeg2k uses __any/__all, which don't exist for sm_70 and later (ptxas rejects vote without .sync).
+Before that, SCALE needs llvm-project's fix for -Xcompiler=-fno-builtin reaching device code (printf).
 gpu_jpeg2k fails to build on sm_120: https://code.spectralcompute.com/spectral-compute/scale/issues/1255
