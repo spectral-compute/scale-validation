@@ -29,4 +29,9 @@ for TEST in "${EXCLUSIONS[@]}"; do
     EXCLUSIONS_SED="${EXCLUSIONS_SED};/${TEST}/d"
 done
 
-(cd "build" && ./src/amgx_tests_launcher "$(./src/amgx_tests_launcher --help | sed -E "1,/Available tests are:/d;${EXCLUSIONS_SED}")")
+cd build
+mapfile -t TESTS < <(./src/amgx_tests_launcher --help | sed -E "1,/Available tests are:/d;${EXCLUSIONS_SED}")
+./src/amgx_tests_launcher "${TESTS[@]}" | tee amgx_tests.log
+
+# The launcher exits 0 even when tests fail.
+grep -Eq "Total tests run: [1-9][0-9]*\s+Failed tests: 0$" amgx_tests.log

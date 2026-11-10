@@ -7,12 +7,15 @@ if [ ! -e "${OUT_DIR}/openmpi/install" ]; then
     exit 1
 fi
 
+export PATH="${OUT_DIR}/openmpi/install/bin:${PATH}"
+export LD_LIBRARY_PATH="${OUT_DIR}/openmpi/install/lib:${LD_LIBRARY_PATH:-}"
+
 # Configure.
 if [ -z "$(which scalediag)" ] || scalediag full-driver p2p; then
-    log "scalediag did not detect p2p, not using MPI"
+    log "scalediag detected p2p (or isn't SCALE's), using MPI"
     CMAKE_NO_MPI=Off
 else
-    log "scalediag did detect p2p, using MPI"
+    log "scalediag did not detect p2p, not using MPI"
     CMAKE_NO_MPI=On
 fi
 

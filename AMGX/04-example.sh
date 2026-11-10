@@ -10,8 +10,8 @@ export OMPI_MCA_accelerator=cuda
 for MODE in dFFI dDDI; do
     echo -e "\x1b[34;1mVariant\x1b[m: \x1b[1m${MODE}\x1b[m"
     build/examples/amgx_capi \
-        -m "${SRC_DIR}/examples/matrix.mtx" \
-        -c "${SRC_DIR}/src/configs/FGMRES_AGGREGATION.json" \
+        -m "AMGX/examples/matrix.mtx" \
+        -c "AMGX/src/configs/FGMRES_AGGREGATION.json" \
         -mode "${MODE}"
 
     echo -e "\x1b[34;1mVariant\x1b[m: \x1b[1m${MODE} with MPI\x1b[m"
@@ -21,7 +21,7 @@ for MODE in dFFI dDDI; do
     fi
     mpirun -np 2 \
         build/examples/amgx_mpi_capi \
-        -m "${SRC_DIR}/examples/matrix.mtx" \
-        -c "${SRC_DIR}/src/configs/FGMRES_AGGREGATION.json" \
+        -m "AMGX/examples/matrix.mtx" \
+        -c "AMGX/src/configs/FGMRES_AGGREGATION.json" \
         -mode "${MODE}"
 done
