@@ -1,0 +1,1 @@
+openfold3 builds PyTorch, which crashes SCALE's compiler on NVIDIA (SLPVectorizer assertion `isUnpackedStructLiteral(StructTy)` in llvm::toScalarizedStructTy, in ReduceMomentKernel.cu and others). Tracking: PyTorch support: https://code.spectralcompute.com/spectral-compute/scale/issues/1004
