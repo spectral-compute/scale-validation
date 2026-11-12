@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
 
-PATCH=8
+PATCH=11
 
 VER="$(get_version openmpi)"
 DIR="openmpi-${VER//v/}.${PATCH}"

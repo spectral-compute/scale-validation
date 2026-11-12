@@ -43,7 +43,7 @@ MAGMA v2.9.0
 nerf-cuda main
 nixl e128059af332df6e05de218d24b04c66a64b030a
 nvflip d3ab02a4425eb167d8a4021b382a2bafc6e6c838
-openmpi v4.1
+openmpi v5.0
 openfold3 v0.5.0
 opencv 4.14.0
 opencv_contrib 4.14.0
