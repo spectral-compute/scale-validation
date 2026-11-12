@@ -15,8 +15,9 @@ for MODE in dFFI dDDI; do
         -mode "${MODE}"
 
     echo -e "\x1b[34;1mVariant\x1b[m: \x1b[1m${MODE} with MPI\x1b[m"
-    if [ ! -z "$(which scalediag)" ] && ! scalediag full-driver p2p; then
-        echo "Skipping due to lack of support"
+    # 02-build.sh builds the MPI examples only where it found P2P support.
+    if [ ! -e build/examples/amgx_mpi_capi ]; then
+        echo "Skipping due to lack of P2P support"
         continue
     fi
     mpirun -np 2 \
