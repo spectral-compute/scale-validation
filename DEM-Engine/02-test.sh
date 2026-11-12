@@ -11,6 +11,10 @@ OUT="$(realpath .)/test-output"
 mkdir -p "${OUT}"
 cd "${OUT}"
 
+# Upstream's remedy for slow start-up in fresh processes: without it, Jitify rediscovers every CUDA
+# header for every program, one NVRTC compile per header (~10 min per test on NVIDIA).
+export DEME_PERSISTENT_JITIFY_CACHE="${OUT}/jitify_header_cache.bin"
+
 run_test() {
     timeout 1800 "${BIN}/$1" "${@:2}"
 }
