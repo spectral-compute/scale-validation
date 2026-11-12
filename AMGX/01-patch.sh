@@ -11,3 +11,6 @@ sed -E \
 
 # Since v2.5.0, src/tests/*.cu are compiled into no target, so amgx_tests_launcher has no tests.
 patch -p1 -d "AMGX" <"${SCRIPT_DIR}/build-unit-tests.patch"
+
+# row_length reads past the reference thrust passes it, which hangs LowDegDeterminism on NVIDIA.
+patch -p1 -d "AMGX" <"${SCRIPT_DIR}/row-length-ub.patch"

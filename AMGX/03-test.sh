@@ -14,10 +14,6 @@ EXCLUSIONS=(
     Memory_Use_atmosmodd_pressure MultiPairwise PreconditionerUsage ProfileTest RowMajorVsColMajor ScalarSmootherPoisson
     SmootherBlocksizes SmootherCusparse SmootherNaNRandom
 
-    # Hangs on NVIDIA, and launches an empty grid on SCALE: the row_length functor in matrix.cu
-    # reads past the reference thrust passes it, which needn't point into the row offsets.
-    LowDegDeterminism
-
     # Tests which don't report failure, but which print errors regarding memory corruption or
     # invalid usage of internal data structures on both SCALE and NV
     CAPIFailure NestedSolvers
