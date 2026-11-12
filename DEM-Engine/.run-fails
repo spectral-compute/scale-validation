@@ -1,6 +1,4 @@
 DEMTest_StateFinite: a device trap aborts the process under SCALE, losing the device printf that
 precedes it (NVIDIA prints it and returns a launch failure); upstream's driver checks the message.
-DEMTest_MeshDeformation: SCALE's FMA contraction differs from NVIDIA's in the tri-tri contact code
-(matches with -fmad=false), flipping a near-degenerate shallow-contact decision.
 With two GPUs, inter-device copies (~0.5 ms each via hsa_memory_copy) make several tests exceed the
 per-test timeout.
