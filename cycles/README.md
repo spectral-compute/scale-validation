@@ -79,8 +79,7 @@ standalone: it runs the numbered build scripts alongside it and depends on `util
 - Validated against Cycles `v5.2.0` (the standalone release, separate from full Blender).
 - The build is configured with OpenColorIO enabled and many optional features disabled (USD,
   OSL, NanoVDB, OpenVDB, Alembic, Hydra) to keep the build lean and portable.
-- One patch is applied: `intrinsics.patch` (fix a `ifndef(HIP)` guard that breaks CUDA
-  compilation).
+- No patches are applied.
 - `glog` is statically linked using a pre-compiled `libglog_ubuntu.a` so the runtime image has
   no glog dependency.
 - The CI correctness test renders four example scenes on both CPU and CUDA and verifies that the
