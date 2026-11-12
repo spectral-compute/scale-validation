@@ -43,11 +43,9 @@ if [[ -n "${SCALE_ENV:-}" ]]; then
     case "$TEST_GPU_ARCH" in
     gfx1201) disable blas-fp8gemm attentionMultiHeadKVCache ;;
     sm_120)
-        disable qkv d3q19-bgk quant3MatMul sobol
+        disable d3q19-bgk quant3MatMul sobol
         # "error: use of undeclared identifier '__NV_ATOMIC_RELAXED'"
         disable michalewicz 'graphB\+' scatter hausdorff lebesgue atomicCAS
-        # Link error on isfinite
-        disable permute
         ;;
     esac
 fi
