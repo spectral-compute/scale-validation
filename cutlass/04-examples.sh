@@ -5,7 +5,7 @@ LOGFILE="examples.log"
 log "Writing to $LOGFILE"
 : >"$LOGFILE"
 
-mapfile -t TESTS < <(find build/examples -perm /100 | sort)
+mapfile -t TESTS < <(find build/examples -type f -executable ! -name "*.so" ! -name "*.a" ! -name "*.o" | sort)
 
 SKIP=(
     # These require external input and require special handling to provide it.
