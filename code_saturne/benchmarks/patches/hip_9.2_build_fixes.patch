@@ -1,0 +1,156 @@
+diff --git a/src/base/cs_algorithm.cpp b/src/base/cs_algorithm.cpp
+index 9d1d7fb95..64ca09f6a 100644
+--- a/src/base/cs_algorithm.cpp
++++ b/src/base/cs_algorithm.cpp
+@@ -44,6 +44,10 @@
+ #include <cub/cub.cuh>
+ #endif
+ 
++#if defined(HAVE_HIP)
++#include <rocprim/rocprim.hpp>
++#endif
++
+ /*----------------------------------------------------------------------------
+  * Local headers
+  *----------------------------------------------------------------------------*/
+@@ -273,7 +277,7 @@ _count_to_index_inplace_rocm(hipStream_t  stream,
+                           a, a, 0, n+1, rocprim::plus<cs_lnum_t>(),
+                           stream);
+ 
+-  cub::SyncStream(stream);
++  (void)hipStreamSynchronize(stream);
+ 
+   CS_FREE(tmp_storage);
+ }
+diff --git a/src/base/cs_base_hip.cpp b/src/base/cs_base_hip.cpp
+index 3071729fe..4b4d5bbb9 100644
+--- a/src/base/cs_base_hip.cpp
++++ b/src/base/cs_base_hip.cpp
+@@ -292,7 +292,7 @@ _initialize_nccl(int  n_devices,
+  */
+ /*----------------------------------------------------------------------------*/
+ 
+-extern "C" void
++void
+ cs_hip_copy_h2d(void        *dst,
+                  const void  *src,
+                  size_t       size)
+@@ -317,7 +317,7 @@ cs_hip_copy_h2d(void        *dst,
+  */
+ /*----------------------------------------------------------------------------*/
+ 
+-extern "C" void
++void
+ cs_hip_copy_h2d_async(void        *dst,
+                        const void  *src,
+                        size_t       size)
+@@ -342,7 +342,7 @@ cs_hip_copy_h2d_async(void        *dst,
+  */
+ /*----------------------------------------------------------------------------*/
+ 
+-extern "C" void
++void
+ cs_hip_copy_d2h(void        *dst,
+                  const void  *src,
+                  size_t       size)
+@@ -366,7 +366,7 @@ cs_hip_copy_d2h(void        *dst,
+  */
+ /*----------------------------------------------------------------------------*/
+ 
+-extern "C" void
++void
+ cs_hip_copy_d2h_async(void        *dst,
+                        const void  *src,
+                        size_t       size)
+@@ -389,7 +389,7 @@ cs_hip_copy_d2h_async(void        *dst,
+  */
+ /*----------------------------------------------------------------------------*/
+ 
+-extern "C" void
++void
+ cs_hip_copy_d2d(void        *dst,
+                  const void  *src,
+                  size_t       size)
+@@ -415,7 +415,7 @@ cs_hip_copy_d2d(void        *dst,
+  */
+ /*----------------------------------------------------------------------------*/
+ 
+-extern "C" void *
++void *
+ cs_hip_get_host_ptr(const void  *ptr)
+ {
+   hipPointerAttribute_t attributes;
+@@ -600,7 +600,7 @@ cs_hip_get_2_stage_reduce_buffers(int            stream_id,
+  */
+ /*----------------------------------------------------------------------------*/
+ 
+-extern "C" void
++void
+ cs_base_hip_device_info(cs_log_t  log_id)
+ {
+   int n_devices = 0;
+@@ -658,7 +658,7 @@ cs_base_hip_device_info(cs_log_t  log_id)
+  */
+ /*----------------------------------------------------------------------------*/
+ 
+-extern "C" void
++void
+ cs_base_hip_version_info(cs_log_t  log_id)
+ {
+   int runtime_version = -1, driver_version = -1;
+@@ -679,7 +679,7 @@ cs_base_hip_version_info(cs_log_t  log_id)
+  */
+ /*----------------------------------------------------------------------------*/
+ 
+-extern "C" void
++void
+ cs_base_hip_compiler_info(cs_log_t  log_id)
+ {
+   cs_log_printf(log_id,
+@@ -723,7 +723,7 @@ cs_base_hip_nccl_info(cs_log_t  log_id)
+  */
+ /*----------------------------------------------------------------------------*/
+ 
+-extern "C" int
++int
+ cs_base_hip_select_default_device(void)
+ {
+   int device_id = 0, n_devices = 0;
+@@ -812,7 +812,7 @@ cs_base_hip_select_default_device(void)
+  */
+ /*----------------------------------------------------------------------------*/
+ 
+-extern "C" int
++int
+ cs_base_hip_get_device(void)
+ {
+   int device_id = -1, n_devices = 0;
+diff --git a/src/base/cs_dispatch.h b/src/base/cs_dispatch.h
+index 91c666b09..86add0199 100644
+--- a/src/base/cs_dispatch.h
++++ b/src/base/cs_dispatch.h
+@@ -1285,6 +1285,11 @@ public:
+ 
+   //! Get associated stream
+ 
++  hipStream_t
++  stream(void) {
++    return this->stream_;
++  }
++
+   //! Change HIP device
+ 
+   void
+diff --git a/src/base/cs_halo_hip.cpp b/src/base/cs_halo_hip.cpp
+index 07311056d..2dd63ab0b 100644
+--- a/src/base/cs_halo_hip.cpp
++++ b/src/base/cs_halo_hip.cpp
+@@ -188,7 +188,7 @@ _gather_full_strided_hip(cs_lnum_t         n,
+  */
+ /*----------------------------------------------------------------------------*/
+ 
+-extern "C" void
++void
+ cs_halo_hip_pack_send_buffer(const cs_halo_t   *halo,
+                               hipStream_t       stream,
+                               cs_halo_type_t     sync_mode,

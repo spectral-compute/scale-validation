@@ -1,0 +1,35 @@
+--- a/src/base/cs_halo.cpp
++++ b/src/base/cs_halo.cpp
+@@ -1913,6 +1913,32 @@
+   if (val_host_ptr != val && val != nullptr)
+     _hs->var_location = CS_ALLOC_DEVICE;
+ 
++#elif defined(HAVE_HIP)
++
++  void *_send_buf = cs_halo_sync_pack_init_state(halo,
++                                                 sync_mode,
++                                                 data_type,
++                                                 stride,
++                                                 send_buf,
++                                                 _hs);
++
++  void *val_host_ptr = cs_hip_get_host_ptr(val);
++  void *_send_buf_d = (send_buf != nullptr) ?
++    send_buf : cs_get_device_ptr(_send_buf);
++
++  cs_halo_hip_pack_send_buffer(halo,
++                               _hs->stream,
++                               sync_mode,
++                               data_type,
++                               stride,
++                               val,
++                               _send_buf_d);
++
++  _hs->var_location = CS_ALLOC_HOST_DEVICE_SHARED;
++
++  if (val_host_ptr != val && val != nullptr)
++    _hs->var_location = CS_ALLOC_DEVICE;
++
+ #else // defined(HAVE_CUDA)
+ 
+   cs_halo_sync_pack(halo,

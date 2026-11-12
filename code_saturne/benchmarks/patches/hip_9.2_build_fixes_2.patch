@@ -1,0 +1,177 @@
+--- a/src/alge/cs_matrix_util.cpp
++++ b/src/alge/cs_matrix_util.cpp
+@@ -138,8 +138,8 @@
+     use_gpu = true;
+ 
+   if (use_gpu) {
+-    hipStream_t stream = cs_hip_get_stream();
+-    double s = cs_blas_hip_dot(n, x, x);
++    hipStream_t stream = cs_hip_get_stream(0);
++    double s = cs_blas_hip_dot(stream, n, x, x);
+     CS_HIP_CHECK(hipStreamSynchronize(stream));
+ 
+     return s;
+--- a/src/alge/cs_sles_it_hip.cpp
++++ b/src/alge/cs_sles_it_hip.cpp
+@@ -1140,7 +1140,7 @@
+   /* Alternatives */
+ 
+   if (_use_hipblas == false)
+-    s = cs_blas_hip_dot(c->setup_data->n_rows, x, y);
++    s = cs_blas_hip_dot(stream, c->setup_data->n_rows, x, y);
+ 
+ #if defined(HAVE_HIPBLAS)
+   if (_use_hipblas)
+--- a/src/alge/cs_gradient.cpp
++++ b/src/alge/cs_gradient.cpp
+@@ -33,6 +33,7 @@
+ #include <algorithm>
+ #include <cmath>
+ #include <chrono>
++#include <type_traits>
+ 
+ #include <assert.h>
+ #include <errno.h>
+@@ -2752,6 +2753,7 @@
+ 
+ // HIP computation if available instead of CUDA
+ #if defined(HAVE_HIP)
++  if constexpr (std::is_same_v<T, cs_real_t>) {
+ 
+   if (on_device) {
+     cs_gradient_scalar_lsq_hip(m,
+@@ -2766,6 +2768,7 @@
+     return;
+   }
+ 
++  }
+ #endif
+ 
+ 
+@@ -4250,6 +4253,7 @@
+   }
+ #endif
+ #if defined(HAVE_HIP)
++  if constexpr (std::is_same_v<T, cs_real_t>) {
+   bool accel = (cs_get_device_id() > -1 && hyd_p_flag == 0
+                 && t_f_weight == nullptr) ? true : false;
+ 
+@@ -4268,6 +4272,7 @@
+                                  (T (*)[1][3])grad);
+     return;
+   }
++  }
+ #endif
+ 
+   std::chrono::high_resolution_clock::time_point t_start, t_init, t_i_faces, \
+@@ -6159,6 +6164,7 @@
+   }
+ #endif
+ #if defined(HAVE_HIP)
++  if constexpr (std::is_same_v<T, cs_real_t>) {
+   if (cs_get_device_id() > -1) {
+     cs_gradient_strided_gg_r_hip(m,
+                                  madj,
+@@ -6173,6 +6179,7 @@
+ 
+     return;
+   }
++  }
+ #endif
+ 
+   cs_dispatch_context ctx_b;
+@@ -6808,6 +6815,7 @@
+ 
+ #endif
+ #if defined(HAVE_HIP)
++  if constexpr (std::is_same_v<T, cs_real_t>) {
+ 
+   if (on_device) {
+     cs_gradient_strided_lsq_hip(m,
+@@ -6823,6 +6831,7 @@
+     return;
+   }
+ 
++  }
+ #endif
+ 
+   cs_dispatch_sum_type_t i_sum_type = ctx.get_parallel_for_i_faces_sum_type(m);
+--- a/src/base/cs_base_hip.h
++++ b/src/base/cs_base_hip.h
+@@ -73,7 +73,7 @@
+ /* For all current compute capabilities, the warp size is 32; If it ever
+    changes, it can be obtained through hipDeviceProp_t, so we could then
+    replace this macro with a global variable */
+-#if defined(__GFX8__) || defined(__GFX9__)
++#if defined(__GFX8__) || defined(__GFX9__) || !defined(__HIP_DEVICE_COMPILE__)
+   #define CS_HIP_WARP_SIZE 64
+ using cs_hip_mask_t = uint64_t;
+ #else
+--- a/src/base/cs_math_hip.h
++++ b/src/base/cs_math_hip.h
+@@ -74,7 +74,7 @@
+   || (HIP_VERSION >= 70000000 && !defined(HIP_DISABLE_WARP_SYNC_BUILTINS))
+   return __match_any_sync(mask, v);
+ #else
+-  cs_hip_mask_t lanemask_eq = 1u << (threadIdx.x % CS_HIP_WARP_SIZE);
++  cs_hip_mask_t lanemask_eq = cs_hip_mask_t(1) << (threadIdx.x % CS_HIP_WARP_SIZE);
+ 
+   if (!(mask & lanemask_eq))
+     return 0;
+@@ -126,8 +126,8 @@
+             T             &v) noexcept
+ {
+   int laneid = __lane_id();   // Ensure portability depending on warpSize for AMD
+-  cs_hip_mask_t lanemask_lt = (1u << laneid) - 1;
+-  cs_hip_mask_t lanemask_gt = -2u << laneid;
++  cs_hip_mask_t lanemask_lt = (cs_hip_mask_t(1) << laneid) - 1;
++  cs_hip_mask_t lanemask_gt = ~cs_hip_mask_t(1) << laneid;
+ 
+ #if CS_HIP_WARP_SIZE == 64
+   int rank = __popcll(peers & lanemask_lt);
+--- a/src/alge/cs_matrix_spmv_hip.cpp
++++ b/src/alge/cs_matrix_spmv_hip.cpp
+@@ -214,8 +214,8 @@
+     vii.get() = aii_x;
+     vjj.get() = ajj_x;
+ 
+-    sum_v::ref(y[ii]).conflict_free_add(-1u, vii);
+-    sum_v::ref(y[jj]).conflict_free_add(-1u, vjj);
++    sum_v::ref(y[ii]).conflict_free_add(~cs_hip_mask_t(0), vii);
++    sum_v::ref(y[jj]).conflict_free_add(~cs_hip_mask_t(0), vjj);
+ #endif
+   }
+ }
+@@ -261,8 +261,8 @@
+     vii.get() = aii_x;
+     vjj.get() = ajj_x;
+ 
+-    sum_v::ref(y[ii]).conflict_free_add(-1u, vii);
+-    sum_v::ref(y[jj]).conflict_free_add(-1u, vjj);
++    sum_v::ref(y[ii]).conflict_free_add(~cs_hip_mask_t(0), vii);
++    sum_v::ref(y[jj]).conflict_free_add(~cs_hip_mask_t(0), vjj);
+ #endif
+   }
+ }
+--- a/src/alge/cs_gradient_hip.cpp
++++ b/src/alge/cs_gradient_hip.cpp
+@@ -683,8 +683,8 @@
+     grad_cf1[j].get() =   pfaci * i_face_u_normal[f_id][j];
+     grad_cf2[j].get() = - pfacj * i_face_u_normal[f_id][j];
+   }
+-  cell_v::ref(grad[c_id1][i]).conflict_free_add(-1u, grad_cf1);
+-  cell_v::ref(grad[c_id2][i]).conflict_free_add(-1u, grad_cf2);
++  cell_v::ref(grad[c_id1][i]).conflict_free_add(~cs_hip_mask_t(0), grad_cf1);
++  cell_v::ref(grad[c_id2][i]).conflict_free_add(~cs_hip_mask_t(0), grad_cf2);
+ 
+ #else
+ 
+@@ -821,7 +821,7 @@
+   for (cs_lnum_t j = 0; j < 3; j++){
+     grad_cf[j].get() = pfac * b_face_u_normal[f_id][j];
+   }
+-  cell_v::ref(grad[c_id][i]).conflict_free_add(-1u, grad_cf);
++  cell_v::ref(grad[c_id][i]).conflict_free_add(~cs_hip_mask_t(0), grad_cf);
+ 
+ #else
+ 
