@@ -1,0 +1,14 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 6c1542c..c8950c0 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -15,7 +15,8 @@ target_include_directories(amgx_libs PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../inclu
+ 
+ set(AMGX_INCLUDES ../include)
+ 
+-set(tests_all ${tests_all} testframework.cu test_utils.cu unit_test.cu)
++FILE(GLOB TESTS_SRCS "tests/*.cu")
++set(tests_all ${tests_all} testframework.cu test_utils.cu unit_test.cu ${TESTS_SRCS})
+ 
+ add_library(amgx_tests_libs OBJECT ${tests_all})
+ 

@@ -1,5 +1,5 @@
 alien v4.12.3
-AMGX v2.4.0
+AMGX v2.5.0
 arrayfire v3.9.0
 bitnet 0b341e582afbf9e1011f24744b554c96a3477eb5
 Bonsai 581fa8e70501ce85660c7eac0d61c0e5c5bece4a

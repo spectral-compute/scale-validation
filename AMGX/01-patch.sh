@@ -8,3 +8,6 @@ patch -p0 -d "AMGX" <"${SCRIPT_DIR}/memory_use_int_overflow.patch"
 sed -E \
     's/description\(p.description\), default_value\(default_value\)/description(p.description), default_value(p.default_value)/' \
     -i "AMGX/include/amg_config.h"
+
+# Since v2.5.0, src/tests/*.cu are compiled into no target, so amgx_tests_launcher has no tests.
+patch -p1 -d "AMGX" <"${SCRIPT_DIR}/build-unit-tests.patch"
