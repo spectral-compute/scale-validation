@@ -1,5 +1,7 @@
 ubuntu24.04:apt:python3-dev
 ubuntu24.04:apt:python3-venv
+ubuntu24.04:apt:libxrender1
+ubuntu24.04:apt:libxrender-dev
 rocky9:ext:dependencies-not-yet-found
 rocky8:ext:dependencies-not-yet-found
 ubuntu22.04:ext:dependencies-not-yet-found
