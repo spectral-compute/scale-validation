@@ -1,0 +1,22 @@
+diff --git a/tests/fvm_selector_postfix_test.cpp b/tests/fvm_selector_postfix_test.cpp
+index 18cc8e951..81c8729a2 100644
+--- a/tests/fvm_selector_postfix_test.cpp
++++ b/tests/fvm_selector_postfix_test.cpp
+@@ -24,7 +24,7 @@
+ 
+ /*----------------------------------------------------------------------------*/
+ 
+-#include "cs_defs.h"
++#include "base/cs_defs.h"
+ 
+ /*----------------------------------------------------------------------------
+  * Standard C library headers
+@@ -48,7 +48,7 @@
+  *----------------------------------------------------------------------------*/
+ 
+ #include "base/cs_defs.h"
+-#include "basr/cs_mem.h"
++#include "base/cs_mem.h"
+ 
+ /*----------------------------------------------------------------------------
+  *  Header for the current file
