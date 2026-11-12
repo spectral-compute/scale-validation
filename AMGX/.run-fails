@@ -1,4 +1,0 @@
-With SCALE's getrf workspace fix (08283dc84), the 121 unit tests pass and the single-process example
-solves on gfx90a. The MPI example is unverified: scalediag full-driver p2p spun for 50+ minutes in
-02-build.sh (single MI210, GPU shared with another job), 2026-11-10.
-Probably trivial green in scale-validation: https://code.spectralcompute.com/spectral-compute/scale/issues/1138
