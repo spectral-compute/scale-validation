@@ -491,7 +491,7 @@ def test_install_commands() -> None:
         "RUN apt-get update && apt-get install -y bc pipx",
         "RUN dnf install -y bc && dnf clean all",
         "RUN PIP_BREAK_SYSTEM_PACKAGES=1 pip3 install numpy==2.1.0",
-        "RUN PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install 'dvc[s3]==3.67.1'",
+        "RUN PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin PIPX_MAN_DIR=/usr/local/share/man pipx install 'dvc[s3]==3.67.1'",
         (
             "RUN --mount=type=bind,source=install-ext.sh,target=/install-ext.sh"
             " /install-ext.sh cmake=4.0.3"

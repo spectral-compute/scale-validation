@@ -206,7 +206,7 @@ def install_commands(packages: frozenset[str]) -> list[str]:
     if pipx := by_source.pop("pipx", None):
         # Install outside any home directory, so every user can run them.
         commands.append(
-            "RUN PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin"
+            "RUN PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin PIPX_MAN_DIR=/usr/local/share/man"
             f" pipx install {shlex.join(pipx)}"
         )
     for package in by_source.pop("ext", []):
