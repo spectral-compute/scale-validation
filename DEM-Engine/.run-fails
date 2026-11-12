@@ -1,6 +1,3 @@
-Most tests: DEME's JIT matches CUDA headers to NVRTC's version by finding a literal
-`#define CUDA_VERSION <n>` in <dir>/cuda.h; SCALE's CUDA_VERSION is an expression in
-redscale_impl/version.h, so it finds none ("NVRTC 12.9 is loaded, but matching CUDA headers were not found").
 DEMTest_StateFinite: a device trap aborts the process under SCALE, losing the device printf that
 precedes it (NVIDIA prints it and returns a launch failure); upstream's driver checks the message.
 DEMTest_MeshDeformation: SCALE's FMA contraction differs from NVIDIA's in the tri-tri contact code
