@@ -12,6 +12,9 @@ export CUTLASS_PATH="$(realpath ../)/pytorch/pytorch/third_party/cutlass"
 export TORCH_EXTENSIONS_DIR="$(realpath .)/torch_extensions"
 export MAX_JOBS="$(nproc)"
 
+# Use the NVCC we want to actually use, not $CUDA_HOME/bin/nvcc
+export PYTORCH_NVCC=${CUDACXX}
+
 # See pytorch/util/build-env.sh.
 export TORCH_EXTENSION_SKIP_NVCC_GEN_DEPENDENCIES=1
 
