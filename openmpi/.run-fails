@@ -1,0 +1,1 @@
+osu_latency D D gets stale data across GPUs: SCALE releases kernels on a peer-accessed device at agent scope.
