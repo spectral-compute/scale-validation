@@ -7,6 +7,12 @@ sed -Ee 's|"/bin/nvcc", "-V"\]|"/bin/nvcc", "--version"]|' -i DeepSpeed/deepspee
 sed -Ee 's|\[nvcc, "-V"\]|[nvcc, "--version"]|' -i DeepSpeed/op_builder/builder.py
 ! grep -q '"-V"' DeepSpeed/deepspeed/env_report.py DeepSpeed/op_builder/builder.py
 
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+
+# The Evoformer test's absolute tolerance is below one bf16 ulp at its gradients' magnitudes, so it
+# fails for about a quarter of random inputs on NVIDIA too.
+git -C DeepSpeed apply "${SCRIPT_DIR}/patches/0001-evoformer-test-relative-tolerance.patch"
+
 # PyTorch is built without NCCL.
 sed -Ee 's|^    if sys.platform != "win32":$|    if sys.platform != "win32" and hasattr(torch._C, "_nccl_version"):|' \
     -i DeepSpeed/setup.py

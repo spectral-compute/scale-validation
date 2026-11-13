@@ -1,0 +1,22 @@
+diff --git a/tests/unit/ops/deepspeed4science/test_DS4Sci_EvoformerAttention.py b/tests/unit/ops/deepspeed4science/test_DS4Sci_EvoformerAttention.py
+index 307f591..48dc16b 100644
+--- a/tests/unit/ops/deepspeed4science/test_DS4Sci_EvoformerAttention.py
++++ b/tests/unit/ops/deepspeed4science/test_DS4Sci_EvoformerAttention.py
+@@ -96,9 +96,12 @@ def test_DS4Sci_EvoformerAttention(dtype, tensor_shape):
+     db, bias.grad = bias.grad.clone(), None
+ 
+     eps = 1e-2 if dtype == torch.float16 else 5e-2
++    # Gradients reach magnitudes where one ulp exceeds eps (0.0625 for bf16 in [8, 16)), so allow
++    # a relative error too: torch.testing's default for the dtype.
++    rtol = 1e-3 if dtype == torch.float16 else 1.6e-2
+ 
+-    assert torch.max(torch.abs(ref_out - out)).item() < eps, f"out eps: {torch.max(torch.abs(ref_out - out))}"
+-    assert torch.max(torch.abs(ref_dv - dv)) < eps, f"dv eps: {torch.max(torch.abs(ref_dv - dv))}"
+-    assert torch.max(torch.abs(ref_dk - dk)) < eps, f"dk eps: {torch.max(torch.abs(ref_dk - dk))}"
+-    assert torch.max(torch.abs(ref_dq - dq)) < eps, f"dq eps: {torch.max(torch.abs(ref_dq - dq))}"
+-    assert torch.max(torch.abs(ref_db - db)) < 2 * eps, f"db eps: {torch.max(torch.abs(ref_db - db))}"
++    torch.testing.assert_close(out, ref_out, atol=eps, rtol=rtol, msg=lambda m: f"out: {m}")
++    torch.testing.assert_close(dv, ref_dv, atol=eps, rtol=rtol, msg=lambda m: f"dv: {m}")
++    torch.testing.assert_close(dk, ref_dk, atol=eps, rtol=rtol, msg=lambda m: f"dk: {m}")
++    torch.testing.assert_close(dq, ref_dq, atol=eps, rtol=rtol, msg=lambda m: f"dq: {m}")
++    torch.testing.assert_close(db, ref_db, atol=2 * eps, rtol=rtol, msg=lambda m: f"db: {m}")
