@@ -1,0 +1,8 @@
+ubuntu24.04:apt:autoconf
+ubuntu24.04:apt:automake
+ubuntu24.04:apt:bzip2
+ubuntu24.04:apt:gfortran
+ubuntu24.04:apt:lbzip2
+ubuntu24.04:apt:libtool
+ubuntu24.04:apt:pipx
+ubuntu24.04:pipx:uv==0.9.5
