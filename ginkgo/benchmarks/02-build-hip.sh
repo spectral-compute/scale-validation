@@ -21,9 +21,10 @@ args=(
     -GNinja
 )
 
-# Ginkgo only disables its custom thrust namespace for HIP 7.1, but rocThrust in ROCm 7.2 is broken
-# by it too (unqualified ::thrust in rocThrust's own headers).
-sed -i 's/AND GINKGO_HIP_VERSION VERSION_LESS 7.2$/AND GINKGO_HIP_VERSION VERSION_LESS 7.3/' ginkgo/CMakeLists.txt
+# Ginkgo only disables its custom thrust namespace for HIP 7.1, but rocThrust is still broken by it
+# in ROCm 7.2 and 7.14 (unqualified ::thrust in rocThrust's own headers), so disable it from 7.1 on.
+sed -i 's/AND GINKGO_HIP_VERSION VERSION_LESS 7.2$/AND GINKGO_HIP_VERSION VERSION_LESS 999/' \
+    ginkgo/CMakeLists.txt
 
 cmake "${args[@]}" -B build -S ginkgo
 
