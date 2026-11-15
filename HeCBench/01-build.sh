@@ -4,6 +4,9 @@
 cd HeCBench
 
 # Our own preset name, so it can't collide with the upstream cuda-sm<N> presets.
+# Like HeCBench's Makefiles, build with -O3 but keep asserts (Release would add
+# -DNDEBUG): some benchmarks verify their results with them. Upstream's presets
+# set no build type, so build unoptimised.
 PRESET="scale-cuda-sm${CUDAARCHS#sm_}"
 
 cat >CMakeUserPresets.json <<JSON
@@ -18,7 +21,11 @@ cat >CMakeUserPresets.json <<JSON
             "HECBENCH_ENABLE_HIP": "OFF",
             "HECBENCH_ENABLE_SYCL": "OFF",
             "HECBENCH_ENABLE_OPENMP": "OFF",
-            "HECBENCH_CUDA_ARCH": "${CUDAARCHS#sm_}"
+            "HECBENCH_CUDA_ARCH": "${CUDAARCHS#sm_}",
+            "CMAKE_BUILD_TYPE": "Release",
+            "CMAKE_C_FLAGS_RELEASE": "-O3",
+            "CMAKE_CXX_FLAGS_RELEASE": "-O3",
+            "CMAKE_CUDA_FLAGS_RELEASE": "-O3"
         }
     }]
 }
@@ -51,4 +58,8 @@ if [[ -n "${SCALE_ENV:-}" ]]; then
 fi
 
 export CUDAFLAGS="-Wno-cuda-implicit-real-arch -Wno-unused-command-line-argument -Wno-write-strings"
-python3 tools/hecbench --verbose build --preset "$PRESET"
+# Optional: a space-separated subset of benchmark names, without the model
+# suffix (default: all).
+read -ra BENCHES <<<"${HECBENCH_BENCHMARKS:-}"
+BENCHES=("${BENCHES[@]/%/-cuda}")
+python3 tools/hecbench --verbose build --preset "$PRESET" "${BENCHES[@]}"

@@ -28,11 +28,17 @@ fi
 stem="$mode.$TEST_GPU_ARCH"
 data_file="$RESULTS_DIR/hecbench.$stem.$(date '+%Y%m%d-%H%M%S').csv"
 
+# Optional: a space-separated subset of benchmark names, without the model
+# suffix (default: all).
+read -ra BENCHES <<<"${HECBENCH_BENCHMARKS:-}"
+BENCHES=("${BENCHES[@]/%/-cuda}")
 python3 tools/hecbench run \
+    "${BENCHES[@]}" \
     --model cuda \
     --preset "$PRESET" \
     --store "hecbench-results.$stem.db" \
     --format csv \
+    --timeout "${HECBENCH_TIMEOUT:-600}" \
     --output "$data_file"
 
 if [[ "$(wc -l <"$data_file")" -le 1 ]]; then
