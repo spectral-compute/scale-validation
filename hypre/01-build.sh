@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
 
+# hypre v2.33.0 uses the CUDA 12 cudaMemPrefetchAsync (with an int device).
+export SCALE_CUDA_VERSION="12.8"
+
 MPI_DIR="$(realpath ../)/openmpi/install"
 if [ ! -e "${MPI_DIR}" ]; then
     echo "Please build the OpenMPI third party project first. Use the same working directory." 1>&2
