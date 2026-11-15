@@ -4,13 +4,13 @@
 
 # DEME's native HIP backend, for comparison.
 
-# DEME's JIT kernels use the fixed-width integer types unqualified. Since ROCm 7.14, hipRTC only
-# declares them in namespace __hip_internal, so pull them into the global namespace. Repeating a
-# typedef of the same type is fine, so this is harmless on older ROCm.
+# DEME's JIT kernels use the unsigned fixed-width integer types unqualified. hipRTC (ROCm 7.2 and
+# 7.14 both) only declares them in namespace __hip_internal, so pull them into the global namespace.
+# (On 7.14 the signed ones are still declared globally, some as different types, so leave them.)
 F=DEM-Engine/src/DEM/VariableTypes.h
 if ! grep -q __hip_internal "${F}"; then
     types=""
-    for t in int8_t int16_t int32_t int64_t uint8_t uint16_t uint32_t uint64_t; do
+    for t in uint8_t uint16_t uint32_t uint64_t; do
         types+="typedef __hip_internal::${t} ${t};\n"
     done
     sed -i "s/^namespace deme {$/#ifdef __HIPCC_RTC__\n${types}#endif\n\n&/" "${F}"
