@@ -34,7 +34,7 @@ hashcat 6716447dfce969ddde42a9abe0681500bee0df48
 hashinator 34cf1886ab5f0a3ab6aaa94a8ed1624f4212d841
 heraclespp a925d6ac86ffcdb170284bef9bf1e91c33d32b74
 HiGHS v1.15.1
-hypre v2.33.0
+hypre v3.2.1
 jitify master
 lammps stable_30Sep2026_update1
 lammps-kokkos stable_30Sep2026_update1
