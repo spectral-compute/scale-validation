@@ -7,13 +7,6 @@
 
 use_openmpi
 
-# The GUI's Python dependencies (requirements.txt), in a venv that lives in the
-# workdir. configure records this venv's python for the code_saturne launcher.
-uv venv --clear venv
-# shellcheck disable=SC1091
-. venv/bin/activate
-uv pip install -r "${SCRIPT_DIR}/requirements.txt"
-
 # 01-patch.sh has switched on automake's test harness in tests/Makefile.am,
 # which upstream ships disabled; autoreconf has to run after that for it to
 # reach the generated Makefile. 04-test.sh then just runs "make check".
@@ -33,6 +26,7 @@ configure_args=(
     --with-mpi="${OPENMPI_INSTALL}"
     --enable-cuda
     --without-cusparse
+    --disable-gui
     --with-hdf5="${DEPS_INSTALL}"
     --with-med="${DEPS_INSTALL}"
     --with-cgns="${DEPS_INSTALL}"
