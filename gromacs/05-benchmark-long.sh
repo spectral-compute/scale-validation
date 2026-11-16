@@ -80,7 +80,7 @@ for ZIP in "${OUT_DIR}/data/MaxPlanckInstituteGromacsBenchmarks/"*.zip; do
     # Actually extract and run the test.
     unzip "${ZIP}"
 
-    # See comment in bench-short on comparison to HIP
+    # See comment in 04-benchmark-short.sh on comparison to HIP
     log "Running ${NAME}.tpr with extra args: ${EXTRA_ARGS[*]}"
 
     set +e

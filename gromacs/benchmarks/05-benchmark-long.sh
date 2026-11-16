@@ -7,4 +7,4 @@ if [[ "${GROMACS_BENCH_LONG:-0}" != 1 ]]; then
     log "Skipping the long suite; set GROMACS_BENCH_LONG=1 to run it"
     exit 0
 fi
-exec bash "$(dirname "$0")/../05-bench-long.sh"
+exec bash "$(dirname "$0")/../05-benchmark-long.sh"
