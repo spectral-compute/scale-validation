@@ -47,12 +47,9 @@ RUN bash test.sh /build /opt/scale "${GPU_ARCH}" cycles --match '-(clone|patch|b
 FROM build AS test
 ARG GPU_ARCH=gfx1100
 ENV GPU_ARCH=${GPU_ARCH}
-# 03-test-examples.sh needs `time` (GNU time, /usr/bin/time -- not bash's
-# builtin) to time each render, plus imagemagick/python3 for the CPU-vs-CUDA
-# parity check (same packages the runtime stage installs below, for the same
-# reason -- `time` isn't needed there since nothing at runtime calls it).
+# 03-test-examples.sh needs imagemagick/python3 for the CPU-vs-CUDA parity
+# check (same packages the runtime stage installs below, for the same reason).
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    time \
     imagemagick \
     python3 \
     && rm -rf /var/lib/apt/lists/*

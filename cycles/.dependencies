@@ -20,7 +20,6 @@ ubuntu24.04:apt:libswresample-dev
 ubuntu24.04:apt:libswscale-dev
 ubuntu24.04:apt:libtiff-dev
 ubuntu24.04:apt:libwebp-dev
-ubuntu24.04:apt:time
 ubuntu24.04:apt:zlib1g-dev
 ubuntu24.04:ext:cmake=4.0
 rocky9:ext:dependencies-not-yet-found
