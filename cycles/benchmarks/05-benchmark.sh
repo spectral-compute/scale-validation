@@ -6,7 +6,7 @@
 # scene_caustics and scene_world_volume are black on every device in v5.2.0) at a fixed sample
 # count and resolution, using Cycles' CUDA device, or its HIP device for the native baseline.
 SAMPLES="${CYCLES_BENCHMARK_SAMPLES:-1024}"
-OUT="${RESULTS_DIR:-$(realpath .)}/cycles.${BENCHMARK_COMPILER:-unknown}.${TEST_GPU_ARCH}.$(date -u +%Y%m%d%H%M%S).csv"
+OUT="${RESULTS_DIR:-$(realpath .)}/cycles.${BENCHMARK_COMPILER:-unknown}.${TEST_GPU_ARCH}.r${BENCHMARK_REPEAT:-1}.$(date -u +%Y%m%d%H%M%S).csv"
 
 DEVICE=CUDA
 if [[ "${BENCHMARK_COMPILER:-}" == hip ]]; then

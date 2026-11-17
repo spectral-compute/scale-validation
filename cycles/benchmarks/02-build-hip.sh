@@ -36,6 +36,14 @@ args=(
     -DWITH_CYCLES_OSL=OFF
 )
 
+# ROCm's clang searches its own headers last (-idirafter), so a stray distro HIP in /usr/include (e.g.
+# Ubuntu's libamdhip64-dev) wins. Only then, put the toolkit's headers first (never /usr/include).
+ROCM_INCLUDE="$(realpath "${ROCM_PATH}/include")"
+if [[ -d /usr/include/hip && "${ROCM_INCLUDE}" != "/usr/include" ]]; then
+    log "Preferring ${ROCM_INCLUDE} over /usr/include/hip"
+    args+=(-DHIP_HIPCC_FLAGS="-isystem${ROCM_INCLUDE}")
+fi
+
 if echo "$(
     source /etc/os-release
     echo "$NAME"
