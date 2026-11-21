@@ -28,7 +28,7 @@ Contributions welcome!
 | cutlass          | v4.1.0       | ❓|❓|✅|❌️️|
 | CV-CUDA          | f769fe4bf336ab...       | ❌️️|❌️️|❌️️|❌️️|
 | cycles          | v5.2.0       | ❓|❓|✅|❓|
-| deepspeed          | v0.19.7       | ❓|❓|❌|❌|
+| deepspeed          | v0.19.7       | ❓|❓|❓|❌|
 | DEM-Engine          | c375eae467894a...       | ❌️️|❌️️|❌️️|❌️️|
 | faiss          | v1.9.0       | ❓|❓|❌|✅|
 | FastEddy          | v5.0.1       | ❓|❓|✅|✅|
@@ -44,11 +44,11 @@ Contributions welcome!
 | HARD          | 489e162f435b8e...       | ❓|❓|✅|✅|
 | hashcat          | 6716447dfce969...       | ❓|❓|✅|✅|
 | hashinator          | 34cf1886ab5f0a...       | ❌️️|❌️️|❌️️|❌️️|
-| HeCBench          | 6c7245e94ad9e3...       | ❓|❓|✅|❓|
+| HeCBench          | 6c7245e94ad9e3...       | ❓|❓|❌|❓|
 | HiGHS          | v1.15.1       | ❓|❓|❌|✅|
 | hoomd-blue          | 5c949015f3fc1a...       | ❓|❓|✅|✅|
 | hypre          | v2.33.0       | ❓|❓|❓|✅|
-| jitify          | master       | ❓|❓|✅|❌|
+| jitify          | master       | ❓|❓|✅|✅|
 | kokkos          | 60d8384266eba9...       | ❌️️|❌️️|❌️️|✅|
 | lammps          | stable_30Sep20...       | ❓|❓|✅|✅|
 | lammps-kokkos          | stable_30Sep20...       | ❓|❓|✅|✅|
@@ -58,8 +58,8 @@ Contributions welcome!
 | nixl          | e128059af332df...       | ❓|❓|✅|✅|
 | nvflip          | d3ab02a4425eb1...       | ❓|❓|✅|❌️️|
 | opencv          | 4.14.0       | ❌️️|❌️️|❌️️|❌|
-| openfold3          | v0.5.0       | ❓|❓|❌|❌|
-| openmpi          | v5.0       | ❓|❓|❌|✅|
+| openfold3          | v0.5.0       | ❓|❓|❓|❓|
+| openmpi          | v5.0       | ❓|❓|✅|✅|
 | PhysX          | 1e44a0e2998f06...       | ❌️️|❌️️|❌️️|❌️️|
 | ppisp          | v1.3.0       | ❓|❓|❌|❌️️|
 | pytorch          | v2.9.0       | ❌️️|❌️️|❌️️|❌️️|
@@ -76,8 +76,8 @@ Contributions welcome!
 | UppASD          | gpu_new       | ❓|❓|✅|✅|
 | vllm          | v0.13.0       | ❌️️|❌️️|❌️️|❌️️|
 | warp          | v1.14.0       | ❌️️|❌️️|❌️️|❌️️|
-| whispercpp          | v1.9.5       | ❓|❓|❌|❓|
-| xgboost          | v2.1.0       | ❌|✅|❌|❌|
+| whispercpp          | v1.9.5       | ❓|❌|❌|✅|
+| xgboost          | v2.1.0       | ❌|❌|✅|❌|
 
 *Key:*
 * ✅ Validated succesfully
@@ -85,7 +85,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * ❌️️ Tested, but not expected to pass
 
-Pipeline ID: 44549.
+Pipeline ID: 44760.
 
 ## Running Tests
 
