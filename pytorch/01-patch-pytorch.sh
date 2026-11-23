@@ -3,12 +3,14 @@
 
 OUT_DIR=$(realpath .)
 
-# 1) Add -k to pytorch build
-cd "${OUT_DIR}/pytorch/tools/setup_helpers"
-git stash
+# 1) Add -k to pytorch build (from 2.15, PyTorch builds with scikit-build-core, which pytorch-2.15 passes -k to)
+if [[ -e "${OUT_DIR}/pytorch/tools/setup_helpers/cmake.py" ]]; then
+    cd "${OUT_DIR}/pytorch/tools/setup_helpers"
+    git stash
 
-# Make Ninja quiet so there is no build log spam
-git apply "${SCRIPT_DIR}/patches/0001-quiet-ninja.patch"
+    # Make Ninja quiet so there is no build log spam
+    git apply "${SCRIPT_DIR}/patches/0001-quiet-ninja.patch"
+fi
 
 # 2) Patch CUTLASS sources
 cd "${OUT_DIR}/pytorch/third_party/cutlass/"
