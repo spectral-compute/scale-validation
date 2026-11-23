@@ -1,0 +1,74 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jens Fursund <jens@spectralcompute.co.uk>
+Date: Sat, 21 Nov 2026 09:00:00 +0000
+Subject: [PATCH] Let the build set the collective unroll
+
+ncclCollUnroll takes the collectives' unroll from the compute
+capability alone, and ncclShmemDynamicSize the dynamic shared memory
+per block from the unroll: 82240 B from sm_80 on (unroll 8). The unroll
+is a template argument of the device code, so it can't follow the
+device's limit at run time. A device that reports sm_80 or newer with
+less shared memory per block fails every communicator init ("dynamic
+smem 82240 exceeds device/fn maxSharedMem"): AMD GPUs through SCALE,
+which reports sm_89, have 64 KiB.
+
+Add a COLL_UNROLL make option, as MAX_EXT_NET_PLUGINS is, which defines
+NCCL_COLL_UNROLL for host and device code, and return it from
+ncclCollUnroll when it is set. Without it nothing changes: unroll 8
+from sm_80, 6 on sm_120, 4 below sm_80.
+
+Checked with g++ against device.h: by default, ncclCollUnroll(890) is
+8 and ncclShmemDynamicSize(890) 82240; with COLL_UNROLL=4 they are 4
+and 41280, which fits in 64 KiB. SCALE's NCCL builds have used unroll 4
+on AMD GPUs, with nccl-tests passing every collective.
+---
+ makefiles/common.mk  |    7 +++++++
+ src/include/device.h |    5 +++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/makefiles/common.mk b/makefiles/common.mk
+index 75cbf6b..160563c 100644
+--- a/makefiles/common.mk
++++ b/makefiles/common.mk
+@@ -20,6 +20,7 @@ RDMA_CORE ?= 0
+ NET_PROFILER ?= 0
+ MLX5DV ?= 0
+ MAX_EXT_NET_PLUGINS ?= 0
++COLL_UNROLL ?= 0
+ EMIT_LLVM_IR ?= 0
+ 
+ NVCC ?= $(CUDA_HOME)/bin/nvcc
+@@ -163,6 +164,12 @@ ifneq ($(MAX_EXT_NET_PLUGINS), 0)
+ CXXFLAGS += -DNCCL_NET_MAX_PLUGINS=$(MAX_EXT_NET_PLUGINS)
+ endif
+ 
++# Collective unroll for devices with less shared memory per block than their compute capability implies.
++ifneq ($(COLL_UNROLL), 0)
++CXXFLAGS  += -DNCCL_COLL_UNROLL=$(COLL_UNROLL)
++NVCUFLAGS += -DNCCL_COLL_UNROLL=$(COLL_UNROLL)
++endif
++
+ CXXFLAGS += -DDOCA_VERBS_USE_CUDA_WRAPPER -DDOCA_VERBS_USE_NET_WRAPPER
+ NVCUFLAGS += -DDOCA_VERBS_USE_CUDA_WRAPPER -DDOCA_VERBS_USE_NET_WRAPPER
+ 
+diff --git a/src/include/device.h b/src/include/device.h
+index e55d009..bf30968 100644
+--- a/src/include/device.h
++++ b/src/include/device.h
+@@ -522,8 +522,13 @@ __host__ __device__ constexpr int ncclCalcUnroll(int bytePerPack, int insns, int
+ // side code can elide passing the arch for brevity.
+ 
+ __host__ __device__ constexpr int ncclCollUnroll(int cudaArch = NCCL_CUDA_ARCH) {
++#ifdef NCCL_COLL_UNROLL
++  // Set by the build (COLL_UNROLL) for devices with less shared memory per block than cudaArch implies.
++  return NCCL_COLL_UNROLL;
++#else
+   // Our collective unroll should move to the same bytes&insns model as NVLS.
+   return cudaArch >= 800 ? (cudaArch / 100 == 12 ? 6 : 8) : 4;
++#endif
+ }
+ 
+ __host__ __device__ constexpr int ncclNvlsUnrollBytes(int cudaArch = NCCL_CUDA_ARCH) { return 4*16; }
+-- 
+2.43.0
+

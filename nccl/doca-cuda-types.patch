@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jens Fursund <jens@spectralcompute.co.uk>
+Date: Sat, 21 Nov 2026 09:00:00 +0000
+Subject: [PATCH] Skip DOCA's CUDA type declarations when cuda.h is included
+
+doca_verbs_cuda_wrapper.h declares the CUDA driver types it uses
+(CUresult, CUdevice, CUdeviceptr, CUcontext and three enums) for builds
+without cuda.h, which NCCL's are (DOCA_VERBS_USE_CUDA_WRAPPER). A
+translation unit that has cuda.h before it, directly or through a CUDA
+runtime header that also declares the driver API (SCALE's does), gets
+each type twice: "multiple definition of 'enum cudaError_enum'" and
+eight more errors.
+
+Skip the declarations when cuda.h's include guard, __cuda_cuda_h__, is
+defined. The wrapper functions are then declared with cuda.h's types,
+which the declarations stand in for. A build without cuda.h is
+unchanged.
+
+Checked with g++ and CUDA 12.8's cuda.h: the header after cuda.h had 9
+errors and has none, and on its own it compiles as before.
+---
+ .../doca-gpunetio/src/doca_verbs_cuda_wrapper.h    |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/transport/net_ib/gdaki/doca-gpunetio/src/doca_verbs_cuda_wrapper.h b/src/transport/net_ib/gdaki/doca-gpunetio/src/doca_verbs_cuda_wrapper.h
+index d748e1b..b4ae453 100644
+--- a/src/transport/net_ib/gdaki/doca-gpunetio/src/doca_verbs_cuda_wrapper.h
++++ b/src/transport/net_ib/gdaki/doca-gpunetio/src/doca_verbs_cuda_wrapper.h
+@@ -38,6 +38,7 @@ extern "C" {
+ #ifdef DOCA_VERBS_USE_CUDA_WRAPPER
+ 
+ /* CUDA type declarations for builds without cuda.h */
++#ifndef __cuda_cuda_h__
+ typedef enum cudaError_enum {
+     CUDA_SUCCESS = 0,
+     CUDA_ERROR_NOT_INITIALIZED = 3,
+@@ -60,6 +61,7 @@ typedef enum CUdevice_attribute_enum {
+ } CUdevice_attribute;
+ 
+ typedef void *CUcontext;
++#endif /* __cuda_cuda_h__ */
+ 
+ /* Wrapper function declarations */
+ CUresult doca_verbs_wrapper_cuDeviceGetAttribute(int *pi, CUdevice_attribute attrib, CUdevice dev);
+-- 
+2.43.0
+
