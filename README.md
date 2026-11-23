@@ -48,7 +48,7 @@ Contributions welcome!
 | HiGHS          | v1.15.1       | ❓|❓|❌|✅|
 | hoomd-blue          | 5c949015f3fc1a...       | ❓|❓|✅|✅|
 | hypre          | v2.33.0       | ❓|❓|❓|✅|
-| jitify          | master       | ❓|❓|✅|✅|
+| jitify          | master       | ❓|❓|✅|❌|
 | kokkos          | 60d8384266eba9...       | ❌️️|❌️️|❌️️|✅|
 | lammps          | stable_30Sep20...       | ❓|❓|✅|✅|
 | lammps-kokkos          | stable_30Sep20...       | ❓|❓|✅|✅|
@@ -58,7 +58,7 @@ Contributions welcome!
 | nixl          | e128059af332df...       | ❓|❓|✅|✅|
 | nvflip          | d3ab02a4425eb1...       | ❓|❓|✅|❌️️|
 | opencv          | 4.14.0       | ❌️️|❌️️|❌️️|❌|
-| openfold3          | v0.5.0       | ❓|❓|❓|❓|
+| openfold3          | v0.5.0       | ❓|❓|❌|❌|
 | openmpi          | v5.0       | ❓|❓|✅|✅|
 | PhysX          | 1e44a0e2998f06...       | ❌️️|❌️️|❌️️|❌️️|
 | ppisp          | v1.3.0       | ❓|❓|❌|❌️️|
@@ -77,7 +77,7 @@ Contributions welcome!
 | vllm          | v0.13.0       | ❌️️|❌️️|❌️️|❌️️|
 | warp          | v1.14.0       | ❌️️|❌️️|❌️️|❌️️|
 | whispercpp          | v1.9.5       | ❓|❓|❌|✅|
-| xgboost          | v2.1.0       | ❓|❓|✅|❌|
+| xgboost          | v2.1.0       | ❓|❓|❌|❌|
 
 *Key:*
 * ✅ Validated succesfully
@@ -85,7 +85,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * ❌️️ Tested, but not expected to pass
 
-Pipeline ID: 44974.
+Pipeline ID: 45182.
 
 ## Running Tests
 
