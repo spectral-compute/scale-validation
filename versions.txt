@@ -71,7 +71,7 @@ timemachine 2f6fe1fdb9e667349a5f52b6bedf497f21da85d8
 tiny-cuda-nn v2.0
 UppASD gpu_new
 ucx c982cef7cdfc80008c838741ff4cc38a4ce54c89
-vllm v0.13.0
+vllm v0.29.0
 whispercpp v1.9.5
 xgboost v2.1.0
 House-Prices-Advanced-Regression f3a41e60128a3e17c57d04d70de0a04366d7baab
