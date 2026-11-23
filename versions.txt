@@ -56,6 +56,8 @@ PhysX 1e44a0e2998f06b6746362dbbb3e202b56215904
 pytorch v2.9.0
 pytorch-1.8.1 v1.8.1
 pytorch-2.13 v2.13.0
+torchvision v0.24.0
+torchvision-2.13 v0.28.0
 quda 07822b61c6ab5fa9586233b03ac794bf33ab647e
 quokka 26.07
 RabbitCT main
