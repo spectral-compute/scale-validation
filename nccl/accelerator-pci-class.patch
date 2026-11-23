@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jens Fursund <jens@spectralcompute.co.uk>
+Date: Fri, 20 Nov 2026 15:00:00 +0000
+Subject: [PATCH] Treat PCI class 0x1200 (processing accelerator) as a GPU
+
+NCCL finds out what is at the other end of an NVLink by reading the
+target's PCI class from sysfs, and only class 0x03 counts as a GPU.
+Accelerators of class 0x1200 (processing accelerator: AMD Instinct
+MI300A, MI300X, MI325X and MI355X all report it) fall back to PCI, and
+ncclTopoAddNvLinks connects every link whose target is neither a GPU nor
+a CPU to one virtual NVSwitch. A full mesh of such GPUs then looks like
+an NVSwitch system: the search sees one switch with the sum of all link
+bandwidth, keeps sameChannels=1 and repeats one ring order on every
+channel, so each GPU sends over one of its links only.
+
+With the class recognised, the links connect GPU to GPU, as on an NVLink
+mesh of class 0x03 GPUs, and the ring search spreads distinct orders
+over all links. A device of this class that isn't in the communicator
+is left out, as for 0x03.
+
+kvDictPciClass also types the nodes of the PCI tree (ncclTopoAddPci).
+There a class 0x1200 node is now a GPU too, so, like a class 0x03 node,
+it is only added when it has a <gpu> child. NVIDIA's GPUs (0x03) and
+NVSwitches (0x068000) match earlier entries, so for them nothing
+changes.
+
+4x MI300A (xGMI full mesh), nccl-tests -g 4, 256 MiB, bus bandwidth:
+the search goes from maxBw 240 / sameChannels 1 / one ring order to
+maxBw 80 / sameChannels 0 / six ring orders; all_reduce 85 -> 151 GB/s,
+all_gather 83 -> 147, reduce_scatter 80 -> 127, broadcast 87 -> 162,
+reduce 86 -> 140.
+---
+diff --git a/src/graph/topo.cc b/src/graph/topo.cc
+index 16d7372..6fc3c54 100644
+--- a/src/graph/topo.cc
++++ b/src/graph/topo.cc
+@@ -442,7 +442,7 @@ ncclResult_t ncclTopoAddGpu(struct ncclXmlNode* xmlGpu, struct ncclTopoSystem* s
+ 
+ #define PCI_BRIDGE_DEVICE_CLASS "0x060400"
+ 
+-struct kvDict kvDictPciClass[] = { { PCI_BRIDGE_DEVICE_CLASS, PCI }, {"0x080100", /*CX8 data direct*/PCI}, { "0x068000", NVS }, { "0x068001", CPU }, { "0x03", GPU }, { "0x02", NIC }, { NULL, PCI /* Default fallback value */ } };
++struct kvDict kvDictPciClass[] = { { PCI_BRIDGE_DEVICE_CLASS, PCI }, {"0x080100", /*CX8 data direct*/PCI}, { "0x068000", NVS }, { "0x068001", CPU }, { "0x03", GPU }, { "0x1200", /*Processing accelerator*/GPU }, { "0x02", NIC }, { NULL, PCI /* Default fallback value */ } };
+ struct kvDict kvDictPciGen[] = {
+   { "2.5 GT/s", 15 }, { "5 GT/s", 30 }, { "8 GT/s", 60 }, { "16 GT/s", 120 }, { "32 GT/s", 240 }, /* Kernel 5.6 and earlier */
+   { "2.5 GT/s PCIe", 15 }, { "5.0 GT/s PCIe", 30 }, { "8.0 GT/s PCIe", 60 }, { "16.0 GT/s PCIe", 120 }, { "32.0 GT/s PCIe", 240 }, { "64.0 GT/s PCIe", 480 },
+-- 
+2.43.0
+

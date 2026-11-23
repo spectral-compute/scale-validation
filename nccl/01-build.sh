@@ -12,6 +12,9 @@ NCCL_ARGS=(CUDA_HOME="${CUDA_DIR}" NVCC="${CUDACXX}" NVCC_GENCODE="${GENCODE}" N
     CUDARTLIB=cudart)
 
 # NCCL changes proposed upstream (see each patch's message):
+# - link targets of PCI class 0x1200 (processing accelerators, e.g. AMD Instinct) are GPUs, not an NVSwitch, so rings
+#   use every xGMI link;
+# - sm86/sm89 duplicate search channels as Ampere does (SCALE reports sm89 on AMD GPUs);
 # - DOCA GPUNetIO skips its own CUDA driver types when cuda.h is included (SCALE's cuda_runtime.h includes it);
 # - a COLL_UNROLL make option sets the collective unroll, and with it the dynamic shared memory per block.
 # Already applied when the workdir is kept (test.sh --keep).

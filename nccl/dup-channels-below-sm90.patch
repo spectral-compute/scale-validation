@@ -1,0 +1,46 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jens Fursund <jens@spectralcompute.co.uk>
+Date: Fri, 20 Nov 2026 15:00:00 +0000
+Subject: [PATCH] Duplicate search channels below sm90 as on Ampere
+
+ncclTopoDupChannels skips the duplication when ccMin > 80, bwIntra < 50
+and there are more than 4 channels. Below sm90 the search speeds are
+Ampere's (at most 40 GB/s intra-node, 48 inter-node), so for sm86 and
+sm89 bwIntra < 50 always holds, and the condition is only "more than 4
+channels": the same topology gets half the channels of an A100. Hopper
+and newer search at up to 60 GB/s, so for them the condition also
+depends on bandwidth.
+
+Example: a full mesh of 4 GPUs with 4 NVLinks (80 GB/s) per pair, as on
+a 4-GPU HGX A100. The search finds 6 ring orders at 40 GB/s. With cc 8.0
+they are duplicated to 12 at 20 GB/s and ncclTopoPostset makes 24
+channels. With cc 8.9 the duplication is skipped and NCCL runs 12
+channels, about 4 per link.
+
+This lifts the 4-channel limit for sm86 and sm89 only; sm80 and sm90
+and newer are unchanged. On NVIDIA GPUs it changes a topology only if
+the search finds more than 4 channels at 25 GB/s or more.
+
+4x MI300A through SCALE (which reports cc 8.9; xGMI full mesh, 4 links
+of 20 GB/s per pair in NVML), with the PCI class 0x1200 fix, nccl-tests
+-g 4, 256 MiB, bus bandwidth, 12 -> 24 channels: all_reduce 151 -> 210
+GB/s, all_gather 147 -> 201, reduce_scatter 127 -> 170, broadcast 162
+-> 227, reduce 140 -> 200. More channels than 24 (NCCL_MIN_NCHANNELS 32,
+48, 64) add nothing.
+---
+diff --git a/src/graph/search.cc b/src/graph/search.cc
+index cbae02f..361d53d 100644
+--- a/src/graph/search.cc
++++ b/src/graph/search.cc
+@@ -963,7 +963,7 @@ ncclResult_t ncclTopoDupChannels(struct ncclTopoGraph* graph, int ccMin, int ngp
+   if (graph->nChannels == 0) return ncclSuccess;
+   if (graph->pattern == NCCL_TOPO_PATTERN_NVLS) return ncclSuccess;
+   if (graph->bwIntra < 25.0) return ncclSuccess;
+-  if (ccMin > 80 && graph->bwIntra < 50.0 && graph->nChannels > 4) return ncclSuccess;
++  if (ccMin >= 90 && graph->bwIntra < 50.0 && graph->nChannels > 4) return ncclSuccess;
+ 
+   int dupChannels = std::min(graph->nChannels*2, graph->maxChannels);
+   memcpy(graph->intra+graph->nChannels*ngpus, graph->intra, (dupChannels-graph->nChannels)*ngpus*sizeof(int));
+-- 
+2.43.0
+
