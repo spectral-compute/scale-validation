@@ -12,6 +12,7 @@ test.sh does.
 
 import argparse
 import datetime
+import fcntl
 import logging
 import os
 import re
@@ -179,6 +180,18 @@ def build_env(compiler, toolkit, arch, args):
     return env
 
 
+def lock_workdir(workdir):
+    """Hold an exclusive lock on `workdir` for the life of the process, so a
+    second run can't wipe the clone/build out from under the first."""
+    lock = open(workdir / ".benchmark.lock", "w")
+    try:
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        sys.exit(f"{workdir} is in use by another benchmark.py; give each parallel "
+                 "run its own workdir")
+    return lock
+
+
 def create_parser():
     projects = benchmark_projects()
     parser = argparse.ArgumentParser(
@@ -264,6 +277,8 @@ def main():
         return
 
     workdir = args.workdir.resolve()
+    workdir.mkdir(parents=True, exist_ok=True)
+    _lock = lock_workdir(workdir)  # Held until exit.
     run_dir = workdir / args.project
     if not args.keep:
         shutil.rmtree(run_dir, ignore_errors=True)

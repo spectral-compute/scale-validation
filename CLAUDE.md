@@ -136,6 +136,10 @@ Every script also gets `MAKEFLAGS="-O -k"`, `TEST_GPU_ARCH`, and:
   given. It's repeatable or comma-separated. Optional but recommended as if
   there's an issue running scripts it's usually because you need to be explicit about the devices to run on (particularly on heterogeneous systems).
 
+### Running in parallel
+
+Each run takes an exclusive lock on `<workdir>` (`<workdir>/.benchmark.lock`) and refuses to start if another run holds it, since a second run would wipe the first's clone and build. To run several at once (e.g. `scale` and `hip` on different GPUs), give each its own workdir.
+
 ### Script selection
 
 Scripts are gathered from both `<project>/` and `<project>/benchmarks/`. Each is keyed
