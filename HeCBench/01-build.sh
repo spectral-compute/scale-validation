@@ -45,7 +45,10 @@ if [[ -n "${SCALE_ENV:-}" ]]; then
     sm_120)
         disable d3q19-bgk quant3MatMul sobol
         # "error: use of undeclared identifier '__NV_ATOMIC_RELAXED'"
-        disable michalewicz 'graphB\+' scatter hausdorff lebesgue atomicCAS
+        disable michalewicz 'graphB\+' scatter hausdorff lebesgue atomicCAS cc
+        # ptxas: the __launch_bounds__(512) kernel calls update_cols, which clang
+        # doesn't inline, with a regcount of 255 (> 128).
+        disable stiff-ode
         ;;
     esac
 fi
