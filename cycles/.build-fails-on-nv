@@ -1,0 +1,1 @@
+SCALE NVIDIA mode: no assert in device-only (--cubin) compiles, unlike nvcc; regressed in the 2026-11-10 nightly
