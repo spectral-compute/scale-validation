@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
 
+# Caffe launches __global__ templates across translation units, which CUDA 13's
+# default hidden visibility and static template stubs break.
+# TODO: Check whether a newer upstream release supports CUDA 13, so this can go.
+export SCALE_CUDA_VERSION="12.8"
+
 args=(
     -DUSE_CUDNN=OFF
     -DUSE_OPENCV=OFF
