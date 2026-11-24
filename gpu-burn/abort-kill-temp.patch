@@ -1,0 +1,13 @@
+diff --git a/gpu_burn-drv.cpp b/gpu_burn-drv.cpp
+index e81816a..d48208b 100644
+--- a/gpu_burn-drv.cpp
++++ b/gpu_burn-drv.cpp
+@@ -609,6 +609,8 @@ void listenClients(std::vector<int> clientFd, std::vector<pid_t> clientPid,
+                 oneAlive = true;
+         if (!oneAlive) {
+             fprintf(stderr, "\n\nNo clients are alive!  Aborting\n");
++            // Don't leave nvidia-smi running: it holds our stderr open.
++            kill(tempPid, SIGKILL);
+             exit(ENOMEDIUM);
+         }
+ 
