@@ -54,9 +54,6 @@ args=(
     -DCMAKE_CXX_FLAGS="-DSCALE_WARP_SIZE=32"
     -DCMAKE_C_FLAGS="-DSCALE_WARP_SIZE=32"
 
-    # No CPU threading used here. On NVIDIA the libomp that SCALE's clang links isn't on the runtime path
-    -DBUILD_OMP=no
-
     -DPKG_MOLECULE=yes
     -DPKG_KSPACE=yes
     # Upstream's recommendation for the CUDA backend. The FFT unit tests also need it: they link
