@@ -10,7 +10,10 @@ args=(
     -DGGML_CUDA=ON
     -DGGML_NATIVE=OFF
 
+    # Don't download the prebuilt web UI either: it's a floating "latest" archive that
+    # can stop matching this release (it did on 2026-11-17).
     -DLLAMA_BUILD_UI=OFF
+    -DLLAMA_USE_PREBUILT_UI=OFF
 )
 
 cmake \
