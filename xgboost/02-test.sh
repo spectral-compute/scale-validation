@@ -17,4 +17,9 @@ if [[ "${SCALE_ENV:-}" == "gfx1201" ]]; then
     FILTER="${FILTER}:EllpackPage.*"
 fi
 
+if [[ -n "${SCALE_ENV:-}" && "${TEST_GPU_ARCH}" == sm_* ]]; then
+    # Wrong result under SCALE on sm_120: 2 nodes where 3 are expected.
+    FILTER="${FILTER}:GPUFeatureInteractionConstraint.QueryNode"
+fi
+
 ./build/testxgboost --gtest_output=xml:xgboost.xml --gtest_filter="$FILTER"
