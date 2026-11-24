@@ -38,7 +38,11 @@ disable() {
 }
 
 # tridiagonal: the HIP port segfaults (the CUDA one runs fine under SCALE).
-disable tridiagonal
+# nqueen: ROCm 7.2.3's clang segfaults in the AMDGPU backend (copyPhysReg)
+# at -O2 and above.
+# leukocyte: hipcc builds its meschach library without -fPIC, so the PIE
+# link fails.
+disable tridiagonal nqueen leukocyte
 
 # The gfx major version is everything but the last two (hex) digits, e.g. 9
 # for gfx90a, 11 for gfx1100.
