@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: master <5f214ad8>.**
+**This shows the test status for SCALE: master <b1540a4a>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -13,13 +13,13 @@ Contributions welcome!
 
 | Project        | Version                    | gfx90a|gfx1201|gfx1100|sm_120|
 |----------------|----------------------------| -|-|-|-|
-| alien          | v4.12.3       | ❓|✅|✅|✅|
-| AMGX          | v2.5.0       | ❓|❌|❌|❓|
+| alien          | v4.12.3       | ✅|✅|✅|✅|
+| AMGX          | v2.5.0       | ❌|❌|❌|❓|
 | arrayfire          | v3.9.0       | ❓|❓|❓|❓|
 | bitnet          | 0b341e582afbf9...       | ❓|❓|❓|❓|
 | caffe          | 9b891540183ddc...       | ❓|❓|❓|✅|
-| ChOp          | 58f730850eccc2...       | ❓|✅|✅|❌|
-| code_saturne          | v9.2.0       | ❌|❌|❌|❌|
+| ChOp          | 58f730850eccc2...       | ✅|✅|✅|❌|
+| code_saturne          | v9.2.0       | ❌|✅|❌|❌|
 | ctranslate2          | v4.5.0       | ❌|❌|❌|✅|
 | CUDALibrarySamples          | 5ac0f9a8032a10...       | ❌|❌|❌|❌️️|
 | cuml          | b17f2dbbea05ae...       | ❌️️|❌️️|❌️️|❌️️|
@@ -42,13 +42,13 @@ Contributions welcome!
 | GPUJPEG          | 3e045d1df72735...       | ❌️️|❌️️|❌️️|✅|
 | gromacs          | v2026.4       | ❌|❌|❌|✅|
 | HARD          | 489e162f435b8e...       | ✅|✅|✅|✅|
-| hashcat          | 6716447dfce969...       | ✅|✅|✅|✅|
+| hashcat          | 6716447dfce969...       | ❌|✅|✅|✅|
 | hashinator          | 34cf1886ab5f0a...       | ❌️️|❌️️|❌️️|❌️️|
-| HeCBench          | 6c7245e94ad9e3...       | ✅|✅|✅|❓|
+| HeCBench          | 6c7245e94ad9e3...       | ❌|✅|✅|❓|
 | HiGHS          | v1.15.1       | ❌|❌|❌|✅|
-| hoomd-blue          | 5c949015f3fc1a...       | ✅|✅|✅|✅|
+| hoomd-blue          | 5c949015f3fc1a...       | ❌|✅|✅|✅|
 | hypre          | v2.33.0       | ❓|❓|❓|✅|
-| jitify          | master       | ✅|✅|✅|✅|
+| jitify          | master       | ❌|✅|✅|❌|
 | kokkos          | 60d8384266eba9...       | ❌️️|❌️️|❌️️|✅|
 | lammps          | stable_30Sep20...       | ✅|✅|✅|✅|
 | lammps-kokkos          | stable_30Sep20...       | ✅|✅|✅|✅|
@@ -58,7 +58,7 @@ Contributions welcome!
 | nixl          | e128059af332df...       | ✅|✅|✅|✅|
 | nvflip          | d3ab02a4425eb1...       | ✅|✅|✅|❌️️|
 | opencv          | 4.14.0       | ❌️️|❌️️|❌️️|❌|
-| openfold3          | v0.5.0       | ❓|❓|❌|❌|
+| openfold3          | v0.5.0       | ❌|❌|❌|❌|
 | openmpi          | v5.0       | ✅|✅|✅|✅|
 | PhysX          | 1e44a0e2998f06...       | ❌️️|❌️️|❌️️|❌️️|
 | ppisp          | v1.3.0       | ❌|❌|❌|❌️️|
@@ -77,7 +77,7 @@ Contributions welcome!
 | vllm          | v0.13.0       | ❌️️|❌️️|❌️️|❌️️|
 | warp          | v1.14.0       | ❌️️|❌️️|❌️️|❌️️|
 | whispercpp          | v1.9.5       | ❌|❌|❌|✅|
-| xgboost          | v2.1.0       | ✅|✅|❌|❌|
+| xgboost          | v2.1.0       | ✅|✅|✅|❌|
 
 *Key:*
 * ✅ Validated succesfully
@@ -85,7 +85,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * ❌️️ Tested, but not expected to pass
 
-Pipeline ID: 45392.
+Pipeline ID: 45682.
 
 ## Running Tests
 
