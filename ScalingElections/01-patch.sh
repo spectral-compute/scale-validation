@@ -4,6 +4,7 @@
 cd "ScalingElections"
 
 python - <<'PY'
+import os
 import re
 from pathlib import Path
 
@@ -27,8 +28,12 @@ pat_barrier = re.compile(
 )
 
 already_disabled = re.search(r'(?ms)^#if\s*0\s*\n.*cuda::device::experimental', t) is not None
+# On NVIDIA targets, __CUDA_ARCH__ >= 900 enables the Hopper kernel, which uses these.
+nvidia = os.environ.get("TEST_GPU_ARCH", "").startswith("sm_")
 
-if not already_disabled:
+if nvidia:
+    print("NVIDIA target; keeping the barrier alias block.")
+elif not already_disabled:
     t_new, n = pat_barrier.subn(
         "#if 0\n"
         "// Disabled for SCALE/AMD: no cuda::device::experimental barrier needed.\n"

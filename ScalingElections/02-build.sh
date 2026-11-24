@@ -18,7 +18,6 @@ pip -V
 python -m pip install --upgrade pip wheel setuptools
 python -m pip install "numpy==1.26.*" "llvmlite==0.43.*" "numba==0.60.*" pybind11
 
-export PATH="${CUDA_PATH}/bin:${PATH}"
 export LD_LIBRARY_PATH="${CUDA_PATH}/lib64:${CUDA_PATH}/lib:${LD_LIBRARY_PATH:-}"
 
 # Prefer SCALE headers
@@ -29,15 +28,17 @@ export CPLUS_INCLUDE_PATH="${CPATH}"
 
 # 4) Python helper vars from THIS venv
 PYBIN=python
-PYBIND_INC_STR="$($PYBIN -m pybind11 --includes)"
+# These hold several flags each, so split them into separate arguments.
+read -ra PYBIND_INCS <<<"$($PYBIN -m pybind11 --includes)"
 NUMPY_INC="$($PYBIN -c 'import numpy; print(numpy.get_include())')"
 EXT_SUFFIX="$($PYBIN -c 'import sysconfig; print(sysconfig.get_config_var("EXT_SUFFIX"))')"
-PY_LDFLAGS="$($PYBIN -c 'import sysconfig; print(sysconfig.get_config_var("LDFLAGS") or "")')"
+read -ra PY_LDFLAGS <<<"$($PYBIN -c 'import sysconfig; print(sysconfig.get_config_var("LDFLAGS") or "")')"
 
 # 5) Arch flags for SCALE/nvcc
 ARCH_FLAGS="-gencode=arch=compute_${CUDAARCHS},code=sm_${CUDAARCHS}"
 
-NVCC="${CUDA_PATH}/bin/nvcc"
+# The nvcc on PATH: under SCALE on sm_*, CUDA_PATH is NVIDIA's toolkit, not SCALE's.
+NVCC="nvcc"
 BUILD_DIR=build
 mkdir -p "${BUILD_DIR}"
 
@@ -55,7 +56,7 @@ ${NVCC} \
     -O3 -std=c++17 \
     -Xcompiler -fPIC \
     "${ARCH_FLAGS}" \
-    "${PYBIND_INC_STR}" \
+    "${PYBIND_INCS[@]}" \
     -I"${NUMPY_INC}" \
     -I"${TARGET_INC}" \
     -c scaling_elections.cu \
@@ -64,9 +65,9 @@ ${NVCC} \
 # 7) Link .so with host compiler
 CXX="${CXX:-g++}"
 "${CXX}" -shared "${OBJ}" -o "${OUT_SO}" \
-    "${PY_LDFLAGS}" \
-    -L"${CUDA_PATH}/lib64" -L"${CUDA_PATH}/lib" \
+    "${PY_LDFLAGS[@]}" \
+    -L"${CUDA_PATH}/lib64" -L"${CUDA_PATH}/lib" -L"${CUDA_PATH}/lib64/stubs" \
     -lcudart -lcuda -lcublas \
     -fopenmp
 
-log "[build.sh] built ${SRCDIR}/${OUT_SO}"
+log "[build.sh] built ${PWD}/${OUT_SO}"
