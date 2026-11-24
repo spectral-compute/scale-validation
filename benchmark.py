@@ -265,25 +265,28 @@ def main():
         logger.error("No scripts to run for %s with compiler %s", args.project, compiler)
         sys.exit(1)
 
+    workdir = args.workdir.resolve()
+    args.results_dir = (args.results_dir or workdir / "results").resolve()
+
     logger.info("project:  %s", args.project)
     logger.info("compiler: %s (%s)", compiler, toolkit)
     logger.info("arch:     %s", args.arch)
     if args.devices:
         logger.info("devices:  %s", ",".join(args.devices))
+    logger.info("workdir:  %s", workdir)
+    logger.info("results:  %s", args.results_dir)
     for s in scripts:
         runs = f" x{args.repeats}" if s.is_benchmark else ""
         logger.info("  %s%s", s.path.relative_to(REPO_ROOT), runs)
     if args.dry_run:
         return
 
-    workdir = args.workdir.resolve()
     workdir.mkdir(parents=True, exist_ok=True)
     _lock = lock_workdir(workdir)  # Held until exit.
     run_dir = workdir / args.project
     if not args.keep:
         shutil.rmtree(run_dir, ignore_errors=True)
     run_dir.mkdir(parents=True, exist_ok=True)
-    args.results_dir = (args.results_dir or workdir / "results").resolve()
     args.results_dir.mkdir(parents=True, exist_ok=True)
 
     env = build_env(compiler, toolkit, args.arch, args)
@@ -303,6 +306,8 @@ def main():
     logger.info("toolkit: %s", toolkit)
     logger.info("arch: %s", args.arch)
     logger.info("devices: %s", ",".join(args.devices) or "all")
+    logger.info("workdir: %s", workdir)
+    logger.info("results: %s", args.results_dir)
     logger.info("repeats: %s", args.repeats)
     logger.info("started: %s\n", stamp)
 
