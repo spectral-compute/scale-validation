@@ -17,9 +17,6 @@ use_openmpi
 # no mpicc wrapper needed. The rpaths save every later script from having to
 # re-export LD_LIBRARY_PATH just to load libmpi and the mesh libraries.
 ldflags="-Wl,-rpath,${OPENMPI_INSTALL}/lib -Wl,-rpath,${DEPS_INSTALL}/lib"
-if [[ -n "${SCALE_ENV:-}" ]]; then
-    ldflags="-L/opt/rocm-scale/lib -lhsa-runtime64 ${ldflags}"
-fi
 
 configure_args=(
     --prefix="${CS_INSTALL}"
