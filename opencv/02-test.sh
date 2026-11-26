@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 . "$(dirname "$0")"/../util/prelude.sh
 
+# The tests look for their data files under OPENCV_TEST_DATA_PATH.
+OPENCV_TEST_DATA_PATH="$(pwd)/opencv_extra/testdata"
+export OPENCV_TEST_DATA_PATH
+
 RETCODE=0
 BROKEN=()
 for T in "$(pwd)"/install/bin/opencv_test_cuda*; do

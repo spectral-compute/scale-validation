@@ -16,13 +16,12 @@ args=(
     -DINSTALL_TESTS=On
 
     -DWITH_CUDA=On
-    -DWITH_CUFFT=Off
+    -DWITH_CUFFT=On
     -DWITH_CUBLAS=Off
     -DWITH_CUDNN=Off
     -DWITH_NVCUVID=Off
     -DWITH_NVCUVENC=Off
 
-    -DBUILD_opencv_cudalegacy=Off
     -DOPENCV_EXTRA_MODULES_PATH="$(pwd)/opencv_contrib/modules"
 )
 cmake \
