@@ -27,12 +27,10 @@ repo="$(realpath saturne_tutorials)"
 dest="${CS_SMGR_DEST:-$(realpath .)/saturne_tutorials_run}"
 mkdir -p "${dest}"
 
-# The RANS case's setup.xml asks for 3000 iterations; set this to cut a smoke
-# test short.
-smgr_args=()
-if [[ -n "${CS_SMGR_ITERATIONS:-}" ]]; then
-    smgr_args+=(-n "${CS_SMGR_ITERATIONS}")
-fi
+# The RANS case's setup.xml asks for 3000 iterations, which takes over two hours
+# in CI. The checks below only ask whether the case ran to completion, so 100
+# iterations serve as well. Set CS_SMGR_ITERATIONS=3000 for the full case.
+smgr_args=(-n "${CS_SMGR_ITERATIONS:-100}")
 
 n_procs="${CS_SMGR_N_PROCS:-4}"
 
