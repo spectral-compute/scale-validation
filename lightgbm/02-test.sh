@@ -23,4 +23,12 @@ gpu_device_id = 0
 EOF
 echo "num_threads=$(nproc)" >>lightgbm_gpu.conf
 
-./install/bin/lightgbm config=lightgbm_gpu.conf data=higgs.train valid=higgs.test objective=binary metric=rmse
+./install/bin/lightgbm config=lightgbm_gpu.conf data=higgs.train valid=higgs.test objective=binary metric=rmse |
+    tee train.log
+
+# NVIDIA (CUDA 12.9, sm_120) reaches this validation RMSE after 50 iterations. The CUDA learner sums
+# histograms with float atomics, so allow a little slack for summation order.
+expected=0.41561
+actual=$(grep -oP 'Iteration:50, valid_1 rmse : \K[0-9.]+' train.log)
+log "Final validation RMSE: ${actual} (NVIDIA: ${expected})"
+python3 -c "import sys; sys.exit(abs(${actual} - ${expected}) > 1e-3)"
