@@ -1,0 +1,13 @@
+diff --git a/scaling_elections.cu b/scaling_elections.cu
+index 1d215e5..e18f677 100644
+--- a/scaling_elections.cu
++++ b/scaling_elections.cu
+@@ -901,6 +901,8 @@ static py::array_t<votes_count_t> compute_strongest_paths(      //
+         }
+
+         cudaMemset(strongest_paths_ptr, 0, num_candidates * num_candidates * sizeof(votes_count_t));
++        // The host writes the seed graph into this managed allocation, so the memset must finish first.
++        cudaDeviceSynchronize();
+         cuda_kernel(preferences_ptr, num_candidates, row_stride, strongest_paths_ptr, allow_tma);
+
+         // Synchronize to ensure all CUDA operations are complete

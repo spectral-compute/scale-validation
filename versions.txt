@@ -83,7 +83,7 @@ kokkos 60d8384266eba9ee28dacf21016ef414981ebba3
 llama-cpp-python e1af05f43f57d2b660edfb77935dd2d2641ec602
 nv-codec-headers n13.1.15.0
 parrot c88d995700dc51c784089fc032b9c58c17c22317
-ScalingElections a7222a000edb9c2a4eb3dc5f97d2472785fa38c2
+ScalingElections v0.2.0
 tensorflow-tensorflow v2.2.0
 tensorflow-tensorboard 2.2.0
 tensorflow-estimator v2.2.0
