@@ -5,7 +5,7 @@ open-source projects to validate the correctness of [SCALE](https://docs.scale-l
 
 ## Current Status
 
-**This shows the test status for SCALE: v1.8.0 <7efbb7a1>.**
+**This shows the test status for SCALE: master <ecbd6f44>.**
 
 Test scripts get added to this repository long before they are fully supported by SCALE, so some tests are expected to fail.
 We use the outcome of this kind of testing to prioritise development.
@@ -28,10 +28,10 @@ Contributions welcome!
 | cutlass          | v4.1.0       | ✅|✅|✅|❌️️|
 | CV-CUDA          | f769fe4bf336ab...       | ❌️️|❌️️|❌️️|❌️️|
 | cycles          | v5.2.0       | ✅|✅|✅|❌️️|
-| deepspeed          | v0.19.7       | ❌|❌|✅|✅|
+| deepspeed          | v0.19.7       | ❌|❌|❓|✅|
 | DEM-Engine          | c375eae467894a...       | ❌️️|❌️️|❌️️|✅|
-| faiss          | v1.9.0       | ❌|❌|✅|✅|
-| FastEddy          | v5.0.1       | ✅|❌|✅|✅|
+| faiss          | v1.9.0       | ✅|✅|✅|✅|
+| FastEddy          | v5.0.1       | ✅|✅|✅|✅|
 | ffmpeg          | n8.0.3       | ✅|✅|✅|✅|
 | FLAMEGPU2          | v2.0.0-rc.2       | ✅|✅|✅|✅|
 | ggml          | v0.29.0       | ✅|✅|✅|✅|
@@ -46,34 +46,34 @@ Contributions welcome!
 | hashinator          | 34cf1886ab5f0a...       | ❌️️|❌️️|❌️️|❌️️|
 | HeCBench          | 6c7245e94ad9e3...       | ✅|✅|✅|✅|
 | HiGHS          | v1.15.1       | ❌|❌|❌|✅|
-| hoomd-blue          | 5c949015f3fc1a...       | ✅|✅|✅|✅|
-| hypre          | v2.33.0       | ✅|✅|✅|✅|
-| jitify          | master       | ✅|✅|✅|✅|
+| hoomd-blue          | 5c949015f3fc1a...       | ✅|❓|✅|✅|
+| hypre          | v2.33.0       | ✅|❓|✅|✅|
+| jitify          | master       | ✅|✅|❌|✅|
 | kokkos          | 60d8384266eba9...       | ❌️️|❌️️|❌️️|✅|
-| lammps          | stable_30Sep20...       | ✅|✅|✅|✅|
+| lammps          | stable_30Sep20...       | ✅|✅|❓|❓|
 | lammps-kokkos          | stable_30Sep20...       | ✅|✅|✅|✅|
 | llama.cpp          | b12111       | ✅|✅|✅|✅|
-| llm.c          | 7ecd8906afe6ed...       | ✅|✅|✅|✅|
+| llm.c          | 7ecd8906afe6ed...       | ✅|✅|❌|✅|
 | neko          | v1.1.2       | ❌|❌|❌|❌|
 | nixl          | e128059af332df...       | ✅|✅|✅|✅|
 | nvflip          | d3ab02a4425eb1...       | ✅|✅|✅|❌️️|
 | opencv          | 4.14.0       | ❌️️|❌️️|❌️️|❌|
 | openfold3          | v0.5.0       | ❌|❌|❓|❌|
-| openmpi          | v5.0       | ❓|❌|✅|✅|
+| openmpi          | v5.0       | ✅|✅|✅|✅|
 | PhysX          | 1e44a0e2998f06...       | ❌️️|❌️️|❌️️|❌️️|
-| ppisp          | v1.3.0       | ❓|✅|❓|❌️️|
+| ppisp          | v1.3.0       | ❓|❓|❓|❌️️|
 | pytorch          | v2.9.0       | ❌️️|❌️️|❌️️|❌️️|
-| pytorch-2.13          | v2.13.0       | ❌️️|❌️️|❌️️|❓|
+| pytorch-2.13          | v2.13.0       | ❌️️|❌️️|❌️️|✅|
 | quda          | 07822b61c6ab5f...       | ✅|❌|❌|❌|
 | quokka          | 26.07       | ❌️️|❌️️|❌️️|❌️️|
 | RabbitCT          | main       | ❓|❓|❓|❓|
 | risc0          | v1.2.2       | ❌️️|❌️️|❌️️|❌️️|
-| stdgpu          | 503c63af2dcdfa...       | ✅|❌|✅|✅|
-| TCLB          | v6.7       | ✅|✅|✅|✅|
-| thrust          | 756c5afc0750f1...       | ❌|✅|✅|✅|
+| stdgpu          | 503c63af2dcdfa...       | ✅|❌|❌|❓|
+| TCLB          | v6.7       | ✅|✅|❓|✅|
+| thrust          | 756c5afc0750f1...       | ✅|❓|✅|✅|
 | timemachine          | 2f6fe1fdb9e667...       | ❓|❓|❓|❓|
-| tsne-cuda          | 4.0.1       | ✅|✅|✅|✅|
-| UppASD          | gpu_new       | ✅|✅|✅|✅|
+| tsne-cuda          | 4.0.1       | ✅|✅|❌|❓|
+| UppASD          | gpu_new       | ✅|✅|❌|❌|
 | vllm          | v0.13.0       | ❌️️|❌️️|❌️️|❌️️|
 | warp          | v1.14.0       | ❌️️|❌️️|❌️️|❌️️|
 | whispercpp          | v1.9.5       | ✅|✅|✅|✅|
@@ -85,7 +85,7 @@ Contributions welcome!
 * ❓ Validation skipped
 * ❌️️ Tested, but not expected to pass
 
-Pipeline ID: 46461.
+Pipeline ID: 46716.
 
 ## Running Tests
 
