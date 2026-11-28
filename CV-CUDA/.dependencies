@@ -1,2 +1,3 @@
 ubuntu24.04:apt:git-lfs
 ubuntu24.04:apt:libgtest-dev
+ubuntu24.04:apt:openssl
